@@ -1,0 +1,452 @@
+import { Request, Response } from 'express'
+import Post, { IPost } from '@/models/Post'
+import User, { IUser } from '@/models/User'
+
+interface AuthenticatedRequest extends Request {
+  user?: IUser
+}
+
+// @desc    Get all posts
+// @route   GET /api/posts
+// @access  Public
+export const getPosts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+    const sort = req.query.sort as string || '-createdAt'
+    const category = req.query.category as string
+    const search = req.query.search as string
+    const tags = req.query.tags as string
+    const status = req.query.status as string || 'published'
+
+    // Build query
+    const query: any = { status }
+
+    if (category) {
+      query.category = category
+    }
+
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { excerpt: { $regex: search, $options: 'i' } },
+        { content: { $regex: search, $options: 'i' } }
+      ]
+    }
+
+    if (tags) {
+      const tagArray = tags.split(',')
+      query.tags = { $in: tagArray }
+    }
+
+    const skip = (page - 1) * limit
+
+    const posts = await Post.find(query)
+      .populate('author', 'name avatar email')
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+
+    const total = await Post.countDocuments(query)
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      total,
+      pagination: {
+        page,
+        limit,
+        pages: Math.ceil(total / limit)
+      },
+      data: posts
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Get single post
+// @route   GET /api/posts/:id
+// @access  Public
+export const getPost = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const post = await Post.findById(req.params.id)
+      .populate('author', 'name avatar email bio socialLinks')
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      })
+      return
+    }
+
+    // Increment view count (bypass TS error)
+    (post as any).views = ((post as any).views || 0) + 1
+    await post.save()
+
+    res.status(200).json({
+      success: true,
+      data: post
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Create new post
+// @route   POST /api/posts
+// @access  Private (Author/Admin)
+export const createPost = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    // Add author to req.body
+    req.body.author = req.user?._id
+
+    const post = await Post.create(req.body)
+
+    res.status(201).json({
+      success: true,
+      data: post
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Update post
+// @route   PUT /api/posts/:id
+// @access  Private (Author/Admin)
+export const updatePost = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    let post = await Post.findById(req.params.id)
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      })
+      return
+    }
+
+    // Make sure user is post owner or admin
+    if (post.author.toString() !== req.user?._id.toString() && req.user?.role !== 'admin') {
+      res.status(401).json({
+        success: false,
+        error: 'Not authorized to update this post'
+      })
+      return
+    }
+
+    post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    })
+
+    res.status(200).json({
+      success: true,
+      data: post
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Delete post
+// @route   DELETE /api/posts/:id
+// @access  Private (Author/Admin)
+export const deletePost = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const post = await Post.findById(req.params.id)
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      })
+      return
+    }
+
+    // Make sure user is post owner or admin
+    if (post.author.toString() !== req.user?._id.toString() && req.user?.role !== 'admin') {
+      res.status(401).json({
+        success: false,
+        error: 'Not authorized to delete this post'
+      })
+      return
+    }
+
+    await post.deleteOne()
+
+    res.status(200).json({
+      success: true,
+      data: {}
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Like/Unlike post
+// @route   PUT /api/posts/:id/like
+// @access  Private
+export const likePost = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const post = await Post.findById(req.params.id)
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      })
+      return
+    }
+
+    const userId = req.user?._id?.toString()
+    const likeIndex = post.likes.findIndex(like => like.toString() === userId)
+
+    if (likeIndex > -1) {
+      // Unlike
+      post.likes.splice(likeIndex, 1)
+    } else {
+      // Like
+      post.likes.push(req.user?._id as any)
+    }
+
+    await post.save()
+
+    res.status(200).json({
+      success: true,
+      data: {
+        likes: post.likes.length,
+        liked: likeIndex === -1
+      }
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Add comment to post
+// @route   POST /api/posts/:id/comments
+// @access  Private
+export const addComment = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const post = await Post.findById(req.params.id)
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      })
+      return
+    }
+
+    const comment = {
+      user: req.user?._id,
+      content: req.body.content,
+      createdAt: new Date()
+    }
+
+    post.comments.push(comment as any)
+    await post.save()
+
+    // Populate the new comment
+    await post.populate('comments.user', 'name avatar')
+
+    res.status(201).json({
+      success: true,
+      data: post.comments[post.comments.length - 1]
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Get posts by category
+// @route   GET /api/posts/category/:category
+// @access  Public
+export const getPostsByCategory = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+    const skip = (page - 1) * limit
+
+    const posts = await Post.find({ 
+      category: req.params.category,
+      status: 'published'
+    })
+      .populate('author', 'name avatar email')
+      .sort('-createdAt')
+      .skip(skip)
+      .limit(limit)
+
+    const total = await Post.countDocuments({ 
+      category: req.params.category,
+      status: 'published'
+    })
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      total,
+      pagination: {
+        page,
+        limit,
+        pages: Math.ceil(total / limit)
+      },
+      data: posts
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Get featured posts
+// @route   GET /api/posts/featured
+// @access  Public
+export const getFeaturedPosts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const limit = parseInt(req.query.limit as string) || 6
+
+    const posts = await Post.find({
+      isFeatured: true,
+      status: 'published'
+    })
+      .populate('author', 'name avatar email')
+      .sort('-createdAt')
+      .limit(limit)
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      data: posts
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Get popular posts
+// @route   GET /api/posts/popular
+// @access  Public
+export const getPopularPosts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const limit = parseInt(req.query.limit as string) || 6
+
+    const posts = await Post.find({
+      status: 'published'
+    })
+      .populate('author', 'name avatar email')
+      .sort('-views -likes')
+      .limit(limit)
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      data: posts
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Search posts
+// @route   GET /api/posts/search
+// @access  Public
+export const searchPosts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { q, category, tags, sortBy } = req.query
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+    const skip = (page - 1) * limit
+
+    if (!q) {
+      res.status(400).json({
+        success: false,
+        error: 'Search query is required'
+      })
+      return
+    }
+
+    const query: any = {
+      status: 'published',
+      $or: [
+        { title: { $regex: q, $options: 'i' } },
+        { excerpt: { $regex: q, $options: 'i' } },
+        { content: { $regex: q, $options: 'i' } },
+        { tags: { $regex: q, $options: 'i' } }
+      ]
+    }
+
+    if (category) {
+      query.category = category
+    }
+
+    if (tags) {
+      const tagArray = (tags as string).split(',')
+      query.tags = { $in: tagArray }
+    }
+
+    let sort = '-createdAt'
+    if (sortBy === 'popular') {
+      sort = '-views -likes'
+    } else if (sortBy === 'oldest') {
+      sort = 'createdAt'
+    }
+
+    const posts = await Post.find(query)
+      .populate('author', 'name avatar email')
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+
+    const total = await Post.countDocuments(query)
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      total,
+      pagination: {
+        page,
+        limit,
+        pages: Math.ceil(total / limit)
+      },
+      data: posts
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Server error'
+    })
+  }
+}
