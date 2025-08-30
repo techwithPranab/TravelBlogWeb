@@ -1,100 +1,87 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, Calendar, User, Clock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { postsApi, categoriesApi, type Post, type Category } from '@/lib/api'
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [posts, setPosts] = useState<Post[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Sample blog posts data
-  const blogPosts = [
-    {
-      id: 1,
-      title: 'Hidden Gems of Southeast Asia',
-      excerpt: 'Discover breathtaking destinations off the beaten path in Thailand, Vietnam, and Cambodia.',
-      image: '/images/blog/southeast-asia.jpg',
-      category: 'Destinations',
-      author: 'Sarah Johnson',
-      date: '2024-01-15',
-      readTime: '8 min read',
-      slug: 'hidden-gems-southeast-asia'
-    },
-    {
-      id: 2,
-      title: 'Solo Travel Safety Tips for Women',
-      excerpt: 'Essential advice and precautions for women traveling alone around the world.',
-      image: '/images/blog/solo-travel.jpg',
-      category: 'Tips',
-      author: 'Emma Rodriguez',
-      date: '2024-01-12',
-      readTime: '6 min read',
-      slug: 'solo-travel-safety-tips'
-    },
-    {
-      id: 3,
-      title: 'Budget Backpacking Through Europe',
-      excerpt: 'How to explore Europe on a shoestring budget without compromising on experiences.',
-      image: '/images/blog/europe-backpacking.jpg',
-      category: 'Budget Travel',
-      author: 'Michael Chen',
-      date: '2024-01-10',
-      readTime: '10 min read',
-      slug: 'budget-backpacking-europe'
-    },
-    {
-      id: 4,
-      title: 'Food Adventures in Japan',
-      excerpt: 'A culinary journey through Tokyo, Osaka, and Kyoto - from street food to Michelin stars.',
-      image: '/images/blog/japan-food.jpg',
-      category: 'Food & Culture',
-      author: 'David Kim',
-      date: '2024-01-08',
-      readTime: '7 min read',
-      slug: 'food-adventures-japan'
-    },
-    {
-      id: 5,
-      title: 'Digital Nomad Guide to Bali',
-      excerpt: 'Complete guide to working remotely from Bali - coworking spaces, wifi, and communities.',
-      image: '/images/blog/bali-nomad.jpg',
-      category: 'Digital Nomad',
-      author: 'Lisa Thompson',
-      date: '2024-01-05',
-      readTime: '12 min read',
-      slug: 'digital-nomad-bali'
-    },
-    {
-      id: 6,
-      title: 'Wildlife Photography in Africa',
-      excerpt: 'Tips and techniques for capturing stunning wildlife photos during an African safari.',
-      image: '/images/blog/africa-wildlife.jpg',
-      category: 'Photography',
-      author: 'James Wilson',
-      date: '2024-01-03',
-      readTime: '9 min read',
-      slug: 'wildlife-photography-africa'
+  // Fetch data on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const [postsResponse, categoriesResponse] = await Promise.all([
+          postsApi.getAll({ limit: 20, sort: '-publishedAt' }),
+          categoriesApi.getAll()
+        ])
+        
+        if (postsResponse.success) {
+          setPosts(postsResponse.data)
+        }
+        
+        if (categoriesResponse.success) {
+          setCategories(categoriesResponse.data)
+        }
+      } catch (err) {
+        console.error('Error fetching data:', err)
+        setError('Failed to load blog posts. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
 
-  const categories = [
-    'all',
-    'Destinations',
-    'Tips',
-    'Budget Travel',
-    'Food & Culture',
-    'Digital Nomad',
-    'Photography'
-  ]
+    fetchData()
+  }, [])
 
-  const filteredPosts = blogPosts.filter(post => {
+  // Filter posts based on search and category
+  const filteredPosts = posts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory
+    const matchesCategory = selectedCategory === 'all' || 
+                           post.categories.some(cat => cat.slug === selectedCategory)
     return matchesSearch && matchesCategory
   })
+
+  const blogCategories = [
+    { slug: 'all', name: 'All Posts' },
+    ...categories.map(cat => ({ slug: cat.slug, name: cat.name }))
+  ]
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading blog posts...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -135,17 +122,17 @@ export default function BlogPage() {
 
             {/* Category Filter */}
             <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
+              {blogCategories.map((category) => (
                 <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  key={category.slug}
+                  onClick={() => setSelectedCategory(category.slug)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === category
+                    selectedCategory === category.slug
                       ? 'bg-blue-600 text-white'
                       : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
                   }`}
                 >
-                  {category === 'all' ? 'All Posts' : category}
+                  {category.name}
                 </button>
               ))}
             </div>
@@ -159,7 +146,7 @@ export default function BlogPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post, index) => (
               <motion.article
-                key={post.id}
+                key={post._id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -168,10 +155,17 @@ export default function BlogPage() {
               >
                 {/* Post Image */}
                 <div className="relative h-48 bg-gray-200">
+                  {post.featuredImage && (
+                    <img 
+                      src={post.featuredImage.url} 
+                      alt={post.featuredImage.alt}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   <div className="absolute top-4 left-4">
                     <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                      {post.category}
+                      {post.categories[0]?.name || 'Travel'}
                     </span>
                   </div>
                 </div>
@@ -190,16 +184,16 @@ export default function BlogPage() {
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <User className="h-4 w-4" />
-                        <span>{post.author}</span>
+                        <span>{post.author.name}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        <span>{new Date(post.date).toLocaleDateString()}</span>
+                        <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      <span>{post.readTime}</span>
+                      <span>{post.readTime} min read</span>
                     </div>
                   </div>
 

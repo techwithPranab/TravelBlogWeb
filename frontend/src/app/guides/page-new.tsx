@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, BookOpen, Star, Eye, Filter, MapPin, User, Calendar } from 'lucide-react'
+import { Search, BookOpen, Clock, Star, Download, Eye, Filter, MapPin, User, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { guidesApi, type Guide } from '@/lib/api'

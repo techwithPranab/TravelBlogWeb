@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, BookOpen, Star, Eye, Filter, MapPin, User, Calendar } from 'lucide-react'
+import { Search, BookOpen, Clock, Star, Download, Eye, Filter, MapPin, User } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { guidesApi, type Guide } from '@/lib/api'
@@ -52,7 +52,7 @@ export default function GuidesPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading travel guides...</p>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function GuidesPage() {
           <p className="text-red-600 text-lg">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="mt-4 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+            className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
           >
             Try Again
           </button>
@@ -74,6 +74,111 @@ export default function GuidesPage() {
       </div>
     )
   }
+    {
+      id: 1,
+      title: 'Complete Guide to Solo Travel in Southeast Asia',
+      description: 'Everything you need to know for your first solo adventure in Thailand, Vietnam, and Cambodia.',
+      category: 'Solo Travel',
+      difficulty: 'Beginner',
+      readTime: '15 min read',
+      downloads: 2340,
+      views: 15670,
+      rating: 4.8,
+      image: '/images/guides/solo-asia.jpg',
+      isPremium: false,
+      slug: 'solo-travel-southeast-asia'
+    },
+    {
+      id: 2,
+      title: 'Budget Backpacking Europe: Complete 30-Day Itinerary',
+      description: 'Detailed 30-day itinerary covering 12 countries with budget breakdowns and accommodation tips.',
+      category: 'Budget Travel',
+      difficulty: 'Intermediate',
+      readTime: '25 min read',
+      downloads: 4560,
+      views: 28930,
+      rating: 4.9,
+      image: '/images/guides/europe-budget.jpg',
+      isPremium: true,
+      slug: 'budget-backpacking-europe'
+    },
+    {
+      id: 3,
+      title: 'Digital Nomad Starter Kit: Work & Travel Guide',
+      description: 'Complete guide to becoming a digital nomad, including visa info, best destinations, and tools.',
+      category: 'Digital Nomad',
+      difficulty: 'Beginner',
+      readTime: '20 min read',
+      downloads: 3210,
+      views: 19450,
+      rating: 4.7,
+      image: '/images/guides/digital-nomad.jpg',
+      isPremium: false,
+      slug: 'digital-nomad-starter-kit'
+    },
+    {
+      id: 4,
+      title: 'Adventure Photography: Capture Your Travels',
+      description: 'Professional tips for taking stunning travel photos with any camera, from phone to DSLR.',
+      category: 'Photography',
+      difficulty: 'Intermediate',
+      readTime: '18 min read',
+      downloads: 1890,
+      views: 12340,
+      rating: 4.6,
+      image: '/images/guides/photography.jpg',
+      isPremium: true,
+      slug: 'adventure-photography'
+    },
+    {
+      id: 5,
+      title: 'Family Travel Planning: Ultimate Guide',
+      description: 'Plan amazing family vacations with kids of all ages, including packing lists and activities.',
+      category: 'Family Travel',
+      difficulty: 'Beginner',
+      readTime: '22 min read',
+      downloads: 2780,
+      views: 16820,
+      rating: 4.8,
+      image: '/images/guides/family-travel.jpg',
+      isPremium: false,
+      slug: 'family-travel-planning'
+    },
+    {
+      id: 6,
+      title: 'Extreme Adventure Travel Safety Guide',
+      description: 'Essential safety protocols for extreme sports and adventure activities worldwide.',
+      category: 'Adventure',
+      difficulty: 'Advanced',
+      readTime: '30 min read',
+      downloads: 1450,
+      views: 8900,
+      rating: 4.9,
+      image: '/images/guides/extreme-adventure.jpg',
+      isPremium: true,
+      slug: 'extreme-adventure-safety'
+    }
+  ]
+
+  const categories = [
+    'all',
+    'Solo Travel',
+    'Budget Travel',
+    'Digital Nomad',
+    'Photography',
+    'Family Travel',
+    'Adventure'
+  ]
+
+  const difficulties = ['all', 'Beginner', 'Intermediate', 'Advanced']
+
+  const filteredGuides = guides.filter(guide => {
+    const matchesSearch = guide.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         guide.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === 'all' || guide.category === selectedCategory
+    const matchesDifficulty = selectedDifficulty === 'all' || guide.difficulty === selectedDifficulty
+    return matchesSearch && matchesCategory && matchesDifficulty
+  })
 
   return (
     <div className="min-h-screen bg-white">
@@ -87,10 +192,10 @@ export default function GuidesPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Travel Guides & Itineraries
+              Travel Guides & Resources
             </h1>
             <p className="text-xl mb-8 text-orange-100">
-              Comprehensive travel guides, detailed itineraries, and expert tips to help you plan your perfect trip.
+              Comprehensive travel guides, detailed itineraries, and practical resources to help you plan your perfect adventure.
             </p>
           </motion.div>
         </div>
@@ -114,17 +219,17 @@ export default function GuidesPage() {
 
             {/* Filters */}
             <div className="flex flex-wrap gap-4 items-center">
-              {/* Type Filter */}
+              {/* Category Filter */}
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-gray-600" />
                 <select
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 >
-                  {types.map((type) => (
-                    <option key={type} value={type}>
-                      {type === 'all' ? 'All Types' : type}
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category === 'all' ? 'All Categories' : category}
                     </option>
                   ))}
                 </select>
@@ -153,7 +258,7 @@ export default function GuidesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredGuides.map((guide, index) => (
               <motion.div
-                key={guide._id}
+                key={guide.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -161,24 +266,24 @@ export default function GuidesPage() {
                 className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
                 {/* Guide Image */}
-                <div className="relative h-48 bg-gradient-to-br from-orange-400 to-red-500">
+                <div className="relative h-48 bg-gray-200">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute top-4 left-4 flex gap-2">
                     <span className="bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                      {guide.type}
+                      {guide.category}
                     </span>
-                    {guide.isFeatured && (
+                    {guide.isPremium && (
                       <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-                        Featured
+                        Premium
                       </span>
                     )}
                   </div>
                   <div className="absolute top-4 right-4">
                     {(() => {
                       let difficultyClass = '';
-                      if (guide.difficulty === 'Easy') {
+                      if (guide.difficulty === 'Beginner') {
                         difficultyClass = 'bg-green-100 text-green-700';
-                      } else if (guide.difficulty === 'Moderate') {
+                      } else if (guide.difficulty === 'Intermediate') {
                         difficultyClass = 'bg-yellow-100 text-yellow-700';
                       } else {
                         difficultyClass = 'bg-red-100 text-red-700';
@@ -190,61 +295,55 @@ export default function GuidesPage() {
                       );
                     })()}
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <BookOpen className="h-8 w-8 text-white mb-2" />
-                  </div>
                 </div>
 
                 {/* Guide Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
                     {guide.title}
                   </h3>
-                  
                   <p className="text-gray-600 mb-4 line-clamp-3">
                     {guide.description}
                   </p>
 
-                  {/* Guide Meta */}
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <MapPin className="h-4 w-4" />
-                      <span>{guide.destination.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <User className="h-4 w-4" />
-                      <span>{guide.author.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar className="h-4 w-4" />
-                      <span>{guide.duration.days} days</span>
-                    </div>
-                  </div>
-
-                  {/* Stats */}
+                  {/* Guide Stats */}
                   <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
-                        <Eye className="h-4 w-4" />
-                        <span>{guide.views}</span>
+                        <Clock className="h-4 w-4" />
+                        <span>{guide.readTime}</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4" />
-                        <span>{guide.likes}</span>
+                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                        <span>{guide.rating}</span>
                       </div>
                     </div>
-                    <span className="text-orange-600 font-medium">
-                      {guide.budget.currency} {guide.budget.amount}
-                    </span>
                   </div>
 
-                  {/* Action Button */}
-                  <Link
-                    href={`/guides/${guide.slug}`}
-                    className="block w-full bg-orange-600 text-white text-center py-3 rounded-lg hover:bg-orange-700 transition-colors font-medium"
-                  >
-                    View Guide
-                  </Link>
+                  {/* Download Stats */}
+                  <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
+                    <div className="flex items-center gap-1">
+                      <Download className="h-4 w-4" />
+                      <span>{guide.downloads.toLocaleString()} downloads</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Eye className="h-4 w-4" />
+                      <span>{guide.views.toLocaleString()} views</span>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/guides/${guide.slug}`}
+                      className="flex-1 bg-orange-600 text-white text-center py-2 rounded-lg hover:bg-orange-700 transition-colors font-medium"
+                    >
+                      Read Guide
+                    </Link>
+                    <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                      <BookOpen className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -258,7 +357,7 @@ export default function GuidesPage() {
         </div>
       </section>
 
-      {/* Call to Action */}
+      {/* Featured Guide CTA */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
@@ -268,16 +367,22 @@ export default function GuidesPage() {
             transition={{ duration: 0.6 }}
             className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 text-center text-white"
           >
-            <h2 className="text-3xl font-bold mb-4">Create Your Custom Itinerary</h2>
+            <BookOpen className="h-16 w-16 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold mb-4">Want More In-Depth Guides?</h2>
             <p className="text-xl mb-6 text-orange-100">
-              Get personalized travel itineraries crafted by our expert travel writers.
+              Get access to our premium travel guides with detailed itineraries, budget breakdowns, and insider tips.
             </p>
-            <Link
-              href="/contact"
-              className="inline-block bg-white text-orange-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-            >
-              Get Custom Guide
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-white text-orange-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                View Premium Guides
+              </button>
+              <Link
+                href="/contact"
+                className="border-2 border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-orange-600 transition-colors"
+              >
+                Request Custom Guide
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

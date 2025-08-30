@@ -1,104 +1,43 @@
 'use client'
 
-import { useState } from 'react'
-import { MapPin, Star, Clock, Camera, Users, Search } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { MapPin, Star, Clock, Camera, Users, Search, DollarSign } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { destinationsApi, type Destination } from '@/lib/api'
 
 export default function DestinationsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRegion, setSelectedRegion] = useState('all')
+  const [destinations, setDestinations] = useState<Destination[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Sample destinations data
-  const destinations = [
-    {
-      id: 1,
-      name: 'Santorini, Greece',
-      region: 'Europe',
-      country: 'Greece',
-      image: '/images/destinations/santorini.jpg',
-      rating: 4.8,
-      reviews: 324,
-      description: 'Famous for its white-washed buildings, blue domes, and stunning sunsets over the Aegean Sea.',
-      highlights: ['Sunset Views', 'Architecture', 'Wine Tasting', 'Beaches'],
-      bestTime: 'April - October',
-      budget: '$150-300/day',
-      slug: 'santorini-greece'
-    },
-    {
-      id: 2,
-      name: 'Kyoto, Japan',
-      region: 'Asia',
-      country: 'Japan',
-      image: '/images/destinations/kyoto.jpg',
-      rating: 4.9,
-      reviews: 567,
-      description: 'Ancient capital filled with temples, traditional architecture, and beautiful gardens.',
-      highlights: ['Temples', 'Gardens', 'Culture', 'Food'],
-      bestTime: 'March - May, October - November',
-      budget: '$100-200/day',
-      slug: 'kyoto-japan'
-    },
-    {
-      id: 3,
-      name: 'Machu Picchu, Peru',
-      region: 'South America',
-      country: 'Peru',
-      image: '/images/destinations/machu-picchu.jpg',
-      rating: 4.7,
-      reviews: 892,
-      description: 'Ancient Incan citadel perched high in the Andes Mountains, one of the New Seven Wonders.',
-      highlights: ['History', 'Hiking', 'Mountains', 'Culture'],
-      bestTime: 'May - September',
-      budget: '$80-150/day',
-      slug: 'machu-picchu-peru'
-    },
-    {
-      id: 4,
-      name: 'Maldives',
-      region: 'Asia',
-      country: 'Maldives',
-      image: '/images/destinations/maldives.jpg',
-      rating: 4.9,
-      reviews: 421,
-      description: 'Tropical paradise with crystal-clear waters, luxury resorts, and pristine beaches.',
-      highlights: ['Beaches', 'Diving', 'Luxury', 'Romance'],
-      bestTime: 'November - April',
-      budget: '$300-800/day',
-      slug: 'maldives'
-    },
-    {
-      id: 5,
-      name: 'Iceland Ring Road',
-      region: 'Europe',
-      country: 'Iceland',
-      image: '/images/destinations/iceland.jpg',
-      rating: 4.6,
-      reviews: 298,
-      description: 'Dramatic landscapes featuring waterfalls, glaciers, geysers, and the Northern Lights.',
-      highlights: ['Nature', 'Northern Lights', 'Waterfalls', 'Glaciers'],
-      bestTime: 'June - August (summer), October - March (Northern Lights)',
-      budget: '$120-250/day',
-      slug: 'iceland-ring-road'
-    },
-    {
-      id: 6,
-      name: 'Bali, Indonesia',
-      region: 'Asia',
-      country: 'Indonesia',
-      image: '/images/destinations/bali.jpg',
-      rating: 4.5,
-      reviews: 1024,
-      description: 'Island paradise known for its temples, rice terraces, beaches, and vibrant culture.',
-      highlights: ['Temples', 'Beaches', 'Culture', 'Wellness'],
-      bestTime: 'April - October',
-      budget: '$40-100/day',
-      slug: 'bali-indonesia'
+  // Fetch destinations on component mount
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        setLoading(true)
+        const response = await destinationsApi.getAll({ limit: 50, sort: '-rating.average' })
+        
+        if (response.success) {
+          setDestinations(response.data)
+        }
+      } catch (err) {
+        console.error('Error fetching destinations:', err)
+        setError('Failed to load destinations. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
 
-  const regions = ['all', 'Asia', 'Europe', 'South America', 'Africa', 'North America', 'Oceania']
+    fetchDestinations()
+  }, [])
 
+  // Get unique regions from destinations
+  const regions = ['all', ...Array.from(new Set(destinations.map(dest => dest.region)))]
+
+  // Filter destinations
   const filteredDestinations = destinations.filter(destination => {
     const matchesSearch = destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          destination.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -107,6 +46,32 @@ export default function DestinationsPage() {
     return matchesSearch && matchesRegion
   })
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading destinations...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -170,7 +135,7 @@ export default function DestinationsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredDestinations.map((destination, index) => (
               <motion.div
-                key={destination.id}
+                key={destination._id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -179,6 +144,13 @@ export default function DestinationsPage() {
               >
                 {/* Destination Image */}
                 <div className="relative h-64 bg-gray-200">
+                  {destination.images[0] && (
+                    <img 
+                      src={destination.images[0].url} 
+                      alt={destination.images[0].alt}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute top-4 left-4">
                     <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">
@@ -199,17 +171,19 @@ export default function DestinationsPage() {
                 {/* Destination Content */}
                 <div className="p-6">
                   {/* Rating */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                      <span className="font-medium">{destination.rating}</span>
+                  {destination.rating && (
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                        <span className="font-medium">{destination.rating.average}</span>
+                      </div>
+                      <span className="text-gray-500 text-sm">({destination.rating.count} reviews)</span>
                     </div>
-                    <span className="text-gray-500 text-sm">({destination.reviews} reviews)</span>
-                  </div>
+                  )}
 
                   {/* Description */}
                   <p className="text-gray-600 mb-4 line-clamp-3">
-                    {destination.description}
+                    {destination.shortDescription || destination.description}
                   </p>
 
                   {/* Highlights */}
@@ -235,11 +209,11 @@ export default function DestinationsPage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Clock className="h-4 w-4" />
-                      <span>Best time: {destination.bestTime}</span>
+                      <span>Best time: {destination.bestTimeToVisit.months.join(', ')}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Users className="h-4 w-4" />
-                      <span>Budget: {destination.budget}</span>
+                      <span>Budget: {destination.budget.currency} {destination.budget.low}-{destination.budget.high}/day</span>
                     </div>
                   </div>
 
