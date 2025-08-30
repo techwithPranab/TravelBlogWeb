@@ -24,6 +24,7 @@ import commentRoutes from '@/routes/commentRoutes'
 import contactRoutes from '@/routes/contactRoutes'
 import photoRoutes from '@/routes/photoRoutes'
 import newsletterRoutes from '@/routes/newsletterRoutes'
+import adminRoutes from '@/routes/adminRoutes'
 
 // Load environment variables
 dotenv.config()
@@ -108,6 +109,7 @@ app.use(`${API_VERSION}/comments`, commentRoutes)
 app.use(`${API_VERSION}/contact`, contactRoutes)
 app.use(`${API_VERSION}/photos`, photoRoutes)
 app.use(`${API_VERSION}/newsletter`, newsletterRoutes)
+app.use(`${API_VERSION}/admin`, adminRoutes)
 
 // 404 handler
 app.use(notFound)

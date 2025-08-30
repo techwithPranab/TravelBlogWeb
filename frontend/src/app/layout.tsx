@@ -2,9 +2,8 @@ import '../styles/globals.css'
 import type { Metadata } from 'next'
 import { Inter, Merriweather } from 'next/font/google'
 import { Providers } from '@/components/providers'
-import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
 import { Toaster } from 'react-hot-toast'
+import { ConditionalLayout } from '@/components/layout/ConditionalLayout'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -75,19 +74,15 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  readonly children: React.ReactNode
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
       <body className="min-h-screen bg-white text-gray-900">
         <Providers>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-             <main className="flex-grow pt-16">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
           <Toaster
             position="top-right"
             toastOptions={{
