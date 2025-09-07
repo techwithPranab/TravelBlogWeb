@@ -11,7 +11,7 @@ class AdminApi {
   }
 
   private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    const url = `${API_BASE_URL}/admin${endpoint}`
+    const url = `${API_BASE_URL}${endpoint}` // Remove /admin prefix for generic requests
     
     const config: RequestInit = {
       headers: this.getAuthHeaders(),
@@ -41,9 +41,39 @@ class AdminApi {
     }
   }
 
+  // Generic HTTP methods
+  async get<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint)
+  }
+
+  async post<T>(endpoint: string, data?: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'POST',
+      body: data ? JSON.stringify(data) : undefined
+    })
+  }
+
+  async put<T>(endpoint: string, data?: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'PUT',
+      body: data ? JSON.stringify(data) : undefined
+    })
+  }
+
+  async delete<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'DELETE'
+    })
+  }
+
+  // Legacy method for admin endpoints
+  private async adminRequest<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    return this.request<T>(`/admin${endpoint}`, options)
+  }
+
   // Dashboard
   async getDashboardStats() {
-    return this.request('/dashboard/stats')
+    return this.adminRequest('/dashboard/stats')
   }
 
   // Users Management
@@ -61,25 +91,25 @@ class AdminApi {
     
     const query = searchParams.toString()
     const endpoint = query ? `/users?${query}` : '/users'
-    return this.request(endpoint)
+    return this.adminRequest(endpoint)
   }
 
   async createUser(userData: any) {
-    return this.request('/users', {
+    return this.adminRequest('/users', {
       method: 'POST',
       body: JSON.stringify(userData)
     })
   }
 
   async updateUser(id: string, userData: any) {
-    return this.request(`/users/${id}`, {
+    return this.adminRequest(`/users/${id}`, {
       method: 'PUT',
       body: JSON.stringify(userData)
     })
   }
 
   async deleteUser(id: string) {
-    return this.request(`/users/${id}`, {
+    return this.adminRequest(`/users/${id}`, {
       method: 'DELETE'
     })
   }
@@ -101,19 +131,43 @@ class AdminApi {
     
     const query = searchParams.toString()
     const endpoint = query ? `/posts?${query}` : '/posts'
-    return this.request(endpoint)
+    return this.adminRequest(endpoint)
   }
 
   async updatePostStatus(id: string, status: string) {
-    return this.request(`/posts/${id}/status`, {
+    return this.adminRequest(`/posts/${id}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status })
     })
   }
 
   async deletePost(id: string) {
-    return this.request(`/posts/${id}`, {
+    return this.adminRequest(`/posts/${id}`, {
       method: 'DELETE'
+    })
+  }
+
+  async createPost(postData: any) {
+    return this.adminRequest('/posts', {
+      method: 'POST',
+      body: JSON.stringify(postData)
+    })
+  }
+
+  async updatePost(id: string, postData: any) {
+    return this.adminRequest(`/posts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(postData)
+    })
+  }
+
+  async getPost(id: string) {
+    return this.adminRequest(`/posts/${id}`)
+  }
+
+  async approvePost(id: string) {
+    return this.adminRequest(`/posts/${id}/approve`, {
+      method: 'PUT'
     })
   }
 
@@ -130,16 +184,52 @@ class AdminApi {
     
     const query = searchParams.toString()
     const endpoint = query ? `/destinations?${query}` : '/destinations'
-    return this.request(endpoint)
+    return this.adminRequest(endpoint)
   }
 
   async deleteDestination(id: string) {
-    return this.request(`/destinations/${id}`, {
+    return this.adminRequest(`/destinations/${id}`, {
       method: 'DELETE'
     })
   }
 
+  async createDestination(destinationData: any) {
+    return this.adminRequest('/destinations', {
+      method: 'POST',
+      body: JSON.stringify(destinationData)
+    })
+  }
+
+  async updateDestination(id: string, destinationData: any) {
+    return this.adminRequest(`/destinations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(destinationData)
+    })
+  }
+
+  async getDestination(id: string) {
+    return this.adminRequest(`/destinations/${id}`)
+  }
+
   // Guides Management
+  async createGuide(guideData: any) {
+    return this.adminRequest('/guides', {
+      method: 'POST',
+      body: JSON.stringify(guideData)
+    })
+  }
+
+  async updateGuide(id: string, guideData: any) {
+    return this.adminRequest(`/guides/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(guideData)
+    })
+  }
+
+  async getGuide(id: string) {
+    return this.adminRequest(`/guides/${id}`)
+  }
+
   async getGuides(params?: {
     page?: number
     limit?: number
@@ -152,22 +242,22 @@ class AdminApi {
     
     const query = searchParams.toString()
     const endpoint = query ? `/guides?${query}` : '/guides'
-    return this.request(endpoint)
+    return this.adminRequest(endpoint)
   }
 
   async deleteGuide(id: string) {
-    return this.request(`/guides/${id}`, {
+    return this.adminRequest(`/guides/${id}`, {
       method: 'DELETE'
     })
   }
 
   // Settings Management
   async getSettings() {
-    return this.request('/settings')
+    return this.adminRequest('/settings')
   }
 
   async updateSettings(settings: any) {
-    return this.request('/settings', {
+    return this.adminRequest('/settings', {
       method: 'PUT',
       body: JSON.stringify(settings)
     })

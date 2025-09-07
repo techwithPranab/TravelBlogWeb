@@ -53,6 +53,8 @@ export default function SubmitPhotoPage() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState('')
   const [tagInput, setTagInput] = useState('')
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   
   const [formData, setFormData] = useState<PhotoData>({
     title: '',
@@ -133,15 +135,29 @@ export default function SubmitPhotoPage() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      // In a real app, you would upload to a cloud storage service
-      // For now, we'll simulate with a placeholder URL
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please select a valid image file (JPEG, PNG, GIF, etc.)')
+        return
+      }
+      
+      // Validate file size (10MB limit to match backend)
+      if (file.size > 10 * 1024 * 1024) {
+        setError('File size must be less than 10MB')
+        return
+      }
+
+      setSelectedFile(file)
+      setError('')
+      
+      // Create preview URL
       const reader = new FileReader()
       reader.onload = (event) => {
         const imageUrl = event.target?.result as string
+        setPreviewUrl(imageUrl)
         setFormData(prev => ({
           ...prev,
-          imageUrl,
-          thumbnailUrl: imageUrl // In real app, generate thumbnail
+          imageUrl // Keep for preview, but won't be sent to backend
         }))
       }
       reader.readAsDataURL(file)
@@ -150,7 +166,7 @@ export default function SubmitPhotoPage() {
 
   const validateForm = () => {
     if (!formData.title.trim()) return 'Title is required'
-    if (!formData.imageUrl) return 'Image is required'
+    if (!selectedFile) return 'Image is required'
     if (!formData.location.country.trim()) return 'Country is required'
     if (!formData.photographer.name.trim()) return 'Photographer name is required'
     if (!formData.photographer.email.trim()) return 'Email is required'
@@ -171,6 +187,7 @@ export default function SubmitPhotoPage() {
     const validationError = validateForm()
     if (validationError) {
       setError(validationError)
+      console.log('Validation Error:', validationError);
       return
     }
     
@@ -178,23 +195,63 @@ export default function SubmitPhotoPage() {
     setError('')
     
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/photos`, {
+      // Create FormData for file upload
+      const formDataToSend = new FormData()
+      formDataToSend.append('photo', selectedFile!)
+      formDataToSend.append('title', formData.title)
+      formDataToSend.append('description', formData.description)
+      formDataToSend.append('location', JSON.stringify(formData.location))
+      formDataToSend.append('photographer', JSON.stringify(formData.photographer))
+      formDataToSend.append('tags', JSON.stringify(formData.tags))
+      formDataToSend.append('category', formData.category)
+      formDataToSend.append('camera', JSON.stringify(formData.camera))
+      
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/photos`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: formDataToSend, // No Content-Type header needed for FormData
       })
       
       if (response.ok) {
+        const result = await response.json()
+        console.log('Photo submitted successfully:', result)
         setIsSuccess(true)
         // Reset form after successful submission
+        setFormData({
+          title: '',
+          description: '',
+          imageUrl: '',
+          thumbnailUrl: '',
+          location: {
+            country: '',
+            city: ''
+          },
+          photographer: {
+            name: '',
+            email: ''
+          },
+          tags: [],
+          category: '',
+          camera: {
+            make: '',
+            model: '',
+            settings: {
+              aperture: '',
+              shutter: '',
+              iso: '',
+              focalLength: ''
+            }
+          }
+        })
+        setSelectedFile(null)
+        setPreviewUrl(null)
+        setTagInput('')
         setTimeout(() => {
           router.push('/gallery')
         }, 3000)
       } else {
-        const data = await response.json()
-        setError(data.error || 'Failed to submit photo')
+        const errorData = await response.json()
+        console.error('Photo submission failed:', errorData)
+        setError(errorData.error || 'Failed to submit photo')
       }
     } catch (err) {
       console.error('Photo submission error:', err)
@@ -261,7 +318,7 @@ export default function SubmitPhotoPage() {
                 Photo Upload *
               </label>
               
-              {!formData.imageUrl ? (
+              {!previewUrl ? (
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
                   <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-lg text-gray-600 mb-2">Click to upload your photo</p>
@@ -285,7 +342,7 @@ export default function SubmitPhotoPage() {
               ) : (
                 <div className="relative">
                   <Image
-                    src={formData.imageUrl}
+                    src={previewUrl}
                     alt="Preview"
                     width={400}
                     height={300}
@@ -293,7 +350,11 @@ export default function SubmitPhotoPage() {
                   />
                   <button
                     type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, imageUrl: '', thumbnailUrl: '' }))}
+                    onClick={() => {
+                      setSelectedFile(null)
+                      setPreviewUrl(null)
+                      setFormData(prev => ({ ...prev, imageUrl: '' }))
+                    }}
                     className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition-colors"
                   >
                     <X className="w-4 h-4" />

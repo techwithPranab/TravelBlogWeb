@@ -5,6 +5,8 @@ export interface IPhoto extends Document {
   description?: string;
   imageUrl: string;
   thumbnailUrl?: string;
+  driveId?: string;
+  thumbnailDriveId?: string;
   location: {
     country: string;
     city?: string;
@@ -32,7 +34,9 @@ export interface IPhoto extends Document {
   };
   status: 'pending' | 'approved' | 'rejected';
   moderationNotes?: string;
-  likes: number;
+  moderatedBy?: mongoose.Types.ObjectId;
+  moderatedAt?: Date;
+  likes: mongoose.Types.ObjectId[];
   views: number;
   downloads: number;
   isPublic: boolean;
@@ -61,6 +65,12 @@ const PhotoSchema: Schema = new Schema({
   },
   thumbnailUrl: { 
     type: String 
+  },
+  driveId: {
+    type: String
+  },
+  thumbnailDriveId: {
+    type: String
   },
   location: {
     country: { 
@@ -124,10 +134,18 @@ const PhotoSchema: Schema = new Schema({
     type: String,
     trim: true
   },
-  likes: { 
-    type: Number, 
-    default: 0 
+  moderatedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   },
+  moderatedAt: {
+    type: Date
+  },
+  likes: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }],
   views: { 
     type: Number, 
     default: 0 

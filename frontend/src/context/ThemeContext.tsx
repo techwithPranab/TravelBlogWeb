@@ -17,14 +17,24 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>('system')
+  const [theme, setTheme] = useState<Theme>('light') // Changed from 'system' to 'light'
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light')
 
   useEffect(() => {
-    // Get theme from localStorage
+    // Clear any existing theme settings and force light mode
+    localStorage.removeItem('theme')
+    setTheme('light')
+    setResolvedTheme('light')
+    document.documentElement.classList.remove('dark')
+    
+    // Get theme from localStorage (but default to light)
     const savedTheme = localStorage.getItem('theme') as Theme
-    if (savedTheme) {
+    if (savedTheme && savedTheme !== 'dark') {
       setTheme(savedTheme)
+    } else {
+      // Force light theme
+      setTheme('light')
+      localStorage.setItem('theme', 'light')
     }
   }, [])
 

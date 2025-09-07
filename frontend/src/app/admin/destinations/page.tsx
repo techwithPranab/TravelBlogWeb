@@ -111,7 +111,10 @@ export default function AdminDestinationsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Destinations</h1>
           <p className="text-gray-600 mt-1">Manage travel destinations</p>
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+        <button 
+          onClick={() => window.location.href = '/admin/destinations/create'}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+        >
           <Plus className="h-4 w-4" />
           Add Destination
         </button>
@@ -203,6 +206,7 @@ export default function AdminDestinationsPage() {
 
               <div className="flex items-center justify-end gap-2">
                 <button
+                  onClick={() => window.location.href = `/admin/destinations/${destination._id}/edit`}
                   className="text-blue-600 hover:text-blue-900"
                   title="Edit"
                 >

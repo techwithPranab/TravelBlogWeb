@@ -121,6 +121,7 @@ export default function AdminPostsPage() {
     )
   }
 
+  const router = typeof window !== 'undefined' ? require('next/navigation').useRouter() : null;
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -129,7 +130,10 @@ export default function AdminPostsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Blog Posts</h1>
           <p className="text-gray-600 mt-1">Manage all blog posts and their approval status</p>
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          onClick={() => router?.push('/admin/posts/create')}
+        >
           Create New Post
         </button>
       </div>
@@ -305,6 +309,7 @@ export default function AdminPostsPage() {
                         </button>
                       )}
                       <button
+                        onClick={() => router?.push(`/admin/posts/${post._id}/edit`)}
                         className="text-blue-600 hover:text-blue-900"
                         title="Edit"
                       >

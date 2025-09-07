@@ -8,9 +8,11 @@ import {
   getPhotoCategories,
   getPhotoLocations,
   getFeaturedPhotos,
+  getAllPhotosAdmin,
   getPendingPhotos,
   moderatePhoto,
-  deletePhoto
+  deletePhoto,
+  upload
 } from '../controllers/photoController';
 import { protect, restrictTo } from '../middleware/auth';
 
@@ -22,11 +24,12 @@ router.get('/featured', getFeaturedPhotos);
 router.get('/categories', getPhotoCategories);
 router.get('/locations', getPhotoLocations);
 router.get('/:id', getPhoto);
-router.post('/', submitPhoto);
+router.post('/', upload.single('photo'), submitPhoto);
 router.put('/:id/like', likePhoto);
 router.put('/:id/download', downloadPhoto);
 
 // Admin routes
+router.get('/admin/all', protect, restrictTo('admin'), getAllPhotosAdmin);
 router.get('/admin/pending', protect, restrictTo('admin'), getPendingPhotos);
 router.put('/admin/:id/moderate', protect, restrictTo('admin'), moderatePhoto);
 router.delete('/admin/:id', protect, restrictTo('admin'), deletePhoto);

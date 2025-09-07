@@ -16,7 +16,7 @@ export interface IPost extends Document {
     focusKeyword?: string
     ogImage?: string
   }
-  status: 'draft' | 'published' | 'archived'
+  status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived'
   isPremium: boolean
   readTime: number
   viewCount: number
@@ -32,6 +32,11 @@ export interface IPost extends Document {
       lng: number
     }
   }
+  // Approval workflow fields
+  submittedAt?: Date
+  moderatedBy?: mongoose.Types.ObjectId
+  moderatedAt?: Date
+  moderationNotes?: string
   publishedAt?: Date
   createdAt: Date
   updatedAt: Date
@@ -108,7 +113,7 @@ const postSchema = new Schema<IPost>({
   },
   status: {
     type: String,
-    enum: ['draft', 'published', 'archived'],
+    enum: ['draft', 'pending', 'published', 'rejected', 'archived'],
     default: 'draft'
   },
   isPremium: {
@@ -162,6 +167,21 @@ const postSchema = new Schema<IPost>({
         max: 180
       }
     }
+  },
+  // Approval workflow fields
+  submittedAt: {
+    type: Date
+  },
+  moderatedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  moderatedAt: {
+    type: Date
+  },
+  moderationNotes: {
+    type: String,
+    trim: true
   },
   publishedAt: {
     type: Date
@@ -221,8 +241,13 @@ postSchema.pre('save', function(next) {
 
 // Set published date when status changes to published
 postSchema.pre('save', function(next) {
-  if (this.isModified('status') && this.status === 'published' && !this.publishedAt) {
-    this.publishedAt = new Date()
+  if (this.isModified('status')) {
+    if (this.status === 'published' && !this.publishedAt) {
+      this.publishedAt = new Date()
+    }
+    if (this.status === 'pending' && !this.submittedAt) {
+      this.submittedAt = new Date()
+    }
   }
   next()
 })

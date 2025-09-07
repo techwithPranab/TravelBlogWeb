@@ -85,10 +85,11 @@ export default function GalleryPage() {
     try {
       setLoading(true)
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/photos`)
-      
+      console.log('Fetch photos response:', response);
       if (response.ok) {
-        const data = await response.json()
-        setPhotos(data.photos || [])
+        const data = await response.json();
+        console.log('Fetched photos:', data);
+        setPhotos(data.data || [])
       } else {
         setError('Failed to load photos')
       }
@@ -128,7 +129,7 @@ export default function GalleryPage() {
 
   const handleLike = async (photoId: string) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/photos/${photoId}/like`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/photos/${photoId}/like`, {
         method: 'POST',
       })
       
@@ -146,7 +147,7 @@ export default function GalleryPage() {
 
   const handleDownload = async (photoId: string) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/photos/${photoId}/download`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/photos/${photoId}/download`, {
         method: 'POST',
       })
       

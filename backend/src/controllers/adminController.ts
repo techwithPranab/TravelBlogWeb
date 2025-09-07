@@ -319,6 +319,251 @@ export const deletePost = async (req: Request, res: Response) => {
   }
 }
 
+// Create new post
+export const createPost = async (req: Request, res: Response) => {
+  try {
+    const postData = {
+      ...req.body,
+      author: req.body.author || '64b1234567890abcdef123456' // Default author ID
+    }
+
+    const post = new Post(postData)
+    await post.save()
+    await post.populate('author', 'name email')
+
+    res.status(201).json({
+      success: true,
+      data: post,
+      message: 'Post created successfully'
+    })
+  } catch (error) {
+    console.error('Create post error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create post'
+    })
+  }
+}
+
+// Update post
+export const updatePost = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const post = await Post.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true, runValidators: true }
+    ).populate('author', 'name email')
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: 'Post not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: post,
+      message: 'Post updated successfully'
+    })
+  } catch (error) {
+    console.error('Update post error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update post'
+    })
+  }
+}
+
+// Get single post
+export const getPost = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const post = await Post.findById(id).populate('author', 'name email')
+    
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: 'Post not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: post
+    })
+  } catch (error) {
+    console.error('Get post error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get post'
+    })
+  }
+}
+
+// Approve post
+export const approvePost = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const post = await Post.findByIdAndUpdate(
+      id,
+      { 
+        status: 'published',
+        publishedAt: new Date()
+      },
+      { new: true }
+    ).populate('author', 'name email')
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: 'Post not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: post,
+      message: 'Post approved and published successfully'
+    })
+  } catch (error) {
+    console.error('Approve post error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to approve post'
+    })
+  }
+}
+
+// Get pending posts for moderation
+export const getPendingPosts = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 20
+    const skip = (page - 1) * limit
+
+    const [posts, total] = await Promise.all([
+      Post.find({ status: 'pending' })
+        .populate('author', 'name email')
+        .populate('categories', 'name slug')
+        .populate('moderatedBy', 'name email')
+        .sort({ submittedAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Post.countDocuments({ status: 'pending' })
+    ])
+
+    res.json({
+      success: true,
+      data: posts,
+      pagination: {
+        page,
+        pages: Math.ceil(total / limit),
+        total,
+        limit
+      }
+    })
+  } catch (error) {
+    console.error('Get pending posts error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch pending posts'
+    })
+  }
+}
+
+// Moderate post (approve/reject)
+export const moderatePost = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const { status, moderationNotes } = req.body
+    const adminId = (req as any).user?.id
+
+    if (!['published', 'rejected'].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Status must be either published or rejected'
+      })
+    }
+
+    const updateData: any = {
+      status,
+      moderationNotes,
+      moderatedBy: adminId,
+      moderatedAt: new Date()
+    }
+
+    if (status === 'published') {
+      updateData.publishedAt = new Date()
+    }
+
+    const post = await Post.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    ).populate('author', 'name email')
+     .populate('moderatedBy', 'name email')
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: 'Post not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: post,
+      message: `Post ${status === 'published' ? 'approved' : 'rejected'} successfully`
+    })
+  } catch (error) {
+    console.error('Moderate post error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to moderate post'
+    })
+  }
+}
+
+// Submit post for review (change status from draft to pending)
+export const submitPostForReview = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+
+    const post = await Post.findByIdAndUpdate(
+      id,
+      { 
+        status: 'pending',
+        submittedAt: new Date()
+      },
+      { new: true }
+    ).populate('author', 'name email')
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: 'Post not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: post,
+      message: 'Post submitted for review successfully'
+    })
+  } catch (error) {
+    console.error('Submit post for review error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to submit post for review'
+    })
+  }
+}
+
 // Destinations Management
 export const getAllDestinationsAdmin = async (req: Request, res: Response) => {
   try {
@@ -386,6 +631,85 @@ export const deleteDestination = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'Failed to delete destination'
+    })
+  }
+}
+
+// Create new destination
+export const createDestination = async (req: Request, res: Response) => {
+  try {
+    const destination = new Destination(req.body)
+    await destination.save()
+
+    res.status(201).json({
+      success: true,
+      data: destination,
+      message: 'Destination created successfully'
+    })
+  } catch (error) {
+    console.error('Create destination error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create destination'
+    })
+  }
+}
+
+// Update destination
+export const updateDestination = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const destination = await Destination.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true, runValidators: true }
+    )
+
+    if (!destination) {
+      return res.status(404).json({
+        success: false,
+        message: 'Destination not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: destination,
+      message: 'Destination updated successfully'
+    })
+  } catch (error) {
+    console.error('Update destination error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update destination'
+    })
+  }
+}
+
+// Get single destination
+export const getDestination = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const destination = await Destination.findById(id)
+    
+    if (!destination) {
+      return res.status(404).json({
+        success: false,
+        message: 'Destination not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: destination
+    })
+  } catch (error) {
+    console.error('Get destination error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get destination'
     })
   }
 }
@@ -458,6 +782,85 @@ export const deleteGuide = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'Failed to delete guide'
+    })
+  }
+}
+
+// Create new guide
+export const createGuide = async (req: Request, res: Response) => {
+  try {
+    const guide = new Guide(req.body)
+    await guide.save()
+
+    res.status(201).json({
+      success: true,
+      data: guide,
+      message: 'Guide created successfully'
+    })
+  } catch (error) {
+    console.error('Create guide error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create guide'
+    })
+  }
+}
+
+// Update guide
+export const updateGuide = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const guide = await Guide.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true, runValidators: true }
+    )
+
+    if (!guide) {
+      return res.status(404).json({
+        success: false,
+        message: 'Guide not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: guide,
+      message: 'Guide updated successfully'
+    })
+  } catch (error) {
+    console.error('Update guide error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update guide'
+    })
+  }
+}
+
+// Get single guide
+export const getGuide = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    
+    const guide = await Guide.findById(id)
+    
+    if (!guide) {
+      return res.status(404).json({
+        success: false,
+        message: 'Guide not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: guide
+    })
+  } catch (error) {
+    console.error('Get guide error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get guide'
     })
   }
 }

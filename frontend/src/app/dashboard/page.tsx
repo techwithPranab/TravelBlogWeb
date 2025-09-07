@@ -14,6 +14,7 @@ import {
   Users
 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { readerApi } from '@/lib/readerApi'
 
 interface DashboardStats {
   totalPosts: number
@@ -42,6 +43,7 @@ export default function DashboardPage() {
     recentActivity: []
   })
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -49,49 +51,32 @@ export default function DashboardPage() {
       return
     }
 
-    // Simulate loading dashboard data
     const loadDashboardData = async () => {
       try {
-        // In a real app, you would fetch this from your API
-        await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API call
+        setIsLoading(true)
+        setError(null)
+        
+        const dashboardData: any = await readerApi.getDashboard()
         
         setStats({
-          totalPosts: 12,
-          totalLikes: 248,
-          totalComments: 89,
-          totalViews: 3421,
-          recentActivity: [
-            {
-              id: '1',
-              type: 'like',
-              message: 'Sarah liked your post',
-              date: '2 hours ago',
-              postTitle: 'Hidden Gems of Southeast Asia'
-            },
-            {
-              id: '2',
-              type: 'comment',
-              message: 'New comment on your travel guide',
-              date: '4 hours ago',
-              postTitle: 'Budget Travel Tips for Europe'
-            },
-            {
-              id: '3',
-              type: 'follow',
-              message: 'Mike started following you',
-              date: '1 day ago'
-            },
-            {
-              id: '4',
-              type: 'view',
-              message: 'Your post gained 50 new views',
-              date: '2 days ago',
-              postTitle: 'Best Photography Spots in Japan'
-            }
-          ]
+          totalPosts: dashboardData.stats?.totalPosts || 0,
+          totalLikes: dashboardData.stats?.totalLikes || 0,
+          totalComments: dashboardData.stats?.totalComments || 0,
+          totalViews: dashboardData.stats?.totalViews || 0,
+          recentActivity: dashboardData.recentActivity || []
         })
       } catch (error) {
         console.error('Error loading dashboard:', error)
+        setError('Failed to load dashboard data. Please try again.')
+        
+        // Set fallback data
+        setStats({
+          totalPosts: 0,
+          totalLikes: 0,
+          totalComments: 0,
+          totalViews: 0,
+          recentActivity: []
+        })
       } finally {
         setIsLoading(false)
       }
@@ -108,6 +93,34 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-sm border border-gray-200 dark:border-gray-700 max-w-md mx-4">
+          <div className="text-center">
+            <div className="text-red-500 mb-4">
+              <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              Error Loading Dashboard
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              {error}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-lg transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
       </div>
     )
   }

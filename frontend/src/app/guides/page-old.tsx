@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, BookOpen, Clock, Star, Download, Eye, Filter, MapPin, User } from 'lucide-react'
+import { Search, BookOpen, Clock, Eye, Filter } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { guidesApi, type Guide } from '@/lib/api'
@@ -37,7 +37,7 @@ export default function GuidesPage() {
 
   // Get unique types and difficulties from guides
   const types = ['all', ...Array.from(new Set(guides.map(guide => guide.type)))]
-  const difficulties = ['all', 'Easy', 'Moderate', 'Challenging']
+  const difficulties = ['all', 'Beginner', 'Intermediate', 'Advanced']
 
   // Filter guides
   const filteredGuides = guides.filter(guide => {
@@ -74,91 +74,6 @@ export default function GuidesPage() {
       </div>
     )
   }
-    {
-      id: 1,
-      title: 'Complete Guide to Solo Travel in Southeast Asia',
-      description: 'Everything you need to know for your first solo adventure in Thailand, Vietnam, and Cambodia.',
-      category: 'Solo Travel',
-      difficulty: 'Beginner',
-      readTime: '15 min read',
-      downloads: 2340,
-      views: 15670,
-      rating: 4.8,
-      image: '/images/guides/solo-asia.jpg',
-      isPremium: false,
-      slug: 'solo-travel-southeast-asia'
-    },
-    {
-      id: 2,
-      title: 'Budget Backpacking Europe: Complete 30-Day Itinerary',
-      description: 'Detailed 30-day itinerary covering 12 countries with budget breakdowns and accommodation tips.',
-      category: 'Budget Travel',
-      difficulty: 'Intermediate',
-      readTime: '25 min read',
-      downloads: 4560,
-      views: 28930,
-      rating: 4.9,
-      image: '/images/guides/europe-budget.jpg',
-      isPremium: true,
-      slug: 'budget-backpacking-europe'
-    },
-    {
-      id: 3,
-      title: 'Digital Nomad Starter Kit: Work & Travel Guide',
-      description: 'Complete guide to becoming a digital nomad, including visa info, best destinations, and tools.',
-      category: 'Digital Nomad',
-      difficulty: 'Beginner',
-      readTime: '20 min read',
-      downloads: 3210,
-      views: 19450,
-      rating: 4.7,
-      image: '/images/guides/digital-nomad.jpg',
-      isPremium: false,
-      slug: 'digital-nomad-starter-kit'
-    },
-    {
-      id: 4,
-      title: 'Adventure Photography: Capture Your Travels',
-      description: 'Professional tips for taking stunning travel photos with any camera, from phone to DSLR.',
-      category: 'Photography',
-      difficulty: 'Intermediate',
-      readTime: '18 min read',
-      downloads: 1890,
-      views: 12340,
-      rating: 4.6,
-      image: '/images/guides/photography.jpg',
-      isPremium: true,
-      slug: 'adventure-photography'
-    },
-    {
-      id: 5,
-      title: 'Family Travel Planning: Ultimate Guide',
-      description: 'Plan amazing family vacations with kids of all ages, including packing lists and activities.',
-      category: 'Family Travel',
-      difficulty: 'Beginner',
-      readTime: '22 min read',
-      downloads: 2780,
-      views: 16820,
-      rating: 4.8,
-      image: '/images/guides/family-travel.jpg',
-      isPremium: false,
-      slug: 'family-travel-planning'
-    },
-    {
-      id: 6,
-      title: 'Extreme Adventure Travel Safety Guide',
-      description: 'Essential safety protocols for extreme sports and adventure activities worldwide.',
-      category: 'Adventure',
-      difficulty: 'Advanced',
-      readTime: '30 min read',
-      downloads: 1450,
-      views: 8900,
-      rating: 4.9,
-      image: '/images/guides/extreme-adventure.jpg',
-      isPremium: true,
-      slug: 'extreme-adventure-safety'
-    }
-  ]
 
   const categories = [
     'all',
@@ -169,16 +84,6 @@ export default function GuidesPage() {
     'Family Travel',
     'Adventure'
   ]
-
-  const difficulties = ['all', 'Beginner', 'Intermediate', 'Advanced']
-
-  const filteredGuides = guides.filter(guide => {
-    const matchesSearch = guide.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         guide.description.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'all' || guide.category === selectedCategory
-    const matchesDifficulty = selectedDifficulty === 'all' || guide.difficulty === selectedDifficulty
-    return matchesSearch && matchesCategory && matchesDifficulty
-  })
 
   return (
     <div className="min-h-screen bg-white">
@@ -223,8 +128,8 @@ export default function GuidesPage() {
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-gray-600" />
                 <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 >
                   {categories.map((category) => (
@@ -258,7 +163,7 @@ export default function GuidesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredGuides.map((guide, index) => (
               <motion.div
-                key={guide.id}
+                key={guide._id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -270,20 +175,15 @@ export default function GuidesPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute top-4 left-4 flex gap-2">
                     <span className="bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                      {guide.category}
+                      {guide.category.name}
                     </span>
-                    {guide.isPremium && (
-                      <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-                        Premium
-                      </span>
-                    )}
                   </div>
                   <div className="absolute top-4 right-4">
                     {(() => {
                       let difficultyClass = '';
-                      if (guide.difficulty === 'Beginner') {
+                      if (guide.difficulty === 'Easy') {
                         difficultyClass = 'bg-green-100 text-green-700';
-                      } else if (guide.difficulty === 'Intermediate') {
+                      } else if (guide.difficulty === 'Moderate') {
                         difficultyClass = 'bg-yellow-100 text-yellow-700';
                       } else {
                         difficultyClass = 'bg-red-100 text-red-700';
@@ -311,24 +211,24 @@ export default function GuidesPage() {
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
-                        <span>{guide.readTime}</span>
+                        <span>{guide.duration.days} days</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span>{guide.rating}</span>
+                        <Eye className="h-4 w-4" />
+                        <span>{guide.views} views</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Download Stats */}
+                  {/* Budget Info */}
                   <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
                     <div className="flex items-center gap-1">
-                      <Download className="h-4 w-4" />
-                      <span>{guide.downloads.toLocaleString()} downloads</span>
+                      <span className="font-medium text-gray-700">
+                        {guide.budget.currency} {guide.budget.amount}
+                      </span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Eye className="h-4 w-4" />
-                      <span>{guide.views.toLocaleString()} views</span>
+                      <span>{guide.likes} likes</span>
                     </div>
                   </div>
 

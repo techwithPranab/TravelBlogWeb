@@ -1,0 +1,31 @@
+{
+  "name": "travel-blog-web",
+  "version": "1.0.0",
+  "description": "Modern Travel Blog Website with Next.js, Node.js, Express, and MongoDB",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && npm start",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "travel",
+    "blog",
+    "nextjs",
+    "nodejs",
+    "express",
+    "mongodb",
+    "tailwindcss",
+    "framer-motion"
+  ],
+  "author": "TechWithPranab",
+  "license": "MIT"
+}

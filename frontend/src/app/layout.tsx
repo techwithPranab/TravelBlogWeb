@@ -78,7 +78,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
-      <body className="min-h-screen bg-white text-gray-900">
+      <body className="min-h-screen bg-white">
         <Providers>
           <ConditionalLayout>
             {children}

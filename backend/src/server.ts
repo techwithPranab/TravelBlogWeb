@@ -1,3 +1,4 @@
+import dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
@@ -6,8 +7,12 @@ import compression from 'compression'
 import rateLimit from 'express-rate-limit'
 import mongoSanitize from 'express-mongo-sanitize'
 import hpp from 'hpp'
-import dotenv from 'dotenv'
+import path from 'path'
 
+// Load environment variables FIRST
+dotenv.config()
+
+// Importing the database connection and middleware
 import { connectDB } from '@/config/database'
 import { errorHandler } from '@/middleware/errorHandler'
 import { notFound } from '@/middleware/notFound'
@@ -25,9 +30,7 @@ import contactRoutes from '@/routes/contactRoutes'
 import photoRoutes from '@/routes/photoRoutes'
 import newsletterRoutes from '@/routes/newsletterRoutes'
 import adminRoutes from '@/routes/adminRoutes'
-
-// Load environment variables
-dotenv.config()
+import readerRoutes from '@/routes/readerRoutes'
 
 // Connect to database
 connectDB()
@@ -40,13 +43,20 @@ app.set('trust proxy', 1)
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: process.env.NODE_ENV === 'development' ? 60 * 60 * 1000 : 15 * 60 * 1000, // 1 hour for dev, 15 min for prod
+  max: process.env.NODE_ENV === 'development' ? 1000 : 100, // 1000 requests for dev, 100 for prod
   message: {
     error: 'Too many requests from this IP, please try again later.'
   },
   standardHeaders: true,
   legacyHeaders: false,
+  // Skip rate limiting for health checks, static files, and common development routes
+  skip: (req) => {
+    return req.path === '/health' || 
+           req.path.startsWith('/uploads/') || 
+           req.path.startsWith('/api/auth/login') ||
+           req.path.startsWith('/api/auth/register')
+  }
 })
 
 // Apply rate limiting to all requests
@@ -67,6 +77,7 @@ app.use(helmet({
       frameSrc: ["'self'", 'https:'],
     },
   },
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 }))
 
 app.use(cors({
@@ -85,6 +96,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 app.use(mongoSanitize())
 app.use(hpp())
 
+// Serve static files from uploads directory (for local storage fallback)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -92,6 +106,35 @@ app.get('/health', (req, res) => {
     message: 'Server is running!',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
+  })
+})
+
+// Debug endpoint to check environment variables
+app.get('/debug/env', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Environment variables check',
+    cloudinary: {
+      CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME ? 'SET' : 'NOT SET',
+      CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? 'SET' : 'NOT SET',
+      CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? 'SET' : 'NOT SET'
+    },
+    port: process.env.PORT,
+    node_env: process.env.NODE_ENV
+  })
+})
+
+// Rate limit status endpoint
+app.get('/api/rate-limit-status', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Rate limit status',
+    environment: process.env.NODE_ENV,
+    limits: {
+      windowMs: process.env.NODE_ENV === 'development' ? 60 * 60 * 1000 : 15 * 60 * 1000,
+      max: process.env.NODE_ENV === 'development' ? 1000 : 100,
+      window: process.env.NODE_ENV === 'development' ? '1 hour' : '15 minutes'
+    }
   })
 })
 
@@ -110,6 +153,7 @@ app.use(`${API_VERSION}/contact`, contactRoutes)
 app.use(`${API_VERSION}/photos`, photoRoutes)
 app.use(`${API_VERSION}/newsletter`, newsletterRoutes)
 app.use(`${API_VERSION}/admin`, adminRoutes)
+app.use(`${API_VERSION}/reader`, readerRoutes)
 
 // 404 handler
 app.use(notFound)

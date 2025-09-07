@@ -13,7 +13,8 @@ import {
   Menu,
   X,
   LogOut,
-  Shield
+  Shield,
+  Camera
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -33,6 +34,12 @@ const sidebarItems = [
     href: '/admin/posts',
     icon: FileText,
     badge: 'Posts'
+  },
+  {
+    name: 'Photos',
+    href: '/admin/photos',
+    icon: Camera,
+    badge: null
   },
   {
     name: 'Destinations',
