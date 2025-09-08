@@ -15,7 +15,7 @@ dotenv.config()
 // Importing the database connection and middleware
 import { connectDB } from '@/config/database'
 import { errorHandler } from '@/middleware/errorHandler'
-import { notFound } from '@/middleware/notFound'
+import notFound from '@/middleware/notFound'
 
 // Route imports
 import authRoutes from '@/routes/auth'
