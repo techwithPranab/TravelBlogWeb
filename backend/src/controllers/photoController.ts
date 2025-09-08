@@ -129,16 +129,30 @@ export const submitPhoto = handleAsync(async (req: Request, res: Response) => {
   }
 
   try {
-    // Process image with sharp to create thumbnail
-    const processedImage = await sharp(req.file.buffer)
+    // Process image with sharp to create both main image and thumbnail
+    const sharpImage = sharp(req.file.buffer);
+
+    // Create main image
+    const processedImage = await sharpImage
+      .clone()
       .resize(1920, 1080, { fit: 'inside', withoutEnlargement: true })
       .jpeg({ quality: 85 })
       .toBuffer();
 
-    const thumbnail = await sharp(req.file.buffer)
+    // Create thumbnail from the same sharp instance
+    const thumbnail = await sharpImage
+      .clone()
       .resize(400, 300, { fit: 'cover' })
       .jpeg({ quality: 80 })
       .toBuffer();
+
+    // Clear the original buffer from memory
+    req.file.buffer = Buffer.alloc(0);
+
+    // Force garbage collection if available (only in development)
+    if (global.gc) {
+      global.gc();
+    }
 
     // Generate unique filenames
     const timestamp = Date.now();
