@@ -2,8 +2,81 @@
 
 import { MapPin, Camera, Globe, Heart, Users, Award } from 'lucide-react'
 import { motion } from 'framer-motion'
+import Head from 'next/head'
 
 export default function AboutPage() {
+  // Generate SEO metadata for about page
+  const generateSEOMetadata = () => {
+    const title = 'About Us - TravelBlog | Passionate Travelers Sharing Authentic Stories'
+    const description = 'Learn about TravelBlog\'s journey, our team of experienced travelers, and our mission to inspire authentic travel experiences around the world. Discover our story and values.'
+    const keywords = [
+      'about travel blog',
+      'travel team',
+      'travel writers',
+      'travel photographers',
+      'travel company',
+      'travel mission',
+      'travel values',
+      'travel story',
+      'travel community',
+      'travel experts'
+    ].join(', ')
+
+    return { title, description, keywords }
+  }
+
+  const seoData = generateSEOMetadata()
+
+  // Generate structured data for about page
+  const generateStructuredData = () => {
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "About TravelBlog",
+      "description": seoData.description,
+      "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`,
+      "publisher": {
+        "@type": "Organization",
+        "name": "TravelBlog",
+        "foundingDate": "2018",
+        "description": "A travel blog dedicated to sharing authentic travel experiences and inspiring adventures around the world.",
+        "sameAs": [
+          "https://facebook.com/travelblog",
+          "https://twitter.com/travelblog",
+          "https://instagram.com/travelblog"
+        ]
+      },
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "TravelBlog",
+        "description": "Passionate travelers sharing authentic stories, practical guides, and inspiring adventures from around the world.",
+        "founder": {
+          "@type": "Person",
+          "name": "Sarah Johnson"
+        },
+        "employee": [
+          {
+            "@type": "Person",
+            "name": "Sarah Johnson",
+            "jobTitle": "Founder & Travel Writer"
+          },
+          {
+            "@type": "Person",
+            "name": "Michael Chen",
+            "jobTitle": "Photography Director"
+          },
+          {
+            "@type": "Person",
+            "name": "Emma Rodriguez",
+            "jobTitle": "Adventure Guide Writer"
+          }
+        ]
+      }
+    }
+
+    return JSON.stringify(structuredData)
+  }
+
   const stats = [
     { icon: MapPin, label: 'Countries Visited', value: '42' },
     { icon: Camera, label: 'Photos Taken', value: '10,000+' },
@@ -59,7 +132,43 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <Head>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta name="keywords" content={seoData.keywords} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`} />
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-about.jpg`} />
+        <meta property="og:site_name" content="TravelBlog" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`} />
+        <meta property="twitter:title" content={seoData.title} />
+        <meta property="twitter:description" content={seoData.description} />
+        <meta property="twitter:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-about.jpg`} />
+
+        {/* Additional SEO */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="TravelBlog Team" />
+        <meta name="language" content="English" />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`} />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: generateStructuredData(),
+          }}
+        />
+      </Head>
+
+      <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-20">
         <div className="container mx-auto px-4">
@@ -263,5 +372,6 @@ export default function AboutPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

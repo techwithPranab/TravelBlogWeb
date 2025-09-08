@@ -38,7 +38,7 @@ export const photoUpload = multer({
   limits: {
     fileSize: 10 * 1024 * 1024 // 10MB limit
   },
-  fileFilter: (req: Request, file: Express.Multer.File, cb) => {
+  fileFilter: (req: Request, file: any, cb) => {
     // Only allow image files
     if (file.mimetype.startsWith('image/')) {
       cb(null, true)
@@ -148,7 +148,7 @@ export const uploadBufferToDrive = async (buffer: Buffer, fileName: string, mime
 }
 
 // Function to upload file to Google Drive (with local fallback)
-export const uploadToDrive = async (file: Express.Multer.File, folder: string = 'photos'): Promise<string> => {
+export const uploadToDrive = async (file: any, folder: string = 'photos'): Promise<string> => {
   const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}-${file.originalname}`
   console.log('Uploading file to Google Drive with name:', fileName)
 
@@ -162,7 +162,7 @@ export const uploadToDrive = async (file: Express.Multer.File, folder: string = 
 }
 
 // Local storage fallback function
-const uploadToLocal = async (file: Express.Multer.File, folder: string): Promise<string> => {
+const uploadToLocal = async (file: any, folder: string): Promise<string> => {
   // Create uploads directory if it doesn't exist
   const uploadDir = path.join(__dirname, '../../uploads', folder)
   await fs.mkdir(uploadDir, { recursive: true })

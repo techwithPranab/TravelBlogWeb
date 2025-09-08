@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import Post, { IPost } from '@/models/Post'
-import User, { IUser } from '@/models/User'
+import Post from '@/models/Post'
+import { IUser } from '@/models/User'
 
 interface AuthenticatedRequest extends Request {
   user?: IUser

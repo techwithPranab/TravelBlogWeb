@@ -6,10 +6,10 @@ export interface ApiError extends Error {
 }
 
 export const errorHandler = (
-  err: ApiError,
+  err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): void => {
   let error = { ...err }
   error.message = err.message
@@ -24,14 +24,14 @@ export const errorHandler = (
   }
 
   // Mongoose duplicate key
-  if (err.name === 'MongoServerError' && (err as any).code === 11000) {
+  if (err.name === 'MongoServerError' && err.code === 11000) {
     const message = 'Duplicate field value entered'
     error = { ...error, message, statusCode: 400 }
   }
 
   // Mongoose validation error
   if (err.name === 'ValidationError') {
-    const message = Object.values((err as any).errors).map((val: any) => val.message).join(', ')
+    const message = Object.values(err.errors).map((val: any) => val.message).join(', ')
     error = { ...error, message, statusCode: 400 }
   }
 

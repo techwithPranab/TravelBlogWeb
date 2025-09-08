@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { MapPin, Star, Clock, Camera, Users, Search, DollarSign } from 'lucide-react'
+import { MapPin, Star, Clock, Camera, Users, Search } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import Head from 'next/head'
 import { destinationsApi, type Destination } from '@/lib/api'
 
 export default function DestinationsPage() {
@@ -12,6 +13,63 @@ export default function DestinationsPage() {
   const [destinations, setDestinations] = useState<Destination[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Generate SEO metadata for destinations page
+  const generateSEOMetadata = () => {
+    const title = 'Travel Destinations - Explore Amazing Places Around the World | TravelBlog'
+    const description = 'Discover incredible travel destinations with detailed guides, photos, and insider tips. From hidden gems to popular hotspots, find your perfect travel destination.'
+    const keywords = [
+      'travel destinations',
+      'places to visit',
+      'travel guides',
+      'destination guides',
+      'travel spots',
+      'vacation destinations',
+      'travel locations',
+      'world destinations',
+      'travel planning',
+      'destination reviews'
+    ].join(', ')
+
+    return { title, description, keywords }
+  }
+
+  const seoData = generateSEOMetadata()
+
+  // Generate structured data for destinations page
+  const generateStructuredData = () => {
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Travel Destinations",
+      "description": seoData.description,
+      "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/destinations`,
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Travel Destinations",
+        "description": "Curated collection of amazing travel destinations around the world"
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}`
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Destinations",
+            "item": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/destinations`
+          }
+        ]
+      }
+    }
+
+    return JSON.stringify(structuredData)
+  }
 
   // Fetch destinations on component mount
   useEffect(() => {
@@ -73,7 +131,43 @@ export default function DestinationsPage() {
     )
   }
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <Head>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta name="keywords" content={seoData.keywords} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/destinations`} />
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-destinations.jpg`} />
+        <meta property="og:site_name" content="TravelBlog" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/destinations`} />
+        <meta property="twitter:title" content={seoData.title} />
+        <meta property="twitter:description" content={seoData.description} />
+        <meta property="twitter:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-destinations.jpg`} />
+
+        {/* Additional SEO */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="TravelBlog Team" />
+        <meta name="language" content="English" />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/destinations`} />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: generateStructuredData(),
+          }}
+        />
+      </Head>
+
+      <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-20">
         <div className="container mx-auto px-4">
@@ -266,5 +360,6 @@ export default function DestinationsPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

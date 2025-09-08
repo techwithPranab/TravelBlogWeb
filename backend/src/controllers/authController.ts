@@ -230,24 +230,19 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
 
     await user.save({ validateBeforeSave: false })
 
-    // Create reset URL
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/auth/reset-password/${resetToken}`
-
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`
-
     try {
       // Here you would send email
       // await sendEmail({
       //   email: user.email,
       //   subject: 'Password reset token',
-      //   message,
+      //   message: `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${req.protocol}://${req.get('host')}/api/auth/reset-password/${resetToken}`
       // })
 
       res.status(200).json({
         success: true,
         message: 'Email sent'
       })
-    } catch (err) {
+    } catch (_err) {
       user.passwordResetToken = undefined
       user.passwordResetExpires = undefined
 

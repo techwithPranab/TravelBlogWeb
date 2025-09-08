@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Search, Calendar, User, Clock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import Head from 'next/head'
 import { postsApi, categoriesApi, type Post, type Category } from '@/lib/api'
 
 export default function BlogPage() {
@@ -13,6 +14,70 @@ export default function BlogPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Generate SEO metadata for blog page
+  const generateSEOMetadata = () => {
+    const title = 'Travel Blog - Stories, Guides & Travel Tips | TravelBlog'
+    const description = 'Discover inspiring travel stories, destination guides, and practical travel tips from experienced travelers around the world. Your ultimate resource for adventure and exploration.'
+    const keywords = [
+      'travel blog',
+      'travel stories',
+      'travel guides',
+      'travel tips',
+      'destination guides',
+      'travel advice',
+      'travel experiences',
+      'travel writing',
+      'travel photography',
+      'adventure travel'
+    ].join(', ')
+
+    return { title, description, keywords }
+  }
+
+  const seoData = generateSEOMetadata()
+
+  // Generate structured data for blog page
+  const generateStructuredData = () => {
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "TravelBlog",
+      "description": seoData.description,
+      "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`,
+      "publisher": {
+        "@type": "Organization",
+        "name": "TravelBlog",
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/logo.png`
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}`
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`
+          }
+        ]
+      }
+    }
+
+    return JSON.stringify(structuredData)
+  }
 
   // Fetch data on component mount
   useEffect(() => {
@@ -84,7 +149,43 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <Head>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta name="keywords" content={seoData.keywords} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`} />
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-blog.jpg`} />
+        <meta property="og:site_name" content="TravelBlog" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`} />
+        <meta property="twitter:title" content={seoData.title} />
+        <meta property="twitter:description" content={seoData.description} />
+        <meta property="twitter:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-blog.jpg`} />
+
+        {/* Additional SEO */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="TravelBlog Team" />
+        <meta name="language" content="English" />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`} />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: generateStructuredData(),
+          }}
+        />
+      </Head>
+
+      <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="container mx-auto px-4">
@@ -246,5 +347,6 @@ export default function BlogPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }
