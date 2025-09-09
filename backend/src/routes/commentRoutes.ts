@@ -21,11 +21,11 @@ router.get('/:resourceType/:resourceId', getComments)
 router.get('/stats/:resourceType/:resourceId', getCommentStats)
 router.get('/flagged', getFlaggedComments)
 router.get('/:id', getComment)
+router.post('/', submitComment) // Make comment submission public
 
 // Protected routes
 router.use(protect)
 
-router.post('/', submitComment)
 router.put('/:id', editComment)
 router.delete('/:id', deleteComment)
 router.post('/:id/like', likeComment)

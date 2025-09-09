@@ -45,10 +45,11 @@ export const getComments = async (req: Request, res: Response) => {
         status: 'approved'
       })
     } else {
+      // For top-level comments, check for null parentId
       totalComments = await Comment.countDocuments({
         resourceType,
         resourceId,
-        parentId: { $exists: false },
+        parentId: null,
         status: 'approved'
       })
     }

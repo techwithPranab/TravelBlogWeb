@@ -69,12 +69,28 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
 }
 
 // @desc    Get single post
-// @route   GET /api/posts/:id
+// @route   GET /api/posts/:identifier
 // @access  Public
 export const getPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const post = await Post.findById(req.params.id)
+    const { identifier } = req.params
+
+    // Check if identifier is a valid ObjectId
+    const isValidObjectId = /^[a-f\d]{24}$/i.test(identifier)
+
+    let query: any = { status: 'published' }
+
+    if (isValidObjectId) {
+      // If it's a valid ObjectId, search by _id
+      query._id = identifier
+    } else {
+      // If it's not a valid ObjectId, search by slug
+      query.slug = identifier
+    }
+
+    const post = await Post.findOne(query)
       .populate('author', 'name avatar email bio socialLinks')
+      .populate('categories', 'name slug')
 
     if (!post) {
       res.status(404).json({
@@ -84,8 +100,8 @@ export const getPost = async (req: Request, res: Response): Promise<void> => {
       return
     }
 
-    // Increment view count (bypass TS error)
-    (post as any).views = ((post as any).views || 0) + 1
+    // Increment view count
+    post.viewCount = (post.viewCount || 0) + 1
     await post.save()
 
     res.status(200).json({
@@ -93,6 +109,7 @@ export const getPost = async (req: Request, res: Response): Promise<void> => {
       data: post
     })
   } catch (error: any) {
+    console.error('Error in getPost:', error)
     res.status(500).json({
       success: false,
       error: error.message || 'Server error'

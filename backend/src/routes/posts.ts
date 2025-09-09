@@ -22,7 +22,7 @@ router.get('/featured', getFeaturedPosts)
 router.get('/popular', getPopularPosts)
 router.get('/search', searchPosts)
 router.get('/category/:category', getPostsByCategory)
-router.get('/:id', getPost)
+router.get('/:identifier', getPost)
 
 // Protected routes
 router.post('/', protect, authorize('author', 'admin'), createPost)

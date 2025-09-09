@@ -11,33 +11,108 @@
     margin: 0;
     padding: 0;
   }
-  
+
   body {
     @apply text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     margin: 0;
     padding: 0;
+    /* Ensure full width on mobile */
+    width: 100%;
+    overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-bold;
+  /* Ensure images are responsive */
+  img {
+    max-width: 100%;
+    height: auto;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
+  /* Better mobile touch targets */
+  button, a, input, select, textarea {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
   }
 
-  ::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-800;
-  }
+  /* Mobile-specific improvements */
+  @media (max-width: 640px) {
+    body {
+      font-size: 16px; /* Prevent zoom on iOS */
+    }
 
-  ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
-  }
+    /* Ensure containers don't overflow */
+    .container-max {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+    }
 
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400 dark:bg-gray-500;
+    /* Better spacing for mobile */
+    .section-padding {
+      padding-top: 3rem !important;
+      padding-bottom: 3rem !important;
+    }
+
+    /* Header mobile improvements */
+    header {
+      min-height: 4rem; /* Ensure minimum touch target height */
+    }
+
+    /* Better touch targets for mobile */
+    header button,
+    header a {
+      min-height: 44px; /* iOS recommended touch target size */
+      min-width: 44px;
+    }
+
+    /* Improve mobile menu spacing */
+    .mobile-menu-item {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Ensure mobile menu button is always visible and clickable */
+    header .mobile-menu-button {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      z-index: 60 !important;
+      position: relative;
+      background-color: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.375rem;
+      min-width: 48px !important;
+      min-height: 48px !important;
+      cursor: pointer !important;
+      -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Ensure mobile menu button is not blocked */
+    header .mobile-menu-button::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      z-index: -1;
+    }
+
+    /* Mobile menu overlay styling */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 40;
+    }
+
+    /* Ensure mobile navigation is properly positioned */
+    header nav > div:last-child {
+      position: relative;
+      z-index: 45;
+    }
   }
 }
 

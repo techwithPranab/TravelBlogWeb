@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "68b236f92366ffacdd961719"
+  },
+  "name": "Admin User",
+  "email": "admin@travelblog.com",
+  "password": "$2a$12$9Pa25oYMSuweGB6A9kjRAeJYemhL/SyefYHMrTg6o8cKjVcHrsGP.",
+  "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+  "role": "admin",
+  "bio": "Travel blog administrator and content curator.",
+  "isPremium": false,
+  "isEmailVerified": true,
+  "followers": [],
+  "following": [],
+  "createdAt": {
+    "$date": "2025-08-29T23:25:45.019Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-29T23:25:45.019Z"
+  },
+  "__v": 0
+}]

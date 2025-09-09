@@ -26,9 +26,9 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-pattern opacity-10"></div>
       
       {/* Floating Elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-blue-100 rounded-full animate-float"></div>
+      {/* <div className="absolute top-20 left-10 w-20 h-20 bg-blue-100 rounded-full animate-float"></div>
       <div className="absolute top-40 right-20 w-32 h-32 bg-purple-100 rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
-      <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-pink-100 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-pink-100 rounded-full animate-float" style={{ animationDelay: '2s' }}></div> */}
 
       {/* Content */}
       <div className="relative z-10 container-max section-padding text-center">
@@ -36,7 +36,7 @@ export function HeroSection() {
           {/* Hero Text */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 animate-fade-up">
             Discover the World
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+            <span className="block text-transparent bg-clip-text text-white">
               One Story at a Time
             </span>
           </h1>

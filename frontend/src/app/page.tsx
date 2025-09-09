@@ -66,6 +66,12 @@ export default function HomePage() {
         <meta name="description" content={seoData.description} />
         <meta name="keywords" content={seoData.keywords} />
 
+        {/* Mobile Optimization */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'} />
@@ -96,48 +102,48 @@ export default function HomePage() {
         />
       </Head>
 
-      <div className="min-h-screen">
+      <div className="min-h-screen w-full overflow-x-hidden">
         {/* Hero Section with Search */}
         <HeroSection />
 
         {/* Featured Stories */}
         <section className="section-padding bg-gray-50 dark:bg-gray-800">
-          <div className="container-max">
+          <div className="container-max w-full">
             <FeaturedStories />
           </div>
         </section>
 
         {/* Latest Blog Posts */}
         <section className="section-padding">
-          <div className="container-max">
+          <div className="container-max w-full">
             <LatestPosts />
           </div>
         </section>
 
         {/* Interactive Travel Map */}
         <section className="section-padding bg-gray-50 dark:bg-gray-800">
-          <div className="container-max">
+          <div className="container-max w-full">
             <InteractiveTravelMap />
           </div>
         </section>
 
         {/* Categories */}
         <section className="section-padding">
-          <div className="container-max">
+          <div className="container-max w-full">
             <Categories />
           </div>
         </section>
 
         {/* Testimonials */}
         <section className="section-padding bg-gray-50 dark:bg-gray-800">
-          <div className="container-max">
+          <div className="container-max w-full">
             <Testimonials />
           </div>
         </section>
 
         {/* Newsletter Signup */}
         <section className="section-padding hero-gradient">
-          <div className="container-max">
+          <div className="container-max w-full">
             <Newsletter />
           </div>
         </section>

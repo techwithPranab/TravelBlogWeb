@@ -340,7 +340,7 @@ commentSchema.statics.getResourceComments = function(
 
   // Filter for top-level comments or replies
   if (includeReplies && !parentId) {
-    query.parentId = { $exists: false }
+    query.parentId = null
   } else if (parentId) {
     query.parentId = parentId
   }
@@ -375,12 +375,12 @@ commentSchema.statics.getCommentStats = function(resourceType: string, resourceI
         avgLikes: { $avg: '$likes' },
         topLevelComments: {
           $sum: {
-            $cond: [{ $exists: ['$parentId', false] }, 1, 0]
+            $cond: [{ $eq: ['$parentId', null] }, 1, 0]
           }
         },
         replies: {
           $sum: {
-            $cond: [{ $exists: ['$parentId', true] }, 1, 0]
+            $cond: [{ $ne: ['$parentId', null] }, 1, 0]
           }
         }
       }

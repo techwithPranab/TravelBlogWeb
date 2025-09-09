@@ -63,7 +63,18 @@ interface Comment {
   likes: number
   isLiked: boolean
   replies?: Comment[]
+  isSubmitting?: boolean
 }
+
+interface ApiResponse<T> {
+  data: T
+  success: boolean
+  message?: string
+}
+
+interface BlogApiResponse extends ApiResponse<BlogPost> {}
+interface CommentsApiResponse extends ApiResponse<Comment[]> {}
+interface CommentSubmitResponse extends ApiResponse<Comment> {}
 
 export default function BlogDetailsPage() {
   const params = useParams()
@@ -72,85 +83,223 @@ export default function BlogDetailsPage() {
   const [newComment, setNewComment] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmittingComment, setIsSubmittingComment] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [commentError, setCommentError] = useState<string | null>(null)
 
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setPost({
-        id: '1',
-        title: 'The Hidden Gems of Santorini: Beyond the Famous Blue Domes',
-        content: `
-          <p>Santorini, with its iconic blue-domed churches and stunning sunsets, is undoubtedly one of Greece's most photographed destinations. But beyond the Instagram-famous spots lies a treasure trove of hidden gems waiting to be discovered.</p>
-          
-          <h2>The Secret Beaches</h2>
-          <p>While most tourists flock to Kamari and Perissa, the real magic happens at the lesser-known beaches. Red Beach, with its dramatic red cliffs, offers a more secluded experience, especially if you arrive early in the morning.</p>
-          
-          <h2>Traditional Villages</h2>
-          <p>Venture beyond Oia and Fira to discover authentic Greek culture in villages like Megalochori and Emporio. These settlements offer a glimpse into traditional Santorinian life, complete with local tavernas serving family recipes passed down through generations.</p>
-          
-          <h2>Wine Tasting Adventures</h2>
-          <p>Santorini's volcanic soil produces some of Greece's most unique wines. Visit local wineries like Santo Wines or Venetsanos for tastings with spectacular views of the caldera.</p>
-          
-          <h2>Planning Your Visit</h2>
-          <p>The best time to explore these hidden gems is during the shoulder seasons (April-May and September-October) when the crowds are thinner and the weather is still perfect for exploration.</p>
-        `,
-        excerpt: 'Discover the secret spots and hidden treasures of Santorini that most tourists never see.',
+  // Simulated API functions
+  const fetchBlogPost = async (slug: string): Promise<BlogApiResponse> => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/posts/${slug}`)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to fetch blog post')
+      }
+
+      // Transform the backend data to match our frontend interface
+      const post = data.data
+      const transformedPost: BlogPost = {
+        id: post._id || post.id,
+        title: post.title,
+        content: post.content,
+        excerpt: post.excerpt,
         featuredImage: {
-          url: '/images/santorini-hidden-gems.jpg',
-          alt: 'Hidden beach in Santorini',
-          caption: 'A secluded beach away from the crowds'
+          url: post.featuredImage?.url || post.featuredImage,
+          alt: post.featuredImage?.alt || 'Blog post image',
+          caption: post.featuredImage?.caption
         },
         author: {
-          name: 'Sarah Thompson',
-          avatar: '/images/author-sarah.jpg',
-          bio: 'Travel writer and photographer with 10+ years exploring the Mediterranean'
+          name: post.author?.name || 'Unknown Author',
+          avatar: post.author?.avatar || '/images/default-avatar.jpg',
+          bio: post.author?.bio || 'Travel enthusiast and writer'
         },
         category: {
-          name: 'Destinations',
-          slug: 'destinations'
+          name: post.categories?.[0]?.name || 'Uncategorized',
+          slug: post.categories?.[0]?.slug || 'uncategorized'
         },
-        tags: ['Greece', 'Santorini', 'Hidden Gems', 'Travel Tips'],
-        publishedAt: '2024-01-15',
-        readTime: 8,
-        views: 2341,
-        likes: 156,
-        isLiked: false,
-        isBookmarked: false,
-        destination: {
-          country: 'Greece',
-          city: 'Santorini'
-        }
+        tags: post.tags || [],
+        publishedAt: post.publishedAt || post.createdAt,
+        readTime: post.readTime || 5,
+        views: post.viewCount || 0,
+        likes: post.likeCount || 0,
+        isLiked: false, // This would need authentication to determine
+        isBookmarked: false, // This would need authentication to determine
+        destination: post.destination
+      }
+
+      return {
+        data: transformedPost,
+        success: true,
+        message: 'Blog post fetched successfully'
+      }
+    } catch (error) {
+      console.error('Error fetching blog post:', error)
+      throw error
+    }
+  }
+
+  const fetchComments = async (postId: string): Promise<CommentsApiResponse> => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/comments/blog/${postId}`)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to fetch comments')
+      }
+
+      // Transform the backend comments to match our frontend interface
+      const transformedComments: Comment[] = (data.data?.comments || []).map((comment: any) => ({
+        id: comment._id || comment.id,
+        content: comment.content,
+        author: {
+          name: comment.author?.name || 'Anonymous',
+          avatar: comment.author?.avatar || '/images/default-avatar.jpg'
+        },
+        createdAt: comment.createdAt,
+        likes: comment.likes || 0,
+        isLiked: false, // This would need authentication to determine
+        replies: comment.replies?.map((reply: any) => ({
+          id: reply._id || reply.id,
+          content: reply.content,
+          author: {
+            name: reply.author?.name || 'Anonymous',
+            avatar: reply.author?.avatar || '/images/default-avatar.jpg'
+          },
+          createdAt: reply.createdAt,
+          likes: reply.likes || 0,
+          isLiked: false
+        })) || []
+      }))
+
+      return {
+        data: transformedComments,
+        success: true,
+        message: 'Comments fetched successfully'
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error)
+      // Return empty array instead of throwing error for comments
+      return {
+        data: [],
+        success: true,
+        message: 'Comments fetched successfully'
+      }
+    }
+  }
+
+  const submitComment = async (postId: string, content: string): Promise<CommentSubmitResponse> => {
+    try {
+      const response = await fetch('http://localhost:5000/api/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          resourceType: 'blog',
+          resourceId: postId,
+          author: {
+            name: 'Anonymous User', // In a real app, this would come from user authentication
+            email: 'user@example.com', // In a real app, this would come from user authentication
+            avatar: '/images/default-avatar.jpg'
+          },
+          content: content.trim()
+        })
       })
 
-      setComments([
-        {
-          id: '1',
-          content: 'Amazing article! I visited Santorini last year but missed these hidden spots. Definitely going back with this guide.',
-          author: {
-            name: 'Alex Chen',
-            avatar: '/images/user-alex.jpg'
-          },
-          createdAt: '2024-01-16',
-          likes: 12,
-          isLiked: false,
-          replies: [
-            {
-              id: '2',
-              content: 'Same here! The traditional villages sound fascinating.',
-              author: {
-                name: 'Maria Rodriguez',
-                avatar: '/images/user-maria.jpg'
-              },
-              createdAt: '2024-01-16',
-              likes: 5,
-              isLiked: true
-            }
-          ]
-        }
-      ])
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`)
+      }
 
-      setIsLoading(false)
-    }, 1000)
+      const data = await response.json()
+
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to submit comment')
+      }
+
+      // Transform the backend response to match our frontend interface
+      const newComment: Comment = {
+        id: data.data?.comment?._id || data.data?.commentId || Date.now().toString(),
+        content: content.trim(),
+        author: {
+          name: 'Anonymous User',
+          avatar: '/images/default-avatar.jpg'
+        },
+        createdAt: new Date().toISOString(),
+        likes: 0,
+        isLiked: false
+      }
+
+      return {
+        data: newComment,
+        success: true,
+        message: 'Comment submitted successfully'
+      }
+    } catch (error) {
+      console.error('Error submitting comment:', error)
+      throw error
+    }
+  }
+
+  useEffect(() => {
+    const loadBlogData = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+
+        const slug = params.slug as string
+
+        // Fetch blog post and comments in parallel
+        const [blogResponse, commentsResponse] = await Promise.allSettled([
+          fetchBlogPost(slug),
+          fetchComments('temp-id') // We'll update this after we get the post ID
+        ])
+
+        // Handle blog post response
+        if (blogResponse.status === 'fulfilled') {
+          setPost(blogResponse.value.data)
+          
+          // Now fetch comments with the correct post ID
+          if (blogResponse.value.data.id) {
+            const commentsResp = await fetchComments(blogResponse.value.data.id)
+            if (commentsResp.success) {
+              setComments(commentsResp.data)
+            }
+          }
+        } else {
+          console.error('Failed to fetch blog post:', blogResponse.reason)
+          setError('Failed to load blog post. Please try again.')
+        }
+
+        // Handle comments response (this will be empty for now since we refetch with correct ID)
+        if (commentsResponse.status === 'fulfilled') {
+          // Comments are now fetched with the correct post ID above
+        } else {
+          console.error('Failed to fetch comments:', commentsResponse.reason)
+          // Don't set error for comments failure, just log it
+        }
+
+      } catch (err) {
+        console.error('Unexpected error:', err)
+        setError('An unexpected error occurred. Please try again.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (params.slug) {
+      loadBlogData()
+    }
   }, [params.slug])
 
   const handleLike = () => {
@@ -180,59 +329,97 @@ export default function BlogDetailsPage() {
           text: post.excerpt,
           url: window.location.href,
         })
-      } catch (err) {
-        // Fallback to clipboard
-        navigator.clipboard.writeText(window.location.href)
-        alert('Link copied to clipboard!')
+      } catch {
+        // User cancelled share or share failed, fallback to clipboard
+        try {
+          await navigator.clipboard.writeText(window.location.href)
+          alert('Link copied to clipboard!')
+        } catch {
+          alert('Unable to share. Please copy the URL manually.')
+        }
       }
     } else {
-      navigator.clipboard.writeText(window.location.href)
-      alert('Link copied to clipboard!')
+      try {
+        await navigator.clipboard.writeText(window.location.href)
+        alert('Link copied to clipboard!')
+      } catch {
+        alert('Unable to share. Please copy the URL manually.')
+      }
     }
   }
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newComment.trim()) return
+    
+    if (!newComment.trim()) {
+      setCommentError('Please enter a comment')
+      return
+    }
+
+    if (newComment.trim().length < 10) {
+      setCommentError('Comment must be at least 10 characters long')
+      return
+    }
+
+    if (newComment.length > 1000) {
+      setCommentError('Comment must be less than 1000 characters')
+      return
+    }
 
     setIsSubmittingComment(true)
-    
-    // Simulate API call
-    setTimeout(() => {
-      const comment: Comment = {
-        id: Date.now().toString(),
-        content: newComment,
-        author: {
-          name: 'You',
-          avatar: '/images/default-avatar.jpg'
-        },
-        createdAt: new Date().toISOString(),
-        likes: 0,
-        isLiked: false
-      }
+    setCommentError(null)
+
+    try {
+      const response = await submitComment(post!.id, newComment.trim())
       
-      setComments([comment, ...comments])
-      setNewComment('')
+      if (response.success) {
+        setComments([response.data, ...comments])
+        setNewComment('')
+        // Show success message
+        alert('Comment posted successfully!')
+      } else {
+        setCommentError(response.message || 'Failed to post comment')
+      }
+    } catch (err) {
+      console.error('Comment submission error:', err)
+      setCommentError(err instanceof Error ? err.message : 'Failed to post comment. Please try again.')
+    } finally {
       setIsSubmittingComment(false)
-    }, 1000)
+    }
   }
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading blog post...</p>
+        </div>
       </div>
     )
   }
 
-  if (!post) {
+  if (error) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Post not found</h1>
-          <Link href="/blog" className="text-blue-600 hover:text-blue-800">
-            ← Back to Blog
-          </Link>
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Oops! Something went wrong</h1>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <div className="space-y-3">
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Try Again
+            </button>
+            <Link
+              href="/blog"
+              className="block w-full bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              Back to Blog
+            </Link>
+          </div>
         </div>
       </div>
     )
@@ -252,49 +439,49 @@ export default function BlogDetailsPage() {
           </Link>
           
           <div className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
-            <Link href={`/blog/category/${post.category.slug}`} className="text-blue-600 hover:text-blue-800">
-              {post.category.name}
+            <Link href={`/blog/category/${post!.category.slug}`} className="text-blue-600 hover:text-blue-800">
+              {post!.category.name}
             </Link>
-            {post.destination && (
+            {post!.destination && (
               <>
                 <span>•</span>
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-1" />
-                  {post.destination.city ? `${post.destination.city}, ` : ''}{post.destination.country}
+                  {post!.destination.city ? `${post!.destination.city}, ` : ''}{post!.destination.country}
                 </div>
               </>
             )}
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            {post.title}
+            {post!.title}
           </h1>
           
           <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            {post.excerpt}
+            {post!.excerpt}
           </p>
           
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <img 
-                src={post.author.avatar} 
-                alt={post.author.name}
+                src={post!.author.avatar} 
+                alt={post!.author.name}
                 className="w-12 h-12 rounded-full"
               />
               <div>
-                <div className="font-medium text-gray-900">{post.author.name}</div>
+                <div className="font-medium text-gray-900">{post!.author.name}</div>
                 <div className="flex items-center space-x-4 text-sm text-gray-600">
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
-                    {new Date(post.publishedAt).toLocaleDateString()}
+                    {new Date(post!.publishedAt).toLocaleDateString()}
                   </div>
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-1" />
-                    {post.readTime} min read
+                    {post!.readTime} min read
                   </div>
                   <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
-                    {post.views.toLocaleString()} views
+                    {post!.views.toLocaleString()} views
                   </div>
                 </div>
               </div>
@@ -304,24 +491,24 @@ export default function BlogDetailsPage() {
               <button
                 onClick={handleLike}
                 className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
-                  post.isLiked 
+                  post!.isLiked 
                     ? 'bg-red-100 text-red-600' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} />
-                <span>{post.likes}</span>
+                <Heart className={`w-4 h-4 ${post!.isLiked ? 'fill-current' : ''}`} />
+                <span>{post!.likes}</span>
               </button>
               
               <button
                 onClick={handleBookmark}
                 className={`p-2 rounded-lg transition-colors ${
-                  post.isBookmarked 
+                  post!.isBookmarked 
                     ? 'bg-blue-100 text-blue-600' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                <Bookmark className={`w-4 h-4 ${post.isBookmarked ? 'fill-current' : ''}`} />
+                <Bookmark className={`w-4 h-4 ${post!.isBookmarked ? 'fill-current' : ''}`} />
               </button>
               
               <button
@@ -339,14 +526,14 @@ export default function BlogDetailsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="relative h-96 md:h-[600px] rounded-2xl overflow-hidden">
           <Image
-            src={post.featuredImage.url}
-            alt={post.featuredImage.alt}
+            src={post!.featuredImage.url}
+            alt={post!.featuredImage.alt}
             fill
             className="object-cover"
           />
-          {post.featuredImage.caption && (
+          {post!.featuredImage.caption && (
             <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm">
-              {post.featuredImage.caption}
+              {post!.featuredImage.caption}
             </div>
           )}
         </div>
@@ -356,12 +543,12 @@ export default function BlogDetailsPage() {
       <div className="container mx-auto px-4 pb-16">
         <div className="max-w-4xl mx-auto">
           <div className="prose prose-lg max-w-none mb-12">
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            <div dangerouslySetInnerHTML={{ __html: post!.content }} />
           </div>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-8">
-            {post.tags.map((tag) => (
+            {post!.tags.map((tag) => (
               <span
                 key={tag}
                 className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
@@ -376,13 +563,13 @@ export default function BlogDetailsPage() {
           <div className="bg-gray-50 rounded-2xl p-6 mb-12">
             <div className="flex items-start space-x-4">
               <img 
-                src={post.author.avatar} 
-                alt={post.author.name}
+                src={post!.author.avatar} 
+                alt={post!.author.name}
                 className="w-16 h-16 rounded-full"
               />
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">About {post.author.name}</h3>
-                <p className="text-gray-600">{post.author.bio}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">About {post!.author.name}</h3>
+                <p className="text-gray-600">{post!.author.bio}</p>
               </div>
             </div>
           </div>
