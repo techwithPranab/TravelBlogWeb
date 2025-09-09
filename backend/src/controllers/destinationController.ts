@@ -6,19 +6,17 @@ import { handleAsync } from '../utils/handleAsync'
 // @route   GET /api/destinations
 // @access  Public
 export const getAllDestinations = handleAsync(async (req: Request, res: Response) => {
-  const { page = 1, limit = 10, country, region, difficulty, isPopular, isFeatured } = req.query
+  const { page = 1, limit = 10, country, continent, isPopular, isFeatured } = req.query
 
   // Build filter object
   const filter: any = { isActive: true }
-  
+
   if (country) filter.country = country
-  if (region) filter.region = region
-  if (difficulty) filter.difficulty = difficulty
+  if (continent) filter.continent = continent
   if (isPopular) filter.isPopular = isPopular === 'true'
   if (isFeatured) filter.isFeatured = isFeatured === 'true'
 
   const destinations = await Destination.find(filter)
-    .populate('posts guides')
     .sort({ createdAt: -1 })
     .limit(Number(limit) * 1)
     .skip((Number(page) - 1) * Number(limit))
@@ -42,11 +40,10 @@ export const getAllDestinations = handleAsync(async (req: Request, res: Response
 // @route   GET /api/destinations/featured
 // @access  Public
 export const getFeaturedDestinations = handleAsync(async (req: Request, res: Response) => {
-  const destinations = await Destination.find({ 
-    isActive: true, 
-    isFeatured: true 
+  const destinations = await Destination.find({
+    isActive: true,
+    isFeatured: true
   })
-    .populate('posts guides')
     .sort({ createdAt: -1 })
     .limit(6)
 
@@ -61,12 +58,11 @@ export const getFeaturedDestinations = handleAsync(async (req: Request, res: Res
 // @route   GET /api/destinations/popular
 // @access  Public
 export const getPopularDestinations = handleAsync(async (req: Request, res: Response) => {
-  const destinations = await Destination.find({ 
-    isActive: true, 
-    isPopular: true 
+  const destinations = await Destination.find({
+    isActive: true,
+    isPopular: true
   })
-    .populate('posts guides')
-    .sort({ 'rating.average': -1 })
+    .sort({ rating: -1 })
     .limit(10)
 
   res.status(200).json({
@@ -80,20 +76,10 @@ export const getPopularDestinations = handleAsync(async (req: Request, res: Resp
 // @route   GET /api/destinations/:slug
 // @access  Public
 export const getDestinationBySlug = handleAsync(async (req: Request, res: Response) => {
-  const destination = await Destination.findOne({ 
-    slug: req.params.slug, 
-    isActive: true 
+  const destination = await Destination.findOne({
+    slug: req.params.slug,
+    isActive: true
   })
-    .populate({
-      path: 'posts',
-      match: { status: 'published' },
-      options: { sort: { publishedAt: -1 } }
-    })
-    .populate({
-      path: 'guides',
-      match: { isPublished: true },
-      options: { sort: { createdAt: -1 } }
-    })
 
   if (!destination) {
     return res.status(404).json({

@@ -43,39 +43,55 @@ export interface Destination {
   name: string
   slug: string
   description: string
-  shortDescription: string
   country: string
-  region: string
-  coordinates: {
-    latitude: number
-    longitude: number
-  }
-  images: Array<{
+  continent: string
+  featuredImage: {
     url: string
     alt: string
-    caption?: string
-    isPrimary?: boolean
+  }
+  gallery: Array<{
+    url: string
+    alt: string
   }>
+  coordinates: {
+    lat: number
+    lng: number
+  }
+  bestTimeToVisit: string
+  averageTemperature: {
+    summer: string
+    winter: string
+  }
+  currency: string
+  language: string
+  timezone: string
+  rating: number
+  totalReviews: number
   highlights: string[]
-  bestTimeToVisit: {
-    months: string[]
+  activities: Array<{
+    name: string
+    icon: string
     description: string
+  }>
+  accommodation: {
+    budget: string
+    midRange: string
+    luxury: string
   }
-  difficulty: 'Easy' | 'Moderate' | 'Challenging'
-  budget: {
-    currency: string
-    low: number
-    high: number
-    description: string
-  }
-  tags: string[]
-  activities: string[]
-  isPopular?: boolean
-  isFeatured?: boolean
-  rating?: {
-    average: number
-    count: number
-  }
+  transportation: string[]
+  localCuisine: string[]
+  travelTips: string[]
+  relatedPosts: Array<{
+    id: string
+    title: string
+    slug: string
+    image: string
+  }>
+  isPopular: boolean
+  isFeatured: boolean
+  isActive: boolean
+  seoTitle?: string
+  seoDescription?: string
   createdAt: string
   updatedAt: string
 }
@@ -245,19 +261,18 @@ export const destinationsApi = {
   getAll: async (params?: {
     page?: number
     limit?: number
-    region?: string
-    difficulty?: string
+    continent?: string
     sort?: string
   }): Promise<ApiResponse<Destination[]>> => {
     const searchParams = new URLSearchParams()
     if (params?.page) searchParams.append('page', params.page.toString())
     if (params?.limit) searchParams.append('limit', params.limit.toString())
-    if (params?.region) searchParams.append('region', params.region)
-    if (params?.difficulty) searchParams.append('difficulty', params.difficulty)
+    if (params?.continent) searchParams.append('continent', params.continent)
     if (params?.sort) searchParams.append('sort', params.sort)
     
     const query = searchParams.toString()
-    return apiRequest<Destination[]>(`/destinations${query ? `?${query}` : ''}`)
+    const endpoint = query ? `/destinations?${query}` : '/destinations'
+    return apiRequest<Destination[]>(endpoint)
   },
 
   getBySlug: async (slug: string): Promise<ApiResponse<Destination>> => {
@@ -292,7 +307,8 @@ export const guidesApi = {
     if (params?.sort) searchParams.append('sort', params.sort)
     
     const query = searchParams.toString()
-    return apiRequest<Guide[]>(`/guides${query ? `?${query}` : ''}`)
+    const endpoint = query ? `/guides?${query}` : '/guides'
+    return apiRequest<Guide[]>(endpoint)
   },
 
   getBySlug: async (slug: string): Promise<ApiResponse<Guide>> => {

@@ -251,6 +251,45 @@ class AdminApi {
     })
   }
 
+  // Partners Management
+  async getPartners(params?: {
+    page?: number
+    limit?: number
+    search?: string
+    status?: string
+  }) {
+    const searchParams = new URLSearchParams()
+    if (params?.page) searchParams.append('page', params.page.toString())
+    if (params?.limit) searchParams.append('limit', params.limit.toString())
+    if (params?.search) searchParams.append('search', params.search)
+    if (params?.status) searchParams.append('status', params.status)
+    
+    const query = searchParams.toString()
+    const endpoint = query ? `/partners?${query}` : '/partners'
+    return this.request(endpoint)
+  }
+
+  async getPartner(id: string) {
+    return this.request(`/partners/${id}`)
+  }
+
+  async updatePartnerStatus(id: string, status: string) {
+    return this.request(`/partners/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    })
+  }
+
+  async deletePartner(id: string) {
+    return this.request(`/partners/${id}`, {
+      method: 'DELETE'
+    })
+  }
+
+  async getPartnerStats() {
+    return this.request('/partners/stats')
+  }
+
   // Settings Management
   async getSettings() {
     return this.adminRequest('/settings')

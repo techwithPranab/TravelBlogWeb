@@ -121,117 +121,252 @@ const sampleDestinations = [
   {
     name: 'Bali, Indonesia',
     description: 'A tropical paradise known for its stunning beaches, ancient temples, vibrant culture, and lush rice terraces. Experience the perfect blend of relaxation and adventure in this Indonesian gem.',
-    shortDescription: 'Tropical paradise with beaches, temples, and rich culture',
     country: 'Indonesia',
-    region: 'Southeast Asia',
-    coordinates: {
-      latitude: -8.4095,
-      longitude: 115.1889
+    continent: 'Asia',
+    featuredImage: {
+      url: 'https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=800&h=600&fit=crop',
+      alt: 'Bali rice terraces'
     },
-    images: [
+    gallery: [
       {
         url: 'https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=800&h=600&fit=crop',
-        alt: 'Bali rice terraces',
-        caption: 'Famous Jatiluwih rice terraces in Bali',
-        isPrimary: true
+        alt: 'Bali rice terraces'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1555400113-28f3e0c56e1b?w=800&h=400&fit=crop',
+        alt: 'Tanah Lot Temple at sunset'
       }
     ],
+    coordinates: {
+      lat: -8.4095,
+      lng: 115.1889
+    },
+    bestTimeToVisit: 'April to September (dry season)',
+    averageTemperature: {
+      summer: '25-32°C (77-90°F)',
+      winter: '22-28°C (72-82°F)'
+    },
+    currency: 'IDR (Indonesian Rupiah)',
+    language: 'Indonesian, Balinese',
+    timezone: 'UTC+8 (Central Indonesian Time)',
+    rating: 4.8,
+    totalReviews: 1250,
     highlights: ['Ubud Rice Terraces', 'Uluwatu Temple', 'Seminyak Beach', 'Mount Batur Sunrise Trek'],
-    bestTimeToVisit: {
-      months: ['April', 'May', 'June', 'July', 'August', 'September'],
-      description: 'Dry season with less rainfall and perfect weather for outdoor activities'
+    activities: [
+      {
+        name: 'Surfing',
+        icon: '🏄‍♂️',
+        description: 'World-class surfing spots from beginner to advanced levels'
+      },
+      {
+        name: 'Temple Hopping',
+        icon: '🏛️',
+        description: 'Explore ancient Hindu temples and learn about Balinese culture'
+      },
+      {
+        name: 'Yoga Retreats',
+        icon: '🧘‍♀️',
+        description: 'Find peace and wellness in Bali\'s spiritual atmosphere'
+      },
+      {
+        name: 'Hiking',
+        icon: '🥾',
+        description: 'Trek through rice terraces and volcanic landscapes'
+      },
+      {
+        name: 'Snorkeling',
+        icon: '🤿',
+        description: 'Discover vibrant coral reefs and marine life'
+      }
+    ],
+    accommodation: {
+      budget: '$20-50 per night (guesthouses, hostels)',
+      midRange: '$50-150 per night (boutique hotels, villas)',
+      luxury: '$150+ per night (resorts, private villas)'
     },
-    difficulty: 'Easy',
-    budget: {
-      currency: 'USD',
-      low: 30,
-      high: 100,
-      description: 'Per day including accommodation, food, and activities'
-    },
-    tags: ['beaches', 'temples', 'culture', 'rice terraces', 'tropical'],
-    activities: ['Surfing', 'Temple Hopping', 'Yoga Retreats', 'Hiking', 'Snorkeling'],
+    transportation: ['Airport transfer', 'Scooter rental', 'Private driver', 'Local buses', 'Boat transfers'],
+    localCuisine: ['Nasi Goreng', 'Babi Guling', 'Sate', 'Ayam Betutu', 'Pisang Goreng'],
+    travelTips: [
+      'Respect local customs and dress modestly at temples',
+      'Bargain politely at markets',
+      'Stay hydrated and use sunscreen',
+      'Learn basic Indonesian phrases',
+      'Book popular activities in advance during peak season'
+    ],
+    relatedPosts: [
+      {
+        id: 'sample-post-1',
+        title: '10 Must-Visit Temples in Bali: A Spiritual Journey',
+        slug: '10-must-visit-temples-in-bali-spiritual-journey',
+        image: 'https://images.unsplash.com/photo-1555400113-28f3e0c56e1b?w=800&h=400&fit=crop'
+      }
+    ],
     isPopular: true,
     isFeatured: true,
-    rating: {
-      average: 4.8,
-      count: 1250
-    }
+    isActive: true,
+    seoTitle: 'Bali Travel Guide: Beaches, Temples & Culture',
+    seoDescription: 'Discover Bali\'s stunning beaches, ancient temples, and vibrant culture. Complete guide for your Indonesian adventure.'
   },
   {
     name: 'Kyoto, Japan',
     description: 'Former imperial capital renowned for its classical Buddhist temples, gardens, imperial palaces, Shinto shrines and traditional wooden houses.',
-    shortDescription: 'Ancient capital with temples, gardens, and traditional culture',
     country: 'Japan',
-    region: 'East Asia',
-    coordinates: {
-      latitude: 35.0116,
-      longitude: 135.7681
+    continent: 'Asia',
+    featuredImage: {
+      url: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=600&fit=crop',
+      alt: 'Kyoto bamboo forest'
     },
-    images: [
+    gallery: [
       {
         url: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=600&fit=crop',
-        alt: 'Kyoto bamboo forest',
-        caption: 'Famous Arashiyama Bamboo Grove',
-        isPrimary: true
+        alt: 'Kyoto bamboo forest'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800&h=600&fit=crop',
+        alt: 'Fushimi Inari Shrine'
       }
     ],
+    coordinates: {
+      lat: 35.0116,
+      lng: 135.7681
+    },
+    bestTimeToVisit: 'March-May (cherry blossoms) or September-November (autumn leaves)',
+    averageTemperature: {
+      summer: '20-30°C (68-86°F)',
+      winter: '0-10°C (32-50°F)'
+    },
+    currency: 'JPY (Japanese Yen)',
+    language: 'Japanese',
+    timezone: 'UTC+9 (Japan Standard Time)',
+    rating: 4.9,
+    totalReviews: 980,
     highlights: ['Fushimi Inari Shrine', 'Kinkaku-ji Temple', 'Arashiyama Bamboo Grove', 'Gion District'],
-    bestTimeToVisit: {
-      months: ['March', 'April', 'May', 'October', 'November'],
-      description: 'Spring cherry blossoms and autumn colors'
+    activities: [
+      {
+        name: 'Temple Visits',
+        icon: '🏛️',
+        description: 'Explore Kyoto\'s 2,000+ temples and shrines'
+      },
+      {
+        name: 'Tea Ceremony',
+        icon: '🍵',
+        description: 'Experience traditional Japanese tea ceremony'
+      },
+      {
+        name: 'Cherry Blossom Viewing',
+        icon: '🌸',
+        description: 'Witness the famous sakura season in spring'
+      },
+      {
+        name: 'Traditional Crafts',
+        icon: '🎨',
+        description: 'Learn about Kyoto\'s traditional crafts and artisans'
+      }
+    ],
+    accommodation: {
+      budget: '$30-80 per night (hostels, budget ryokan)',
+      midRange: '$80-200 per night (business hotels, traditional inns)',
+      luxury: '$200+ per night (luxury ryokan, high-end hotels)'
     },
-    difficulty: 'Easy',
-    budget: {
-      currency: 'USD',
-      low: 80,
-      high: 200,
-      description: 'Per day including accommodation, food, and activities'
-    },
-    tags: ['temples', 'culture', 'history', 'gardens', 'cherry blossoms'],
-    activities: ['Temple Visits', 'Tea Ceremony', 'Cherry Blossom Viewing', 'Traditional Crafts'],
+    transportation: ['JR Pass', 'Subway', 'Bus', 'Bicycle rental', 'Taxi'],
+    localCuisine: ['Kaiseki', 'Yudofu', 'Obanzai', 'Matcha desserts', 'Street food'],
+    travelTips: [
+      'Get a Japan Rail Pass for extensive travel',
+      'Visit temples early to avoid crowds',
+      'Try onsen (hot springs) for relaxation',
+      'Learn basic bowing etiquette',
+      'Book accommodation well in advance during peak seasons'
+    ],
+    relatedPosts: [],
+    isPopular: true,
     isFeatured: true,
-    rating: {
-      average: 4.9,
-      count: 980
-    }
+    isActive: true,
+    seoTitle: 'Kyoto Travel Guide: Temples, Gardens & Culture',
+    seoDescription: 'Explore Kyoto\'s ancient temples, beautiful gardens, and traditional culture. Your complete guide to Japan\'s cultural capital.'
   },
   {
     name: 'Patagonia, Argentina & Chile',
     description: 'Vast wilderness region at the southern tip of South America, known for dramatic landscapes including glaciers, mountains, and steppes.',
-    shortDescription: 'Dramatic wilderness with glaciers and mountains',
     country: 'Argentina',
-    region: 'South America',
-    coordinates: {
-      latitude: -50.5,
-      longitude: -73.0
+    continent: 'South America',
+    featuredImage: {
+      url: 'https://images.unsplash.com/photo-1528543606781-2f6e6857f318?w=800&h=600&fit=crop',
+      alt: 'Patagonia mountains'
     },
-    images: [
+    gallery: [
       {
         url: 'https://images.unsplash.com/photo-1528543606781-2f6e6857f318?w=800&h=600&fit=crop',
-        alt: 'Patagonia mountains',
-        caption: 'Torres del Paine National Park',
-        isPrimary: true
+        alt: 'Patagonia mountains'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1544737151-6e4b9b1c1b68?w=800&h=400&fit=crop',
+        alt: 'Torres del Paine towers'
       }
     ],
+    coordinates: {
+      lat: -50.5,
+      lng: -73.0
+    },
+    bestTimeToVisit: 'December to March (Southern Hemisphere summer)',
+    averageTemperature: {
+      summer: '5-15°C (41-59°F)',
+      winter: '-5-5°C (23-41°F)'
+    },
+    currency: 'ARS (Argentine Peso) / CLP (Chilean Peso)',
+    language: 'Spanish',
+    timezone: 'UTC-3 (Argentina) / UTC-4 (Chile)',
+    rating: 4.7,
+    totalReviews: 650,
     highlights: ['Torres del Paine', 'Perito Moreno Glacier', 'Mount Fitz Roy', 'Ushuaia'],
-    bestTimeToVisit: {
-      months: ['December', 'January', 'February', 'March'],
-      description: 'Summer season with best weather for trekking'
+    activities: [
+      {
+        name: 'Trekking',
+        icon: '🥾',
+        description: 'Hike the famous W Circuit and O Circuit trails'
+      },
+      {
+        name: 'Glacier Viewing',
+        icon: '🧊',
+        description: 'Witness massive glaciers and ice formations'
+      },
+      {
+        name: 'Wildlife Watching',
+        icon: '🦌',
+        description: 'Spot guanacos, condors, and marine life'
+      },
+      {
+        name: 'Photography',
+        icon: '📷',
+        description: 'Capture stunning landscapes and wildlife'
+      }
+    ],
+    accommodation: {
+      budget: '$25-60 per night (hostels, camping)',
+      midRange: '$60-150 per night (lodges, cabins)',
+      luxury: '$150+ per night (luxury lodges, eco-resorts)'
     },
-    difficulty: 'Challenging',
-    budget: {
-      currency: 'USD',
-      low: 60,
-      high: 150,
-      description: 'Per day including accommodation, food, and activities'
-    },
-    tags: ['hiking', 'glaciers', 'wilderness', 'adventure', 'mountains'],
-    activities: ['Trekking', 'Glacier Viewing', 'Wildlife Watching', 'Photography'],
+    transportation: ['Internal flights', 'Bus tours', 'Private transfers', 'Rental cars', 'Ferries'],
+    localCuisine: ['Lamb dishes', 'Seafood', 'Empanadas', 'Wine', 'Mate tea'],
+    travelTips: [
+      'Prepare for unpredictable weather',
+      'Book tours and accommodation in advance',
+      'Pack layers for variable temperatures',
+      'Respect wildlife and maintain distance',
+      'Consider travel insurance for remote areas'
+    ],
+    relatedPosts: [
+      {
+        id: 'sample-post-2',
+        title: 'Trekking Torres del Paine: Complete Guide to Patagonia\'s Crown Jewel',
+        slug: 'trekking-torres-del-paine-complete-guide-patagonia',
+        image: 'https://images.unsplash.com/photo-1544737151-6e4b9b1c1b68?w=800&h=400&fit=crop'
+      }
+    ],
     isPopular: true,
-    rating: {
-      average: 4.7,
-      count: 650
-    }
+    isFeatured: true,
+    isActive: true,
+    seoTitle: 'Patagonia Travel Guide: Glaciers, Mountains & Adventure',
+    seoDescription: 'Explore Patagonia\'s dramatic landscapes, glaciers, and mountains. Complete guide for Argentina and Chile\'s wilderness region.'
   }
 ]
 

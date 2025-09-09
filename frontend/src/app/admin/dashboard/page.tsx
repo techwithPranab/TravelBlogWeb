@@ -10,8 +10,7 @@ import {
   Mail, 
   Clock,
   TrendingUp,
-  Eye,
-  Settings
+  Eye
 } from 'lucide-react'
 import { adminApi } from '@/lib/adminApi'
 
@@ -22,6 +21,8 @@ interface DashboardStats {
   totalGuides: number
   totalSubscribers: number
   pendingPosts: number
+  totalPartners: number
+  pendingPartners: number
 }
 
 interface RecentActivity {
@@ -66,9 +67,26 @@ export default function AdminDashboard() {
         setLoading(true)
         const response = await adminApi.getDashboardStats() as any
         
+        let dashboardStats = null
         if (response.success) {
-          setStats(response.data.stats)
+          dashboardStats = response.data.stats
+          setStats(dashboardStats)
           setRecentActivity(response.data.recentActivity)
+        }
+
+        // Fetch partner stats separately
+        try {
+          const partnerStatsResponse = await adminApi.getPartnerStats() as any
+          if (partnerStatsResponse.success) {
+            const updatedStats = {
+              ...(dashboardStats || {}),
+              totalPartners: partnerStatsResponse.data.totalPartners,
+              pendingPartners: partnerStatsResponse.data.pendingPartners
+            }
+            setStats(updatedStats)
+          }
+        } catch (partnerError) {
+          console.error('Failed to fetch partner stats:', partnerError)
         }
       } catch (err) {
         console.error('Dashboard error:', err)
@@ -127,6 +145,13 @@ export default function AdminDashboard() {
       change: '+15%'
     },
     {
+      name: 'Partners',
+      value: stats?.totalPartners || 0,
+      icon: Users,
+      color: 'bg-indigo-500',
+      change: '+10%'
+    },
+    {
       name: 'Subscribers',
       value: stats?.totalSubscribers || 0,
       icon: Mail,
@@ -139,6 +164,13 @@ export default function AdminDashboard() {
       icon: Clock,
       color: 'bg-yellow-500',
       change: stats?.pendingPosts ? 'Needs Review' : 'All Clear'
+    },
+    {
+      name: 'Pending Partners',
+      value: stats?.pendingPartners || 0,
+      icon: Clock,
+      color: 'bg-red-500',
+      change: stats?.pendingPartners ? 'Needs Review' : 'All Clear'
     }
   ]
 
@@ -151,7 +183,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat, index) => {
           const Icon = stat.icon
           return (
@@ -271,6 +303,13 @@ export default function AdminDashboard() {
       >
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button 
+            onClick={() => window.location.href = '/admin/partners'}
+            className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <Users className="h-5 w-5 text-indigo-600" />
+            <span className="text-sm font-medium text-gray-900">Manage Partners</span>
+          </button>
           <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             <Users className="h-5 w-5 text-blue-600" />
             <span className="text-sm font-medium text-gray-900">Manage Users</span>
@@ -282,10 +321,6 @@ export default function AdminDashboard() {
           <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             <Eye className="h-5 w-5 text-purple-600" />
             <span className="text-sm font-medium text-gray-900">View Site</span>
-          </button>
-          <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-            <Settings className="h-5 w-5 text-orange-600" />
-            <span className="text-sm font-medium text-gray-900">Settings</span>
           </button>
         </div>
       </motion.div>

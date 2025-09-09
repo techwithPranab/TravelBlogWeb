@@ -23,10 +23,11 @@ import {
   Share2,
   BookOpen
 } from 'lucide-react'
+import { destinationsApi } from '@/lib/api'
 import { motion } from 'framer-motion'
 
 interface Destination {
-  id: string
+  _id: string
   name: string
   country: string
   continent: string
@@ -79,138 +80,28 @@ export default function DestinationDetailsPage() {
   const params = useParams()
   const [destination, setDestination] = useState<Destination | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [isLiked, setIsLiked] = useState(false)
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setDestination({
-        id: '1',
-        name: 'Santorini',
-        country: 'Greece',
-        continent: 'Europe',
-        description: 'Santorini is a volcanic island in the Cyclades group of the Greek islands. Famous for its dramatic cliffs, stunning sunsets, and distinctive white-washed buildings with blue domes, Santorini offers a perfect blend of natural beauty, rich history, and modern luxury.',
-        featuredImage: {
-          url: '/images/santorini-main.jpg',
-          alt: 'Santorini sunset view'
-        },
-        gallery: [
-          { url: '/images/santorini-1.jpg', alt: 'Blue domed churches' },
-          { url: '/images/santorini-2.jpg', alt: 'Sunset in Oia' },
-          { url: '/images/santorini-3.jpg', alt: 'Traditional architecture' },
-          { url: '/images/santorini-4.jpg', alt: 'Volcanic beaches' },
-          { url: '/images/santorini-5.jpg', alt: 'Local cuisine' },
-          { url: '/images/santorini-6.jpg', alt: 'Caldera view' }
-        ],
-        coordinates: {
-          lat: 36.3932,
-          lng: 25.4615
-        },
-        bestTimeToVisit: 'April to October',
-        averageTemperature: {
-          summer: '28°C (82°F)',
-          winter: '15°C (59°F)'
-        },
-        currency: 'Euro (EUR)',
-        language: 'Greek',
-        timezone: 'EET (UTC+2)',
-        rating: 4.8,
-        totalReviews: 12847,
-        highlights: [
-          'Iconic blue-domed churches in Oia',
-          'Spectacular sunsets over the caldera',
-          'Unique volcanic black sand beaches',
-          'Ancient ruins of Akrotiri',
-          'World-class wine tasting experiences',
-          'Traditional Cycladic architecture'
-        ],
-        activities: [
-          {
-            name: 'Sunset Watching',
-            icon: '🌅',
-            description: 'Experience world-famous sunsets from Oia or Fira'
-          },
-          {
-            name: 'Wine Tasting',
-            icon: '🍷',
-            description: 'Sample unique volcanic wines at local wineries'
-          },
-          {
-            name: 'Beach Hopping',
-            icon: '🏖️',
-            description: 'Explore unique colored beaches - red, black, and white'
-          },
-          {
-            name: 'Boat Tours',
-            icon: '⛵',
-            description: 'Sail around the caldera and visit nearby islands'
-          },
-          {
-            name: 'Archaeological Sites',
-            icon: '🏛️',
-            description: 'Visit ancient Akrotiri and learn about Minoan civilization'
-          },
-          {
-            name: 'Photography',
-            icon: '📸',
-            description: 'Capture the iconic whitewashed buildings and stunning views'
-          }
-        ],
-        accommodation: {
-          budget: '$30-80/night (Hostels, guesthouses)',
-          midRange: '$100-300/night (Hotels, apartments)',
-          luxury: '$400-1500/night (Luxury resorts, cave hotels)'
-        },
-        transportation: [
-          'Ferry from Athens (5-8 hours)',
-          'Flight from Athens (45 minutes)',
-          'Local buses around the island',
-          'Rental cars and ATVs',
-          'Taxi services',
-          'Walking in village centers'
-        ],
-        localCuisine: [
-          'Fava (yellow split pea puree)',
-          'Tomatokeftedes (tomato fritters)',
-          'Fresh seafood and grilled octopus',
-          'Greek salads with local capers',
-          'Assyrtiko and Vinsanto wines',
-          'Baklava and local sweets'
-        ],
-        travelTips: [
-          'Book accommodation well in advance for summer visits',
-          'Arrive early at sunset viewpoints to secure good spots',
-          'Wear comfortable walking shoes for cobblestone streets',
-          'Try local wines - Santorini produces unique varieties',
-          'Visit during shoulder season for fewer crowds',
-          'Bring sunscreen and hat for strong Mediterranean sun',
-          'Learn a few Greek phrases - locals appreciate the effort',
-          'Respect local customs and dress codes at religious sites'
-        ],
-        relatedPosts: [
-          {
-            id: '1',
-            title: 'Hidden Gems of Santorini',
-            slug: 'hidden-gems-santorini',
-            image: '/images/santorini-hidden.jpg'
-          },
-          {
-            id: '2',
-            title: 'Best Restaurants in Santorini',
-            slug: 'best-restaurants-santorini',
-            image: '/images/santorini-food.jpg'
-          },
-          {
-            id: '3',
-            title: 'Santorini Photography Guide',
-            slug: 'santorini-photography-guide',
-            image: '/images/santorini-photo.jpg'
-          }
-        ]
-      })
-      setIsLoading(false)
-    }, 1000)
+    const fetchDestination = async () => {
+      try {
+        setError(null)
+        const slug = params.slug as string
+        const response = await destinationsApi.getBySlug(slug)
+        setDestination(response.data)
+      } catch (error) {
+        console.error('Error fetching destination:', error)
+        setError('Destination not found')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (params.slug) {
+      fetchDestination()
+    }
   }, [params.slug])
 
   const handleShare = async () => {
@@ -239,11 +130,13 @@ export default function DestinationDetailsPage() {
     )
   }
 
-  if (!destination) {
+  if (error || !destination) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Destination not found</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            {error || 'Destination not found'}
+          </h1>
           <Link href="/destinations" className="text-blue-600 hover:text-blue-800">
             ← Back to Destinations
           </Link>

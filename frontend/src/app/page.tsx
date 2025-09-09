@@ -142,11 +142,11 @@ export default function HomePage() {
         </section>
 
         {/* Newsletter Signup */}
-        <section className="section-padding hero-gradient">
+        {/* <section className="section-padding hero-gradient">
           <div className="container-max w-full">
             <Newsletter />
           </div>
-        </section>
+        </section> */}
       </div>
     </>
   )

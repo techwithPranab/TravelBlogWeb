@@ -9,7 +9,7 @@ import { destinationsApi, type Destination } from '@/lib/api'
 
 export default function DestinationsPage() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedRegion, setSelectedRegion] = useState('all')
+  const [selectedContinent, setSelectedContinent] = useState('all')
   const [destinations, setDestinations] = useState<Destination[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -76,7 +76,7 @@ export default function DestinationsPage() {
     const fetchDestinations = async () => {
       try {
         setLoading(true)
-        const response = await destinationsApi.getAll({ limit: 50, sort: '-rating.average' })
+        const response = await destinationsApi.getAll({ limit: 50, sort: '-rating' })
         
         if (response.success) {
           setDestinations(response.data)
@@ -92,16 +92,16 @@ export default function DestinationsPage() {
     fetchDestinations()
   }, [])
 
-  // Get unique regions from destinations
-  const regions = ['all', ...Array.from(new Set(destinations.map(dest => dest.region)))]
+  // Get unique continents from destinations
+  const continents = ['all', ...Array.from(new Set(destinations.map(dest => dest.continent)))]
 
   // Filter destinations
   const filteredDestinations = destinations.filter(destination => {
     const matchesSearch = destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          destination.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          destination.description.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRegion = selectedRegion === 'all' || destination.region === selectedRegion
-    return matchesSearch && matchesRegion
+    const matchesContinent = selectedContinent === 'all' || destination.continent === selectedContinent
+    return matchesSearch && matchesContinent
   })
 
   if (loading) {
@@ -203,19 +203,19 @@ export default function DestinationsPage() {
               />
             </div>
 
-            {/* Region Filter */}
+            {/* Continent Filter */}
             <div className="flex flex-wrap gap-2">
-              {regions.map((region) => (
+              {continents.map((continent) => (
                 <button
-                  key={region}
-                  onClick={() => setSelectedRegion(region)}
+                  key={continent}
+                  onClick={() => setSelectedContinent(continent)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedRegion === region
+                    selectedContinent === continent
                       ? 'bg-green-600 text-white'
                       : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
                   }`}
                 >
-                  {region === 'all' ? 'All Regions' : region}
+                  {continent === 'all' ? 'All Continents' : continent}
                 </button>
               ))}
             </div>
@@ -238,17 +238,17 @@ export default function DestinationsPage() {
               >
                 {/* Destination Image */}
                 <div className="relative h-64 bg-gray-200">
-                  {destination.images[0] && (
+                  {destination.featuredImage && (
                     <img 
-                      src={destination.images[0].url} 
-                      alt={destination.images[0].alt}
+                      src={destination.featuredImage.url} 
+                      alt={destination.featuredImage.alt}
                       className="w-full h-full object-cover"
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute top-4 left-4">
                     <span className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                      {destination.region}
+                      {destination.continent}
                     </span>
                   </div>
                   <div className="absolute bottom-4 left-4 right-4">
@@ -269,15 +269,15 @@ export default function DestinationsPage() {
                     <div className="flex items-center gap-2 mb-3">
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span className="font-medium">{destination.rating.average}</span>
+                        <span className="font-medium">{destination.rating}</span>
                       </div>
-                      <span className="text-gray-500 text-sm">({destination.rating.count} reviews)</span>
+                      <span className="text-gray-500 text-sm">({destination.totalReviews} reviews)</span>
                     </div>
                   )}
 
                   {/* Description */}
                   <p className="text-gray-600 mb-4 line-clamp-3">
-                    {destination.shortDescription || destination.description}
+                    {destination.description}
                   </p>
 
                   {/* Highlights */}
@@ -303,11 +303,11 @@ export default function DestinationsPage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Clock className="h-4 w-4" />
-                      <span>Best time: {destination.bestTimeToVisit.months.join(', ')}</span>
+                      <span>Best time: {destination.bestTimeToVisit}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Users className="h-4 w-4" />
-                      <span>Budget: {destination.budget.currency} {destination.budget.low}-{destination.budget.high}/day</span>
+                      <span>Budget: {destination.accommodation.budget}</span>
                     </div>
                   </div>
 

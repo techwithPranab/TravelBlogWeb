@@ -394,34 +394,52 @@ export default function GalleryClient() {
       {/* Photo Modal */}
       {selectedPhoto && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="relative max-w-4xl max-h-full bg-white rounded-lg overflow-hidden">
+          <div className="relative max-w-5xl max-h-[90vh] bg-white rounded-lg overflow-hidden shadow-2xl">
             <button
               onClick={() => setSelectedPhoto(null)}
-              className="absolute top-4 right-4 z-10 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-75 transition-colors"
+              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-75 transition-colors"
+              aria-label="Close modal"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
-            <div className="relative aspect-video">
+            <div className="relative w-full h-[60vh] bg-gray-100">
               <Image
                 src={selectedPhoto.imageUrl}
                 alt={selectedPhoto.title}
                 fill
                 className="object-contain"
                 sizes="(max-width: 1024px) 100vw, 1024px"
+                priority
               />
             </div>
 
-            <div className="p-6">
+            <div className="p-6 bg-white">
               <h3 className="text-2xl font-bold text-gray-900 mb-2">{selectedPhoto.title}</h3>
-              <p className="text-gray-600 mb-4">{selectedPhoto.description}</p>
+              <p className="text-gray-600 mb-4 leading-relaxed">{selectedPhoto.description}</p>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
-                <span>📍 {selectedPhoto.location.city}, {selectedPhoto.location.country}</span>
-                <span>👤 {selectedPhoto.photographer?.name || 'Anonymous'}</span>
-                <span>📅 {new Date(selectedPhoto.createdAt).toLocaleDateString()}</span>
+                <span className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  {selectedPhoto.location.city}, {selectedPhoto.location.country}
+                </span>
+                <span className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  {selectedPhoto.photographer?.name || 'Anonymous'}
+                </span>
+                <span className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {new Date(selectedPhoto.createdAt).toLocaleDateString()}
+                </span>
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -430,7 +448,7 @@ export default function GalleryClient() {
                     key={tag}
                     className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
                   >
-                    {tag}
+                    #{tag}
                   </span>
                 ))}
               </div>

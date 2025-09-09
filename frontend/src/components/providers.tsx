@@ -2,14 +2,13 @@
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { AuthProvider } from '@/context/AuthContext'
 import { CartProvider } from '@/context/CartContext'
 import { useState } from 'react'
 
 interface ProvidersProps {
-  children: React.ReactNode
+  readonly children: React.ReactNode
 }
 
 export function Providers({ children }: ProvidersProps) {
@@ -33,15 +32,13 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider>
-        <ThemeProvider>
-          <AuthProvider>
-            <CartProvider>
-              {children}
-            </CartProvider>
-          </AuthProvider>
-        </ThemeProvider>
-      </SessionProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </AuthProvider>
+      </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

@@ -27,7 +27,7 @@ export function Footer() {
       { name: 'Help Center', href: '/help' },
       { name: 'Community', href: '/community' },
       { name: 'Newsletter', href: '/newsletter' },
-      { name: 'Partner with Us', href: '/partnerships' },
+      { name: 'Partner with Us', href: '/partner-with-us' },
     ],
   }
 

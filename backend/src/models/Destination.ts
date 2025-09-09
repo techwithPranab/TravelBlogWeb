@@ -4,49 +4,50 @@ export interface IDestination extends Document {
   name: string
   slug: string
   description: string
-  shortDescription: string
   country: string
-  region: string
-  coordinates: {
-    latitude: number
-    longitude: number
-  }
-  images: {
+  continent: string
+  featuredImage: {
     url: string
     alt: string
-    caption?: string
-    isPrimary: boolean
-  }[]
+  }
+  gallery: Array<{
+    url: string
+    alt: string
+  }>
+  coordinates: {
+    lat: number
+    lng: number
+  }
+  bestTimeToVisit: string
+  averageTemperature: {
+    summer: string
+    winter: string
+  }
+  currency: string
+  language: string
+  timezone: string
+  rating: number
+  totalReviews: number
   highlights: string[]
-  bestTimeToVisit: {
-    months: string[]
+  activities: Array<{
+    name: string
+    icon: string
     description: string
-  }
-  difficulty: 'Easy' | 'Moderate' | 'Challenging' | 'Expert'
-  budget: {
-    currency: string
-    low: number
-    high: number
-    description: string
-  }
-  tags: string[]
-  activities: string[]
+  }>
   accommodation: {
-    type: string
-    description: string
-    priceRange: string
-  }[]
-  transportation: {
-    type: string
-    description: string
-    cost?: string
-  }[]
-  posts: mongoose.Types.ObjectId[]
-  guides: mongoose.Types.ObjectId[]
-  rating: {
-    average: number
-    count: number
+    budget: string
+    midRange: string
+    luxury: string
   }
+  transportation: string[]
+  localCuisine: string[]
+  travelTips: string[]
+  relatedPosts: Array<{
+    id: string
+    title: string
+    slug: string
+    image: string
+  }>
   isPopular: boolean
   isFeatured: boolean
   isActive: boolean
@@ -75,37 +76,17 @@ const destinationSchema = new Schema<IDestination>({
     required: [true, 'Description is required'],
     trim: true
   },
-  shortDescription: {
-    type: String,
-    required: true,
-    trim: true,
-    maxlength: [200, 'Short description cannot exceed 200 characters']
-  },
   country: {
     type: String,
     required: [true, 'Country is required'],
     trim: true
   },
-  region: {
+  continent: {
     type: String,
-    required: true,
+    required: [true, 'Continent is required'],
     trim: true
   },
-  coordinates: {
-    latitude: {
-      type: Number,
-      required: true,
-      min: -90,
-      max: 90
-    },
-    longitude: {
-      type: Number,
-      required: true,
-      min: -180,
-      max: 180
-    }
-  },
-  images: [{
+  featuredImage: {
     url: {
       type: String,
       required: true
@@ -113,105 +94,137 @@ const destinationSchema = new Schema<IDestination>({
     alt: {
       type: String,
       required: true
+    }
+  },
+  gallery: [{
+    url: {
+      type: String,
+      required: true
     },
-    caption: String,
-    isPrimary: {
-      type: Boolean,
-      default: false
+    alt: {
+      type: String,
+      required: true
     }
   }],
+  coordinates: {
+    lat: {
+      type: Number,
+      required: true,
+      min: -90,
+      max: 90
+    },
+    lng: {
+      type: Number,
+      required: true,
+      min: -180,
+      max: 180
+    }
+  },
+  bestTimeToVisit: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  averageTemperature: {
+    summer: {
+      type: String,
+      required: true
+    },
+    winter: {
+      type: String,
+      required: true
+    }
+  },
+  currency: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  language: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  timezone: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 0,
+    max: 5,
+    default: 0
+  },
+  totalReviews: {
+    type: Number,
+    required: true,
+    min: 0,
+    default: 0
+  },
   highlights: [{
     type: String,
     trim: true
   }],
-  bestTimeToVisit: {
-    months: [{
-      type: String,
-      enum: ['January', 'February', 'March', 'April', 'May', 'June', 
-             'July', 'August', 'September', 'October', 'November', 'December']
-    }],
-    description: {
-      type: String,
-      trim: true
-    }
-  },
-  difficulty: {
-    type: String,
-    enum: ['Easy', 'Moderate', 'Challenging', 'Expert'],
-    default: 'Easy'
-  },
-  budget: {
-    currency: {
-      type: String,
-      default: 'USD'
-    },
-    low: {
-      type: Number,
-      min: 0
-    },
-    high: {
-      type: Number,
-      min: 0
-    },
-    description: {
-      type: String,
-      trim: true
-    }
-  },
-  tags: [{
-    type: String,
-    trim: true
-  }],
   activities: [{
+    name: {
+      type: String,
+      required: true
+    },
+    icon: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    }
+  }],
+  accommodation: {
+    budget: {
+      type: String,
+      required: true
+    },
+    midRange: {
+      type: String,
+      required: true
+    },
+    luxury: {
+      type: String,
+      required: true
+    }
+  },
+  transportation: [{
     type: String,
     trim: true
   }],
-  accommodation: [{
-    type: {
+  localCuisine: [{
+    type: String,
+    trim: true
+  }],
+  travelTips: [{
+    type: String,
+    trim: true
+  }],
+  relatedPosts: [{
+    id: {
       type: String,
       required: true
     },
-    description: {
+    title: {
       type: String,
       required: true
     },
-    priceRange: {
+    slug: {
+      type: String,
+      required: true
+    },
+    image: {
       type: String,
       required: true
     }
   }],
-  transportation: [{
-    type: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: true
-    },
-    cost: String
-  }],
-  posts: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post'
-  }],
-  guides: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Guide'
-  }],
-  rating: {
-    average: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 5
-    },
-    count: {
-      type: Number,
-      default: 0,
-      min: 0
-    }
-  },
   isPopular: {
     type: Boolean,
     default: false
@@ -240,10 +253,10 @@ const destinationSchema = new Schema<IDestination>({
 
 // Indexes for better performance
 destinationSchema.index({ slug: 1 })
-destinationSchema.index({ country: 1, region: 1 })
+destinationSchema.index({ country: 1, continent: 1 })
 destinationSchema.index({ isPopular: 1, isFeatured: 1 })
-destinationSchema.index({ tags: 1 })
-destinationSchema.index({ 'coordinates.latitude': 1, 'coordinates.longitude': 1 })
+destinationSchema.index({ rating: -1 })
+destinationSchema.index({ 'coordinates.lat': 1, 'coordinates.lng': 1 })
 destinationSchema.index({ isActive: 1 })
 
 export default mongoose.model<IDestination>('Destination', destinationSchema)
