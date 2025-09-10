@@ -17,6 +17,7 @@ import {
   Eye,
   ThumbsUp
 } from 'lucide-react'
+import { postsApi } from '@/lib/api'
 
 interface BlogPost {
   id: string
@@ -28,6 +29,7 @@ interface BlogPost {
     alt: string
     caption?: string
   }
+  images: string[]
   author: {
     name: string
     avatar: string
@@ -83,38 +85,31 @@ export default function BlogDetailsPage() {
   const [isSubmittingComment, setIsSubmittingComment] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [commentError, setCommentError] = useState<string | null>(null)
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null)
+  const [lightboxIndex, setLightboxIndex] = useState<number>(0)
 
   // Simulated API functions
   const fetchBlogPost = async (slug: string): Promise<BlogApiResponse> => {
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${slug}`)
+      const response = await postsApi.getBySlug(slug)
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      const data = await response.json()
-      
-      if (!data.success) {
-        throw new Error(data.error || 'Failed to fetch blog post')
-      }
-
       // Transform the backend data to match our frontend interface
-      const post = data.data
+      const post = response.data
       const transformedPost: BlogPost = {
-        id: post._id || post.id,
+        id: post._id,
         title: post.title,
         content: post.content,
         excerpt: post.excerpt,
         featuredImage: {
-          url: post.featuredImage?.url || post.featuredImage,
-          alt: post.featuredImage?.alt || 'Blog post image',
-          caption: post.featuredImage?.caption
+          url: (typeof post.featuredImage === 'object' && post.featuredImage?.url) || (typeof post.featuredImage === 'string' ? post.featuredImage : ''),
+          alt: (typeof post.featuredImage === 'object' && post.featuredImage?.alt) || 'Blog post image',
+          caption: (typeof post.featuredImage === 'object' && post.featuredImage?.caption) || undefined
         },
+        images: post.images || [],
         author: {
           name: post.author?.name || 'Unknown Author',
           avatar: post.author?.avatar || '/images/default-avatar.jpg',
-          bio: post.author?.bio || 'Travel enthusiast and writer'
+          bio: 'Travel enthusiast and writer'
         },
         category: {
           name: post.categories?.[0]?.name || 'Uncategorized',
@@ -386,6 +381,32 @@ export default function BlogDetailsPage() {
     }
   }
 
+  const handleImageClick = (imageUrl: string, index: number) => {
+    setLightboxImage(imageUrl)
+    setLightboxIndex(index)
+  }
+
+  const closeLightbox = () => {
+    setLightboxImage(null)
+    setLightboxIndex(0)
+  }
+
+  const navigateLightbox = (direction: 'prev' | 'next') => {
+    if (!post) return
+
+    const allImages = [post.featuredImage.url, ...post.images]
+    let newIndex = lightboxIndex
+
+    if (direction === 'prev') {
+      newIndex = lightboxIndex > 0 ? lightboxIndex - 1 : allImages.length - 1
+    } else {
+      newIndex = lightboxIndex < allImages.length - 1 ? lightboxIndex + 1 : 0
+    }
+
+    setLightboxImage(allImages[newIndex])
+    setLightboxIndex(newIndex)
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -522,20 +543,69 @@ export default function BlogDetailsPage() {
 
       {/* Featured Image */}
       <div className="container mx-auto px-4 py-8">
-        <div className="relative h-96 md:h-[600px] rounded-2xl overflow-hidden">
+        <div className="relative h-96 md:h-[600px] rounded-2xl overflow-hidden group cursor-pointer">
           <Image
             src={post!.featuredImage.url}
             alt={post!.featuredImage.alt}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
           {post!.featuredImage.caption && (
             <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm">
               {post!.featuredImage.caption}
             </div>
           )}
+          {/* Click overlay */}
+          <button
+            onClick={() => handleImageClick(post!.featuredImage.url, 0)}
+            className="absolute inset-0 w-full h-full bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-2xl"
+            aria-label="View featured image in full size"
+          >
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
+          </button>
         </div>
       </div>
+
+      {/* Additional Images Gallery */}
+      {post!.images && post!.images.length > 0 && (
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Gallery</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {post!.images.map((imageUrl, index) => (
+                <button
+                  key={`${imageUrl}-${index}`}
+                  className="relative group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
+                  onClick={() => handleImageClick(imageUrl, index + 1)} // +1 because featured image is index 0
+                  aria-label={`View gallery image ${index + 1} in full size`}
+                >
+                  <div className="aspect-square rounded-lg overflow-hidden">
+                    <Image
+                      src={imageUrl}
+                      alt={`Gallery image ${index + 1}`}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-lg flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Content */}
       <div className="container mx-auto px-4 pb-16">
@@ -659,6 +729,66 @@ export default function BlogDetailsPage() {
           </div>
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div className="relative max-w-5xl max-h-full">
+            {/* Close button */}
+            <button
+              onClick={closeLightbox}
+              className="absolute top-4 right-4 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+              aria-label="Close lightbox"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Navigation buttons */}
+            {post && (post.images.length > 0) && (
+              <>
+                <button
+                  onClick={() => navigateLightbox('prev')}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+                  aria-label="Previous image"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => navigateLightbox('next')}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+                  aria-label="Next image"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </>
+            )}
+
+            {/* Image */}
+            <div className="relative">
+              <Image
+                src={lightboxImage}
+                alt="Gallery image"
+                width={1200}
+                height={800}
+                className="max-w-full max-h-[80vh] object-contain"
+              />
+            </div>
+
+            {/* Image counter */}
+            {post && (post.images.length > 0) && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                {lightboxIndex + 1} / {post.images.length + 1}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

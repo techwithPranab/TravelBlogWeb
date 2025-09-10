@@ -70,6 +70,7 @@ export default function AdminDashboard() {
         let dashboardStats = null
         if (response.success) {
           dashboardStats = response.data.stats
+          console.log('Dashboard stats:', dashboardStats)
           setStats(dashboardStats)
           setRecentActivity(response.data.recentActivity)
         }

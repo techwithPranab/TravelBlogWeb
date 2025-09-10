@@ -29,7 +29,12 @@ export default function EditPostPage() {
     title: '',
     content: '',
     excerpt: '',
-    featuredImage: '',
+    featuredImage: {
+      url: '',
+      alt: '',
+      caption: ''
+    },
+    images: [] as string[],
     category: '',
     destination: '',
     status: 'draft',
@@ -67,7 +72,16 @@ export default function EditPostPage() {
         title: post.title || '',
         content: post.content || '',
         excerpt: post.excerpt || '',
-        featuredImage: post.featuredImage || '',
+        featuredImage: post.featuredImage ? {
+          url: post.featuredImage.url || '',
+          alt: post.featuredImage.alt || '',
+          caption: post.featuredImage.caption || ''
+        } : {
+          url: '',
+          alt: '',
+          caption: ''
+        },
+        images: post.images || [],
         category: post.category || '',
         destination: post.destination || '',
         status: post.status || 'draft',
@@ -105,17 +119,106 @@ export default function EditPostPage() {
     setTags(prev => prev.filter(tag => tag !== tagToRemove))
   }
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Here you would implement image upload to your storage service
-    const imageUrl = URL.createObjectURL(file)
+    // Show loading state
+    const loadingToast = toast.loading('Uploading image...')
+
+    try {
+      // Create FormData for file upload
+      const formData = new FormData()
+      formData.append('image', file)
+
+      // Upload to our API endpoint
+      const response = await fetch('http://localhost:5000/api/posts/upload-image', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
+        body: formData
+      })
+
+      if (!response.ok) {
+        throw new Error('Upload failed')
+      }
+
+      const result = await response.json()
+
+      if (result.success) {
+        setFormData(prev => ({
+          ...prev,
+          featuredImage: {
+            url: result.data.url,
+            alt: formData.title || 'Featured image',
+            caption: ''
+          }
+        }))
+        toast.success('Featured image uploaded successfully')
+      } else {
+        throw new Error(result.error || 'Upload failed')
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      toast.error('Failed to upload image. Please try again.')
+    } finally {
+      toast.dismiss(loadingToast)
+    }
+  }
+
+  const handleMultipleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    const loadingToast = toast.loading(`Uploading ${files.length} image(s)...`)
+    const newImageUrls: string[] = []
+
+    try {
+      // Upload each file to Cloudinary
+      for (const file of Array.from(files)) {
+        const formData = new FormData()
+        formData.append('image', file)
+
+        const response = await fetch('http://localhost:5000/api/posts/upload-image', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+          },
+          body: formData
+        })
+
+        if (!response.ok) {
+          throw new Error(`Failed to upload ${file.name}`)
+        }
+
+        const result = await response.json()
+        if (result.success) {
+          newImageUrls.push(result.data.url)
+        } else {
+          throw new Error(result.error || `Failed to upload ${file.name}`)
+        }
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...newImageUrls]
+      }))
+      toast.success(`${files.length} image(s) uploaded successfully`)
+    } catch (error) {
+      console.error('Upload error:', error)
+      toast.error('Failed to upload some images. Please try again.')
+    } finally {
+      toast.dismiss(loadingToast)
+    }
+  }
+
+  const handleRemoveImage = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      featuredImage: imageUrl
+      images: prev.images.filter((_, i) => i !== index)
     }))
-    toast.success('Image uploaded successfully')
+    toast.success('Image removed successfully')
   }
 
   const handleSubmit = async (e: React.FormEvent, status: 'draft' | 'published') => {
@@ -166,10 +269,10 @@ export default function EditPostPage() {
           </button>
         </div>
         <div className="max-w-4xl mx-auto p-8 text-black">
-          {formData.featuredImage && (
+          {formData.featuredImage.url && (
             <img 
-              src={formData.featuredImage} 
-              alt={formData.title}
+              src={formData.featuredImage.url} 
+              alt={formData.featuredImage.alt || formData.title}
               className="w-full h-64 object-cover rounded-lg mb-6"
             />
           )}
@@ -340,20 +443,66 @@ export default function EditPostPage() {
               {/* Featured Image */}
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Featured Image</h3>
-                {formData.featuredImage ? (
-                  <div className="relative">
-                    <img 
-                      src={formData.featuredImage} 
-                      alt="Featured" 
-                      className="w-full h-40 object-cover rounded-lg"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, featuredImage: '' }))}
-                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
+                {formData.featuredImage.url ? (
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <img 
+                        src={formData.featuredImage.url} 
+                        alt={formData.featuredImage.alt || "Featured"} 
+                        className="w-full h-40 object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ 
+                          ...prev, 
+                          featuredImage: { url: '', alt: '', caption: '' } 
+                        }))}
+                        className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <label htmlFor="featuredImageAlt" className="block text-sm font-medium text-gray-700 mb-1">
+                          Alt Text *
+                        </label>
+                        <input
+                          type="text"
+                          id="featuredImageAlt"
+                          value={formData.featuredImage.alt}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            featuredImage: {
+                              ...prev.featuredImage,
+                              alt: e.target.value
+                            }
+                          }))}
+                          placeholder="Describe the image for accessibility..."
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-black"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="featuredImageCaption" className="block text-sm font-medium text-gray-700 mb-1">
+                          Caption (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          id="featuredImageCaption"
+                          value={formData.featuredImage.caption}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            featuredImage: {
+                              ...prev.featuredImage,
+                              caption: e.target.value
+                            }
+                          }))}
+                          placeholder="Image caption..."
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-black"
+                        />
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
@@ -367,6 +516,51 @@ export default function EditPostPage() {
                     <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
                   </label>
                 )}
+              </div>
+
+              {/* Additional Images */}
+              <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Images</h3>
+                <div className="space-y-4">
+                  {/* Display uploaded images */}
+                  {formData.images.length > 0 && (
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      {formData.images.map((image, index) => (
+                        <div key={`${image}-${index}`} className="relative">
+                          <img 
+                            src={image} 
+                            alt={`Gallery item ${index + 1}`} 
+                            className="w-full h-24 object-cover rounded-lg"
+                          />
+                          <button
+                            onClick={() => handleRemoveImage(index)}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Upload new images */}
+                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <Upload className="w-6 h-6 mb-2 text-gray-500" />
+                      <p className="mb-1 text-sm text-gray-500">
+                        <span className="font-semibold">Click to upload additional images</span>
+                      </p>
+                      <p className="text-xs text-gray-500">PNG, JPG or WEBP (multiple files allowed)</p>
+                    </div>
+                    <input 
+                      type="file" 
+                      className="hidden" 
+                      accept="image/*" 
+                      multiple 
+                      onChange={handleMultipleImageUpload} 
+                    />
+                  </label>
+                </div>
               </div>
 
               {/* Category */}

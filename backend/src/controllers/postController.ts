@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import Post from '@/models/Post'
 import { IUser } from '@/models/User'
+import { uploadBufferToCloudinary } from '@/config/drive'
+import sharp from 'sharp'
 
 interface AuthenticatedRequest extends Request {
   user?: IUser
@@ -397,73 +399,45 @@ export const getPopularPosts = async (req: Request, res: Response): Promise<void
   }
 }
 
-// @desc    Search posts
-// @route   GET /api/posts/search
-// @access  Public
-export const searchPosts = async (req: Request, res: Response): Promise<void> => {
+// @desc    Upload image for blog post
+// @route   POST /api/posts/upload-image
+// @access  Private
+export const uploadPostImage = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const { q, category, tags, sortBy } = req.query
-    const page = parseInt(req.query.page as string) || 1
-    const limit = parseInt(req.query.limit as string) || 10
-    const skip = (page - 1) * limit
-
-    if (!q) {
+    if (!req.file) {
       res.status(400).json({
         success: false,
-        error: 'Search query is required'
+        error: 'No image file provided'
       })
       return
     }
 
-    const query: any = {
-      status: 'published',
-      $or: [
-        { title: { $regex: q, $options: 'i' } },
-        { excerpt: { $regex: q, $options: 'i' } },
-        { content: { $regex: q, $options: 'i' } },
-        { tags: { $regex: q, $options: 'i' } }
-      ]
-    }
+    // Process image with sharp
+    const processedImage = await sharp(req.file.buffer)
+      .resize(1920, 1080, { fit: 'inside', withoutEnlargement: true })
+      .jpeg({ quality: 85 })
+      .toBuffer()
 
-    if (category) {
-      query.category = category
-    }
+    // Generate unique filename
+    const timestamp = Date.now()
+    const originalName = req.file.originalname.replace(/\.[^/.]+$/, "")
+    const fileName = `TravelBlog/posts/${timestamp}-${originalName}.jpg`
 
-    if (tags) {
-      const tagArray = (tags as string).split(',')
-      query.tags = { $in: tagArray }
-    }
-
-    let sort = '-createdAt'
-    if (sortBy === 'popular') {
-      sort = '-views -likes'
-    } else if (sortBy === 'oldest') {
-      sort = 'createdAt'
-    }
-
-    const posts = await Post.find(query)
-      .populate('author', 'name avatar email')
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
-
-    const total = await Post.countDocuments(query)
+    // Upload to Cloudinary
+    const result = await uploadBufferToCloudinary(processedImage, fileName, 'TravelBlog/posts')
 
     res.status(200).json({
       success: true,
-      count: posts.length,
-      total,
-      pagination: {
-        page,
-        limit,
-        pages: Math.ceil(total / limit)
-      },
-      data: posts
+      data: {
+        url: result.url,
+        publicId: result.public_id
+      }
     })
   } catch (error: any) {
+    console.error('Error uploading post image:', error)
     res.status(500).json({
       success: false,
-      error: error.message || 'Server error'
+      error: error.message || 'Failed to upload image'
     })
   }
 }

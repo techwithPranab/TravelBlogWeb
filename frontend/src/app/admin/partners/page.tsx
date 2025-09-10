@@ -1,22 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
-type PartnerStatus = 'pending' | 'approved' | 'rejected';
-
-interface Partner {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  company: string;
-  website?: string;
-  partnershipType: string;
-  message: string;
-  status: PartnerStatus;
-  createdAt: string;
-}
+import { partnersApi, Partner } from '@/lib/api';
 
 export default function PartnersAdminPage() {
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -30,22 +15,16 @@ export default function PartnersAdminPage() {
   const fetchPartners = async (page = 1, search = '', status = 'all') => {
     try {
       setLoading(true);
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: '10',
+      const response = await partnersApi.getAll({
+        page,
+        limit: 10,
         ...(search && { search }),
         ...(status !== 'all' && { status })
       });
 
-      const response = await fetch(`/api/partners?${params}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch partners');
-      }
-
-      const data = await response.json();
-      setPartners(data.partners);
-      setTotalPages(data.totalPages);
-      setCurrentPage(data.currentPage);
+      setPartners(response.data.partners);
+      setTotalPages(response.data.totalPages);
+      setCurrentPage(response.data.currentPage);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -74,18 +53,7 @@ export default function PartnersAdminPage() {
 
   const updatePartnerStatus = async (partnerId: string, newStatus: 'pending' | 'approved' | 'rejected') => {
     try {
-      const response = await fetch(`/api/partners/${partnerId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update partner status');
-      }
-
+      await partnersApi.updateStatus(partnerId, newStatus);
       // Refresh the partners list
       fetchPartners(currentPage, searchTerm, statusFilter);
     } catch (err) {

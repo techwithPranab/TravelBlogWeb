@@ -26,16 +26,30 @@ export interface Post {
   featuredImage?: {
     url: string
     alt: string
+    caption?: string
   }
+  images?: string[]
   tags: string[]
   status: 'draft' | 'published'
   publishedAt: string
   readTime: number
-  likes: number
   views: number
+  likes: number
   comments: number
   createdAt: string
   updatedAt: string
+  // Additional fields from backend
+  viewCount?: number
+  likeCount?: number
+  commentCount?: number
+  destination?: {
+    country: string
+    city?: string
+    coordinates?: {
+      lat: number
+      lng: number
+    }
+  }
 }
 
 export interface Destination {
@@ -98,6 +112,7 @@ export interface Destination {
 
 export interface Guide {
   _id: string
+  id: string
   title: string
   slug: string
   description: string
@@ -105,19 +120,21 @@ export interface Guide {
   author: {
     _id: string
     name: string
-    avatar?: string
+    avatar: string
+    bio: string
   }
   destination: {
     _id: string
     name: string
     slug: string
+    country: string
   }
   category: {
     _id: string
     name: string
     slug: string
   }
-  type: string
+  type: 'itinerary' | 'budget' | 'photography' | 'food' | 'adventure'
   duration: string | {
     days: number
     description: string
@@ -127,16 +144,18 @@ export interface Guide {
     currency: string
     amount: number
     description: string
+    range: string
+    details: string
   }
   itinerary?: Array<{
     day: number
     title: string
     description: string
     activities: string[]
-    accommodation?: string
-    meals?: string[]
+    accommodation: string
+    meals: string[]
     transportation?: string
-    budget?: number
+    budget: string
   }>
   tags: string[]
   isPublished: boolean
@@ -146,6 +165,58 @@ export interface Guide {
   likes: number
   createdAt: string
   updatedAt: string
+  // Additional properties from the detailed Guide interface
+  bestTime: string
+  rating: number
+  totalReviews: number
+  lastUpdated: string
+  isPremium: boolean
+  downloadCount: number
+  featuredImage: {
+    url: string
+    alt: string
+  }
+  sections: Array<{
+    title: string
+    content: string
+    tips?: string[]
+    images?: Array<{
+      url: string
+      alt: string
+      caption?: string
+    }>
+  }>
+  packingList?: Array<{
+    category: string
+    items: string[]
+  }>
+  resources: Array<{
+    title: string
+    type: 'link' | 'document' | 'app'
+    url: string
+  }>
+  relatedGuides: Array<{
+    id: string
+    title: string
+    slug: string
+    image: string
+    type: string
+  }>
+}
+
+export interface Partner {
+  _id: string
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  company: string
+  website?: string
+  partnershipType: string
+  message: string
+  status: 'pending' | 'approved' | 'rejected'
+  createdAt: string
+  updatedAt?: string
 }
 
 export interface Category {
@@ -330,6 +401,43 @@ export const guidesApi = {
   }
 }
 
+// Partners API
+export const partnersApi = {
+  getAll: async (params?: {
+    page?: number
+    limit?: number
+    search?: string
+    status?: string
+  }): Promise<ApiResponse<{ partners: Partner[]; totalPages: number; currentPage: number; total: number }>> => {
+    const searchParams = new URLSearchParams()
+    if (params?.page) searchParams.append('page', params.page.toString())
+    if (params?.limit) searchParams.append('limit', params.limit.toString())
+    if (params?.search) searchParams.append('search', params.search)
+    if (params?.status) searchParams.append('status', params.status)
+    
+    const query = searchParams.toString()
+    const endpoint = query ? `/partners?${query}` : '/partners'
+    return apiRequest<{ partners: Partner[]; totalPages: number; currentPage: number; total: number }>(endpoint)
+  },
+
+  updateStatus: async (partnerId: string, status: 'pending' | 'approved' | 'rejected'): Promise<ApiResponse<Partner>> => {
+    return apiRequest<Partner>(`/partners/${partnerId}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    })
+  },
+
+  delete: async (partnerId: string): Promise<ApiResponse<{ message: string }>> => {
+    return apiRequest<{ message: string }>(`/partners/${partnerId}`, {
+      method: 'DELETE'
+    })
+  },
+
+  getById: async (partnerId: string): Promise<ApiResponse<Partner>> => {
+    return apiRequest<Partner>(`/partners/${partnerId}`)
+  }
+}
+
 // Categories API
 export const categoriesApi = {
   getAll: async (): Promise<ApiResponse<Category[]>> => {
@@ -345,5 +453,6 @@ export default {
   posts: postsApi,
   destinations: destinationsApi,
   guides: guidesApi,
+  partners: partnersApi,
   categories: categoriesApi
 }

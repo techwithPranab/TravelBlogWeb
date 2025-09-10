@@ -23,77 +23,7 @@ import {
   Heart
 } from 'lucide-react'
 import { generateGuidePDF } from '@/lib/pdfGenerator'
-
-interface Guide {
-  id: string
-  title: string
-  description: string
-  type: 'itinerary' | 'budget' | 'photography' | 'food' | 'adventure'
-  destination: {
-    name: string
-    country: string
-    slug: string
-  }
-  author: {
-    name: string
-    avatar: string
-    bio: string
-  }
-  featuredImage: {
-    url: string
-    alt: string
-  }
-  duration: string | {
-    days: number
-    description: string
-  }
-  difficulty: 'Easy' | 'Moderate' | 'Challenging'
-  budget: {
-    range: string
-    details: string
-  }
-  bestTime: string
-  rating: number
-  totalReviews: number
-  publishedAt: string
-  lastUpdated: string
-  isPremium: boolean
-  downloadCount: number
-  sections: Array<{
-    title: string
-    content: string
-    tips?: string[]
-    images?: Array<{
-      url: string
-      alt: string
-      caption?: string
-    }>
-  }>
-  itinerary?: Array<{
-    day: number
-    title: string
-    activities: string[]
-    meals: string[]
-    accommodation: string
-    budget: string
-  }>
-  packingList?: Array<{
-    category: string
-    items: string[]
-  }>
-  resources: Array<{
-    title: string
-    type: 'link' | 'document' | 'app'
-    url: string
-  }>
-  relatedGuides: Array<{
-    id: string
-    title: string
-    slug: string
-    image: string
-    type: string
-  }>
-}
+import { guidesApi, Guide } from '@/lib/api'
 
 export default function GuideDetailsPage() {
   const params = useParams()
@@ -107,14 +37,8 @@ export default function GuideDetailsPage() {
     const fetchGuide = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch(`/api/guides/${params.slug}`)
-        
-        if (!response.ok) {
-          throw new Error('Guide not found')
-        }
-        
-        const data = await response.json()
-        setGuide(data.data)
+        const response = await guidesApi.getBySlug(params.slug as string)
+        setGuide(response.data)
       } catch (error) {
         console.error('Error fetching guide:', error)
         setGuide(null)

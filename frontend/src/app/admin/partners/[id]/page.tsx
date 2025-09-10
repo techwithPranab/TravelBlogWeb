@@ -2,23 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { partnersApi, Partner } from '@/lib/api';
 
 type PartnerStatus = 'pending' | 'approved' | 'rejected';
-
-interface Partner {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  company: string;
-  website?: string;
-  partnershipType: string;
-  message: string;
-  status: PartnerStatus;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export default function PartnerDetailPage() {
   const params = useParams();
@@ -33,12 +19,8 @@ export default function PartnerDetailPage() {
   const fetchPartner = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/partners/${partnerId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch partner details');
-      }
-      const data = await response.json();
-      setPartner(data);
+      const response = await partnersApi.getById(partnerId);
+      setPartner(response.data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -55,17 +37,7 @@ export default function PartnerDetailPage() {
   const updatePartnerStatus = async (newStatus: PartnerStatus) => {
     try {
       setUpdating(true);
-      const response = await fetch(`/api/partners/${partnerId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update partner status');
-      }
+      await partnersApi.updateStatus(partnerId, newStatus);
 
       // Update local state
       if (partner) {
@@ -85,14 +57,7 @@ export default function PartnerDetailPage() {
 
     try {
       setUpdating(true);
-      const response = await fetch(`/api/partners/${partnerId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete partner');
-      }
-
+      await partnersApi.delete(partnerId);
       router.push('/admin/partners');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete partner');
@@ -248,8 +213,14 @@ export default function PartnerDetailPage() {
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {new Date(partner.updatedAt).toLocaleDateString()} at{' '}
-                {new Date(partner.updatedAt).toLocaleTimeString()}
+                {partner.updatedAt ? (
+                  <>
+                    {new Date(partner.updatedAt).toLocaleDateString()} at{' '}
+                    {new Date(partner.updatedAt).toLocaleTimeString()}
+                  </>
+                ) : (
+                  'Not updated yet'
+                )}
               </dd>
             </div>
             <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
