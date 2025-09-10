@@ -6,10 +6,12 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Head from 'next/head'
 import { destinationsApi, type Destination } from '@/lib/api'
+import { CountryFilter } from '@/components/common/CountryFilter'
 
 export default function DestinationsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedContinent, setSelectedContinent] = useState('all')
+  const [selectedCountry, setSelectedCountry] = useState('all')
   const [destinations, setDestinations] = useState<Destination[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -95,13 +97,17 @@ export default function DestinationsPage() {
   // Get unique continents from destinations
   const continents = ['all', ...Array.from(new Set(destinations.map(dest => dest.continent)))]
 
+  // Get unique countries from destinations
+  const countries = Array.from(new Set(destinations.map(dest => dest.country)))
+
   // Filter destinations
   const filteredDestinations = destinations.filter(destination => {
     const matchesSearch = destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          destination.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          destination.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesContinent = selectedContinent === 'all' || destination.continent === selectedContinent
-    return matchesSearch && matchesContinent
+    const matchesCountry = selectedCountry === 'all' || destination.country === selectedCountry
+    return matchesSearch && matchesContinent && matchesCountry
   })
 
   if (loading) {
@@ -203,21 +209,32 @@ export default function DestinationsPage() {
               />
             </div>
 
-            {/* Continent Filter */}
-            <div className="flex flex-wrap gap-2">
-              {continents.map((continent) => (
-                <button
-                  key={continent}
-                  onClick={() => setSelectedContinent(continent)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedContinent === continent
-                      ? 'bg-green-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-                  }`}
-                >
-                  {continent === 'all' ? 'All Continents' : continent}
-                </button>
-              ))}
+            {/* Filters */}
+            <div className="flex flex-wrap gap-4 items-center">
+              {/* Country Filter */}
+              <CountryFilter
+                selectedCountry={selectedCountry}
+                onCountryChange={setSelectedCountry}
+                countries={countries}
+                placeholder="All Countries"
+              />
+
+              {/* Continent Filter */}
+              <div className="flex flex-wrap gap-2">
+                {continents.map((continent) => (
+                  <button
+                    key={continent}
+                    onClick={() => setSelectedContinent(continent)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      selectedContinent === continent
+                        ? 'bg-green-600 text-white'
+                        : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                    }`}
+                  >
+                    {continent === 'all' ? 'All Continents' : continent}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { 
   Calendar, 
   Clock, 
-  User, 
   Heart, 
   Share2, 
   Bookmark, 
@@ -18,7 +17,6 @@ import {
   Eye,
   ThumbsUp
 } from 'lucide-react'
-import { motion } from 'framer-motion'
 
 interface BlogPost {
   id: string
@@ -125,7 +123,7 @@ export default function BlogDetailsPage() {
         tags: post.tags || [],
         publishedAt: post.publishedAt || post.createdAt,
         readTime: post.readTime || 5,
-        views: post.viewCount || 0,
+        views: post.views || post.viewCount || 0,
         likes: post.likeCount || 0,
         isLiked: false, // This would need authentication to determine
         isBookmarked: false, // This would need authentication to determine

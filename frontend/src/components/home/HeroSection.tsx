@@ -3,14 +3,35 @@
 import { useState } from 'react'
 import { Search, MapPin, Calendar, Users } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 export function HeroSection() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
+  const router = useRouter()
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Implement search logic
-    console.log('Searching for:', searchQuery)
+
+    if (!searchQuery.trim()) {
+      toast.error('Please enter a search term')
+      return
+    }
+
+    setIsSearching(true)
+
+    try {
+      // Navigate to search results page with query
+      const searchUrl = `/search?q=${encodeURIComponent(searchQuery.trim())}`
+      router.push(searchUrl)
+    } catch (error) {
+      console.error('Search error:', error)
+      toast.error('Failed to perform search. Please try again.')
+    } finally {
+      setIsSearching(false)
+    }
   }
 
   const stats = [
@@ -20,10 +41,10 @@ export function HeroSection() {
   ]
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-violet-50 to-fuchsia-100 overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500"></div>
-      <div className="absolute inset-0 bg-pattern opacity-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-100 via-violet-50 to-fuchsia-100"></div>
+      <div className="absolute inset-0 bg-pattern opacity-5"></div>
       
       {/* Floating Elements */}
       {/* <div className="absolute top-20 left-10 w-20 h-20 bg-blue-100 rounded-full animate-float"></div>
@@ -36,17 +57,15 @@ export function HeroSection() {
           {/* Hero Text */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 animate-fade-up">
             Discover the World
-            <span className="block text-transparent bg-clip-text text-white">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-fuchsia-600">
               One Story at a Time
             </span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-gray-700 mb-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
             Join me on epic adventures around the globe. From hidden gems to iconic destinations,
             discover travel tips, cultural insights, and breathtaking photography.
-          </p>
-
-          {/* Search Bar */}
+          </p>          {/* Search Bar */}
           <form 
             onSubmit={handleSearch} 
             className="max-w-2xl mx-auto mb-12 animate-fade-up" 
@@ -59,31 +78,32 @@ export function HeroSection() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search destinations, travel tips, experiences..."
-                className="w-full pl-12 pr-4 py-4 text-lg rounded-xl bg-white/95 backdrop-blur-sm border-0 focus:ring-4 focus:ring-white/50 focus:outline-none shadow-2xl text-black placeholder-gray-400"
+                className="w-full pl-12 pr-4 py-4 text-lg rounded-xl bg-white/95 backdrop-blur-sm border-0 focus:ring-4 focus:ring-white/50 focus:outline-none shadow-2xl text-black placeholder-gray-500"
               />
-              <Button 
+              <Button
                 type="submit"
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6"
                 variant="primary"
+                disabled={isSearching}
               >
-                Search
+                {isSearching ? 'Searching...' : 'Search'}
               </Button>
             </div>
           </form>
 
           {/* Call to Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-up" style={{ animationDelay: '0.6s' }}>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="lg"
-              className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20"
+              className="bg-white/80 backdrop-blur-sm border-gray-300 text-gray-700 hover:bg-white/90"
             >
               Explore Stories
             </Button>
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               size="lg"
-              className="bg-white text-gray-900 hover:bg-gray-100"
+              className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white hover:from-purple-700 hover:to-fuchsia-700"
             >
               Plan Your Trip
             </Button>
@@ -93,13 +113,13 @@ export function HeroSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-up" style={{ animationDelay: '0.8s' }}>
             {stats.map((stat, index) => (
               <div key={stat.label} className="text-center">
-                <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-white/10 backdrop-blur-sm rounded-full">
-                  <stat.icon className="w-8 h-8 text-white" />
+                <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-100 to-fuchsia-100 rounded-full shadow-lg">
+                  <stat.icon className="w-8 h-8 text-purple-600" />
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+                <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                   {stat.value}
                 </div>
-                <div className="text-white/80 text-sm md:text-base">
+                <div className="text-gray-600 text-sm md:text-base">
                   {stat.label}
                 </div>
               </div>
@@ -110,8 +130,8 @@ export function HeroSection() {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
+        <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-pulse"></div>
         </div>
       </div>
     </section>

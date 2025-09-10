@@ -5,11 +5,13 @@ import { Search, BookOpen, Star, Eye, Filter, MapPin, User, Calendar } from 'luc
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { guidesApi, type Guide } from '@/lib/api'
+import { CountryFilter } from '@/components/common/CountryFilter'
 
 export default function GuidesPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedType, setSelectedType] = useState('all')
   const [selectedDifficulty, setSelectedDifficulty] = useState('all')
+  const [selectedCountry, setSelectedCountry] = useState('all')
   const [guides, setGuides] = useState<Guide[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -35,9 +37,10 @@ export default function GuidesPage() {
     fetchGuides()
   }, [])
 
-  // Get unique types and difficulties from guides
+  // Get unique types, difficulties, and countries from guides
   const types = ['all', ...Array.from(new Set(guides.map(guide => guide.type)))]
   const difficulties = ['all', 'Easy', 'Moderate', 'Challenging']
+  const countries = Array.from(new Set(guides.map(guide => guide.destination?.name).filter(Boolean)))
 
   // Filter guides
   const filteredGuides = guides.filter(guide => {
@@ -45,7 +48,8 @@ export default function GuidesPage() {
                          guide.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesType = selectedType === 'all' || guide.type === selectedType
     const matchesDifficulty = selectedDifficulty === 'all' || guide.difficulty === selectedDifficulty
-    return matchesSearch && matchesType && matchesDifficulty
+    const matchesCountry = selectedCountry === 'all' || guide.destination?.name === selectedCountry
+    return matchesSearch && matchesType && matchesDifficulty && matchesCountry
   })
 
   const formatDuration = (duration: string | { days: number; description: string }) => {
@@ -124,6 +128,14 @@ export default function GuidesPage() {
 
             {/* Filters */}
             <div className="flex flex-wrap gap-4 items-center">
+              {/* Country Filter */}
+              <CountryFilter
+                selectedCountry={selectedCountry}
+                onCountryChange={setSelectedCountry}
+                countries={countries}
+                placeholder="All Countries"
+              />
+
               {/* Type Filter */}
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-gray-600" />

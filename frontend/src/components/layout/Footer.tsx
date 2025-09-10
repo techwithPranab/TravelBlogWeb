@@ -14,7 +14,7 @@ export function Footer() {
     resources: [
       { name: 'Travel Resources', href: '/resources' },
       { name: 'Photo Gallery', href: '/gallery' },
-      { name: 'Trip Planning', href: '/planning' },
+      // { name: 'Trip Planning', href: '/planning' },
       { name: 'Gear Reviews', href: '/blog?category=gear' },
     ],
     company: [

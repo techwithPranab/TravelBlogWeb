@@ -191,6 +191,11 @@ const postSchema = new Schema<IPost>({
   toJSON: { 
     virtuals: true,
     transform: function(doc: any, ret: any) {
+      // Convert backend field names to match frontend API interface
+      ret.views = ret.viewCount || 0
+      ret.likes = ret.likeCount || 0
+      ret.comments = ret.commentCount || 0
+      
       // Ensure numeric fields have default values
       ret.viewCount = ret.viewCount || 0
       ret.likeCount = ret.likeCount || 0

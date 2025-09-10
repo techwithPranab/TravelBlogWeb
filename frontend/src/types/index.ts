@@ -69,7 +69,7 @@ export interface Post {
   status: 'draft' | 'published' | 'archived'
   isPremium: boolean
   readTime: number
-  viewCount: number
+  views: number
   likeCount: number
   commentCount: number
   destination?: {

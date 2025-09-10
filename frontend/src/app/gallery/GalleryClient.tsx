@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CountryFilter } from '@/components/common/CountryFilter';
 
 interface Photo {
   _id: string;
@@ -30,15 +31,17 @@ export default function GalleryClient() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const photosPerPage = 12;
 
-  // Get all unique tags and locations for filters
+  // Get all unique tags, locations, and countries for filters
   const allTags = Array.from(new Set(photos.flatMap(photo => photo.tags)));
   const allLocations = Array.from(new Set(
     photos.map(photo => `${photo.location.city}, ${photo.location.country}`).filter(Boolean)
   ));
+  const allCountries = Array.from(new Set(photos.map(photo => photo.location.country).filter(Boolean)));
 
   useEffect(() => {
     fetchPhotos();
@@ -46,7 +49,7 @@ export default function GalleryClient() {
 
   useEffect(() => {
     filterPhotos();
-  }, [photos, searchTerm, selectedTag, selectedLocation]);
+  }, [photos, searchTerm, selectedTag, selectedLocation, selectedCountry]);
 
   const fetchPhotos = async () => {
     try {
@@ -85,6 +88,10 @@ export default function GalleryClient() {
       );
     }
 
+    if (selectedCountry && selectedCountry !== 'all') {
+      filtered = filtered.filter(photo => photo.location.country === selectedCountry);
+    }
+
     setFilteredPhotos(filtered);
     setCurrentPage(1);
   };
@@ -93,6 +100,7 @@ export default function GalleryClient() {
     setSearchTerm('');
     setSelectedTag('');
     setSelectedLocation('');
+    setSelectedCountry('all');
   };
 
   // Pagination
@@ -221,6 +229,14 @@ export default function GalleryClient() {
 
             {/* Filters */}
             <div className="flex gap-4 items-center">
+              {/* Country Filter */}
+              <CountryFilter
+                selectedCountry={selectedCountry}
+                onCountryChange={setSelectedCountry}
+                countries={allCountries}
+                placeholder="All Countries"
+              />
+
               <select
                 value={selectedTag}
                 onChange={(e) => setSelectedTag(e.target.value)}
@@ -243,7 +259,7 @@ export default function GalleryClient() {
                 ))}
               </select>
 
-              {(searchTerm || selectedTag || selectedLocation) && (
+              {(searchTerm || selectedTag || selectedLocation || selectedCountry !== 'all') && (
                 <button
                   onClick={clearFilters}
                   className="px-4 py-2 text-blue-600 hover:text-blue-800 font-medium"
@@ -257,11 +273,12 @@ export default function GalleryClient() {
           {/* Results Summary */}
           <div className="mt-4 text-sm text-gray-600">
             Showing {currentPhotos.length} of {filteredPhotos.length} photos
-            {(searchTerm || selectedTag || selectedLocation) && (
+            {(searchTerm || selectedTag || selectedLocation || selectedCountry !== 'all') && (
               <span className="ml-2">
                 {searchTerm && `for "${searchTerm}"`}
                 {selectedTag && `tagged "${selectedTag}"`}
                 {selectedLocation && `in ${selectedLocation}`}
+                {selectedCountry !== 'all' && `from ${selectedCountry}`}
               </span>
             )}
           </div>
@@ -279,11 +296,11 @@ export default function GalleryClient() {
             </div>
             <h3 className="text-xl font-medium text-gray-900 mb-2">No photos found</h3>
             <p className="text-gray-600 mb-4">
-              {searchTerm || selectedTag || selectedLocation
+              {searchTerm || selectedTag || selectedLocation || selectedCountry !== 'all'
                 ? "Try adjusting your search or filters"
                 : "Be the first to share your travel photos!"}
             </p>
-            {(searchTerm || selectedTag || selectedLocation) && (
+            {(searchTerm || selectedTag || selectedLocation || selectedCountry !== 'all') && (
               <button
                 onClick={clearFilters}
                 className="text-blue-600 hover:text-blue-800 font-medium"

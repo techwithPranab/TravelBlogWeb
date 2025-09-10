@@ -6,10 +6,12 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Head from 'next/head'
 import { postsApi, categoriesApi, type Post, type Category } from '@/lib/api'
+import { CountryFilter } from '@/components/common/CountryFilter'
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedCountry, setSelectedCountry] = useState('all')
   const [posts, setPosts] = useState<Post[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -113,8 +115,15 @@ export default function BlogPage() {
                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || 
                            post.categories.some(cat => cat.slug === selectedCategory)
-    return matchesSearch && matchesCategory
+    const matchesCountry = selectedCountry === 'all' ||
+                          post.destinations?.some(dest => dest.name === selectedCountry)
+    return matchesSearch && matchesCategory && matchesCountry
   })
+
+  // Extract countries from posts
+  const countries = posts.flatMap(post => 
+    post.destinations?.map(dest => dest.name).filter(Boolean) || []
+  )
 
   const blogCategories = [
     { slug: 'all', name: 'All Posts' },
@@ -221,21 +230,32 @@ export default function BlogPage() {
               />
             </div>
 
-            {/* Category Filter */}
-            <div className="flex flex-wrap gap-2">
-              {blogCategories.map((category) => (
-                <button
-                  key={category.slug}
-                  onClick={() => setSelectedCategory(category.slug)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === category.slug
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-                  }`}
-                >
-                  {category.name}
-                </button>
-              ))}
+            {/* Filters */}
+            <div className="flex flex-wrap gap-4 items-center">
+              {/* Country Filter */}
+              <CountryFilter
+                selectedCountry={selectedCountry}
+                onCountryChange={setSelectedCountry}
+                countries={countries}
+                placeholder="All Countries"
+              />
+
+              {/* Category Filter */}
+              <div className="flex flex-wrap gap-2">
+                {blogCategories.map((category) => (
+                  <button
+                    key={category.slug}
+                    onClick={() => setSelectedCategory(category.slug)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      selectedCategory === category.slug
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                    }`}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

@@ -114,11 +114,11 @@ export default function HomePage() {
         </section>
 
         {/* Latest Blog Posts */}
-        <section className="section-padding">
+        {/* <section className="section-padding">
           <div className="container-max w-full">
             <LatestPosts />
           </div>
-        </section>
+        </section> */}
 
         {/* Interactive Travel Map */}
         <section className="section-padding bg-gray-50 dark:bg-gray-800">

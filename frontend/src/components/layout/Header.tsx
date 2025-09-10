@@ -71,7 +71,7 @@ export function Header() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
             ? 'bg-black/95 backdrop-blur-sm border-b border-gray-800 shadow-sm' 
-            : 'bg-black/80 backdrop-blur-sm'
+            : 'bg-black/95 backdrop-blur-sm'
         }`}
       >
         <nav className="container-max px-4 sm:px-6 lg:px-8">
@@ -115,7 +115,7 @@ export function Header() {
               </button>
 
               {/* Theme Toggle */}
-              <div className="relative hidden sm:block">
+              {/* <div className="relative hidden sm:block">
                 <select
                   value={theme}
                   onChange={(e) => setTheme(e.target.value as any)}
@@ -141,7 +141,7 @@ export function Header() {
                   {theme === 'dark' && <Moon className="w-5 h-5 md:w-6 md:h-6" />}
                   {theme === 'system' && <Monitor className="w-5 h-5 md:w-6 md:h-6" />}
                 </button>
-              </div>
+              </div> */}
 
               {/* User Menu */}
               {isAuthenticated ? (

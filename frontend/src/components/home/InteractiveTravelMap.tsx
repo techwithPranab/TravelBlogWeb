@@ -2,7 +2,17 @@
 
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Marker,
+  ZoomableGroup
+} from 'react-simple-maps'
 import { MapPin, Camera, Calendar, ExternalLink, X } from 'lucide-react'
+
+// World map topology data URL
+const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 
 interface TravelLocation {
   id: string
@@ -77,15 +87,6 @@ export function InteractiveTravelMap() {
   const [hoveredLocation, setHoveredLocation] = useState<string | null>(null)
   const mapRef = useRef<HTMLDivElement>(null)
 
-  // Simple coordinate to pixel conversion for demo purposes
-  const coordinateToPixel = (coordinates: [number, number], mapWidth: number, mapHeight: number) => {
-    // Simple projection (not geographically accurate, just for demo)
-    const [lng, lat] = coordinates
-    const x = ((lng + 180) / 360) * mapWidth
-    const y = ((90 - lat) / 180) * mapHeight
-    return { x, y }
-  }
-
   const closeModal = () => {
     setSelectedLocation(null)
   }
@@ -102,101 +103,97 @@ export function InteractiveTravelMap() {
       </div>
 
       {/* Map Container */}
-      <div 
-        ref={mapRef}
-        className="relative bg-gradient-to-b from-blue-100 to-green-100 dark:from-blue-900 dark:to-green-900 rounded-lg overflow-hidden"
-        style={{ height: '500px' }}
-      >
-        {/* World Map Background */}
-        <div className="absolute inset-0 opacity-20">
-          <svg viewBox="0 0 1000 500" className="w-full h-full">
-            {/* Simplified world map shapes */}
-            <path
-              d="M150,200 L200,180 L280,200 L320,240 L280,280 L200,260 L150,240 Z"
-              fill="currentColor"
-              className="text-gray-600"
-            />
-            <path
-              d="M400,150 L500,130 L600,150 L650,200 L600,250 L500,230 L400,200 Z"
-              fill="currentColor"
-              className="text-gray-600"
-            />
-            <path
-              d="M700,180 L800,160 L850,200 L800,240 L700,220 Z"
-              fill="currentColor"
-              className="text-gray-600"
-            />
-          </svg>
-        </div>
+      <div ref={mapRef} className="relative rounded-lg overflow-hidden shadow-lg bg-gradient-to-b from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20">
+        <ComposableMap
+          projection="geoMercator"
+          projectionConfig={{
+            scale: 120,
+            center: [0, 20]
+          }}
+          width={800}
+          height={300}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <ZoomableGroup zoom={1} center={[0, 20]}>
+            <Geographies geography={geoUrl}>
+              {({ geographies }: { geographies: any[] }) =>
+                geographies.map((geo: any) => (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill="#EAEAEC"
+                    stroke="#D6D6DA"
+                    strokeWidth={0.5}
+                    style={{
+                      default: {
+                        fill: "#EAEAEC",
+                        stroke: "#D6D6DA",
+                        strokeWidth: 0.5,
+                        outline: "none",
+                      },
+                      hover: {
+                        fill: "#F53",
+                        stroke: "#D6D6DA",
+                        strokeWidth: 0.5,
+                        outline: "none",
+                      },
+                      pressed: {
+                        fill: "#E42",
+                        stroke: "#D6D6DA",
+                        strokeWidth: 0.5,
+                        outline: "none",
+                      },
+                    }}
+                  />
+                ))
+              }
+            </Geographies>
 
-        {/* Location Pins */}
-        {travelLocations.map((location) => {
-          const position = coordinateToPixel(location.coordinates, 1000, 500)
-          return (
-            <motion.button
-              key={location.id}
-              className={`absolute transform -translate-x-1/2 -translate-y-1/2 z-10 ${
-                hoveredLocation === location.id ? 'scale-125' : 'scale-100'
-              }`}
-              style={{ 
-                left: `${position.x / 10}%`, 
-                top: `${position.y / 5}%` 
-              }}
-              onMouseEnter={() => setHoveredLocation(location.id)}
-              onMouseLeave={() => setHoveredLocation(null)}
-              onClick={() => setSelectedLocation(location)}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <div className="relative">
-                <MapPin className="w-8 h-8 text-red-500 drop-shadow-lg" fill="currentColor" />
-                {/* Pulse animation */}
-                <div className="absolute inset-0 animate-ping">
-                  <MapPin className="w-8 h-8 text-red-300 opacity-75" />
-                </div>
-                
-                {/* Location tooltip */}
-                {hoveredLocation === location.id && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-black text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap"
-                  >
-                    {location.name}, {location.country}
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-black"></div>
-                  </motion.div>
-                )}
-              </div>
-            </motion.button>
-          )
-        })}
+            {/* Location Markers */}
+            {travelLocations.map((location) => (
+              <Marker
+                key={location.id}
+                coordinates={[location.coordinates[0], location.coordinates[1]]}
+              >
+                <motion.g
+                  className="cursor-pointer"
+                  onMouseEnter={() => setHoveredLocation(location.id)}
+                  onMouseLeave={() => setHoveredLocation(null)}
+                  onClick={() => setSelectedLocation(location)}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <circle
+                    r={8}
+                    fill="#ef4444"
+                    stroke="#ffffff"
+                    strokeWidth={2}
+                    className="drop-shadow-lg"
+                  />
+                  <circle
+                    r={8}
+                    fill="none"
+                    stroke="#ef4444"
+                    strokeWidth={2}
+                    className="animate-ping opacity-75"
+                  />
+                  <MapPin
+                    className="w-4 h-4 text-red-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    fill="currentColor"
+                  />
+                </motion.g>
+              </Marker>
+            ))}
+          </ZoomableGroup>
+        </ComposableMap>
 
-        {/* Travel Routes (simplified) */}
-        <svg className="absolute inset-0 pointer-events-none" viewBox="0 0 1000 500">
-          <defs>
-            <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#ef4444" stopOpacity="0.3" />
-            </linearGradient>
-          </defs>
-          {/* Example route lines */}
-          <path
-            d="M200,300 Q400,200 600,280"
-            stroke="url(#routeGradient)"
-            strokeWidth="3"
-            fill="none"
-            strokeDasharray="10,5"
-            className="animate-pulse"
-          />
-          <path
-            d="M600,280 Q700,250 750,300"
-            stroke="url(#routeGradient)"
-            strokeWidth="3"
-            fill="none"
-            strokeDasharray="10,5"
-            className="animate-pulse"
-          />
-        </svg>
+        {/* Tooltip */}
+        {hoveredLocation && (
+          <div className="absolute top-4 left-4 bg-black text-white px-3 py-2 rounded-lg text-sm z-10">
+            {travelLocations.find(loc => loc.id === hoveredLocation)?.name},{' '}
+            {travelLocations.find(loc => loc.id === hoveredLocation)?.country}
+          </div>
+        )}
       </div>
 
       {/* Location Grid */}
