@@ -265,13 +265,13 @@ export default function DestinationsPage() {
                 {/* Destination Content */}
                 <div className="p-6">
                   {/* Rating */}
-                  {destination.rating && (
+                  {destination.rating !== undefined && destination.rating !== null && (
                     <div className="flex items-center gap-2 mb-3">
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4 text-yellow-400 fill-current" />
                         <span className="font-medium">{destination.rating}</span>
                       </div>
-                      <span className="text-gray-500 text-sm">({destination.totalReviews} reviews)</span>
+                      <span className="text-gray-500 text-sm">({destination.totalReviews || 0} reviews)</span>
                     </div>
                   )}
 

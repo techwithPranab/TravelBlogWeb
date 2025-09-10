@@ -194,7 +194,7 @@ export default function DestinationDetailsPage() {
               <div className="flex items-center space-x-1">
                 <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 <span>{destination.rating}</span>
-                <span className="text-white/80">({destination.totalReviews.toLocaleString()} reviews)</span>
+                <span className="text-white/80">({(destination.totalReviews || 0).toLocaleString()} reviews)</span>
               </div>
             </motion.div>
             

@@ -481,7 +481,7 @@ export default function BlogDetailsPage() {
                   </div>
                   <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
-                    {post!.views.toLocaleString()} views
+                    {(post!.views || 0).toLocaleString()} views
                   </div>
                 </div>
               </div>

@@ -48,6 +48,16 @@ export default function GuidesPage() {
     return matchesSearch && matchesType && matchesDifficulty
   })
 
+  const formatDuration = (duration: string | { days: number; description: string }) => {
+    if (typeof duration === 'string') {
+      return duration
+    }
+    if (typeof duration === 'object' && duration.days) {
+      return duration.description || `${duration.days} days`
+    }
+    return 'N/A'
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -209,15 +219,15 @@ export default function GuidesPage() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <MapPin className="h-4 w-4" />
-                      <span>{guide.destination.name}</span>
+                      <span>{guide.destination?.name || 'Unknown'}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <User className="h-4 w-4" />
-                      <span>{guide.author.name}</span>
+                      <span>{guide.author?.name || 'Unknown'}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Calendar className="h-4 w-4" />
-                      <span>{guide.duration.days} days</span>
+                      <span>{formatDuration(guide.duration)}</span>
                     </div>
                   </div>
 
@@ -226,15 +236,15 @@ export default function GuidesPage() {
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <Eye className="h-4 w-4" />
-                        <span>{guide.views}</span>
+                        <span>{(guide.views || 0).toLocaleString()}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4" />
-                        <span>{guide.likes}</span>
+                        <span>{(guide.likes || 0).toLocaleString()}</span>
                       </div>
                     </div>
                     <span className="text-orange-600 font-medium">
-                      {guide.budget.currency} {guide.budget.amount}
+                      {guide.budget ? `${guide.budget.currency} ${guide.budget.amount}` : 'N/A'}
                     </span>
                   </div>
 

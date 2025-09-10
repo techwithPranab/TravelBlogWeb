@@ -1,76 +1,89 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
 export interface IGuide extends Document {
+  id: string
   title: string
-  slug: string
   description: string
-  content: string
-  author: mongoose.Types.ObjectId
-  destination?: mongoose.Types.ObjectId
-  category: mongoose.Types.ObjectId
-  images: {
+  type: 'itinerary' | 'budget' | 'photography' | 'food' | 'adventure'
+  destination: {
+    name: string
+    country: string
+    slug: string
+  }
+  author: {
+    name: string
+    avatar: string
+    bio: string
+  }
+  featuredImage: {
     url: string
     alt: string
-    caption?: string
-    isPrimary: boolean
-  }[]
-  type: 'Itinerary' | 'Tips' | 'Budget' | 'Transportation' | 'Accommodation' | 'Activities' | 'General'
-  duration?: {
-    days: number
-    description: string
   }
-  difficulty: 'Easy' | 'Moderate' | 'Challenging' | 'Expert'
+  duration: string
+  difficulty: 'Easy' | 'Moderate' | 'Challenging'
   budget: {
-    currency: string
-    amount: number
-    description: string
+    range: string
+    details: string
   }
-  itinerary?: {
+  bestTime: string
+  rating: number
+  totalReviews: number
+  publishedAt: string
+  lastUpdated: string
+  isPremium: boolean
+  downloadCount: number
+  sections: Array<{
+    title: string
+    content: string
+    tips?: string[]
+    images?: Array<{
+      url: string
+      alt: string
+      caption?: string
+    }>
+  }>
+  itinerary?: Array<{
     day: number
     title: string
-    description: string
     activities: string[]
-    accommodation?: string
-    meals?: string[]
-    transportation?: string
-    budget?: number
-    tips?: string[]
-  }[]
-  tips: {
+    meals: string[]
+    accommodation: string
+    budget: string
+  }>
+  packingList?: Array<{
     category: string
+    items: string[]
+  }>
+  resources: Array<{
     title: string
-    description: string
-  }[]
-  whatToBring: string[]
-  requirements: string[]
-  tags: string[]
-  isPublished: boolean
-  isFeatured: boolean
-  views: number
-  likes: mongoose.Types.ObjectId[]
-  likesCount: number
-  comments: mongoose.Types.ObjectId[]
-  commentsCount: number
-  seoTitle?: string
-  seoDescription?: string
-  publishedAt?: Date
-  createdAt: Date
-  updatedAt: Date
+    type: 'link' | 'document' | 'app'
+    url: string
+  }>
+  relatedGuides: Array<{
+    id: string
+    title: string
+    slug: string
+    image: string
+    type: string
+  }>
+  slug?: string
+  isPublished?: boolean
+  views?: number
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 const guideSchema = new Schema<IGuide>({
+  id: {
+    type: String,
+    required: true,
+    unique: true
+  },
   title: {
     type: String,
     required: [true, 'Guide title is required'],
     trim: true,
     maxlength: [200, 'Title cannot exceed 200 characters']
-  },
-  slug: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
   },
   description: {
     type: String,
@@ -78,25 +91,40 @@ const guideSchema = new Schema<IGuide>({
     trim: true,
     maxlength: [500, 'Description cannot exceed 500 characters']
   },
-  content: {
+  type: {
     type: String,
-    required: [true, 'Content is required']
-  },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    enum: ['itinerary', 'budget', 'photography', 'food', 'adventure'],
     required: true
   },
   destination: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Destination'
+    name: {
+      type: String,
+      required: true
+    },
+    country: {
+      type: String,
+      required: true
+    },
+    slug: {
+      type: String,
+      required: true
+    }
   },
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
+  author: {
+    name: {
+      type: String,
+      required: true
+    },
+    avatar: {
+      type: String,
+      required: true
+    },
+    bio: {
+      type: String,
+      required: true
+    }
   },
-  images: [{
+  featuredImage: {
     url: {
       type: String,
       required: true
@@ -104,47 +132,79 @@ const guideSchema = new Schema<IGuide>({
     alt: {
       type: String,
       required: true
-    },
-    caption: String,
-    isPrimary: {
-      type: Boolean,
-      default: false
     }
-  }],
-  type: {
-    type: String,
-    enum: ['Itinerary', 'Tips', 'Budget', 'Transportation', 'Accommodation', 'Activities', 'General'],
-    required: true
   },
   duration: {
-    days: {
-      type: Number,
-      min: 1
-    },
-    description: {
-      type: String,
-      trim: true
-    }
+    type: String,
+    required: true
   },
   difficulty: {
     type: String,
-    enum: ['Easy', 'Moderate', 'Challenging', 'Expert'],
+    enum: ['Easy', 'Moderate', 'Challenging'],
     default: 'Easy'
   },
   budget: {
-    currency: {
+    range: {
       type: String,
-      default: 'USD'
+      required: true
     },
-    amount: {
-      type: Number,
-      min: 0
-    },
-    description: {
+    details: {
       type: String,
-      trim: true
+      required: true
     }
   },
+  bestTime: {
+    type: String,
+    required: true
+  },
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5,
+    default: 0
+  },
+  totalReviews: {
+    type: Number,
+    default: 0
+  },
+  publishedAt: {
+    type: String,
+    required: true
+  },
+  lastUpdated: {
+    type: String,
+    required: true
+  },
+  isPremium: {
+    type: Boolean,
+    default: false
+  },
+  downloadCount: {
+    type: Number,
+    default: 0
+  },
+  sections: [{
+    title: {
+      type: String,
+      required: true
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    tips: [String],
+    images: [{
+      url: {
+        type: String,
+        required: true
+      },
+      alt: {
+        type: String,
+        required: true
+      },
+      caption: String
+    }]
+  }],
   itinerary: [{
     day: {
       type: Number,
@@ -153,107 +213,126 @@ const guideSchema = new Schema<IGuide>({
     },
     title: {
       type: String,
-      required: true,
-      trim: true
-    },
-    description: {
-      type: String,
-      required: true,
-      trim: true
+      required: true
     },
     activities: [{
       type: String,
-      trim: true
+      required: true
     }],
-    accommodation: String,
-    meals: [String],
-    transportation: String,
-    budget: Number,
-    tips: [String]
+    meals: [{
+      type: String,
+      required: true
+    }],
+    accommodation: {
+      type: String,
+      required: true
+    },
+    budget: {
+      type: String,
+      required: true
+    }
   }],
-  tips: [{
+  packingList: [{
     category: {
       type: String,
-      required: true,
-      trim: true
+      required: true
+    },
+    items: [{
+      type: String,
+      required: true
+    }]
+  }],
+  resources: [{
+    title: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      enum: ['link', 'document', 'app'],
+      required: true
+    },
+    url: {
+      type: String,
+      required: true
+    }
+  }],
+  relatedGuides: [{
+    id: {
+      type: String,
+      required: true
     },
     title: {
       type: String,
-      required: true,
-      trim: true
+      required: true
     },
-    description: {
+    slug: {
       type: String,
-      required: true,
-      trim: true
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      required: true
     }
   }],
-  whatToBring: [{
+  slug: {
     type: String,
+    unique: true,
+    lowercase: true,
     trim: true
-  }],
-  requirements: [{
-    type: String,
-    trim: true
-  }],
-  tags: [{
-    type: String,
-    trim: true
-  }],
+  },
   isPublished: {
     type: Boolean,
-    default: false
-  },
-  isFeatured: {
-    type: Boolean,
-    default: false
+    default: true
   },
   views: {
     type: Number,
     default: 0
-  },
-  likes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }],
-  likesCount: {
-    type: Number,
-    default: 0
-  },
-  comments: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Comment'
-  }],
-  commentsCount: {
-    type: Number,
-    default: 0
-  },
-  seoTitle: {
-    type: String,
-    trim: true,
-    maxlength: [60, 'SEO title cannot exceed 60 characters']
-  },
-  seoDescription: {
-    type: String,
-    trim: true,
-    maxlength: [160, 'SEO description cannot exceed 160 characters']
-  },
-  publishedAt: {
-    type: Date
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: {
+    transform: function(doc: any, ret: any) {
+      // Ensure duration is always a string
+      if (ret.duration && typeof ret.duration === 'object') {
+        if (ret.duration.days && ret.duration.description) {
+          ret.duration = ret.duration.description
+        } else if (ret.duration.days) {
+          ret.duration = `${ret.duration.days} ${ret.duration.unit || 'days'}`
+        } else {
+          ret.duration = 'Duration not specified'
+        }
+      }
+      // Ensure numeric fields have default values
+      ret.rating = ret.rating || 0
+      ret.totalReviews = ret.totalReviews || 0
+      ret.views = ret.views || 0
+      ret.downloadCount = ret.downloadCount || 0
+      // Ensure nested objects have default values
+      ret.featuredImage = ret.featuredImage || { url: '', alt: '' }
+      ret.author = ret.author || { name: 'Unknown', avatar: '', bio: '' }
+      ret.budget = ret.budget || { range: 'N/A', details: '' }
+      ret.destination = ret.destination || { name: 'Unknown', country: '', slug: '' }
+      // Ensure arrays have default values
+      ret.sections = ret.sections || []
+      ret.resources = ret.resources || []
+      ret.relatedGuides = ret.relatedGuides || []
+      return ret
+    }
+  }
 })
 
 // Indexes for better performance
+guideSchema.index({ id: 1 })
 guideSchema.index({ slug: 1 })
-guideSchema.index({ author: 1 })
-guideSchema.index({ destination: 1 })
-guideSchema.index({ category: 1 })
 guideSchema.index({ type: 1 })
+guideSchema.index({ 'destination.slug': 1 })
 guideSchema.index({ isPublished: 1, publishedAt: -1 })
-guideSchema.index({ isFeatured: 1 })
-guideSchema.index({ tags: 1 })
+guideSchema.index({ rating: -1 })
 guideSchema.index({ views: -1 })
 
 export default mongoose.model<IGuide>('Guide', guideSchema)

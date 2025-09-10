@@ -122,7 +122,7 @@ export function FeaturedStories() {
                   </span>
                   <span className="flex items-center space-x-1">
                     <Eye className="w-4 h-4" />
-                    <span>{story.views.toLocaleString()}</span>
+                    <span>{(story.views || 0).toLocaleString()}</span>
                   </span>
                   <span className="flex items-center space-x-1">
                     <Heart className="w-4 h-4" />

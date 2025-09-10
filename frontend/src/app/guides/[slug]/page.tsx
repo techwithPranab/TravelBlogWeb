@@ -22,6 +22,7 @@ import {
   Users,
   Heart
 } from 'lucide-react'
+import { generateGuidePDF } from '@/lib/pdfGenerator'
 
 interface Guide {
   id: string
@@ -42,7 +43,10 @@ interface Guide {
     url: string
     alt: string
   }
-  duration: string
+  duration: string | {
+    days: number
+    description: string
+  }
   difficulty: 'Easy' | 'Moderate' | 'Challenging'
   budget: {
     range: string
@@ -96,181 +100,32 @@ export default function GuideDetailsPage() {
   const [guide, setGuide] = useState<Guide | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isBookmarked, setIsBookmarked] = useState(false)
+  const [isDownloadingPDF, setIsDownloadingPDF] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
-  const [activeSection, setActiveSection] = useState(0)
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setGuide({
-        id: '1',
-        title: 'Complete 7-Day Santorini Travel Guide',
-        description: 'A comprehensive guide to exploring Santorini in 7 days, including hidden gems, local experiences, and budget-friendly tips for the perfect Greek island adventure.',
-        type: 'itinerary',
-        destination: {
-          name: 'Santorini',
-          country: 'Greece',
-          slug: 'santorini'
-        },
-        author: {
-          name: 'Elena Papadopoulos',
-          avatar: '/images/author-elena.jpg',
-          bio: 'Local travel expert and Santorini native with 15+ years of experience guiding travelers'
-        },
-        featuredImage: {
-          url: '/images/santorini-guide.jpg',
-          alt: 'Santorini travel guide'
-        },
-        duration: '7 days',
-        difficulty: 'Easy',
-        budget: {
-          range: '$800-1500 per person',
-          details: 'Includes accommodation, meals, activities, and local transportation'
-        },
-        bestTime: 'April to October',
-        rating: 4.9,
-        totalReviews: 2847,
-        publishedAt: '2024-01-15',
-        lastUpdated: '2024-03-01',
-        isPremium: false,
-        downloadCount: 15420,
-        sections: [
-          {
-            title: 'Getting There & Around',
-            content: 'Santorini is accessible by ferry from Athens (5-8 hours) or by flight (45 minutes). The island has a good bus network, but renting a car or ATV gives you more flexibility to explore hidden spots.',
-            tips: [
-              'Book ferry tickets in advance during peak season',
-              'Consider staying in different areas to experience variety',
-              'Download offline maps before arriving'
-            ],
-            images: [
-              {
-                url: '/images/santorini-ferry.jpg',
-                alt: 'Ferry to Santorini',
-                caption: 'Ferry arriving at Santorini port'
-              }
-            ]
-          },
-          {
-            title: 'Where to Stay',
-            content: 'Choose your base wisely. Oia offers the best sunsets but is crowded. Fira has nightlife and central location. Imerovigli provides luxury with fewer crowds. Consider cave hotels for a unique experience.',
-            tips: [
-              'Book caldera-view rooms well in advance',
-              'Consider staying in multiple locations',
-              'Traditional villages offer authentic experiences'
-            ]
-          },
-          {
-            title: 'Must-See Attractions',
-            content: 'Beyond the famous blue domes, visit Red Beach, Ancient Akrotiri, and local wineries. Take a sunset sailing trip and explore traditional villages like Pyrgos and Megalochori.',
-            tips: [
-              'Visit popular spots early morning or late afternoon',
-              'Respect local customs and photography rules',
-              'Try local wines - Santorini produces unique varieties'
-            ]
-          }
-        ],
-        itinerary: [
-          {
-            day: 1,
-            title: 'Arrival & Fira Exploration',
-            activities: [
-              'Arrive in Santorini (morning flight recommended)',
-              'Check into hotel in Fira',
-              'Explore Fira town and caldera views',
-              'Visit Archaeological Museum',
-              'Sunset dinner at caldera-view restaurant'
-            ],
-            meals: ['Breakfast on flight', 'Lunch at local taverna', 'Dinner with sunset views'],
-            accommodation: 'Hotel in Fira',
-            budget: '$120-200'
-          },
-          {
-            day: 2,
-            title: 'Oia & Northern Villages',
-            activities: [
-              'Morning bus to Oia',
-              'Explore Oia village and shops',
-              'Visit Maritime Museum',
-              'Lunch in Oia',
-              'Famous Oia sunset viewing'
-            ],
-            meals: ['Hotel breakfast', 'Lunch in Oia', 'Dinner in Oia'],
-            accommodation: 'Hotel in Fira',
-            budget: '$100-150'
-          },
-          {
-            day: 3,
-            title: 'Beach Day & Wine Tasting',
-            activities: [
-              'Morning at Red Beach',
-              'Visit Ancient Akrotiri',
-              'Wine tasting at Santo Wines',
-              'Relax at Kamari Beach',
-              'Evening in Kamari village'
-            ],
-            meals: ['Hotel breakfast', 'Beach lunch', 'Dinner in Kamari'],
-            accommodation: 'Hotel in Fira',
-            budget: '$90-140'
-          }
-        ],
-        packingList: [
-          {
-            category: 'Clothing',
-            items: ['Comfortable walking shoes', 'Sundresses/light shirts', 'Light jacket', 'Swimwear', 'Sun hat']
-          },
-          {
-            category: 'Electronics',
-            items: ['Camera', 'Phone charger', 'Power bank', 'Waterproof phone case']
-          },
-          {
-            category: 'Essentials',
-            items: ['Sunscreen SPF 50+', 'Sunglasses', 'Water bottle', 'Travel documents', 'Cash and cards']
-          }
-        ],
-        resources: [
-          {
-            title: 'Official Santorini Tourism Website',
-            type: 'link',
-            url: 'https://santorini.net'
-          },
-          {
-            title: 'Offline Maps of Santorini',
-            type: 'app',
-            url: 'https://maps.me'
-          },
-          {
-            title: 'Downloadable Itinerary PDF',
-            type: 'document',
-            url: '/downloads/santorini-itinerary.pdf'
-          }
-        ],
-        relatedGuides: [
-          {
-            id: '2',
-            title: 'Santorini Photography Guide',
-            slug: 'santorini-photography-guide',
-            image: '/images/guide-photography.jpg',
-            type: 'photography'
-          },
-          {
-            id: '3',
-            title: 'Budget Travel in Greek Islands',
-            slug: 'budget-greek-islands',
-            image: '/images/guide-budget.jpg',
-            type: 'budget'
-          },
-          {
-            id: '4',
-            title: 'Greek Island Hopping Itinerary',
-            slug: 'greek-island-hopping',
-            image: '/images/guide-islands.jpg',
-            type: 'itinerary'
-          }
-        ]
-      })
-      setIsLoading(false)
-    }, 1000)
+    const fetchGuide = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch(`/api/guides/${params.slug}`)
+        
+        if (!response.ok) {
+          throw new Error('Guide not found')
+        }
+        
+        const data = await response.json()
+        setGuide(data.data)
+      } catch (error) {
+        console.error('Error fetching guide:', error)
+        setGuide(null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (params.slug) {
+      fetchGuide()
+    }
   }, [params.slug])
 
   const handleShare = async () => {
@@ -282,12 +137,32 @@ export default function GuideDetailsPage() {
           url: window.location.href,
         })
       } catch (err) {
-        navigator.clipboard.writeText(window.location.href)
-        alert('Link copied to clipboard!')
+        console.error('Error sharing:', err)
+        try {
+          await navigator.clipboard.writeText(window.location.href)
+          alert('Link copied to clipboard!')
+        } catch (clipboardErr) {
+          console.error('Error copying to clipboard:', clipboardErr)
+          alert('Unable to share. Please copy the URL manually.')
+        }
       }
     } else {
       navigator.clipboard.writeText(window.location.href)
       alert('Link copied to clipboard!')
+    }
+  }
+
+  const handleDownloadPDF = async () => {
+    if (!guide || isDownloadingPDF) return
+
+    try {
+      setIsDownloadingPDF(true)
+      await generateGuidePDF(guide)
+    } catch (error) {
+      console.error('Error downloading PDF:', error)
+      alert('Failed to download PDF. Please try again.')
+    } finally {
+      setIsDownloadingPDF(false)
     }
   }
 
@@ -300,6 +175,16 @@ export default function GuideDetailsPage() {
       case 'adventure': return <Users className="w-5 h-5" />
       default: return <MapPin className="w-5 h-5" />
     }
+  }
+
+  const formatDuration = (duration: string | { days: number; description: string }) => {
+    if (typeof duration === 'string') {
+      return duration
+    }
+    if (typeof duration === 'object' && duration.days) {
+      return duration.description || `${duration.days} days`
+    }
+    return 'Duration not specified'
   }
 
   const getDifficultyColor = (difficulty: string) => {
@@ -352,11 +237,11 @@ export default function GuideDetailsPage() {
                 <span className="capitalize">{guide.type}</span>
                 <span>•</span>
                 <Link 
-                  href={`/destinations/${guide.destination.slug}`}
+                  href={guide.destination ? `/destinations/${guide.destination.slug}` : '#'}
                   className="text-blue-600 hover:text-blue-800 flex items-center"
                 >
                   <MapPin className="w-4 h-4 mr-1" />
-                  {guide.destination.name}, {guide.destination.country}
+                  {guide.destination ? `${guide.destination.name}, ${guide.destination.country}` : 'Unknown Destination'}
                 </Link>
               </div>
               
@@ -370,23 +255,27 @@ export default function GuideDetailsPage() {
               
               <div className="flex items-center space-x-6 mb-8">
                 <div className="flex items-center space-x-4">
-                  <img 
-                    src={guide.author.avatar} 
-                    alt={guide.author.name}
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div>
-                    <div className="font-medium text-gray-900">{guide.author.name}</div>
-                    <div className="text-sm text-gray-600">
-                      Updated {new Date(guide.lastUpdated).toLocaleDateString()}
-                    </div>
-                  </div>
+                  {guide.author && (
+                    <>
+                      <img 
+                        src={guide.author.avatar} 
+                        alt={guide.author.name}
+                        className="w-12 h-12 rounded-full"
+                      />
+                      <div>
+                        <div className="font-medium text-gray-900">{guide.author.name}</div>
+                        <div className="text-sm text-gray-600">
+                          Updated {new Date(guide.lastUpdated).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
                 
                 <div className="flex items-center space-x-1">
                   <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium">{guide.rating}</span>
-                  <span className="text-gray-600">({guide.totalReviews.toLocaleString()} reviews)</span>
+                  <span className="text-gray-600">({(guide.totalReviews || 0).toLocaleString()} reviews)</span>
                 </div>
               </div>
               
@@ -423,22 +312,28 @@ export default function GuideDetailsPage() {
                   <span>Share</span>
                 </button>
                 
-                <button className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors">
-                  <Download className="w-4 h-4" />
-                  <span>Download PDF</span>
+                <button 
+                  onClick={handleDownloadPDF}
+                  disabled={isDownloadingPDF}
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  <Download className={`w-4 h-4 ${isDownloadingPDF ? 'animate-spin' : ''}`} />
+                  <span>{isDownloadingPDF ? 'Generating PDF...' : 'Download PDF'}</span>
                 </button>
               </div>
             </div>
             
             <div className="lg:col-span-1">
-              <div className="relative h-64 lg:h-80 rounded-lg overflow-hidden">
-                <Image
-                  src={guide.featuredImage.url}
-                  alt={guide.featuredImage.alt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+              {guide.featuredImage && (
+                <div className="relative h-64 lg:h-80 rounded-lg overflow-hidden">
+                  <Image
+                    src={guide.featuredImage.url}
+                    alt={guide.featuredImage.alt}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -457,7 +352,7 @@ export default function GuideDetailsPage() {
                     <Clock className="w-4 h-4" />
                     <span>Duration</span>
                   </div>
-                  <div className="font-medium">{guide.duration}</div>
+                  <div className="font-medium">{formatDuration(guide.duration)}</div>
                 </div>
                 
                 <div>
@@ -475,8 +370,12 @@ export default function GuideDetailsPage() {
                     <DollarSign className="w-4 h-4" />
                     <span>Budget</span>
                   </div>
-                  <div className="font-medium">{guide.budget.range}</div>
-                  <div className="text-sm text-gray-600">{guide.budget.details}</div>
+                  {guide.budget && (
+                    <>
+                      <div className="font-medium">{guide.budget.range}</div>
+                      <div className="text-sm text-gray-600">{guide.budget.details}</div>
+                    </>
+                  )}
                 </div>
                 
                 <div>
@@ -511,7 +410,7 @@ export default function GuideDetailsPage() {
             <section id="sections" className="mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">Guide Overview</h2>
               <div className="space-y-8">
-                {guide.sections.map((section, index) => (
+                {(guide.sections || []).map((section, index) => (
                   <div key={section.title} className="bg-white border rounded-lg p-6">
                     <h3 className="text-xl font-bold text-gray-900 mb-4">{section.title}</h3>
                     <p className="text-gray-700 mb-4 leading-relaxed">{section.content}</p>
@@ -520,8 +419,8 @@ export default function GuideDetailsPage() {
                       <div className="bg-blue-50 rounded-lg p-4 mb-4">
                         <h4 className="font-semibold text-blue-900 mb-2">💡 Pro Tips</h4>
                         <ul className="space-y-1">
-                          {section.tips.map((tip, tipIndex) => (
-                            <li key={tipIndex} className="text-blue-800 text-sm flex items-start">
+                          {(section.tips || []).map((tip, tipIndex) => (
+                            <li key={`tip-${section.title}-${tipIndex}`} className="text-blue-800 text-sm flex items-start">
                               <CheckCircle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                               {tip}
                             </li>
@@ -532,8 +431,8 @@ export default function GuideDetailsPage() {
                     
                     {section.images && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {section.images.map((image, imgIndex) => (
-                          <div key={imgIndex} className="relative h-48 rounded-lg overflow-hidden">
+                        {(section.images || []).map((image, imgIndex) => (
+                          <div key={`image-${section.title}-${imgIndex}`} className="relative h-48 rounded-lg overflow-hidden">
                             <Image
                               src={image.url}
                               alt={image.alt}
@@ -559,7 +458,7 @@ export default function GuideDetailsPage() {
               <section id="itinerary" className="mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-8">Day-by-Day Itinerary</h2>
                 <div className="space-y-6">
-                  {guide.itinerary.map((day) => (
+                  {(guide.itinerary || []).map((day) => (
                     <div key={day.day} className="bg-white border rounded-lg p-6">
                       <div className="flex items-center space-x-3 mb-4">
                         <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
@@ -578,8 +477,8 @@ export default function GuideDetailsPage() {
                             Activities
                           </h4>
                           <ul className="space-y-1">
-                            {day.activities.map((activity, actIndex) => (
-                              <li key={actIndex} className="text-gray-700 text-sm flex items-start">
+                            {(day.activities || []).map((activity, actIndex) => (
+                              <li key={`activity-${day.day}-${actIndex}`} className="text-gray-700 text-sm flex items-start">
                                 <CheckCircle className="w-3 h-3 mr-2 mt-1 flex-shrink-0 text-green-600" />
                                 {activity}
                               </li>
@@ -593,8 +492,8 @@ export default function GuideDetailsPage() {
                             Meals
                           </h4>
                           <ul className="space-y-1">
-                            {day.meals.map((meal, mealIndex) => (
-                              <li key={mealIndex} className="text-gray-700 text-sm">{meal}</li>
+                            {(day.meals || []).map((meal, mealIndex) => (
+                              <li key={`meal-${day.day}-${mealIndex}`} className="text-gray-700 text-sm">{meal}</li>
                             ))}
                           </ul>
                         </div>
@@ -618,12 +517,12 @@ export default function GuideDetailsPage() {
               <section id="packing" className="mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-8">Packing List</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {guide.packingList.map((category) => (
+                  {(guide.packingList || []).map((category) => (
                     <div key={category.category} className="bg-gray-50 rounded-lg p-6">
                       <h3 className="text-lg font-bold text-gray-900 mb-4">{category.category}</h3>
                       <ul className="space-y-2">
-                        {category.items.map((item, itemIndex) => (
-                          <li key={itemIndex} className="flex items-center text-gray-700">
+                        {(category.items || []).map((item, itemIndex) => (
+                          <li key={`item-${category.category}-${itemIndex}`} className="flex items-center text-gray-700">
                             <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
                             {item}
                           </li>
@@ -639,9 +538,9 @@ export default function GuideDetailsPage() {
             <section id="resources" className="mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">Useful Resources</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {guide.resources.map((resource, resourceIndex) => (
+                {(guide.resources || []).map((resource, resourceIndex) => (
                   <a 
-                    key={resourceIndex}
+                    key={`resource-${resource.title}-${resourceIndex}`}
                     href={resource.url}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -660,15 +559,19 @@ export default function GuideDetailsPage() {
             <section className="mb-12">
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="flex items-start space-x-4">
-                  <img 
-                    src={guide.author.avatar} 
-                    alt={guide.author.name}
-                    className="w-16 h-16 rounded-full"
-                  />
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">About {guide.author.name}</h3>
-                    <p className="text-gray-600">{guide.author.bio}</p>
-                  </div>
+                  {guide.author && (
+                    <>
+                      <img 
+                        src={guide.author.avatar} 
+                        alt={guide.author.name}
+                        className="w-16 h-16 rounded-full"
+                      />
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">About {guide.author.name}</h3>
+                        <p className="text-gray-600">{guide.author.bio}</p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </section>
@@ -677,7 +580,7 @@ export default function GuideDetailsPage() {
             <section>
               <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Guides</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {guide.relatedGuides.map((relatedGuide) => (
+                {(guide.relatedGuides || []).map((relatedGuide) => (
                   <Link 
                     key={relatedGuide.id} 
                     href={`/guides/${relatedGuide.slug}`}

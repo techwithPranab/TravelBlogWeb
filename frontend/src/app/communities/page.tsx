@@ -210,11 +210,11 @@ export default function CommunitiesPage() {
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
                       <div className="flex items-center">
                         <Users className="w-4 h-4 mr-1" />
-                        <span>{community.members.toLocaleString()}</span>
+                        <span>{(community.members || 0).toLocaleString()}</span>
                       </div>
                       <div className="flex items-center">
                         <MessageCircle className="w-4 h-4 mr-1" />
-                        <span>{community.posts.toLocaleString()}</span>
+                        <span>{(community.posts || 0).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>

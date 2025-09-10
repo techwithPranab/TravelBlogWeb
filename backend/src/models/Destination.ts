@@ -248,7 +248,15 @@ const destinationSchema = new Schema<IDestination>({
     maxlength: [160, 'SEO description cannot exceed 160 characters']
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: {
+    transform: function(doc: any, ret: any) {
+      // Ensure numeric fields have default values
+      ret.rating = ret.rating || 0
+      ret.totalReviews = ret.totalReviews || 0
+      return ret
+    }
+  }
 })
 
 // Indexes for better performance

@@ -118,7 +118,7 @@ export interface Guide {
     slug: string
   }
   type: string
-  duration: {
+  duration: string | {
     days: number
     description: string
   }
@@ -217,7 +217,8 @@ export const postsApi = {
     if (params?.sort) searchParams.append('sort', params.sort)
     
     const query = searchParams.toString()
-    return apiRequest<Post[]>(`/posts${query ? `?${query}` : ''}`)
+    const endpoint = query ? `/posts?${query}` : '/posts'
+    return apiRequest<Post[]>(endpoint)
   },
 
   getBySlug: async (slug: string): Promise<ApiResponse<Post>> => {
@@ -241,7 +242,8 @@ export const postsApi = {
     if (params?.limit) searchParams.append('limit', params.limit.toString())
     
     const query = searchParams.toString()
-    return apiRequest<Post[]>(`/posts/category/${category}${query ? `?${query}` : ''}`)
+    const endpoint = query ? `/posts/category/${category}?${query}` : `/posts/category/${category}`
+    return apiRequest<Post[]>(endpoint)
   },
 
   search: async (query: string, params?: {

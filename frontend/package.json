@@ -12,6 +12,7 @@
   "dependencies": {
     "@stripe/react-stripe-js": "^2.4.0",
     "@stripe/stripe-js": "^2.4.0",
+    "@types/jspdf": "^1.3.3",
     "@types/mapbox-gl": "^2.7.19",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
@@ -21,6 +22,8 @@
     "clsx": "^2.0.0",
     "date-fns": "^3.0.6",
     "framer-motion": "^10.16.16",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.2",
     "lucide-react": "^0.303.0",
     "mapbox-gl": "^3.0.1",
     "next": "14.0.4",

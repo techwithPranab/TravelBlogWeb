@@ -188,7 +188,17 @@ const postSchema = new Schema<IPost>({
   }
 }, {
   timestamps: true,
-  toJSON: { virtuals: true },
+  toJSON: { 
+    virtuals: true,
+    transform: function(doc: any, ret: any) {
+      // Ensure numeric fields have default values
+      ret.viewCount = ret.viewCount || 0
+      ret.likeCount = ret.likeCount || 0
+      ret.commentCount = ret.commentCount || 0
+      ret.readTime = ret.readTime || 0
+      return ret
+    }
+  },
   toObject: { virtuals: true }
 })
 

@@ -10,16 +10,13 @@ export const getAllGuides = handleAsync(async (req: Request, res: Response) => {
 
   // Build filter object
   const filter: any = { isPublished: true }
-  
+
   if (type) filter.type = type
   if (difficulty) filter.difficulty = difficulty
-  if (destination) filter.destination = destination
+  if (destination) filter['destination.slug'] = destination
   if (category) filter.category = category
 
   const guides = await Guide.find(filter)
-    .populate('author', 'name avatar')
-    .populate('destination', 'name slug')
-    .populate('category', 'name slug')
     .sort({ publishedAt: -1 })
     .limit(Number(limit) * 1)
     .skip((Number(page) - 1) * Number(limit))
@@ -43,14 +40,11 @@ export const getAllGuides = handleAsync(async (req: Request, res: Response) => {
 // @route   GET /api/guides/featured
 // @access  Public
 export const getFeaturedGuides = handleAsync(async (req: Request, res: Response) => {
-  const guides = await Guide.find({ 
-    isPublished: true, 
-    isFeatured: true 
+  const guides = await Guide.find({
+    isPublished: true,
+    rating: { $gte: 4.5 }
   })
-    .populate('author', 'name avatar')
-    .populate('destination', 'name slug')
-    .populate('category', 'name slug')
-    .sort({ publishedAt: -1 })
+    .sort({ rating: -1, totalReviews: -1 })
     .limit(6)
 
   res.status(200).json({
@@ -64,12 +58,10 @@ export const getFeaturedGuides = handleAsync(async (req: Request, res: Response)
 // @route   GET /api/guides/destination/:destinationId
 // @access  Public
 export const getGuidesByDestination = handleAsync(async (req: Request, res: Response) => {
-  const guides = await Guide.find({ 
-    destination: req.params.destinationId,
-    isPublished: true 
+  const guides = await Guide.find({
+    'destination.slug': req.params.destinationId,
+    isPublished: true
   })
-    .populate('author', 'name avatar')
-    .populate('category', 'name slug')
     .sort({ publishedAt: -1 })
 
   res.status(200).json({
@@ -83,13 +75,10 @@ export const getGuidesByDestination = handleAsync(async (req: Request, res: Resp
 // @route   GET /api/guides/type/:type
 // @access  Public
 export const getGuidesByType = handleAsync(async (req: Request, res: Response) => {
-  const guides = await Guide.find({ 
+  const guides = await Guide.find({
     type: req.params.type,
-    isPublished: true 
+    isPublished: true
   })
-    .populate('author', 'name avatar')
-    .populate('destination', 'name slug')
-    .populate('category', 'name slug')
     .sort({ publishedAt: -1 })
 
   res.status(200).json({
@@ -103,21 +92,10 @@ export const getGuidesByType = handleAsync(async (req: Request, res: Response) =
 // @route   GET /api/guides/:slug
 // @access  Public
 export const getGuideBySlug = handleAsync(async (req: Request, res: Response) => {
-  const guide = await Guide.findOne({ 
-    slug: req.params.slug, 
-    isPublished: true 
+  const guide = await Guide.findOne({
+    slug: req.params.slug,
+    isPublished: true
   })
-    .populate('author', 'name avatar bio')
-    .populate('destination', 'name slug images')
-    .populate('category', 'name slug')
-    .populate({
-      path: 'comments',
-      match: { isApproved: true },
-      populate: {
-        path: 'author',
-        select: 'name avatar'
-      }
-    })
 
   if (!guide) {
     return res.status(404).json({
@@ -127,8 +105,10 @@ export const getGuideBySlug = handleAsync(async (req: Request, res: Response) =>
   }
 
   // Increment views
-  guide.views += 1
-  await guide.save()
+  if (guide.views !== undefined) {
+    guide.views += 1
+    await guide.save()
+  }
 
   res.status(200).json({
     success: true,
@@ -140,8 +120,12 @@ export const getGuideBySlug = handleAsync(async (req: Request, res: Response) =>
 // @route   POST /api/guides
 // @access  Private/Admin/Contributor
 export const createGuide = handleAsync(async (req: Request, res: Response) => {
-  // Add user as author
-  req.body.author = (req as any).user._id
+  // Add user as embedded author
+  req.body.author = {
+    name: (req as any).user.name,
+    avatar: (req as any).user.avatar || '',
+    bio: (req as any).user.bio || ''
+  }
 
   const guide = await Guide.create(req.body)
 
@@ -164,8 +148,8 @@ export const updateGuide = handleAsync(async (req: Request, res: Response) => {
     })
   }
 
-  // Check if user is guide owner or admin
-  if (guide.author.toString() !== (req as any).user._id.toString() && (req as any).user.role !== 'admin') {
+  // Check if user is admin (author check removed due to embedded structure)
+  if ((req as any).user.role !== 'admin') {
     return res.status(403).json({
       success: false,
       error: 'Not authorized to update this guide'
