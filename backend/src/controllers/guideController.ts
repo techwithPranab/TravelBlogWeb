@@ -1,6 +1,13 @@
 import { Request, Response } from 'express'
 import Guide from '../models/Guide'
 import { handleAsync } from '../utils/handleAsync'
+import { uploadBufferToCloudinary } from '../config/drive'
+import multer from 'multer'
+import sharp from 'sharp'
+
+// Configure multer for memory storage
+const storage = multer.memoryStorage()
+export const upload = multer({ storage })
 
 // @desc    Get all guides
 // @route   GET /api/guides
@@ -190,4 +197,47 @@ export const deleteGuide = handleAsync(async (req: Request, res: Response) => {
     success: true,
     data: {}
   })
+})
+
+// @desc    Upload image for guide
+// @route   POST /api/guides/upload-image
+// @access  Private/Admin
+export const uploadGuideImage = handleAsync(async (req: Request, res: Response) => {
+  // Check if file was uploaded
+  if (!req.file) {
+    return res.status(400).json({
+      success: false,
+      error: 'Please upload an image file'
+    })
+  }
+
+  try {
+    // Process image with sharp
+    const processedImage = await sharp(req.file.buffer)
+      .resize(1920, 1080, { fit: 'inside', withoutEnlargement: true })
+      .jpeg({ quality: 85 })
+      .toBuffer()
+
+    // Generate unique filename
+    const timestamp = Date.now()
+    const originalName = req.file.originalname.replace(/\.[^/.]+$/, "")
+    const fileName = `TravelBlog/guides/${timestamp}-${originalName}.jpg`
+
+    // Upload to Cloudinary
+    const result = await uploadBufferToCloudinary(processedImage, fileName, 'TravelBlog/guides')
+
+    res.status(200).json({
+      success: true,
+      data: {
+        url: result.url,
+        public_id: result.public_id
+      }
+    })
+  } catch (error) {
+    console.error('Error uploading guide image:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to upload image'
+    })
+  }
 })

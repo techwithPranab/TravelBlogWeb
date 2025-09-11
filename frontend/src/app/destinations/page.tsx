@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { MapPin, Star, Clock, Camera, Users, Search } from 'lucide-react'
+import { MapPin, Star, Clock, Camera, Search } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Head from 'next/head'
@@ -321,10 +321,6 @@ export default function DestinationsPage() {
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Clock className="h-4 w-4" />
                       <span>Best time: {destination.bestTimeToVisit}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Users className="h-4 w-4" />
-                      <span>Budget: {destination.accommodation.budget}</span>
                     </div>
                   </div>
 

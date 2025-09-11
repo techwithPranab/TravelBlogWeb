@@ -7,7 +7,9 @@ import {
   deleteGuide,
   getFeaturedGuides,
   getGuidesByDestination,
-  getGuidesByType 
+  getGuidesByType,
+  uploadGuideImage,
+  upload
 } from '../controllers/guideController'
 import { protect, restrictTo } from '../middleware/auth'
 
@@ -26,5 +28,8 @@ router.use(protect)
 router.post('/', restrictTo('admin', 'contributor'), createGuide)
 router.put('/:id', restrictTo('admin', 'contributor'), updateGuide)
 router.delete('/:id', restrictTo('admin'), deleteGuide)
+
+// Image upload route
+router.post('/upload-image', protect, restrictTo('admin', 'contributor'), upload.single('image'), uploadGuideImage)
 
 export default router

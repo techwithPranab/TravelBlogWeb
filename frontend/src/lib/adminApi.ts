@@ -211,6 +211,40 @@ class AdminApi {
     return this.adminRequest(`/destinations/${id}`)
   }
 
+  // Image upload
+  async uploadDestinationImage(formData: FormData) {
+    const url = `${API_BASE_URL}/destinations/upload-image`
+    
+    const config: RequestInit = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('adminToken')}`
+      },
+      body: formData
+    }
+
+    try {
+      const response = await fetch(url, config)
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('adminToken')
+          localStorage.removeItem('adminUser')
+          window.location.href = '/admin/login'
+          throw new Error('Session expired')
+        }
+        
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `Upload failed: ${response.status}`)
+      }
+
+      return await response.json()
+    } catch (error) {
+      console.error('Image upload error:', error)
+      throw error
+    }
+  }
+
   // Guides Management
   async createGuide(guideData: any) {
     return this.adminRequest('/guides', {
@@ -249,6 +283,40 @@ class AdminApi {
     return this.adminRequest(`/guides/${id}`, {
       method: 'DELETE'
     })
+  }
+
+  // Guide image upload
+  async uploadGuideImage(formData: FormData) {
+    const url = `${API_BASE_URL}/guides/upload-image`
+    
+    const config: RequestInit = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('adminToken')}`
+      },
+      body: formData
+    }
+
+    try {
+      const response = await fetch(url, config)
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('adminToken')
+          localStorage.removeItem('adminUser')
+          window.location.href = '/admin/login'
+          throw new Error('Session expired')
+        }
+        
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `Upload failed: ${response.status}`)
+      }
+
+      return await response.json()
+    } catch (error) {
+      console.error('Guide image upload error:', error)
+      throw error
+    }
   }
 
   // Partners Management

@@ -19,6 +19,11 @@ export interface IGuide extends Document {
     url: string
     alt: string
   }
+  additionalImages: Array<{
+    url: string
+    alt: string
+    caption?: string
+  }>
   duration: string
   difficulty: 'Easy' | 'Moderate' | 'Challenging'
   budget: {
@@ -134,6 +139,17 @@ const guideSchema = new Schema<IGuide>({
       required: true
     }
   },
+  additionalImages: [{
+    url: {
+      type: String,
+      required: true
+    },
+    alt: {
+      type: String,
+      required: true
+    },
+    caption: String
+  }],
   duration: {
     type: String,
     required: true

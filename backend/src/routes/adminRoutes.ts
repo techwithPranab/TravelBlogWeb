@@ -29,6 +29,7 @@ import {
   updateSettings
 } from '../controllers/adminController'
 import { requireAdmin } from '../middleware/adminAuth'
+import { uploadGuideImage, upload } from '../controllers/guideController'
 
 const router = express.Router()
 
@@ -69,6 +70,7 @@ router.post('/guides', createGuide)
 router.get('/guides/:id', getGuide)
 router.put('/guides/:id', updateGuide)
 router.delete('/guides/:id', deleteGuide)
+router.post('/guides/upload-image', upload.single('image'), uploadGuideImage)
 
 // Settings Management
 router.get('/settings', getSettings)

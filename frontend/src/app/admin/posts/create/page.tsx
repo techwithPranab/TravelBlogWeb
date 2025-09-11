@@ -15,6 +15,11 @@ import {
 } from 'lucide-react'
 import { adminApi } from '@/lib/adminApi'
 import { toast } from 'react-hot-toast'
+import dynamic from 'next/dynamic'
+
+// Dynamically import ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+import 'react-quill/dist/quill.snow.css'
 
 export default function CreatePostPage() {
   const router = useRouter()
@@ -40,6 +45,29 @@ export default function CreatePostPage() {
     seoDescription: '',
     publishedAt: ''
   })
+
+  // Quill modules configuration
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'align': [] }],
+      ['blockquote', 'code-block'],
+      ['link', 'image', 'video'],
+      ['clean']
+    ],
+  }
+
+  const formats = [
+    'header', 'bold', 'italic', 'underline', 'strike',
+    'color', 'background', 'list', 'bullet', 'script',
+    'indent', 'align', 'blockquote', 'code-block',
+    'link', 'image', 'video'
+  ]
 
   const categories = [
     'Adventure',
@@ -82,8 +110,8 @@ export default function CreatePostPage() {
 
     try {
       // Create FormData for file upload
-      const formData = new FormData()
-      formData.append('image', file)
+      const uploadFormData = new FormData()
+      uploadFormData.append('image', file)
 
       // Upload to our API endpoint
       const response = await fetch('http://localhost:5000/api/posts/upload-image', {
@@ -91,7 +119,7 @@ export default function CreatePostPage() {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         },
-        body: formData
+        body: uploadFormData
       })
 
       if (!response.ok) {
@@ -105,7 +133,7 @@ export default function CreatePostPage() {
           ...prev,
           featuredImage: {
             url: result.data.url,
-            alt: formData.title || 'Featured image',
+            alt: prev.title || 'Featured image',
             caption: ''
           }
         }))
@@ -131,15 +159,15 @@ export default function CreatePostPage() {
     try {
       // Upload each file to Cloudinary
       for (const file of Array.from(files)) {
-        const formData = new FormData()
-        formData.append('image', file)
+        const uploadFormData = new FormData()
+        uploadFormData.append('image', file)
 
         const response = await fetch('http://localhost:5000/api/posts/upload-image', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
           },
-          body: formData
+          body: uploadFormData
         })
 
         if (!response.ok) {
@@ -222,7 +250,7 @@ export default function CreatePostPage() {
           <h1 className="text-4xl font-bold mb-4">{formData.title || 'Untitled Post'}</h1>
           <p className="text-xl text-gray-600 mb-6">{formData.excerpt}</p>
           <div className="prose max-w-none">
-            <div dangerouslySetInnerHTML={{ __html: formData.content.replace(/\n/g, '<br>') }} />
+            <div dangerouslySetInnerHTML={{ __html: formData.content }} />
           </div>
         </div>
       </div>
@@ -310,16 +338,18 @@ export default function CreatePostPage() {
                 <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
                   Content *
                 </label>
-                <textarea
-                  id="content"
-                  name="content"
-                  value={formData.content}
-                  onChange={handleInputChange}
-                  rows={20}
-                  placeholder="Write your post content here..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm text-black"
-                  required
-                />
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <ReactQuill
+                    theme="snow"
+                    value={formData.content}
+                    onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+                    modules={modules}
+                    formats={formats}
+                    placeholder="Write your post content here..."
+                    className="bg-white"
+                    style={{ minHeight: '400px' }}
+                  />
+                </div>
               </div>
 
               {/* SEO Section */}

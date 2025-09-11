@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { 
   Search, 
   Filter, 
@@ -28,6 +29,7 @@ interface Destination {
 }
 
 export default function AdminDestinationsPage() {
+  const router = useRouter()
   const [destinations, setDestinations] = useState<Destination[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -112,7 +114,7 @@ export default function AdminDestinationsPage() {
           <p className="text-gray-600 mt-1">Manage travel destinations</p>
         </div>
         <button 
-          onClick={() => window.location.href = '/admin/destinations/create'}
+          onClick={() => router.push('/admin/destinations/create')}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
         >
           <Plus className="h-4 w-4" />
@@ -206,8 +208,8 @@ export default function AdminDestinationsPage() {
 
               <div className="flex items-center justify-end gap-2">
                 <button
-                  onClick={() => window.location.href = `/admin/destinations/${destination._id}/edit`}
-                  className="text-blue-600 hover:text-blue-900"
+                  onClick={() => router.push(`/admin/destinations/${destination._id}/edit`)}
+                  className="text-blue-600 hover:text-blue-900 p-2 rounded hover:bg-blue-50 transition-colors"
                   title="Edit"
                 >
                   <Edit className="h-4 w-4" />
@@ -215,7 +217,7 @@ export default function AdminDestinationsPage() {
                 <button
                   onClick={() => handleDelete(destination._id)}
                   disabled={updating === destination._id}
-                  className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                  className="text-red-600 hover:text-red-900 p-2 rounded hover:bg-red-50 transition-colors disabled:opacity-50"
                   title="Delete"
                 >
                   <Trash2 className="h-4 w-4" />

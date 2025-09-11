@@ -1,6 +1,25 @@
 import { Request, Response } from 'express'
 import Destination from '../models/Destination'
 import { handleAsync } from '../utils/handleAsync'
+import multer from 'multer'
+import sharp from 'sharp'
+import { uploadBufferToCloudinary } from '../config/drive'
+
+// Configure multer for memory storage
+const storage = multer.memoryStorage()
+export const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true)
+    } else {
+      cb(new Error('Only image files are allowed'))
+    }
+  }
+})
 
 // @desc    Get all destinations
 // @route   GET /api/destinations
@@ -94,6 +113,25 @@ export const getDestinationBySlug = handleAsync(async (req: Request, res: Respon
   })
 })
 
+// @desc    Get single destination by ID (Admin)
+// @route   GET /api/destinations/admin/:id
+// @access  Private/Admin
+export const getDestinationById = handleAsync(async (req: Request, res: Response) => {
+  const destination = await Destination.findById(req.params.id)
+
+  if (!destination) {
+    return res.status(404).json({
+      success: false,
+      error: 'Destination not found'
+    })
+  }
+
+  res.status(200).json({
+    success: true,
+    data: destination
+  })
+})
+
 // @desc    Create new destination
 // @route   POST /api/destinations
 // @access  Private/Admin
@@ -151,4 +189,47 @@ export const deleteDestination = handleAsync(async (req: Request, res: Response)
     success: true,
     data: {}
   })
+})
+
+// @desc    Upload destination image
+// @route   POST /api/destinations/upload-image
+// @access  Private/Admin
+export const uploadDestinationImage = handleAsync(async (req: Request, res: Response) => {
+  if (!req.file) {
+    return res.status(400).json({
+      success: false,
+      error: 'Please upload an image file'
+    })
+  }
+
+  try {
+    // Process image with sharp
+    const processedImage = await sharp(req.file.buffer)
+      .resize(1920, 1080, { fit: 'inside', withoutEnlargement: true })
+      .jpeg({ quality: 85 })
+      .toBuffer()
+
+    // Generate unique filename
+    const timestamp = Date.now()
+    const originalName = req.file.originalname.replace(/\.[^/.]+$/, "")
+    const filename = `TravelBlog/destinations/${timestamp}-${originalName}.jpg`
+
+    // Upload to Cloudinary
+    const result = await uploadBufferToCloudinary(processedImage, filename, 'TravelBlog/destinations')
+
+    res.status(200).json({
+      success: true,
+      data: {
+        url: result.url,
+        alt: req.file.originalname,
+        public_id: result.public_id
+      }
+    })
+  } catch (error) {
+    console.error('Error uploading image:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to upload image'
+    })
+  }
 })

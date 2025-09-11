@@ -53,7 +53,43 @@ export default function AdminSettingsPage() {
         const response = await adminApi.getSettings() as any
         
         if (response.success) {
-          setSettings(response.data)
+          // Ensure all nested objects exist with defaults
+          const settingsData = response.data
+          const completeSettings = {
+            ...settingsData,
+            socialLinks: {
+              facebook: '',
+              twitter: '',
+              instagram: '',
+              youtube: '',
+              linkedin: '',
+              ...settingsData.socialLinks
+            },
+            seoSettings: {
+              metaTitle: 'Travel Blog - Discover Amazing Destinations',
+              metaDescription: 'Discover amazing travel destinations, guides, and tips from experienced travelers around the world.',
+              metaKeywords: [],
+              ...settingsData.seoSettings
+            },
+            emailSettings: {
+              fromEmail: 'noreply@example.com',
+              fromName: 'Travel Blog',
+              ...settingsData.emailSettings
+            },
+            generalSettings: {
+              postsPerPage: 12,
+              commentsEnabled: true,
+              registrationEnabled: true,
+              maintenanceMode: false,
+              ...settingsData.generalSettings
+            },
+            theme: {
+              primaryColor: '#3B82F6',
+              secondaryColor: '#8B5CF6',
+              ...settingsData.theme
+            }
+          }
+          setSettings(completeSettings)
         }
       } catch (err) {
         console.error('Settings fetch error:', err)
@@ -91,7 +127,11 @@ export default function AdminSettingsPage() {
     const newSettings = { ...settings }
     let current: any = newSettings
 
+    // Ensure nested objects exist
     for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]]) {
+        current[keys[i]] = {}
+      }
       current = current[keys[i]]
     }
     current[keys[keys.length - 1]] = value
@@ -180,7 +220,7 @@ export default function AdminSettingsPage() {
                   <input
                     id="siteName"
                     type="text"
-                    value={settings.siteName}
+                    value={settings.siteName || ''}
                     onChange={(e) => updateSettings('siteName', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
@@ -192,7 +232,7 @@ export default function AdminSettingsPage() {
                   <input
                     id="siteUrl"
                     type="url"
-                    value={settings.siteUrl}
+                    value={settings.siteUrl || ''}
                     onChange={(e) => updateSettings('siteUrl', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
@@ -206,7 +246,7 @@ export default function AdminSettingsPage() {
                 <textarea
                   id="siteDescription"
                   rows={3}
-                  value={settings.siteDescription}
+                  value={settings.siteDescription || ''}
                   onChange={(e) => updateSettings('siteDescription', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -220,7 +260,7 @@ export default function AdminSettingsPage() {
                   <input
                     id="contactEmail"
                     type="email"
-                    value={settings.contactEmail}
+                    value={settings.contactEmail || ''}
                     onChange={(e) => updateSettings('contactEmail', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
@@ -249,7 +289,7 @@ export default function AdminSettingsPage() {
                     </div>
                     <input
                       type="checkbox"
-                      checked={settings.generalSettings.commentsEnabled}
+                      checked={settings.generalSettings?.commentsEnabled ?? true}
                       onChange={(e) => updateSettings('generalSettings.commentsEnabled', e.target.checked)}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
@@ -261,7 +301,7 @@ export default function AdminSettingsPage() {
                     </div>
                     <input
                       type="checkbox"
-                      checked={settings.generalSettings.registrationEnabled}
+                      checked={settings.generalSettings?.registrationEnabled ?? true}
                       onChange={(e) => updateSettings('generalSettings.registrationEnabled', e.target.checked)}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
@@ -273,7 +313,7 @@ export default function AdminSettingsPage() {
                     </div>
                     <input
                       type="checkbox"
-                      checked={settings.generalSettings.maintenanceMode}
+                      checked={settings.generalSettings?.maintenanceMode ?? false}
                       onChange={(e) => updateSettings('generalSettings.maintenanceMode', e.target.checked)}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
@@ -296,7 +336,7 @@ export default function AdminSettingsPage() {
                 <input
                   id="metaTitle"
                   type="text"
-                  value={settings.seoSettings.metaTitle}
+                  value={settings.seoSettings?.metaTitle || ''}
                   onChange={(e) => updateSettings('seoSettings.metaTitle', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -309,7 +349,7 @@ export default function AdminSettingsPage() {
                 <textarea
                   id="metaDescription"
                   rows={3}
-                  value={settings.seoSettings.metaDescription}
+                  value={settings.seoSettings?.metaDescription || ''}
                   onChange={(e) => updateSettings('seoSettings.metaDescription', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -366,6 +406,18 @@ export default function AdminSettingsPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
+                  <div>
+                    <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700 mb-2">
+                      LinkedIn URL
+                    </label>
+                    <input
+                      id="linkedin"
+                      type="url"
+                      value={settings.socialLinks.linkedin || ''}
+                      onChange={(e) => updateSettings('socialLinks.linkedin', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -385,7 +437,7 @@ export default function AdminSettingsPage() {
                   <input
                     id="fromEmail"
                     type="email"
-                    value={settings.emailSettings.fromEmail}
+                    value={settings.emailSettings?.fromEmail || ''}
                     onChange={(e) => updateSettings('emailSettings.fromEmail', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
@@ -397,7 +449,7 @@ export default function AdminSettingsPage() {
                   <input
                     id="fromName"
                     type="text"
-                    value={settings.emailSettings.fromName}
+                    value={settings.emailSettings?.fromName || ''}
                     onChange={(e) => updateSettings('emailSettings.fromName', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
@@ -421,13 +473,13 @@ export default function AdminSettingsPage() {
                     <input
                       id="primaryColor"
                       type="color"
-                      value={settings.theme.primaryColor}
+                      value={settings.theme?.primaryColor || '#3B82F6'}
                       onChange={(e) => updateSettings('theme.primaryColor', e.target.value)}
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
                     <input
                       type="text"
-                      value={settings.theme.primaryColor}
+                      value={settings.theme?.primaryColor || '#3B82F6'}
                       onChange={(e) => updateSettings('theme.primaryColor', e.target.value)}
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
@@ -441,13 +493,13 @@ export default function AdminSettingsPage() {
                     <input
                       id="secondaryColor"
                       type="color"
-                      value={settings.theme.secondaryColor}
+                      value={settings.theme?.secondaryColor || '#8B5CF6'}
                       onChange={(e) => updateSettings('theme.secondaryColor', e.target.value)}
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
                     <input
                       type="text"
-                      value={settings.theme.secondaryColor}
+                      value={settings.theme?.secondaryColor || '#8B5CF6'}
                       onChange={(e) => updateSettings('theme.secondaryColor', e.target.value)}
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />

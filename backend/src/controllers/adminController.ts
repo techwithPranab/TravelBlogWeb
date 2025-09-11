@@ -873,11 +873,36 @@ export const getSettings = async (req: Request, res: Response) => {
     if (!settings) {
       // Create default settings if none exist
       settings = new SiteSettings({
+        siteName: 'Travel Blog',
+        siteDescription: 'Discover amazing travel destinations and guides',
+        siteUrl: 'https://yourdomain.com',
         contactEmail: 'contact@example.com',
         supportEmail: 'support@example.com',
+        socialLinks: {
+          facebook: '',
+          twitter: '',
+          instagram: '',
+          youtube: '',
+          linkedin: ''
+        },
+        seoSettings: {
+          metaTitle: 'Travel Blog - Discover Amazing Destinations',
+          metaDescription: 'Discover amazing travel destinations, guides, and tips from experienced travelers around the world.',
+          metaKeywords: []
+        },
         emailSettings: {
           fromEmail: 'noreply@example.com',
           fromName: 'Travel Blog'
+        },
+        generalSettings: {
+          postsPerPage: 12,
+          commentsEnabled: true,
+          registrationEnabled: true,
+          maintenanceMode: false
+        },
+        theme: {
+          primaryColor: '#3B82F6',
+          secondaryColor: '#8B5CF6'
         }
       })
       await settings.save()
@@ -901,8 +926,44 @@ export const updateSettings = async (req: Request, res: Response) => {
     let settings = await SiteSettings.findOne()
     
     if (!settings) {
-      settings = new SiteSettings(req.body)
+      // Create new settings with complete structure if none exist
+      const defaultSettings = {
+        siteName: 'Travel Blog',
+        siteDescription: 'Discover amazing travel destinations and guides',
+        siteUrl: 'https://yourdomain.com',
+        contactEmail: 'contact@example.com',
+        supportEmail: 'support@example.com',
+        socialLinks: {
+          facebook: '',
+          twitter: '',
+          instagram: '',
+          youtube: '',
+          linkedin: ''
+        },
+        seoSettings: {
+          metaTitle: 'Travel Blog - Discover Amazing Destinations',
+          metaDescription: 'Discover amazing travel destinations, guides, and tips from experienced travelers around the world.',
+          metaKeywords: []
+        },
+        emailSettings: {
+          fromEmail: 'noreply@example.com',
+          fromName: 'Travel Blog'
+        },
+        generalSettings: {
+          postsPerPage: 12,
+          commentsEnabled: true,
+          registrationEnabled: true,
+          maintenanceMode: false
+        },
+        theme: {
+          primaryColor: '#3B82F6',
+          secondaryColor: '#8B5CF6'
+        },
+        ...req.body
+      }
+      settings = new SiteSettings(defaultSettings)
     } else {
+      // Update existing settings
       Object.assign(settings, req.body)
     }
     

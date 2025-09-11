@@ -87,11 +87,6 @@ export interface Destination {
     icon: string
     description: string
   }>
-  accommodation: {
-    budget: string
-    midRange: string
-    luxury: string
-  }
   transportation: string[]
   localCuisine: string[]
   travelTips: string[]

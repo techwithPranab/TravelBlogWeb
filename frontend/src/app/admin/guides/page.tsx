@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { 
   Search, 
   Filter, 
@@ -40,6 +41,7 @@ interface Guide {
 }
 
 export default function AdminGuidesPage() {
+  const router = useRouter()
   const [guides, setGuides] = useState<Guide[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -124,7 +126,7 @@ export default function AdminGuidesPage() {
           <p className="text-gray-600 mt-1">Manage travel guides and itineraries</p>
         </div>
         <button 
-          onClick={() => window.location.href = '/admin/guides/create'}
+          onClick={() => router.push('/admin/guides/create')}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
         >
           <Plus className="h-4 w-4" />
@@ -274,8 +276,8 @@ export default function AdminGuidesPage() {
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button
-                        onClick={() => window.location.href = `/admin/guides/${guide._id}/edit`}
-                        className="text-blue-600 hover:text-blue-900"
+                        onClick={() => router.push(`/admin/guides/${guide._id}/edit`)}
+                        className="text-blue-600 hover:text-blue-900 p-2 rounded hover:bg-blue-50 transition-colors"
                         title="Edit"
                       >
                         <Edit className="h-4 w-4" />
@@ -283,7 +285,7 @@ export default function AdminGuidesPage() {
                       <button
                         onClick={() => handleDelete(guide._id)}
                         disabled={updating === guide._id}
-                        className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                        className="text-red-600 hover:text-red-900 p-2 rounded hover:bg-red-50 transition-colors disabled:opacity-50"
                         title="Delete"
                       >
                         <Trash2 className="h-4 w-4" />

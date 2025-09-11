@@ -1,12 +1,15 @@
 import express from 'express'
-import { 
-  getAllDestinations, 
-  getDestinationBySlug, 
-  createDestination, 
-  updateDestination, 
-  deleteDestination,
+import {
+  getAllDestinations,
   getFeaturedDestinations,
-  getPopularDestinations 
+  getPopularDestinations,
+  getDestinationBySlug,
+  getDestinationById,
+  createDestination,
+  updateDestination,
+  deleteDestination,
+  uploadDestinationImage,
+  upload
 } from '../controllers/destinationController'
 import { protect, restrictTo } from '../middleware/auth'
 
@@ -22,8 +25,10 @@ router.get('/:slug', getDestinationBySlug)
 router.use(protect)
 router.use(restrictTo('admin'))
 
+router.get('/admin/:id', getDestinationById)
 router.post('/', createDestination)
 router.put('/:id', updateDestination)
 router.delete('/:id', deleteDestination)
+router.post('/upload-image', upload.single('image'), uploadDestinationImage)
 
 export default router

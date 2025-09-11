@@ -34,11 +34,15 @@ export interface IDestination extends Document {
     icon: string
     description: string
   }>
-  accommodation: {
-    budget: string
-    midRange: string
-    luxury: string
-  }
+  accommodation: Array<{
+    type: string
+    name: string
+    description: string
+    priceRange: string
+    rating?: number
+    amenities?: string[]
+    bookingUrl?: string
+  }>
   transportation: string[]
   localCuisine: string[]
   travelTips: string[]
@@ -181,20 +185,6 @@ const destinationSchema = new Schema<IDestination>({
       required: true
     }
   }],
-  accommodation: {
-    budget: {
-      type: String,
-      required: true
-    },
-    midRange: {
-      type: String,
-      required: true
-    },
-    luxury: {
-      type: String,
-      required: true
-    }
-  },
   transportation: [{
     type: String,
     trim: true
@@ -258,13 +248,5 @@ const destinationSchema = new Schema<IDestination>({
     }
   }
 })
-
-// Indexes for better performance
-destinationSchema.index({ slug: 1 })
-destinationSchema.index({ country: 1, continent: 1 })
-destinationSchema.index({ isPopular: 1, isFeatured: 1 })
-destinationSchema.index({ rating: -1 })
-destinationSchema.index({ 'coordinates.lat': 1, 'coordinates.lng': 1 })
-destinationSchema.index({ isActive: 1 })
 
 export default mongoose.model<IDestination>('Destination', destinationSchema)

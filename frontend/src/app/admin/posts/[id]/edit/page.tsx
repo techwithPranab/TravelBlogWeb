@@ -13,6 +13,11 @@ import {
 } from 'lucide-react'
 import { adminApi } from '@/lib/adminApi'
 import { toast } from 'react-hot-toast'
+import dynamic from 'next/dynamic'
+
+// Dynamically import ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+import 'react-quill/dist/quill.snow.css'
 
 export default function EditPostPage() {
   const router = useRouter()
@@ -54,6 +59,29 @@ export default function EditPostPage() {
     'Backpacking',
     'Family Travel',
     'Solo Travel'
+  ]
+
+  // Quill modules configuration
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'align': [] }],
+      ['blockquote', 'code-block'],
+      ['link', 'image', 'video'],
+      ['clean']
+    ],
+  }
+
+  const formats = [
+    'header', 'bold', 'italic', 'underline', 'strike',
+    'color', 'background', 'list', 'bullet', 'script',
+    'indent', 'align', 'blockquote', 'code-block',
+    'link', 'image', 'video'
   ]
 
   useEffect(() => {
@@ -151,7 +179,7 @@ export default function EditPostPage() {
           ...prev,
           featuredImage: {
             url: result.data.url,
-            alt: formData.title || 'Featured image',
+            alt: prev.title || 'Featured image',
             caption: ''
           }
         }))
@@ -279,7 +307,7 @@ export default function EditPostPage() {
           <h1 className="text-4xl font-bold mb-4 text-black">{formData.title || 'Untitled Post'}</h1>
           <p className="text-xl mb-6 text-black">{formData.excerpt}</p>
           <div className="prose max-w-none text-black">
-            <div dangerouslySetInnerHTML={{ __html: formData.content.replace(/\n/g, '<br>') }} />
+            <div dangerouslySetInnerHTML={{ __html: formData.content }} />
           </div>
         </div>
       </div>
@@ -376,16 +404,18 @@ export default function EditPostPage() {
                 <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
                   Content *
                 </label>
-                <textarea
-                  id="content"
-                  name="content"
-                  value={formData.content}
-                  onChange={handleInputChange}
-                  rows={20}
-                  placeholder="Write your post content here..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm text-black"
-                  required
-                />
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <ReactQuill
+                    theme="snow"
+                    value={formData.content}
+                    onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+                    modules={modules}
+                    formats={formats}
+                    placeholder="Write your post content here..."
+                    className="bg-white"
+                    style={{ minHeight: '400px' }}
+                  />
+                </div>
               </div>
 
               {/* SEO Section */}

@@ -179,11 +179,6 @@ const sampleDestinations = [
         description: 'Discover vibrant coral reefs and marine life'
       }
     ],
-    accommodation: {
-      budget: '$20-50 per night (guesthouses, hostels)',
-      midRange: '$50-150 per night (boutique hotels, villas)',
-      luxury: '$150+ per night (resorts, private villas)'
-    },
     transportation: ['Airport transfer', 'Scooter rental', 'Private driver', 'Local buses', 'Boat transfers'],
     localCuisine: ['Nasi Goreng', 'Babi Guling', 'Sate', 'Ayam Betutu', 'Pisang Goreng'],
     travelTips: [
@@ -263,11 +258,6 @@ const sampleDestinations = [
         description: 'Learn about Kyoto\'s traditional crafts and artisans'
       }
     ],
-    accommodation: {
-      budget: '$30-80 per night (hostels, budget ryokan)',
-      midRange: '$80-200 per night (business hotels, traditional inns)',
-      luxury: '$200+ per night (luxury ryokan, high-end hotels)'
-    },
     transportation: ['JR Pass', 'Subway', 'Bus', 'Bicycle rental', 'Taxi'],
     localCuisine: ['Kaiseki', 'Yudofu', 'Obanzai', 'Matcha desserts', 'Street food'],
     travelTips: [
@@ -340,11 +330,6 @@ const sampleDestinations = [
         description: 'Capture stunning landscapes and wildlife'
       }
     ],
-    accommodation: {
-      budget: '$25-60 per night (hostels, camping)',
-      midRange: '$60-150 per night (lodges, cabins)',
-      luxury: '$150+ per night (luxury lodges, eco-resorts)'
-    },
     transportation: ['Internal flights', 'Bus tours', 'Private transfers', 'Rental cars', 'Ferries'],
     localCuisine: ['Lamb dishes', 'Seafood', 'Empanadas', 'Wine', 'Mate tea'],
     travelTips: [
@@ -492,39 +477,155 @@ const seedDatabase = async () => {
     console.log('Creating guides...')
     const sampleGuides = [
       {
+        id: 'bali-7-day-itinerary',
         title: '7-Day Bali Itinerary: From Temples to Beaches',
         description: 'Perfect week-long itinerary covering the best of Bali including cultural sites, beaches, and adventure activities.',
-        content: 'Detailed day-by-day itinerary for exploring Bali...',
-        author: users[1]._id,
-        destination: destinations[0]._id,
-        category: categories[1]._id,
-        type: 'Itinerary',
-        duration: {
-          days: 7,
-          description: 'One week exploring the highlights of Bali'
+        type: 'itinerary',
+        destination: {
+          name: destinations[0].name,
+          country: destinations[0].country,
+          slug: destinations[0].slug
         },
+        author: {
+          name: users[1].name,
+          avatar: users[1].avatar,
+          bio: users[1].bio
+        },
+        featuredImage: {
+          url: 'https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=800&h=600&fit=crop',
+          alt: 'Bali itinerary guide'
+        },
+        duration: '7 days',
         difficulty: 'Easy',
         budget: {
-          currency: 'USD',
-          amount: 500,
-          description: 'Total budget for 7 days including accommodation and activities'
+          range: '$500-800',
+          details: 'Total budget for 7 days including accommodation and activities'
         },
+        bestTime: 'April to September',
+        rating: 4.5,
+        totalReviews: 25,
+        publishedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        lastUpdated: new Date().toISOString(),
+        isPremium: false,
+        downloadCount: 150,
+        sections: [
+          {
+            title: 'Getting to Bali',
+            content: 'Fly into Ngurah Rai International Airport (DPS) in Denpasar. The airport is well-connected with major international hubs.',
+            tips: [
+              'Book flights during low season for better rates',
+              'Consider early morning or late evening flights to avoid peak traffic',
+              'Use airport taxis or ride-sharing apps for transportation'
+            ]
+          },
+          {
+            title: 'Transportation in Bali',
+            content: 'Bali offers various transportation options from scooters to private drivers.',
+            tips: [
+              'Rent a scooter if you\'re comfortable driving on the left',
+              'Use ride-sharing apps like Grab or Gojek',
+              'Book private drivers for day trips',
+              'Consider tourist shuttles between major areas'
+            ]
+          }
+        ],
         itinerary: [
           {
             day: 1,
             title: 'Arrival in Ubud',
-            description: 'Arrive in Ubud, check into accommodation, explore Ubud center',
             activities: ['Check-in', 'Ubud Market visit', 'Traditional dinner'],
-            accommodation: 'Ubud traditional guesthouse',
             meals: ['Traditional Balinese dinner'],
-            transportation: 'Airport transfer',
-            budget: 80
+            accommodation: 'Ubud traditional guesthouse',
+            budget: '$80'
+          },
+          {
+            day: 2,
+            title: 'Ubud Exploration',
+            activities: ['Monkey Forest visit', 'Rice terrace walk', 'Art market shopping'],
+            meals: ['Breakfast at guesthouse', 'Local warung lunch', 'Restaurant dinner'],
+            accommodation: 'Ubud traditional guesthouse',
+            budget: '$70'
+          },
+          {
+            day: 3,
+            title: 'Temples and Culture',
+            activities: ['Saraswati Temple', 'Ubud Palace', 'Traditional dance show'],
+            meals: ['Guesthouse breakfast', 'Street food lunch', 'Cultural dinner'],
+            accommodation: 'Ubud traditional guesthouse',
+            budget: '$75'
+          },
+          {
+            day: 4,
+            title: 'Mount Batur Sunrise Trek',
+            activities: ['Early morning trek', 'Sunrise at summit', 'Hot springs relaxation'],
+            meals: ['Pre-trek breakfast', 'Post-trek brunch', 'Relaxation dinner'],
+            accommodation: 'Ubud traditional guesthouse',
+            budget: '$90'
+          },
+          {
+            day: 5,
+            title: 'South Bali Beaches',
+            activities: ['Uluwatu Temple', 'Kecak dance', 'Jimbaran Beach seafood'],
+            meals: ['Guesthouse breakfast', 'Beachside lunch', 'Jimbaran seafood dinner'],
+            accommodation: 'Jimbaran beach hotel',
+            budget: '$85'
+          },
+          {
+            day: 6,
+            title: 'Seminyak and Shopping',
+            activities: ['Beach time', 'Shopping at boutiques', 'Beach clubs'],
+            meals: ['Hotel breakfast', 'Café lunch', 'Beach club dinner'],
+            accommodation: 'Seminyak boutique hotel',
+            budget: '$95'
+          },
+          {
+            day: 7,
+            title: 'Departure Day',
+            activities: ['Last minute shopping', 'Relax at hotel', 'Airport transfer'],
+            meals: ['Hotel breakfast', 'Airport lunch'],
+            accommodation: 'Seminyak boutique hotel',
+            budget: '$60'
           }
         ],
-        tags: ['bali', 'itinerary', 'culture', 'beaches'],
+        packingList: [
+          {
+            category: 'Clothing',
+            items: ['Light clothing', 'Swimwear', 'Light jacket', 'Comfortable walking shoes', 'Hat and sunglasses']
+          },
+          {
+            category: 'Documents',
+            items: ['Passport', 'Visa (if required)', 'Travel insurance', 'Credit cards', 'Cash (IDR)']
+          },
+          {
+            category: 'Essentials',
+            items: ['Sunscreen', 'Insect repellent', 'First aid kit', 'Reusable water bottle', 'Power adapter']
+          }
+        ],
+        resources: [
+          {
+            title: 'Bali Transportation Guide',
+            type: 'link',
+            url: 'https://example.com/bali-transport'
+          },
+          {
+            title: 'Bali Weather App',
+            type: 'app',
+            url: 'https://apps.apple.com/bali-weather'
+          }
+        ],
+        relatedGuides: [
+          {
+            id: 'bali-food-guide',
+            title: 'Bali Food Guide: Must-Try Local Dishes',
+            slug: 'bali-food-guide-must-try-dishes',
+            image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop',
+            type: 'food'
+          }
+        ],
+        tags: ['bali', 'itinerary', 'culture', 'beaches', 'temples'],
         isPublished: true,
         isFeatured: true,
-        publishedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+        views: 1250
       }
     ]
 

@@ -8,20 +8,15 @@ import {
   MapPin, 
   Calendar, 
   Thermometer, 
-  Plane, 
-  Camera, 
   Star,
   ArrowLeft,
   Clock,
   Users,
   DollarSign,
-  Wifi,
   Car,
-  Mountain,
   Utensils,
   Heart,
-  Share2,
-  BookOpen
+  Share2
 } from 'lucide-react'
 import { destinationsApi } from '@/lib/api'
 import { motion } from 'framer-motion'
@@ -60,11 +55,6 @@ interface Destination {
     icon: string
     description: string
   }>
-  accommodation: {
-    budget: string
-    midRange: string
-    luxury: string
-  }
   transportation: string[]
   localCuisine: string[]
   travelTips: string[]
@@ -81,7 +71,6 @@ export default function DestinationDetailsPage() {
   const [destination, setDestination] = useState<Destination | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [isLiked, setIsLiked] = useState(false)
 
   useEffect(() => {
@@ -113,12 +102,10 @@ export default function DestinationDetailsPage() {
           url: window.location.href,
         })
       } catch (err) {
-        navigator.clipboard.writeText(window.location.href)
-        alert('Link copied to clipboard!')
+        console.error('Web Share API failed:', err)
       }
     } else {
-      navigator.clipboard.writeText(window.location.href)
-      alert('Link copied to clipboard!')
+      console.log('Sharing not supported, URL:', window.location.href)
     }
   }
 
@@ -244,10 +231,14 @@ export default function DestinationDetailsPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Gallery</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {destination.gallery.map((image, index) => (
-                  <div 
-                    key={index}
-                    className="relative h-48 rounded-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform"
-                    onClick={() => setSelectedImageIndex(index)}
+                  <button
+                    key={`gallery-${image.url}-${index}`}
+                    className="relative h-48 rounded-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform border-0 bg-transparent p-0"
+                    onClick={() => {
+                      // For now, just log the image URL
+                      console.log('View image:', image.url)
+                    }}
+                    aria-label={`View ${image.alt}`}
                   >
                     <Image
                       src={image.url}
@@ -255,7 +246,7 @@ export default function DestinationDetailsPage() {
                       fill
                       className="object-cover"
                     />
-                  </div>
+                  </button>
                 ))}
               </div>
             </section>
@@ -264,8 +255,8 @@ export default function DestinationDetailsPage() {
             <section className="mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Highlights</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {destination.highlights.map((highlight, index) => (
-                  <div key={index} className="flex items-start space-x-3">
+                {destination.highlights.map((highlight) => (
+                  <div key={highlight} className="flex items-start space-x-3">
                     <Star className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-1" />
                     <span className="text-gray-700">{highlight}</span>
                   </div>
@@ -277,8 +268,8 @@ export default function DestinationDetailsPage() {
             <section className="mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Things to Do</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {destination.activities.map((activity, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-6">
+                {destination.activities.map((activity) => (
+                  <div key={`activity-${activity.name}`} className="bg-gray-50 rounded-lg p-6">
                     <div className="flex items-center space-x-3 mb-3">
                       <span className="text-2xl">{activity.icon}</span>
                       <h3 className="text-xl font-semibold text-gray-900">{activity.name}</h3>
@@ -294,8 +285,8 @@ export default function DestinationDetailsPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Travel Tips</h2>
               <div className="bg-blue-50 rounded-lg p-6">
                 <ul className="space-y-3">
-                  {destination.travelTips.map((tip, index) => (
-                    <li key={index} className="flex items-start space-x-3">
+                  {destination.travelTips.map((tip) => (
+                    <li key={`tip-${tip}`} className="flex items-start space-x-3">
                       <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
                       <span className="text-gray-700">{tip}</span>
                     </li>
@@ -356,31 +347,12 @@ export default function DestinationDetailsPage() {
               </div>
             </div>
 
-            {/* Accommodation */}
-            <div className="bg-gray-50 rounded-lg p-6 mb-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Accommodation</h3>
-              <div className="space-y-3">
-                <div>
-                  <div className="font-medium text-green-600">Budget</div>
-                  <div className="text-sm text-gray-600">{destination.accommodation.budget}</div>
-                </div>
-                <div>
-                  <div className="font-medium text-blue-600">Mid-Range</div>
-                  <div className="text-sm text-gray-600">{destination.accommodation.midRange}</div>
-                </div>
-                <div>
-                  <div className="font-medium text-purple-600">Luxury</div>
-                  <div className="text-sm text-gray-600">{destination.accommodation.luxury}</div>
-                </div>
-              </div>
-            </div>
-
             {/* Transportation */}
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Getting Around</h3>
               <ul className="space-y-2">
-                {destination.transportation.map((transport, index) => (
-                  <li key={index} className="flex items-center space-x-2">
+                {destination.transportation.map((transport) => (
+                  <li key={`transport-${transport}`} className="flex items-center space-x-2">
                     <Car className="w-4 h-4 text-gray-600" />
                     <span className="text-sm text-gray-700">{transport}</span>
                   </li>
@@ -392,8 +364,8 @@ export default function DestinationDetailsPage() {
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Local Cuisine</h3>
               <ul className="space-y-2">
-                {destination.localCuisine.map((dish, index) => (
-                  <li key={index} className="flex items-center space-x-2">
+                {destination.localCuisine.map((dish) => (
+                  <li key={`cuisine-${dish}`} className="flex items-center space-x-2">
                     <Utensils className="w-4 h-4 text-gray-600" />
                     <span className="text-sm text-gray-700">{dish}</span>
                   </li>
