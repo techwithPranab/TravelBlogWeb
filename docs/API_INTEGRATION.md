@@ -16,7 +16,170 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config### GET /api/reader/recommendations
+**Get personalized recommendations**
+```typescript
+interface RecommendationsResponse {
+  success: boolean;
+  data: Post[];
+  type: 'personalized' | 'popular';
+}
+```
+
+## 👥 Contributor APIs
+
+### GET /api/contributor/dashboard
+**Get contributor dashboard stats**
+```typescript
+interface ContributorDashboardResponse {
+  success: boolean;
+  data: {
+    stats: {
+      totalPosts: number;
+      publishedPosts: number;
+      pendingPosts: number;
+      rejectedPosts: number;
+      draftPosts: number;
+      totalViews: number;
+      totalLikes: number;
+    };
+    recentPosts: {
+      title: string;
+      status: string;
+      createdAt: string;
+      updatedAt: string;
+      publishedAt?: string;
+    }[];
+    recentRejections: {
+      title: string;
+      moderationNotes?: string;
+      moderatedAt?: string;
+      moderatedBy?: {
+        name: string;
+      };
+    }[];
+  };
+}
+```
+
+### GET /api/contributor/posts
+**Get contributor's own posts**
+```typescript
+interface ContributorPostsQuery {
+  page?: number;
+  limit?: number;
+  status?: 'all' | 'draft' | 'pending' | 'published' | 'rejected' | 'archived';
+}
+
+interface ContributorPostsResponse {
+  success: boolean;
+  data: Post[];
+  pagination: Pagination;
+  statusCounts: {
+    draft: number;
+    pending: number;
+    published: number;
+    rejected: number;
+    archived: number;
+  };
+}
+```
+
+### POST /api/contributor/posts
+**Create new post (submitted for approval)**
+```typescript
+interface CreateContributorPostRequest {
+  title: string;
+  excerpt: string;
+  content: string;
+  featuredImage: {
+    url: string;
+    alt: string;
+    caption?: string;
+  };
+  categories: string[];
+  tags?: string[];
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    focusKeyword?: string;
+  };
+  destination?: {
+    country: string;
+    city?: string;
+    coordinates?: {
+      lat: number;
+      lng: number;
+    };
+  };
+}
+
+interface CreateContributorPostResponse {
+  success: boolean;
+  message: string;
+  data: Post;
+}
+```
+
+### PUT /api/contributor/posts/:id
+**Update contributor's own post**
+```typescript
+interface UpdateContributorPostRequest {
+  title?: string;
+  excerpt?: string;
+  content?: string;
+  featuredImage?: {
+    url: string;
+    alt: string;
+    caption?: string;
+  };
+  categories?: string[];
+  tags?: string[];
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    focusKeyword?: string;
+  };
+  destination?: {
+    country: string;
+    city?: string;
+    coordinates?: {
+      lat: number;
+      lng: number;
+    };
+  };
+}
+
+interface UpdateContributorPostResponse {
+  success: boolean;
+  message: string;
+  data: Post;
+}
+```
+
+### DELETE /api/contributor/posts/:id
+**Delete contributor's own post**
+```typescript
+interface DeleteContributorPostResponse {
+  success: boolean;
+  message: string;
+}
+```
+
+### POST /api/contributor/upload-image
+**Upload image for contributor post**
+```typescript
+// FormData with 'image' field containing image file
+interface UploadContributorImageResponse {
+  success: boolean;
+  data: {
+    url: string;
+    publicId: string;
+  };
+}
+```
+
+## 🛡️ Admin APIsthorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -332,7 +495,108 @@ interface UpdateProfileRequest {
 }
 ```
 
-## 🛡️ Admin APIs
+## � Reader APIs
+
+### GET /api/reader/dashboard
+**Get reader dashboard data**
+```typescript
+interface ReaderDashboardResponse {
+  success: boolean;
+  data: {
+    totalPosts: number;      // Posts created by the user
+    totalLikes: number;      // Total likes on user's posts
+    totalComments: number;   // Total comments on user's posts
+    totalViews: number;      // Total views on user's posts
+    recentActivity: {
+      id: string;
+      type: 'like' | 'comment' | 'view' | 'follow';
+      message: string;
+      date: string;
+      postTitle?: string;
+    }[];
+  };
+}
+```
+
+### GET /api/reader/profile
+**Get reader profile data**
+```typescript
+interface ReaderProfileResponse {
+  success: boolean;
+  data: {
+    user: User & {
+      stats: {
+        postsLiked: number;
+        photosLiked: number;
+        totalReadTime: number;
+        joinedDate: string;
+      };
+    };
+    recentActivity: any[];
+    favoriteCategories: {
+      name: string;
+      slug: string;
+      count: number;
+    }[];
+  };
+}
+```
+
+### PUT /api/reader/profile
+**Update reader profile**
+```typescript
+interface UpdateReaderProfileRequest {
+  name?: string;
+  bio?: string;
+  location?: string;
+  website?: string;
+  socialLinks?: {
+    website?: string;
+    twitter?: string;
+    instagram?: string;
+  };
+}
+```
+
+### POST /api/reader/avatar
+**Upload reader avatar**
+```typescript
+// FormData with 'avatar' field containing image file
+interface UploadAvatarResponse {
+  success: boolean;
+  message: string;
+  data: {
+    avatar: string; // URL to uploaded avatar
+  };
+}
+```
+
+### GET /api/reader/history
+**Get reading history**
+```typescript
+interface ReadingHistoryQuery {
+  page?: number;
+  limit?: number;
+}
+
+interface ReadingHistoryResponse {
+  success: boolean;
+  data: Post[];
+  pagination: Pagination;
+}
+```
+
+### GET /api/reader/recommendations
+**Get personalized recommendations**
+```typescript
+interface RecommendationsResponse {
+  success: boolean;
+  data: Post[];
+  type: 'personalized' | 'popular';
+}
+```
+
+## �🛡️ Admin APIs
 
 ### GET /api/admin/stats
 **Get admin statistics**
@@ -377,15 +641,48 @@ interface UpdateRoleRequest {
 }
 ```
 
-### GET /api/admin/pending-content
-**Get pending content for moderation**
+### GET /api/admin/posts/pending
+**Get pending posts for moderation**
 ```typescript
-interface PendingContentResponse {
+interface PendingPostsResponse {
   success: boolean;
-  data: {
-    photos: Photo[];
-    posts: Post[];
-  };
+  data: Post[];
+  pagination: Pagination;
+}
+```
+
+### PUT /api/admin/posts/:id/moderate
+**Approve or reject a post**
+```typescript
+interface ModeratePostRequest {
+  status: 'published' | 'rejected';
+  moderationNotes?: string;
+}
+
+interface ModeratePostResponse {
+  success: boolean;
+  message: string;
+  data: Post;
+}
+```
+
+### PUT /api/admin/posts/:id/approve
+**Quick approve a post**
+```typescript
+interface ApprovePostResponse {
+  success: boolean;
+  message: string;
+  data: Post;
+}
+```
+
+### PUT /api/admin/posts/:id/submit
+**Submit post for review (draft to pending)**
+```typescript
+interface SubmitPostResponse {
+  success: boolean;
+  message: string;
+  data: Post;
 }
 ```
 

@@ -13,77 +13,96 @@ export const getReaderDashboard = handleAsync(async (req: Request, res: Response
   const userId = (req as any).user?.id;
 
   try {
-    // Get user's reading stats
-    const userPosts = await Post.find({ 
-      likes: userId,
-      status: 'published'
-    }).countDocuments();
+    // Get user's posts stats
+    const userPosts = await Post.find({ author: userId }).countDocuments();
 
-    const userPhotosLiked = await Photo.find({ 
-      likes: userId,
-      status: 'approved'
-    }).countDocuments();
+    // Get total likes on user's posts
+    const totalLikes = await Post.aggregate([
+      { $match: { author: userId } },
+      { $group: { _id: null, totalLikes: { $sum: { $size: '$likes' } } } }
+    ]);
 
-    // Get recent posts
-    const recentPosts = await Post.find({ status: 'published' })
-      .populate('author', 'name')
-      .populate('categories', 'name slug')
-      .sort({ publishedAt: -1 })
-      .limit(6)
-      .select('title slug excerpt featuredImage publishedAt readTime viewCount');
+    // Get total comments on user's posts
+    const totalComments = await Post.aggregate([
+      { $match: { author: userId } },
+      { $lookup: { from: 'comments', localField: '_id', foreignField: 'post', as: 'comments' } },
+      { $group: { _id: null, totalComments: { $sum: { $size: '$comments' } } } }
+    ]);
 
-    // Get featured photos
-    const featuredPhotos = await Photo.find({ 
-      status: 'approved', 
-      isFeatured: true 
-    })
-      .sort({ likes: -1 })
-      .limit(8)
-      .select('title thumbnailUrl category location photographer');
+    // Get total views on user's posts
+    const totalViews = await Post.aggregate([
+      { $match: { author: userId } },
+      { $group: { _id: null, totalViews: { $sum: '$viewCount' } } }
+    ]);
 
-    // Get reading recommendations based on user's liked posts
-    const likedPosts = await Post.find({ 
-      likes: userId,
-      status: 'published'
-    }).populate('categories', '_id');
+    // Get recent activity (likes, comments on user's posts)
+    const recentActivity = [];
 
-    const likedCategories = likedPosts.flatMap(post => 
-      post.categories.map((cat: any) => cat._id)
-    );
+    // Get recent likes on user's posts
+    const recentLikes = await Post.find({ author: userId })
+      .select('title likes')
+      .sort({ updatedAt: -1 })
+      .limit(10)
+      .populate('likes', 'name')
+      .then(posts => {
+        return posts.flatMap(post =>
+          post.likes.slice(0, 3).map((liker: any) => ({
+            id: `${post._id}-like-${liker._id}`,
+            type: 'like' as const,
+            message: `${liker.name} liked your post`,
+            date: new Date().toISOString().split('T')[0], // Simplified date
+            postTitle: post.title
+          }))
+        );
+      });
 
-    const recommendations = await Post.find({
-      status: 'published',
-      _id: { $nin: likedPosts.map(p => p._id) },
-      ...(likedCategories.length > 0 && { categories: { $in: likedCategories } })
-    })
-      .populate('author', 'name')
-      .populate('categories', 'name slug')
-      .sort({ publishedAt: -1 })
-      .limit(4)
-      .select('title slug excerpt featuredImage publishedAt readTime');
+    // Get recent comments on user's posts
+    const recentComments = await Post.aggregate([
+      { $match: { author: userId } },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'post',
+          as: 'comments'
+        }
+      },
+      { $unwind: '$comments' },
+      { $sort: { 'comments.createdAt': -1 } },
+      { $limit: 10 },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'comments.author',
+          foreignField: '_id',
+          as: 'commentAuthor'
+        }
+      },
+      { $unwind: '$commentAuthor' },
+      {
+        $project: {
+          id: { $concat: ['comment-', { $toString: '$comments._id' }] },
+          type: 'comment',
+          message: { $concat: ['$commentAuthor.name', ' commented on your post'] },
+          date: { $dateToString: { format: '%Y-%m-%d', date: '$comments.createdAt' } },
+          postTitle: '$title'
+        }
+      }
+    ]);
 
-    // Get user's bookmarks/favorites (if this feature exists)
-    const bookmarkedPosts = await Post.find({ 
-      likes: userId,
-      status: 'published'
-    })
-      .populate('author', 'name')
-      .sort({ publishedAt: -1 })
-      .limit(5)
-      .select('title slug excerpt featuredImage publishedAt readTime');
+    // Combine and sort recent activity
+    recentActivity.push(...recentLikes, ...recentComments);
+    recentActivity.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    recentActivity.splice(10); // Keep only 10 most recent
 
     res.status(200).json({
       success: true,
       data: {
-        stats: {
-          postsLiked: userPosts,
-          photosLiked: userPhotosLiked,
-          bookmarksCount: bookmarkedPosts.length
-        },
-        recentPosts,
-        featuredPhotos,
-        recommendations,
-        bookmarks: bookmarkedPosts
+        totalPosts: userPosts,
+        totalLikes: totalLikes[0]?.totalLikes || 0,
+        totalComments: totalComments[0]?.totalComments || 0,
+        totalViews: totalViews[0]?.totalViews || 0,
+        recentActivity
       }
     });
   } catch (error) {

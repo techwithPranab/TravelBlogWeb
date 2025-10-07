@@ -5,7 +5,11 @@ export interface IPost extends Document {
   slug: string
   excerpt: string
   content: string
-  featuredImage?: string
+  featuredImage?: {
+    url: string
+    alt: string
+    caption?: string
+  }
   images?: string[]
   author: mongoose.Types.ObjectId
   categories: mongoose.Types.ObjectId[]
@@ -67,17 +71,9 @@ const postSchema = new Schema<IPost>({
     required: [true, 'Please provide content']
   },
   featuredImage: {
-    url: {
-      type: String,
-      required: true
-    },
-    alt: {
-      type: String,
-      required: true
-    },
-    caption: {
-      type: String
-    }
+    url: String,
+    alt: String,
+    caption: String
   },
   images: [{
     type: String

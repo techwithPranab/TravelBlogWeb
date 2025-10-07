@@ -31,6 +31,7 @@ import photoRoutes from '@/routes/photoRoutes'
 import newsletterRoutes from '@/routes/newsletterRoutes'
 import adminRoutes from '@/routes/adminRoutes'
 import readerRoutes from '@/routes/readerRoutes'
+import contributorRoutes from '@/routes/contributorRoutes'
 import partnerRoutes from '@/routes/partnerRoutes'
 
 // Connect to database
@@ -154,6 +155,7 @@ app.use(`${API_VERSION}/contact`, contactRoutes)
 app.use(`${API_VERSION}/photos`, photoRoutes)
 app.use(`${API_VERSION}/newsletter`, newsletterRoutes)
 app.use(`${API_VERSION}/admin`, adminRoutes)
+app.use(`${API_VERSION}/contributor`, contributorRoutes)
 app.use(`${API_VERSION}/reader`, readerRoutes)
 app.use(`${API_VERSION}/partners`, partnerRoutes)
 
