@@ -27,8 +27,11 @@ export const upload = multer({
 export const getAllDestinations = handleAsync(async (req: Request, res: Response) => {
   const { page = 1, limit = 10, country, continent, isPopular, isFeatured } = req.query
 
-  // Build filter object
-  const filter: any = { isActive: true }
+  // Build filter object - only show published destinations to public
+  const filter: any = { 
+    isActive: true,
+    status: 'published' 
+  }
 
   if (country) filter.country = country
   if (continent) filter.continent = continent
@@ -61,7 +64,8 @@ export const getAllDestinations = handleAsync(async (req: Request, res: Response
 export const getFeaturedDestinations = handleAsync(async (req: Request, res: Response) => {
   const destinations = await Destination.find({
     isActive: true,
-    isFeatured: true
+    isFeatured: true,
+    status: 'published'
   })
     .sort({ createdAt: -1 })
     .limit(6)
@@ -79,7 +83,8 @@ export const getFeaturedDestinations = handleAsync(async (req: Request, res: Res
 export const getPopularDestinations = handleAsync(async (req: Request, res: Response) => {
   const destinations = await Destination.find({
     isActive: true,
-    isPopular: true
+    isPopular: true,
+    status: 'published'
   })
     .sort({ rating: -1 })
     .limit(10)
@@ -97,7 +102,8 @@ export const getPopularDestinations = handleAsync(async (req: Request, res: Resp
 export const getDestinationBySlug = handleAsync(async (req: Request, res: Response) => {
   const destination = await Destination.findOne({
     slug: req.params.slug,
-    isActive: true
+    isActive: true,
+    status: 'published'
   })
 
   if (!destination) {

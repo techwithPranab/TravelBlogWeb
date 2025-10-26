@@ -30,7 +30,7 @@ export interface Post {
   }
   images?: string[]
   tags: string[]
-  status: 'draft' | 'published'
+  status: 'draft' | 'published' | 'inactive'
   publishedAt: string
   readTime: number
   views: number
@@ -87,9 +87,49 @@ export interface Destination {
     icon: string
     description: string
   }>
+  accommodation: Array<{
+    type: string
+    name: string
+    description: string
+    priceRange: string
+    rating?: number
+    amenities?: string[]
+    bookingUrl?: string
+  }>
   transportation: string[]
   localCuisine: string[]
   travelTips: string[]
+  howToReach: {
+    byAir: {
+      nearestAirport: string
+      distanceFromCity: string
+      travelTime: string
+      domesticFlights: string
+      internationalFlights: string
+      transportToCity: string
+      estimatedCost: string
+    }
+    byRail: {
+      nearestStation: string
+      majorTrains: string
+      connections: string
+      travelTime: string
+      transportToCity: string
+      estimatedCost: string
+      booking: string
+    }
+    byRoad: {
+      majorHighways: string
+      distanceFromDelhi: string
+      distanceFromLucknow: string
+      distanceFromKanpur?: string
+      distanceFromPatna?: string
+      travelTime: string
+      busServices: string
+      privateCar: string
+      estimatedCost: string
+    }
+  }
   relatedPosts: Array<{
     id: string
     title: string
@@ -99,6 +139,7 @@ export interface Destination {
   isPopular: boolean
   isFeatured: boolean
   isActive: boolean
+  status: 'published' | 'draft' | 'inactive'
   seoTitle?: string
   seoDescription?: string
   createdAt: string

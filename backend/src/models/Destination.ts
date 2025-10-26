@@ -55,6 +55,7 @@ export interface IDestination extends Document {
   isPopular: boolean
   isFeatured: boolean
   isActive: boolean
+  status: 'published' | 'draft' | 'inactive'
   seoTitle?: string
   seoDescription?: string
   createdAt: Date
@@ -185,6 +186,36 @@ const destinationSchema = new Schema<IDestination>({
       required: true
     }
   }],
+  accommodation: [{
+    type: {
+      type: String,
+      required: true,
+      enum: ['budget', 'mid-range', 'luxury', 'hostel', 'hotel', 'guesthouse', 'homestay']
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    priceRange: {
+      type: String,
+      required: true
+    },
+    rating: {
+      type: Number,
+      min: 0,
+      max: 5
+    },
+    amenities: [{
+      type: String
+    }],
+    bookingUrl: {
+      type: String
+    }
+  }],
   transportation: [{
     type: String,
     trim: true
@@ -226,6 +257,11 @@ const destinationSchema = new Schema<IDestination>({
   isActive: {
     type: Boolean,
     default: true
+  },
+  status: {
+    type: String,
+    enum: ['published', 'draft', 'inactive'],
+    default: 'published'
   },
   seoTitle: {
     type: String,

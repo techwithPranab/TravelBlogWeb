@@ -16,7 +16,10 @@ import {
   Car,
   Utensils,
   Heart,
-  Share2
+  Share2,
+  Plane,
+  Train,
+  Bus
 } from 'lucide-react'
 import { destinationsApi } from '@/lib/api'
 import { motion } from 'framer-motion'
@@ -55,9 +58,49 @@ interface Destination {
     icon: string
     description: string
   }>
+  accommodation: Array<{
+    type: string
+    name: string
+    description: string
+    priceRange: string
+    rating?: number
+    amenities?: string[]
+    bookingUrl?: string
+  }>
   transportation: string[]
   localCuisine: string[]
   travelTips: string[]
+  howToReach: {
+    byAir: {
+      nearestAirport: string
+      distanceFromCity: string
+      travelTime: string
+      domesticFlights: string
+      internationalFlights: string
+      transportToCity: string
+      estimatedCost: string
+    }
+    byRail: {
+      nearestStation: string
+      majorTrains: string
+      connections: string
+      travelTime: string
+      transportToCity: string
+      estimatedCost: string
+      booking: string
+    }
+    byRoad: {
+      majorHighways: string
+      distanceFromDelhi: string
+      distanceFromLucknow: string
+      distanceFromKanpur?: string
+      distanceFromPatna?: string
+      travelTime: string
+      busServices: string
+      privateCar: string
+      estimatedCost: string
+    }
+  }
   relatedPosts: Array<{
     id: string
     title: string
@@ -226,6 +269,111 @@ export default function DestinationDetailsPage() {
               <p className="text-lg text-gray-700 leading-relaxed">{destination.description}</p>
             </section>
 
+            {/* How to Reach */}
+            <section className="mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">How to Reach {destination.name}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* By Air */}
+                <div className="bg-blue-50 rounded-lg p-6">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <Plane className="w-8 h-8 text-blue-600" />
+                    <h3 className="text-xl font-semibold text-gray-900">By Air</h3>
+                  </div>
+                  <div className="space-y-3 text-sm text-gray-700">
+                    <div>
+                      <span className="font-medium">Nearest Airport:</span><br/>
+                      {destination.howToReach.byAir.nearestAirport}
+                    </div>
+                    <div>
+                      <span className="font-medium">Distance:</span><br/>
+                      {destination.howToReach.byAir.distanceFromCity}
+                    </div>
+                    <div>
+                      <span className="font-medium">Travel Time:</span><br/>
+                      {destination.howToReach.byAir.travelTime}
+                    </div>
+                    <div>
+                      <span className="font-medium">Major Connections:</span><br/>
+                      {destination.howToReach.byAir.domesticFlights}
+                    </div>
+                    <div>
+                      <span className="font-medium">Transport to City:</span><br/>
+                      {destination.howToReach.byAir.transportToCity}
+                    </div>
+                    <div className="pt-2 border-t border-blue-200">
+                      <span className="font-medium text-blue-600">Estimated Cost: {destination.howToReach.byAir.estimatedCost}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* By Rail */}
+                <div className="bg-green-50 rounded-lg p-6">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <Train className="w-8 h-8 text-green-600" />
+                    <h3 className="text-xl font-semibold text-gray-900">By Rail</h3>
+                  </div>
+                  <div className="space-y-3 text-sm text-gray-700">
+                    <div>
+                      <span className="font-medium">Nearest Station:</span><br/>
+                      {destination.howToReach.byRail.nearestStation}
+                    </div>
+                    <div>
+                      <span className="font-medium">Major Trains:</span><br/>
+                      {destination.howToReach.byRail.majorTrains}
+                    </div>
+                    <div>
+                      <span className="font-medium">Connections:</span><br/>
+                      {destination.howToReach.byRail.connections}
+                    </div>
+                    <div>
+                      <span className="font-medium">Travel Time:</span><br/>
+                      {destination.howToReach.byRail.travelTime}
+                    </div>
+                    <div>
+                      <span className="font-medium">Transport to City:</span><br/>
+                      {destination.howToReach.byRail.transportToCity}
+                    </div>
+                    <div className="pt-2 border-t border-green-200">
+                      <span className="font-medium text-green-600">Estimated Cost: {destination.howToReach.byRail.estimatedCost}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* By Road */}
+                <div className="bg-orange-50 rounded-lg p-6">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <Bus className="w-8 h-8 text-orange-600" />
+                    <h3 className="text-xl font-semibold text-gray-900">By Road</h3>
+                  </div>
+                  <div className="space-y-3 text-sm text-gray-700">
+                    <div>
+                      <span className="font-medium">Major Highways:</span><br/>
+                      {destination.howToReach.byRoad.majorHighways}
+                    </div>
+                    <div>
+                      <span className="font-medium">Distance from Delhi:</span><br/>
+                      {destination.howToReach.byRoad.distanceFromDelhi}
+                    </div>
+                    <div>
+                      <span className="font-medium">Distance from Lucknow:</span><br/>
+                      {destination.howToReach.byRoad.distanceFromLucknow}
+                    </div>
+                    <div>
+                      <span className="font-medium">Travel Time:</span><br/>
+                      {destination.howToReach.byRoad.travelTime}
+                    </div>
+                    <div>
+                      <span className="font-medium">Bus Services:</span><br/>
+                      {destination.howToReach.byRoad.busServices}
+                    </div>
+                    <div className="pt-2 border-t border-orange-200">
+                      <span className="font-medium text-orange-600">Estimated Cost: {destination.howToReach.byRoad.estimatedCost}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/* Gallery */}
             <section className="mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Gallery</h2>
@@ -293,6 +441,85 @@ export default function DestinationDetailsPage() {
                   ))}
                 </ul>
               </div>
+            </section>
+
+            {/* Accommodation */}
+            <section className="mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Where to Stay</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {destination.accommodation?.map((accommodation, index) => (
+                  <div key={`accommodation-${accommodation.name}-${index}`} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-1">{accommodation.name}</h3>
+                        <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                          accommodation.type === 'budget' ? 'bg-green-100 text-green-800' :
+                          accommodation.type === 'mid-range' ? 'bg-blue-100 text-blue-800' :
+                          accommodation.type === 'luxury' ? 'bg-purple-100 text-purple-800' :
+                          accommodation.type === 'hostel' ? 'bg-orange-100 text-orange-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {accommodation.type.charAt(0).toUpperCase() + accommodation.type.slice(1)}
+                        </span>
+                      </div>
+                      {accommodation.rating && (
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm font-medium">{accommodation.rating}</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <p className="text-gray-700 mb-4 text-sm">{accommodation.description}</p>
+                    
+                    <div className="mb-4">
+                      <span className="text-lg font-bold text-green-600">{accommodation.priceRange}</span>
+                      <span className="text-sm text-gray-500 ml-1">per night</span>
+                    </div>
+                    
+                    {accommodation.amenities && accommodation.amenities.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="text-sm font-medium text-gray-900 mb-2">Amenities:</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {accommodation.amenities.slice(0, 4).map((amenity) => (
+                            <span key={amenity} className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                              {amenity}
+                            </span>
+                          ))}
+                          {accommodation.amenities.length > 4 && (
+                            <span className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                              +{accommodation.amenities.length - 4} more
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {accommodation.bookingUrl && (
+                      <a
+                        href={accommodation.bookingUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                      >
+                        Book Now
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+              
+              {(!destination.accommodation || destination.accommodation.length === 0) && (
+                <div className="text-center py-12">
+                  <div className="text-gray-500 mb-4">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">🏨</span>
+                    </div>
+                    <p className="text-lg">Accommodation information coming soon</p>
+                    <p className="text-sm">We're working on adding detailed accommodation options for this destination.</p>
+                  </div>
+                </div>
+              )}
             </section>
           </div>
 

@@ -54,7 +54,8 @@ export const getContributorPosts = handleAsync(async (req: AuthenticatedRequest,
     pending: 0,
     published: 0,
     rejected: 0,
-    archived: 0
+    archived: 0,
+    inactive: 0
   }
 
   statusCounts.forEach(item => {

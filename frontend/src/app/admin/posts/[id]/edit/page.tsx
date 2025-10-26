@@ -467,6 +467,7 @@ export default function EditPostPage() {
                 >
                   <option value="draft">Draft</option>
                   <option value="published">Published</option>
+                  <option value="inactive">Inactive</option>
                 </select>
               </div>
 

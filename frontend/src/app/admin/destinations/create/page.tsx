@@ -72,7 +72,7 @@ export default function CreateDestinationPage() {
     averageCost: '',
     difficulty: '',
     duration: '',
-    status: 'active'
+    status: 'published'
   })
 
   const continents = [
@@ -1034,6 +1034,7 @@ export default function CreateDestinationPage() {
                     >
                       <option value="published">Published</option>
                       <option value="draft">Draft</option>
+                      <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>

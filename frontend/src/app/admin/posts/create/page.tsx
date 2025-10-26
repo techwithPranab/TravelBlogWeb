@@ -203,7 +203,7 @@ export default function CreatePostPage() {
     toast.success('Image removed successfully')
   }
 
-  const handleSubmit = async (e: React.FormEvent, status: 'draft' | 'published') => {
+  const handleSubmit = async (e: React.FormEvent, status: 'draft' | 'published' | 'inactive') => {
     e.preventDefault()
     setLoading(true)
 
@@ -216,7 +216,8 @@ export default function CreatePostPage() {
       }
 
       await adminApi.createPost(postData)
-      toast.success(`Post ${status === 'published' ? 'published' : 'saved as draft'} successfully!`)
+      const statusMessage = status === 'published' ? 'published' : status === 'inactive' ? 'saved as inactive' : 'saved as draft'
+      toast.success(`Post ${statusMessage} successfully!`)
       router.push('/admin/posts')
     } catch (error) {
       toast.error('Failed to create post')
@@ -282,6 +283,14 @@ export default function CreatePostPage() {
               >
                 <Save className="h-4 w-4" />
                 Save Draft
+              </button>
+              <button
+                onClick={(e) => handleSubmit(e, 'inactive')}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 text-red-700 bg-red-100 rounded-lg hover:bg-red-200 transition-colors disabled:opacity-50"
+              >
+                <Save className="h-4 w-4" />
+                Save as Inactive
               </button>
               <button
                 onClick={(e) => handleSubmit(e, 'published')}

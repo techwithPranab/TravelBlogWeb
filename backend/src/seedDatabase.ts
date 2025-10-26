@@ -179,6 +179,35 @@ const sampleDestinations = [
         description: 'Discover vibrant coral reefs and marine life'
       }
     ],
+    accommodation: [
+      {
+        type: 'budget',
+        name: 'Bali Budget Hostels',
+        description: 'Clean hostels and guesthouses with basic amenities, perfect for backpackers',
+        priceRange: '$20-50 per night',
+        rating: 3.8,
+        amenities: ['Free WiFi', 'Air conditioning', 'Shared bathroom', 'Common area'],
+        bookingUrl: 'https://booking.com/budget-bali'
+      },
+      {
+        type: 'mid-range',
+        name: 'Boutique Hotels & Villas',
+        description: 'Charming boutique hotels and private villas with local character',
+        priceRange: '$50-150 per night',
+        rating: 4.3,
+        amenities: ['Pool', 'Private bathroom', 'Breakfast included', 'Garden view', 'Spa services'],
+        bookingUrl: 'https://booking.com/midrange-bali'
+      },
+      {
+        type: 'luxury',
+        name: 'Premium Resorts & Private Villas',
+        description: 'World-class resorts and exclusive private villas with premium amenities',
+        priceRange: '$150+ per night',
+        rating: 4.8,
+        amenities: ['Private pool', 'Butler service', 'Fine dining', 'Spa', 'Ocean view', 'Private beach access'],
+        bookingUrl: 'https://booking.com/luxury-bali'
+      }
+    ],
     transportation: ['Airport transfer', 'Scooter rental', 'Private driver', 'Local buses', 'Boat transfers'],
     localCuisine: ['Nasi Goreng', 'Babi Guling', 'Sate', 'Ayam Betutu', 'Pisang Goreng'],
     travelTips: [
@@ -187,14 +216,6 @@ const sampleDestinations = [
       'Stay hydrated and use sunscreen',
       'Learn basic Indonesian phrases',
       'Book popular activities in advance during peak season'
-    ],
-    relatedPosts: [
-      {
-        id: 'sample-post-1',
-        title: '10 Must-Visit Temples in Bali: A Spiritual Journey',
-        slug: '10-must-visit-temples-in-bali-spiritual-journey',
-        image: 'https://images.unsplash.com/photo-1555400113-28f3e0c56e1b?w=800&h=400&fit=crop'
-      }
     ],
     isPopular: true,
     isFeatured: true,
@@ -258,6 +279,35 @@ const sampleDestinations = [
         description: 'Learn about Kyoto\'s traditional crafts and artisans'
       }
     ],
+    accommodation: [
+      {
+        type: 'budget',
+        name: 'Kyoto Budget Hostels & Ryokan',
+        description: 'Traditional hostels and budget ryokan offering authentic Japanese experience',
+        priceRange: '$30-80 per night',
+        rating: 4.0,
+        amenities: ['Tatami rooms', 'Shared bathroom', 'Free WiFi', 'Traditional breakfast', 'Common area'],
+        bookingUrl: 'https://booking.com/budget-kyoto'
+      },
+      {
+        type: 'mid-range',
+        name: 'Business Hotels & Traditional Inns',
+        description: 'Comfortable business hotels and traditional Japanese inns with modern amenities',
+        priceRange: '$80-200 per night',
+        rating: 4.4,
+        amenities: ['Private bathroom', 'Free WiFi', 'Air conditioning', 'Traditional breakfast', 'Onsen access'],
+        bookingUrl: 'https://booking.com/midrange-kyoto'
+      },
+      {
+        type: 'luxury',
+        name: 'Luxury Ryokan & High-end Hotels',
+        description: 'Premium traditional ryokan and luxury hotels with exceptional service',
+        priceRange: '$200+ per night',
+        rating: 4.9,
+        amenities: ['Private onsen', 'Kaiseki dining', 'Garden view', 'Butler service', 'Traditional tea ceremony', 'Premium location'],
+        bookingUrl: 'https://booking.com/luxury-kyoto'
+      }
+    ],
     transportation: ['JR Pass', 'Subway', 'Bus', 'Bicycle rental', 'Taxi'],
     localCuisine: ['Kaiseki', 'Yudofu', 'Obanzai', 'Matcha desserts', 'Street food'],
     travelTips: [
@@ -267,7 +317,6 @@ const sampleDestinations = [
       'Learn basic bowing etiquette',
       'Book accommodation well in advance during peak seasons'
     ],
-    relatedPosts: [],
     isPopular: true,
     isFeatured: true,
     isActive: true,
@@ -330,6 +379,35 @@ const sampleDestinations = [
         description: 'Capture stunning landscapes and wildlife'
       }
     ],
+    accommodation: [
+      {
+        type: 'budget',
+        name: 'Hostels & Camping',
+        description: 'Basic hostels and camping sites for adventurous travelers',
+        priceRange: '$25-60 per night',
+        rating: 3.5,
+        amenities: ['Shared facilities', 'Camping gear rental', 'Kitchen access', 'WiFi', 'Tour booking'],
+        bookingUrl: 'https://booking.com/budget-patagonia'
+      },
+      {
+        type: 'mid-range',
+        name: 'Mountain Lodges & Cabins',
+        description: 'Comfortable lodges and cabins with stunning mountain views',
+        priceRange: '$60-150 per night',
+        rating: 4.2,
+        amenities: ['Mountain views', 'Heating', 'Private bathroom', 'Restaurant', 'Hiking gear storage', 'Transfer service'],
+        bookingUrl: 'https://booking.com/midrange-patagonia'
+      },
+      {
+        type: 'luxury',
+        name: 'Luxury Eco-lodges & Resorts',
+        description: 'Premium eco-lodges and luxury resorts with exceptional wilderness access',
+        priceRange: '$150+ per night',
+        rating: 4.7,
+        amenities: ['All-inclusive', 'Private guides', 'Gourmet dining', 'Spa services', 'Helicopter transfers', 'Premium location'],
+        bookingUrl: 'https://booking.com/luxury-patagonia'
+      }
+    ],
     transportation: ['Internal flights', 'Bus tours', 'Private transfers', 'Rental cars', 'Ferries'],
     localCuisine: ['Lamb dishes', 'Seafood', 'Empanadas', 'Wine', 'Mate tea'],
     travelTips: [
@@ -339,22 +417,135 @@ const sampleDestinations = [
       'Respect wildlife and maintain distance',
       'Consider travel insurance for remote areas'
     ],
-    relatedPosts: [
-      {
-        id: 'sample-post-2',
-        title: 'Trekking Torres del Paine: Complete Guide to Patagonia\'s Crown Jewel',
-        slug: 'trekking-torres-del-paine-complete-guide-patagonia',
-        image: 'https://images.unsplash.com/photo-1544737151-6e4b9b1c1b68?w=800&h=400&fit=crop'
-      }
-    ],
     isPopular: true,
     isFeatured: true,
     isActive: true,
     seoTitle: 'Patagonia Travel Guide: Glaciers, Mountains & Adventure',
     seoDescription: 'Explore Patagonia\'s dramatic landscapes, glaciers, and mountains. Complete guide for Argentina and Chile\'s wilderness region.'
+  },
+  {
+    name: 'Varanasi, India',
+    description: 'One of the world\'s oldest continuously inhabited cities and the spiritual capital of India. Experience ancient traditions, sacred ghats along the Ganges, and profound spiritual awakening in this timeless holy city.',
+    country: 'India',
+    continent: 'Asia',
+    featuredImage: {
+      url: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800&h=600&fit=crop',
+      alt: 'Varanasi ghats at sunrise'
+    },
+    gallery: [
+      {
+        url: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800&h=600&fit=crop',
+        alt: 'Varanasi ghats at sunrise'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&h=400&fit=crop',
+        alt: 'Ganga Aarti ceremony at Dashashwamedh Ghat'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop',
+        alt: 'Kashi Vishwanath Temple'
+      }
+    ],
+    coordinates: {
+      lat: 25.3176,
+      lng: 82.9739
+    },
+    bestTimeToVisit: 'October to March (winter season)',
+    averageTemperature: {
+      summer: '32-45°C (90-113°F)',
+      winter: '5-20°C (41-68°F)'
+    },
+    currency: 'INR (Indian Rupee)',
+    language: 'Hindi, Bhojpuri, English',
+    timezone: 'UTC+5:30 (India Standard Time)',
+    rating: 4.6,
+    totalReviews: 2847,
+    highlights: [
+      'Dashashwamedh Ghat Aarti',
+      'Kashi Vishwanath Temple',
+      'Sarnath Buddhist Site',
+      'Sunrise Boat Ride on Ganges',
+      'Ramnagar Fort'
+    ],
+    activities: [
+      {
+        name: 'Ganga Aarti',
+        icon: '🕯️',
+        description: 'Witness the mesmerizing evening prayer ceremony at the ghats'
+      },
+      {
+        name: 'Boat Rides',
+        icon: '⛵',
+        description: 'Explore the ghats from the sacred Ganges River at sunrise'
+      },
+      {
+        name: 'Temple Visits',
+        icon: '🛕',
+        description: 'Visit ancient temples including the famous Kashi Vishwanath'
+      },
+      {
+        name: 'Meditation',
+        icon: '🧘‍♂️',
+        description: 'Find inner peace through meditation and yoga practices'
+      },
+      {
+        name: 'Heritage Walks',
+        icon: '🚶‍♂️',
+        description: 'Explore narrow ancient lanes and traditional architecture'
+      },
+      {
+        name: 'Silk Shopping',
+        icon: '🧵',
+        description: 'Shop for world-famous Banarasi silk sarees and textiles'
+      }
+    ],
+    transportation: [
+      'Airport transfer',
+      'Auto-rickshaw',
+      'Cycle-rickshaw',
+      'Local buses',
+      'Walking',
+      'Boat transport'
+    ],
+    localCuisine: [
+      'Banarasi Paan',
+      'Kachori Sabzi',
+      'Lassi',
+      'Malaiyo',
+      'Tamatar Chaat',
+      'Aloo Tikki',
+      'Rabri'
+    ],
+    travelTips: [
+      'Dress modestly and remove shoes before entering temples',
+      'Respect local customs and photography restrictions at ghats',
+      'Stay hydrated and carry water bottles',
+      'Be prepared for crowds, especially during festivals',
+      'Book accommodation near ghats for easy access',
+      'Learn basic Hindi phrases for better interaction',
+      'Carry cash as many places don\'t accept cards'
+    ],
+    relatedPosts: [
+      {
+        id: 'varanasi-spiritual-guide',
+        title: 'Spiritual Journey Through Varanasi: A Complete Guide',
+        slug: 'spiritual-journey-through-varanasi-complete-guide',
+        image: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&h=400&fit=crop'
+      },
+      {
+        id: 'varanasi-food-culture',
+        title: 'Street Food Culture of Varanasi: A Culinary Adventure',
+        slug: 'street-food-culture-varanasi-culinary-adventure',
+        image: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=800&h=400&fit=crop'
+      }
+    ],
+    isPopular: true,
+    isFeatured: true,
+    isActive: true,
+    seoTitle: 'Varanasi Travel Guide: Sacred Ghats & Ancient Temples',
+    seoDescription: 'Discover Varanasi\'s sacred ghats, ancient temples, and spiritual heritage. Complete guide to India\'s holiest city on the Ganges.'
   }
 ]
-
 const seedDatabase = async () => {
   try {
     // Clear existing data

@@ -33,6 +33,7 @@ interface PostsResponse {
     published: number
     rejected: number
     archived: number
+    inactive: number
   }
 }
 
@@ -51,7 +52,8 @@ export default function ContributorPostsPage() {
     pending: 0,
     published: 0,
     rejected: 0,
-    archived: 0
+    archived: 0,
+    inactive: 0
   })
 
   useEffect(() => {
@@ -267,6 +269,7 @@ export default function ContributorPostsPage() {
                 <option value="published">Published</option>
                 <option value="rejected">Rejected</option>
                 <option value="archived">Archived</option>
+                <option value="inactive">Inactive</option>
               </select>
             </div>
           </div>

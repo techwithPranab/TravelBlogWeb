@@ -49,7 +49,7 @@ export interface ContributorPost {
     slug: string
   }[]
   tags: string[]
-  status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived'
+  status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived' | 'inactive'
   isPremium: boolean
   readTime: number
   viewCount: number
@@ -82,6 +82,7 @@ export interface ContributorPostsResponse {
     published: number
     rejected: number
     archived: number
+    inactive: number
   }
 }
 

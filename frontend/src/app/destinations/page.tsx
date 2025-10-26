@@ -79,7 +79,7 @@ export default function DestinationsPage() {
       try {
         setLoading(true)
         const response = await destinationsApi.getAll({ limit: 50, sort: '-rating' })
-        
+        console.log('Fetched destinations:', response);
         if (response.success) {
           setDestinations(response.data)
         }

@@ -66,7 +66,7 @@ export interface Post {
     focusKeyword?: string
     ogImage?: string
   }
-  status: 'draft' | 'published' | 'archived'
+  status: 'draft' | 'published' | 'archived' | 'inactive'
   isPremium: boolean
   readTime: number
   views: number
@@ -327,7 +327,7 @@ export interface PostForm {
     metaDescription?: string
     focusKeyword?: string
   }
-  status: 'draft' | 'published'
+  status: 'draft' | 'published' | 'inactive'
   isPremium: boolean
   destination?: {
     country: string

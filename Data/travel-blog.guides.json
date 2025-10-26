@@ -1,0 +1,253 @@
+[{
+  "_id": {
+    "$oid": "68c273819861ff85f061adf0"
+  },
+  "id": "varanasi-5-day-spiritual-journey",
+  "title": "5-Day Varanasi Spiritual Journey: Ghats, Temples, and Ancient Culture",
+  "description": "Explore the spiritual heart of India with this comprehensive 5-day itinerary covering Varanasi's sacred ghats, ancient temples, and nearby historical sites.",
+  "type": "itinerary",
+  "destination": {
+    "name": "Varanasi, India",
+    "country": "India",
+    "slug": "varanasi-india"
+  },
+  "author": {
+    "name": "Pranab Paul",
+    "avatar": "https://res.cloudinary.com/due8vcyim/image/upload/v1761492968/IMG-20241012-WA0023_2_zkgdmo.jpg",
+    "bio": "Travel enthusiast and cultural explorer with deep knowledge of Indian heritage and spirituality."
+  },
+  "featuredImage": {
+    "url": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800&h=600&fit=crop",
+    "alt": "Varanasi ghats at sunrise"
+  },
+  "duration": "5 days",
+  "difficulty": "Easy",
+  "budget": {
+    "range": "₹16,000-28,000",
+    "details": "Total budget for 5 days including budget accommodation, local transport, and activities"
+  },
+  "bestTime": "October to March",
+  "rating": 4.7,
+  "totalReviews": 42,
+  "publishedAt": "2025-10-25T07:00:17.181Z",
+  "lastUpdated": "2025-10-25T07:00:17.183Z",
+  "isPremium": false,
+  "downloadCount": 89,
+  "sections": [
+    {
+      "title": "Getting to Varanasi",
+      "content": "Fly into Lal Bahadur Shastri International Airport (VNS) or take a train to Varanasi Junction. The city is well-connected by rail and road.",
+      "tips": [
+        "Book train tickets in advance for better berths",
+        "Airport is 25km from city center - use prepaid taxis",
+        "Consider arriving by train for a more authentic experience",
+        "Auto-rickshaws and cycle-rickshaws are common for local transport"
+      ],
+      "_id": {
+        "$oid": "68c273819861ff85f061adf1"
+      },
+      "images": []
+    },
+    {
+      "title": "Transportation in Varanasi",
+      "content": "Varanasi's narrow lanes are best explored on foot or by cycle-rickshaw. Boats are essential for ghat hopping.",
+      "tips": [
+        "Walk or use cycle-rickshaws in old city areas",
+        "Book boat rides for sunrise/sunset ghat tours",
+        "Use app-based cabs for longer distances",
+        "Negotiate prices beforehand for rickshaws"
+      ],
+      "_id": {
+        "$oid": "68c273819861ff85f061adf2"
+      },
+      "images": []
+    }
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Arrival and Ganga Aarti",
+      "activities": [
+        "Check-in to hotel",
+        "Walk through old city lanes",
+        "Visit Kashi Vishwanath Temple",
+        "Evening Ganga Aarti at Dashashwamedh Ghat"
+      ],
+      "meals": [
+        "Local street food dinner",
+        "Lassi at famous Blue Lassi shop"
+      ],
+      "accommodation": "Hotel Ganges Grand (Budget) - Near Dashashwamedh Ghat",
+      "budget": "$45 (₹3,500)",
+      "_id": {
+        "$oid": "68c273819861ff85f061adf3"
+      }
+    },
+    {
+      "day": 2,
+      "title": "Sunrise Boat Ride and Temple Hopping",
+      "activities": [
+        "Early morning boat ride at sunrise",
+        "Visit Sankat Mochan Hanuman Temple",
+        "Explore Tulsi Manas Temple",
+        "Walk along Assi Ghat",
+        "Visit BHU Campus and New Vishwanath Temple"
+      ],
+      "meals": [
+        "Breakfast at hotel",
+        "Traditional thali lunch",
+        "Evening snacks at ghat"
+      ],
+      "accommodation": "Hotel Ganges Grand",
+      "budget": "$35 (₹2,800)",
+      "_id": {
+        "$oid": "68c273819861ff85f061adf4"
+      }
+    },
+    {
+      "day": 3,
+      "title": "Day Trip to Sarnath",
+      "activities": [
+        "Visit Sarnath Deer Park",
+        "Explore Dhamek Stupa",
+        "Sarnath Archaeological Museum",
+        "Mulagandha Kuti Vihar Temple",
+        "Return to Varanasi for evening at Manikarnika Ghat"
+      ],
+      "meals": [
+        "Hotel breakfast",
+        "Lunch at Sarnath local restaurant",
+        "Dinner at hotel restaurant"
+      ],
+      "accommodation": "Hotel Ganges Grand",
+      "budget": "$50 (₹4,000)",
+      "_id": {
+        "$oid": "68c273819861ff85f061adf5"
+      }
+    },
+    {
+      "day": 4,
+      "title": "Cultural Immersion and Nearby Sites",
+      "activities": [
+        "Visit Ramnagar Fort",
+        "Explore Chunar Fort (day trip)",
+        "Traditional silk weaving workshop",
+        "Evening classical music performance",
+        "Night walk through illuminated ghats"
+      ],
+      "meals": [
+        "Hotel breakfast",
+        "Lunch at Chunar",
+        "Traditional Banarasi dinner"
+      ],
+      "accommodation": "Hotel Ganges Grand",
+      "budget": "$55 (₹4,400)",
+      "_id": {
+        "$oid": "68c273819861ff85f061adf6"
+      }
+    },
+    {
+      "day": 5,
+      "title": "Final Blessings and Departure",
+      "activities": [
+        "Early morning meditation at Assi Ghat",
+        "Visit Durga Temple (Monkey Temple)",
+        "Shopping at Vishwanath Lane",
+        "Final boat ride",
+        "Departure preparations"
+      ],
+      "meals": [
+        "Hotel breakfast",
+        "Farewell lunch at Banarasi restaurant"
+      ],
+      "accommodation": "Hotel Ganges Grand (until checkout)",
+      "budget": "$40 (₹3,200)",
+      "_id": {
+        "$oid": "68c273819861ff85f061adf7"
+      }
+    }
+  ],
+  "packingList": [
+    {
+      "category": "Clothing",
+      "items": [
+        "Modest clothing (long pants, covered shoulders)",
+        "Comfortable walking shoes",
+        "Light cotton clothes",
+        "Warm layer for early mornings",
+        "Scarf or shawl for temple visits"
+      ],
+      "_id": {
+        "$oid": "68c273819861ff85f061adf8"
+      }
+    },
+    {
+      "category": "Documents",
+      "items": [
+        "Valid ID/Passport",
+        "Travel insurance",
+        "Hotel booking confirmations",
+        "Emergency contact numbers",
+        "Cash (Indian Rupees)"
+      ],
+      "_id": {
+        "$oid": "68c273819861ff85f061adf9"
+      }
+    },
+    {
+      "category": "Essentials",
+      "items": [
+        "Hand sanitizer",
+        "First aid kit",
+        "Reusable water bottle",
+        "Power bank",
+        "Camera with extra battery",
+        "Wet wipes"
+      ],
+      "_id": {
+        "$oid": "68c273819861ff85f061adfa"
+      }
+    }
+  ],
+  "resources": [
+    {
+      "title": "Varanasi Travel Guide",
+      "type": "link",
+      "url": "https://example.com/varanasi-guide",
+      "_id": {
+        "$oid": "68c273819861ff85f061adfb"
+      }
+    },
+    {
+      "title": "Indian Railway Booking",
+      "type": "app",
+      "url": "https://www.irctc.co.in",
+      "_id": {
+        "$oid": "68c273819861ff85f061adfc"
+      }
+    }
+  ],
+  "relatedGuides": [
+    {
+      "id": "rajasthan-golden-triangle",
+      "title": "Rajasthan Golden Triangle: 7-Day Cultural Journey",
+      "slug": "rajasthan-golden-triangle-cultural-journey",
+      "image": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=400&h=200&fit=crop",
+      "type": "itinerary",
+      "_id": {
+        "$oid": "68c273819861ff85f061adfd"
+      }
+    }
+  ],
+  "slug": "5day-varanasi-spiritual-journey-ghats-temples-culture",
+  "isPublished": true,
+  "views": 456,
+  "additionalImages": [],
+  "createdAt": {
+    "$date": "2025-10-25T07:00:17.199Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-25T07:00:17.298Z"
+  },
+  "__v": 0
+}]

@@ -20,7 +20,7 @@ export interface IPost extends Document {
     focusKeyword?: string
     ogImage?: string
   }
-  status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived'
+  status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived' | 'inactive'
   isPremium: boolean
   readTime: number
   viewCount: number
@@ -109,7 +109,7 @@ const postSchema = new Schema<IPost>({
   },
   status: {
     type: String,
-    enum: ['draft', 'pending', 'published', 'rejected', 'archived'],
+    enum: ['draft', 'pending', 'published', 'rejected', 'archived', 'inactive'],
     default: 'draft'
   },
   isPremium: {

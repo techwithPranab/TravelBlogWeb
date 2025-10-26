@@ -76,7 +76,7 @@ export default function EditDestinationPage() {
     averageCost: '',
     difficulty: '',
     duration: '',
-    status: 'active',
+    status: 'published',
     slug: ''
   })
 
@@ -138,7 +138,7 @@ export default function EditDestinationPage() {
         averageCost: destination.averageCost || '',
         difficulty: destination.difficulty || '',
         duration: destination.duration || '',
-        status: destination.status || 'active',
+        status: destination.status || 'published',
         coordinates: {
           lat: destination.coordinates?.lat?.toString() || '',
           lng: destination.coordinates?.lng?.toString() || ''
@@ -1079,6 +1079,7 @@ export default function EditDestinationPage() {
                     >
                       <option value="published">Published</option>
                       <option value="draft">Draft</option>
+                      <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>

@@ -1,0 +1,684 @@
+[{
+  "_id": {
+    "$oid": "68fdbbb21cc5835ae389b97a"
+  },
+  "name": "Varanasi, India",
+  "slug": "varanasi-india",
+  "description": "Varanasi, also known as Kashi or Banaras, is one of the oldest continuously inhabited cities in the world, located on the banks of the River Ganges in Uttar Pradesh, India. It is considered the spiritual capital of India, attracting millions of pilgrims who come to bathe in the sacred river and perform rituals on its famous ghats. The city is renowned for its temples, especially the Kashi Vishwanath Temple, vibrant culture, classical music, silk weaving, and evening Ganga Aarti. Varanasi offers a deep spiritual experience, blending ancient traditions with the lively rhythm of everyday Indian life.",
+  "country": "India",
+  "continent": "Asia",
+  "featuredImage": {
+    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459558/TravelBlog/destinations/TravelBlog/destinations/1761459558469-srivatsan-balaji-T5s48osIQTU-unsplash.jpg",
+    "alt": "srivatsan-balaji-T5s48osIQTU-unsplash.jpeg"
+  },
+  "gallery": [
+    {
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459569/TravelBlog/destinations/TravelBlog/destinations/1761459568867-jannes-jacobs-NfsB3jPVlcM-unsplash.jpg",
+      "alt": "jannes-jacobs-NfsB3jPVlcM-unsplash.jpeg",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235176"
+      }
+    }
+  ],
+  "coordinates": {
+    "lat": 25.3176,
+    "lng": 82.9739
+  },
+  "bestTimeToVisit": "October to March (winter season)",
+  "averageTemperature": {
+    "summer": "32-45°C (90-113°F)",
+    "winter": "5-20°C (41-68°F)"
+  },
+  "currency": "INR (Indian Rupee)",
+  "language": "Hindi, Bhojpuri, English",
+  "timezone": "UTC+5:30 (India Standard Time)",
+  "rating": 4.6,
+  "totalReviews": 2847,
+  "highlights": [
+    "Dashashwamedh Ghat Aarti",
+    "Kashi Vishwanath Temple",
+    "Sarnath Buddhist Site",
+    "Sunrise Boat Ride on Ganges",
+    "Ramnagar Fort"
+  ],
+  "activities": [
+    {
+      "name": "Ganga Aarti",
+      "icon": "🕯️",
+      "description": "Witness the mesmerizing evening prayer ceremony at the ghats",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b97e"
+      }
+    },
+    {
+      "name": "Boat Rides",
+      "icon": "⛵",
+      "description": "Explore the ghats from the sacred Ganges River at sunrise",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b97f"
+      }
+    },
+    {
+      "name": "Temple Visits",
+      "icon": "🛕",
+      "description": "Visit ancient temples including the famous Kashi Vishwanath",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b980"
+      }
+    },
+    {
+      "name": "Meditation",
+      "icon": "🧘‍♂️",
+      "description": "Find inner peace through meditation and yoga practices",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b981"
+      }
+    },
+    {
+      "name": "Heritage Walks",
+      "icon": "🚶‍♂️",
+      "description": "Explore narrow ancient lanes and traditional architecture",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b982"
+      }
+    },
+    {
+      "name": "Silk Shopping",
+      "icon": "🧵",
+      "description": "Shop for world-famous Banarasi silk sarees and textiles",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b983"
+      }
+    }
+  ],
+  "accommodation": [
+    {
+      "type": "budget",
+      "name": "Ganges View Guest House",
+      "description": "Clean and simple guesthouse with river views, perfect for budget travelers",
+      "priceRange": "₹800-1,200",
+      "rating": 4.1,
+      "amenities": ["WiFi", "Hot Water", "Breakfast", "Laundry"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "budget",
+      "name": "Ramana's Homestay",
+      "description": "Traditional home with local family, authentic experience on a budget",
+      "priceRange": "₹600-900",
+      "rating": 4.3,
+      "amenities": ["Home-cooked Meals", "Cultural Experience", "Local Guide"],
+      "bookingUrl": "https://airbnb.com"
+    },
+    {
+      "type": "mid-range",
+      "name": "Hotel Buddha International",
+      "description": "Comfortable hotel with modern amenities and great location near ghats",
+      "priceRange": "₹2,500-4,000",
+      "rating": 4.5,
+      "amenities": ["AC", "WiFi", "Restaurant", "Room Service", "Parking"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "luxury",
+      "name": "Taj Ganges Varanasi",
+      "description": "Luxury riverside resort with spa, fine dining, and impeccable service",
+      "priceRange": "₹15,000-25,000",
+      "rating": 4.8,
+      "amenities": ["Spa", "Fine Dining", "Pool", "Concierge", "Airport Transfer"],
+      "bookingUrl": "https://tajhotels.com"
+    }
+  ],
+  "transportation": [
+    "Airport transfer",
+    "Auto-rickshaw",
+    "Cycle-rickshaw",
+    "Local buses",
+    "Walking",
+    "Boat transport"
+  ],
+  "howToReach": {
+    "byAir": {
+      "nearestAirport": "Lal Bahadur Shastri International Airport (VNS)",
+      "distanceFromCity": "25 km",
+      "travelTime": "45-60 minutes",
+      "domesticFlights": "Delhi, Mumbai, Kolkata, Lucknow",
+      "internationalFlights": "Limited international connections",
+      "transportToCity": "Prepaid taxis, airport buses, app-based cabs",
+      "estimatedCost": "₹500-800"
+    },
+    "byRail": {
+      "nearestStation": "Varanasi Junction (BSB)",
+      "majorTrains": "Shatabdi Express, Garib Rath, numerous daily trains",
+      "connections": "Delhi, Mumbai, Kolkata, Lucknow, Chennai, Ahmedabad",
+      "travelTime": "Delhi: 8-10 hours, Mumbai: 18-20 hours",
+      "transportToCity": "Auto-rickshaws, cycle-rickshaws, taxis",
+      "estimatedCost": "₹200-500 (depending on class)",
+      "booking": "IRCTC website/app or railway station"
+    },
+    "byRoad": {
+      "majorHighways": "NH-19 (Delhi-Kolkata), NH-31 (Patna-Guwahati)",
+      "distanceFromDelhi": "780 km",
+      "distanceFromLucknow": "280 km",
+      "distanceFromPatna": "240 km",
+      "travelTime": "Delhi: 12-14 hours, Lucknow: 4-5 hours",
+      "busServices": "AC/Non-AC buses from major cities",
+      "privateCar": "Well-maintained highways, toll plazas",
+      "estimatedCost": "Bus: ₹800-1500, Private car: ₹15,000-20,000 (fuel + tolls)"
+    }
+  },
+  "localCuisine": [
+    "Banarasi Paan",
+    "Kachori Sabzi",
+    "Lassi",
+    "Malaiyo",
+    "Tamatar Chaat",
+    "Aloo Tikki",
+    "Rabri"
+  ],
+  "travelTips": [
+    "Dress modestly and remove shoes before entering temples",
+    "Respect local customs and photography restrictions at ghats",
+    "Stay hydrated and carry water bottles",
+    "Be prepared for crowds, especially during festivals",
+    "Book accommodation near ghats for easy access",
+    "Learn basic Hindi phrases for better interaction",
+    "Carry cash as many places don't accept cards"
+  ],
+  "relatedPosts": [
+    {
+      "id": "varanasi-spiritual-guide",
+      "title": "Spiritual Journey Through Varanasi: A Complete Guide",
+      "slug": "spiritual-journey-through-varanasi-complete-guide",
+      "image": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&h=400&fit=crop",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b984"
+      }
+    },
+    {
+      "id": "varanasi-food-culture",
+      "title": "Street Food Culture of Varanasi: A Culinary Adventure",
+      "slug": "street-food-culture-varanasi-culinary-adventure",
+      "image": "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=800&h=400&fit=crop",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b985"
+      }
+    }
+  ],
+  "isPopular": true,
+  "isFeatured": true,
+  "isActive": true,
+  "status": "published",
+  "seoTitle": "Varanasi Travel Guide: Sacred Ghats & Ancient Temples",
+  "seoDescription": "Discover Varanasi's sacred ghats, ancient temples, and spiritual heritage. Complete guide to India's holiest city on the Ganges.",
+  "createdAt": {
+    "$date": "2025-10-26T06:12:02.525Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-26T06:19:31.567Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68fdbbb21cc5835ae389b98a"
+  },
+  "name": "Ayodhya, India",
+  "slug": "ayodhya-india",
+  "description": "Ayodhya, the birthplace of Lord Rama, is one of the seven sacred cities (Sapta Puri) in Hinduism and holds immense religious significance for millions of devotees worldwide. Located on the banks of the Sarayu River in Uttar Pradesh, this ancient city is mentioned in the Ramayana and other Hindu scriptures. With the grand Ram Mandir recently constructed, Ayodhya has become a major pilgrimage destination, offering visitors a deep spiritual experience through its numerous temples, ghats, and rich cultural heritage that spans thousands of years.",
+  "country": "India",
+  "continent": "Asia",
+  "featuredImage": {
+    "url": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+    "alt": "Ram Mandir Ayodhya"
+  },
+  "gallery": [
+    {
+      "url": "https://images.unsplash.com/photo-1580500550469-16b5ab4f10b0?w=800&h=600&fit=crop",
+      "alt": "Sarayu River Ghat Ayodhya",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235177"
+      }
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1574169208507-84376144848b?w=800&h=600&fit=crop",
+      "alt": "Ancient Temple Architecture Ayodhya",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235178"
+      }
+    }
+  ],
+  "coordinates": {
+    "lat": 26.7922,
+    "lng": 82.1998
+  },
+  "bestTimeToVisit": "October to March (winter season)",
+  "averageTemperature": {
+    "summer": "30-42°C (86-108°F)",
+    "winter": "8-22°C (46-72°F)"
+  },
+  "currency": "INR (Indian Rupee)",
+  "language": "Hindi, Awadhi, English",
+  "timezone": "UTC+5:30 (India Standard Time)",
+  "rating": 4.7,
+  "totalReviews": 3241,
+  "highlights": [
+    "Ram Mandir (Ram Temple)",
+    "Hanuman Garhi Temple",
+    "Kanak Bhawan",
+    "Sarayu River Aarti",
+    "Ram Ki Paidi Ghats"
+  ],
+  "activities": [
+    {
+      "name": "Temple Darshan",
+      "icon": "🛕",
+      "description": "Visit the magnificent Ram Mandir and other ancient temples",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b98b"
+      }
+    },
+    {
+      "name": "Sarayu Aarti",
+      "icon": "🕯️",
+      "description": "Attend the evening aarti ceremony at Sarayu River ghats",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b98c"
+      }
+    },
+    {
+      "name": "Heritage Walk",
+      "icon": "🚶‍♂️",
+      "description": "Explore ancient lanes and historical sites of Ayodhya",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b98d"
+      }
+    },
+    {
+      "name": "River Boat Ride",
+      "icon": "⛵",
+      "description": "Peaceful boat rides on the sacred Sarayu River",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b98e"
+      }
+    },
+    {
+      "name": "Spiritual Meditation",
+      "icon": "🧘‍♂️",
+      "description": "Find inner peace in the birthplace of Lord Rama",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b98f"
+      }
+    },
+    {
+      "name": "Cultural Tours",
+      "icon": "🎭",
+      "description": "Experience Ram Leela performances and cultural programs",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b990"
+      }
+    }
+  ],
+  "accommodation": [
+    {
+      "type": "budget",
+      "name": "Ram Darbar Guest House",
+      "description": "Simple and clean accommodation near Ram Mandir with basic amenities",
+      "priceRange": "₹700-1,100",
+      "rating": 4.0,
+      "amenities": ["WiFi", "Hot Water", "Breakfast", "Temple View"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "budget",
+      "name": "Saryu River Homestay",
+      "description": "Traditional home stay with local family, authentic cultural experience",
+      "priceRange": "₹500-800",
+      "rating": 4.2,
+      "amenities": ["Home-cooked Meals", "Cultural Immersion", "Local Guide"],
+      "bookingUrl": "https://airbnb.com"
+    },
+    {
+      "type": "mid-range",
+      "name": "Hotel Ramakrishna International",
+      "description": "Comfortable hotel with modern facilities and proximity to temples",
+      "priceRange": "₹2,200-3,500",
+      "rating": 4.4,
+      "amenities": ["AC", "WiFi", "Restaurant", "Parking", "Room Service"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "luxury",
+      "name": "The Amaya Ayodhya",
+      "description": "Luxury resort with spa, fine dining, and traditional architecture",
+      "priceRange": "₹12,000-20,000",
+      "rating": 4.7,
+      "amenities": ["Spa", "Fine Dining", "Pool", "Cultural Shows", "Airport Transfer"],
+      "bookingUrl": "https://hotels.com"
+    }
+  ],
+  "transportation": [
+    "Airport transfer (Faizabad Airport)",
+    "Railway station connectivity",
+    "Auto-rickshaw",
+    "Cycle-rickshaw",
+    "Local buses",
+    "Walking",
+    "Private taxis"
+  ],
+  "howToReach": {
+    "byAir": {
+      "nearestAirport": "Ayodhya Airport (under development), Lucknow Airport (LKO)",
+      "distanceFromCity": "Lucknow: 140 km",
+      "travelTime": "Lucknow: 2.5-3 hours",
+      "domesticFlights": "Delhi, Mumbai, Kolkata, Bangalore",
+      "internationalFlights": "Limited international connections via Lucknow",
+      "transportToCity": "Buses, taxis, private cars from Lucknow",
+      "estimatedCost": "₹1,000-1,500"
+    },
+    "byRail": {
+      "nearestStation": "Ayodhya Junction (AY)",
+      "majorTrains": "Nauchandi Express, Rapti Sagar Express, Ganga Kaveri Express",
+      "connections": "Delhi, Lucknow, Kanpur, Patna, Kolkata",
+      "travelTime": "Lucknow: 2-3 hours, Delhi: 6-8 hours",
+      "transportToCity": "Auto-rickshaws, local buses, taxis",
+      "estimatedCost": "₹100-300 (depending on class)",
+      "booking": "IRCTC website/app or railway station"
+    },
+    "byRoad": {
+      "majorHighways": "NH-27, NH-28",
+      "distanceFromDelhi": "650 km",
+      "distanceFromLucknow": "140 km",
+      "distanceFromKanpur": "200 km",
+      "travelTime": "Delhi: 10-12 hours, Lucknow: 2.5-3 hours",
+      "busServices": "Regular AC/Non-AC buses from major cities",
+      "privateCar": "Well-maintained highways with toll plazas",
+      "estimatedCost": "Bus: ₹500-1,000, Private car: ₹12,000-15,000 (fuel + tolls)"
+    }
+  },
+  "localCuisine": [
+    "Awadhi Biryani",
+    "Peda (Sweet)",
+    "Samosa",
+    "Jalebi",
+    "Kulfi",
+    "Chaat",
+    "Lassi",
+    "Malai Makkhan"
+  ],
+  "travelTips": [
+    "Book accommodation well in advance during festivals",
+    "Dress modestly and follow temple etiquette",
+    "Carry water bottles and stay hydrated",
+    "Respect photography restrictions in temples",
+    "Learn about Ram Mandir visiting hours and guidelines",
+    "Be prepared for large crowds during religious occasions",
+    "Carry sufficient cash for offerings and local purchases"
+  ],
+  "relatedPosts": [
+    {
+      "id": "ayodhya-ram-mandir-guide",
+      "title": "Ram Mandir Ayodhya: Complete Visitor's Guide",
+      "slug": "ram-mandir-ayodhya-complete-visitors-guide",
+      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=400&fit=crop",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b991"
+      }
+    },
+    {
+      "id": "ayodhya-spiritual-journey",
+      "title": "Spiritual Journey to Ayodhya: Following Rama's Footsteps",
+      "slug": "spiritual-journey-ayodhya-rama-footsteps",
+      "image": "https://images.unsplash.com/photo-1574169208507-84376144848b?w=800&h=400&fit=crop",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b992"
+      }
+    }
+  ],
+  "isPopular": true,
+  "isFeatured": true,
+  "isActive": true,
+  "status": "published",
+  "seoTitle": "Ayodhya Travel Guide: Ram Mandir & Sacred Temples",
+  "seoDescription": "Explore Ayodhya, birthplace of Lord Rama. Complete guide to Ram Mandir, sacred temples, and spiritual heritage of this holy city.",
+  "createdAt": {
+    "$date": "2025-10-26T06:25:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-26T06:25:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68fdbbb21cc5835ae389b99a"
+  },
+  "name": "Prayagraj, India",
+  "slug": "prayagraj-india",
+  "description": "Prayagraj, formerly known as Allahabad, is one of the holiest cities in Hinduism and home to the sacred Triveni Sangam - the confluence of three rivers: Ganga, Yamuna, and the mythical Saraswati. This ancient city hosts the world's largest religious gathering, the Kumbh Mela, every 12 years. Rich in history and spirituality, Prayagraj is adorned with magnificent forts, temples, and educational institutions. The city offers pilgrims and travelers a unique blend of religious significance, colonial architecture, and cultural heritage that reflects India's diverse historical tapestry.",
+  "country": "India",
+  "continent": "Asia",
+  "featuredImage": {
+    "url": "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&h=600&fit=crop",
+    "alt": "Triveni Sangam Prayagraj"
+  },
+  "gallery": [
+    {
+      "url": "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&h=600&fit=crop",
+      "alt": "Allahabad Fort",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235179"
+      }
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1578307985320-9d4d87c2bb91?w=800&h=600&fit=crop",
+      "alt": "Kumbh Mela Gathering",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235180"
+      }
+    }
+  ],
+  "coordinates": {
+    "lat": 25.4358,
+    "lng": 81.8463
+  },
+  "bestTimeToVisit": "October to March (winter season)",
+  "averageTemperature": {
+    "summer": "32-46°C (90-115°F)",
+    "winter": "6-22°C (43-72°F)"
+  },
+  "currency": "INR (Indian Rupee)",
+  "language": "Hindi, Urdu, English",
+  "timezone": "UTC+5:30 (India Standard Time)",
+  "rating": 4.5,
+  "totalReviews": 4156,
+  "highlights": [
+    "Triveni Sangam",
+    "Allahabad Fort",
+    "Anand Bhawan",
+    "Kumbh Mela (every 12 years)",
+    "Patalpuri Temple",
+    "All Saints Cathedral"
+  ],
+  "activities": [
+    {
+      "name": "Holy Bath at Sangam",
+      "icon": "🌊",
+      "description": "Take a sacred dip at the confluence of three holy rivers",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b99b"
+      }
+    },
+    {
+      "name": "Boat Rides",
+      "icon": "⛵",
+      "description": "Explore the sacred confluence by boat with local boatmen",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b99c"
+      }
+    },
+    {
+      "name": "Fort Exploration",
+      "icon": "🏰",
+      "description": "Visit the magnificent Allahabad Fort built by Emperor Akbar",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b99d"
+      }
+    },
+    {
+      "name": "Heritage Tours",
+      "icon": "🏛️",
+      "description": "Explore Anand Bhawan and other historical monuments",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b99e"
+      }
+    },
+    {
+      "name": "Temple Visits",
+      "icon": "🛕",
+      "description": "Visit ancient temples including Patalpuri and Hanuman Mandir",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b99f"
+      }
+    },
+    {
+      "name": "Kumbh Mela Experience",
+      "icon": "🎪",
+      "description": "Witness the world's largest religious gathering (during Kumbh)",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9a0"
+      }
+    }
+  ],
+  "accommodation": [
+    {
+      "type": "budget",
+      "name": "Sangam View Lodge",
+      "description": "Budget lodge with views of the Triveni Sangam, clean and basic facilities",
+      "priceRange": "₹600-1,000",
+      "rating": 3.9,
+      "amenities": ["WiFi", "Hot Water", "Breakfast", "Sangam View"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "budget",
+      "name": "Ganges Guesthouse",
+      "description": "Simple guesthouse near the ghats, perfect for pilgrims on a budget",
+      "priceRange": "₹500-800",
+      "rating": 4.1,
+      "amenities": ["Shared Bathroom", "Basic Amenities", "Local Food"],
+      "bookingUrl": "https://airbnb.com"
+    },
+    {
+      "type": "mid-range",
+      "name": "Hotel Allahabad Regency",
+      "description": "Comfortable hotel with modern amenities and convenient location",
+      "priceRange": "₹2,000-3,200",
+      "rating": 4.3,
+      "amenities": ["AC", "WiFi", "Restaurant", "Parking", "Room Service"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "luxury",
+      "name": "The Gateway Hotel Ganges",
+      "description": "Luxury hotel with river views, spa, and premium dining experience",
+      "priceRange": "₹10,000-18,000",
+      "rating": 4.6,
+      "amenities": ["Spa", "Fine Dining", "Pool", "River View", "Concierge"],
+      "bookingUrl": "https://tajhotels.com"
+    }
+  ],
+  "transportation": [
+    "Airport transfer (Prayagraj Airport)",
+    "Railway Junction (major hub)",
+    "Auto-rickshaw",
+    "Cycle-rickshaw",
+    "Local buses",
+    "Tempo travellers",
+    "Private cars",
+    "Boat transport at Sangam"
+  ],
+  "howToReach": {
+    "byAir": {
+      "nearestAirport": "Prayagraj Airport (IXD)",
+      "distanceFromCity": "12 km",
+      "travelTime": "20-30 minutes",
+      "domesticFlights": "Delhi, Mumbai, Kolkata, Bangalore, Hyderabad",
+      "internationalFlights": "Limited international connections",
+      "transportToCity": "Prepaid taxis, airport buses, app-based cabs",
+      "estimatedCost": "₹300-500"
+    },
+    "byRail": {
+      "nearestStation": "Prayagraj Junction (PRY)",
+      "majorTrains": "Nauchandi Express, Shatabdi Express, numerous daily trains",
+      "connections": "Delhi, Mumbai, Kolkata, Chennai, Bangalore, Lucknow",
+      "travelTime": "Delhi: 6-8 hours, Mumbai: 16-18 hours",
+      "transportToCity": "Auto-rickshaws, cycle-rickshaws, local buses",
+      "estimatedCost": "₹150-400 (depending on class)",
+      "booking": "IRCTC website/app or railway station"
+    },
+    "byRoad": {
+      "majorHighways": "NH-19, NH-27, NH-30",
+      "distanceFromDelhi": "650 km",
+      "distanceFromLucknow": "200 km",
+      "distanceFromKanpur": "80 km",
+      "travelTime": "Delhi: 10-12 hours, Lucknow: 3-4 hours",
+      "busServices": "AC/Non-AC buses from major cities",
+      "privateCar": "Well-maintained highways with toll plazas",
+      "estimatedCost": "Bus: ₹600-1,200, Private car: ₹13,000-16,000 (fuel + tolls)"
+    }
+  },
+  "localCuisine": [
+    "Allahabadi Paan",
+    "Muradabadi Biryani",
+    "Bedai and Jalebi",
+    "Nimish (winter delicacy)",
+    "Chaat varieties",
+    "Kulfi Faluda",
+    "Samosa Kachori",
+    "Kheer and Rabri"
+  ],
+  "travelTips": [
+    "Best visited during Kumbh Mela for the complete experience",
+    "Book boats early morning for Sangam visit to avoid crowds",
+    "Carry offerings like flowers and prasad for river worship",
+    "Dress modestly and respect local customs",
+    "Stay hydrated and carry water bottles",
+    "Learn about Kumbh Mela dates if planning a special visit",
+    "Negotiate boat fares in advance",
+    "Respect photography restrictions at religious sites"
+  ],
+  "relatedPosts": [
+    {
+      "id": "prayagraj-triveni-sangam-guide",
+      "title": "Triveni Sangam Prayagraj: Sacred Confluence Guide",
+      "slug": "triveni-sangam-prayagraj-sacred-confluence-guide",
+      "image": "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&h=400&fit=crop",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9a1"
+      }
+    },
+    {
+      "id": "kumbh-mela-experience",
+      "title": "Kumbh Mela: World's Largest Spiritual Gathering",
+      "slug": "kumbh-mela-worlds-largest-spiritual-gathering",
+      "image": "https://images.unsplash.com/photo-1578307985320-9d4d87c2bb91?w=800&h=400&fit=crop",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9a2"
+      }
+    }
+  ],
+  "isPopular": true,
+  "isFeatured": true,
+  "isActive": true,
+  "status": "published",
+  "seoTitle": "Prayagraj Travel Guide: Triveni Sangam & Kumbh Mela",
+  "seoDescription": "Discover Prayagraj's sacred Triveni Sangam, historic forts, and the magnificent Kumbh Mela. Complete guide to India's holy confluence city.",
+  "createdAt": {
+    "$date": "2025-10-26T06:30:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-26T06:30:00.000Z"
+  },
+  "__v": 0
+}]

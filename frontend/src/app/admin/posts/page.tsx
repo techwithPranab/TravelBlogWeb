@@ -27,7 +27,7 @@ interface Post {
     name: string
     slug: string
   }>
-  status: 'draft' | 'published'
+  status: 'draft' | 'published' | 'inactive'
   publishedAt: string
   createdAt: string
   views: number
@@ -83,7 +83,7 @@ export default function AdminPostsPage() {
       if (response.success) {
         setPosts(posts.map(post => 
           post._id === postId 
-            ? { ...post, status: newStatus as 'draft' | 'published' }
+            ? { ...post, status: newStatus as 'draft' | 'published' | 'inactive' }
             : post
         ))
       }
@@ -163,6 +163,7 @@ export default function AdminPostsPage() {
               <option value="all">All Status</option>
               <option value="published">Published</option>
               <option value="draft">Draft</option>
+              <option value="inactive">Inactive</option>
             </select>
             <button
               onClick={handleSearch}
@@ -257,6 +258,8 @@ export default function AdminPostsPage() {
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       post.status === 'published'
                         ? 'bg-green-100 text-green-800'
+                        : post.status === 'inactive'
+                        ? 'bg-red-100 text-red-800'
                         : 'bg-yellow-100 text-yellow-800'
                     }`}>
                       {post.status}
@@ -294,18 +297,27 @@ export default function AdminPostsPage() {
                           onClick={() => handleStatusUpdate(post._id, 'published')}
                           disabled={updating === post._id}
                           className="text-green-600 hover:text-green-900 disabled:opacity-50"
-                          title="Approve"
+                          title="Publish"
                         >
                           <Check className="h-4 w-4" />
                         </button>
-                      ) : (
+                      ) : post.status === 'published' ? (
                         <button
-                          onClick={() => handleStatusUpdate(post._id, 'draft')}
+                          onClick={() => handleStatusUpdate(post._id, 'inactive')}
                           disabled={updating === post._id}
-                          className="text-yellow-600 hover:text-yellow-900 disabled:opacity-50"
-                          title="Unpublish"
+                          className="text-red-600 hover:text-red-900 disabled:opacity-50"
+                          title="Mark as Inactive"
                         >
                           <X className="h-4 w-4" />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleStatusUpdate(post._id, 'published')}
+                          disabled={updating === post._id}
+                          className="text-green-600 hover:text-green-900 disabled:opacity-50"
+                          title="Reactivate"
+                        >
+                          <Check className="h-4 w-4" />
                         </button>
                       )}
                       <button
