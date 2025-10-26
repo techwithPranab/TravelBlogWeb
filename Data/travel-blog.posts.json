@@ -1,0 +1,94 @@
+[{
+  "_id": {
+    "$oid": "68fdbb12dd08ede9e662a1be"
+  },
+  "title": "10 Must-Visit Temples in Bali: A Spiritual Journey",
+  "slug": "10-mustvisit-temples-in-bali-a-spiritual-journey",
+  "excerpt": "Discover the most sacred and beautiful temples in Bali, each with its own unique history and architectural marvel.",
+  "content": "\n        <p>Bali is renowned for its stunning temples that showcase the island's rich Hindu heritage. Here are 10 temples you absolutely cannot miss:</p>\n        \n        <h2>1. Tanah Lot Temple</h2>\n        <p>One of Bali's most iconic temples, perched on a rock formation in the sea. Best visited during sunset for breathtaking views.</p>\n        \n        <h2>2. Uluwatu Temple</h2>\n        <p>Dramatically positioned on a cliff 70 meters above the ocean, this temple offers spectacular sunset views and traditional Kecak dance performances.</p>\n        \n        <h2>3. Besakih Temple</h2>\n        <p>Known as the \"Mother Temple\" of Bali, this is the largest and holiest temple complex on the island.</p>\n        \n        <p>Each temple offers a unique glimpse into Balinese spirituality and culture, making them essential stops on any Bali itinerary.</p>\n        ",
+  "featuredImage": {
+    "url": "https://images.unsplash.com/photo-1555400113-28f3e0c56e1b?w=800&h=400&fit=crop",
+    "alt": "Tanah Lot Temple at sunset"
+  },
+  "images": [],
+  "author": {
+    "$oid": "68fdbb0fdd08ede9e662a188"
+  },
+  "categories": [
+    {
+      "$oid": "68fdbb11dd08ede9e662a199"
+    }
+  ],
+  "tags": [
+    "bali",
+    "temples",
+    "culture",
+    "spirituality",
+    "indonesia"
+  ],
+  "status": "published",
+  "isPremium": false,
+  "readTime": 1,
+  "viewCount": 0,
+  "likeCount": 0,
+  "commentCount": 0,
+  "likes": [],
+  "comments": [],
+  "publishedAt": {
+    "$date": "2025-10-21T06:09:22.095Z"
+  },
+  "createdAt": {
+    "$date": "2025-10-26T06:09:22.099Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-26T06:09:22.099Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68fdbb12dd08ede9e662a1c0"
+  },
+  "title": "Trekking Torres del Paine: Complete Guide to Patagonia's Crown Jewel",
+  "slug": "trekking-torres-del-paine-complete-guide-to-patagonias-crown-jewel",
+  "excerpt": "Everything you need to know about trekking the famous W Circuit and O Circuit in Torres del Paine National Park.",
+  "content": "\n        <p>Torres del Paine National Park is one of the world's premier trekking destinations. This comprehensive guide covers everything you need to know.</p>\n        \n        <h2>The W Circuit (4-5 days)</h2>\n        <p>The most popular trek covering the park's highlights including the Torres Base, Cuernos viewpoint, and Grey Glacier.</p>\n        \n        <h2>The O Circuit (8-10 days)</h2>\n        <p>For experienced trekkers, this full circuit adds the remote northern section of the park.</p>\n        \n        <h2>Best Time to Visit</h2>\n        <p>October to April offers the most stable weather, though expect wind and unpredictable conditions year-round.</p>\n        ",
+  "featuredImage": {
+    "url": "https://images.unsplash.com/photo-1544737151-6e4b9b1c1b68?w=800&h=400&fit=crop",
+    "alt": "Torres del Paine towers"
+  },
+  "images": [],
+  "author": {
+    "$oid": "68fdbb10dd08ede9e662a193"
+  },
+  "categories": [
+    {
+      "$oid": "68fdbb11dd08ede9e662a197"
+    }
+  ],
+  "tags": [
+    "patagonia",
+    "trekking",
+    "hiking",
+    "chile",
+    "adventure"
+  ],
+  "status": "published",
+  "isPremium": false,
+  "readTime": 1,
+  "viewCount": 0,
+  "likeCount": 0,
+  "commentCount": 0,
+  "likes": [],
+  "comments": [],
+  "publishedAt": {
+    "$date": "2025-10-23T06:09:22.095Z"
+  },
+  "createdAt": {
+    "$date": "2025-10-26T06:09:22.192Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-26T06:09:22.192Z"
+  },
+  "__v": 0
+}]
