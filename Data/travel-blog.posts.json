@@ -6,6 +6,52 @@
   "slug": "10-mustvisit-temples-in-bali-a-spiritual-journey",
   "excerpt": "Discover the most sacred and beautiful temples in Bali, each with its own unique history and architectural marvel.",
   "content": "\n        <p>Bali is renowned for its stunning temples that showcase the island's rich Hindu heritage. Here are 10 temples you absolutely cannot miss:</p>\n        \n        <h2>1. Tanah Lot Temple</h2>\n        <p>One of Bali's most iconic temples, perched on a rock formation in the sea. Best visited during sunset for breathtaking views.</p>\n        \n        <h2>2. Uluwatu Temple</h2>\n        <p>Dramatically positioned on a cliff 70 meters above the ocean, this temple offers spectacular sunset views and traditional Kecak dance performances.</p>\n        \n        <h2>3. Besakih Temple</h2>\n        <p>Known as the \"Mother Temple\" of Bali, this is the largest and holiest temple complex on the island.</p>\n        \n        <p>Each temple offers a unique glimpse into Balinese spirituality and culture, making them essential stops on any Bali itinerary.</p>\n        ",
+  "contentSections": [
+    {
+      "id": "section-1",
+      "type": "image-text",
+      "title": "Tanah Lot Temple - The Sea Temple",
+      "content": "<p>Tanah Lot is undoubtedly one of Bali's most photographed temples. Built on a large rock formation, it appears to float on the sea during high tide. The temple is dedicated to the sea spirits and offers protection to the island.</p><p>The best time to visit is during sunset when the temple is silhouetted against the golden sky. However, be prepared for crowds as this is a very popular spot.</p>",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=800&h=600&fit=crop",
+        "alt": "Tanah Lot Temple during sunset",
+        "caption": "Tanah Lot Temple at sunset - one of Bali's most iconic views"
+      },
+      "imagePosition": "left",
+      "order": 1
+    },
+    {
+      "id": "section-2",
+      "type": "image-text",
+      "title": "Uluwatu Temple - Cliffside Marvel",
+      "content": "<p>Perched dramatically on a 70-meter cliff overlooking the Indian Ocean, Uluwatu Temple is one of Bali's most spectacular temples. This 11th-century temple is one of the six key temples believed to be Bali's spiritual pillars.</p><p>Don't miss the traditional Kecak fire dance performance held here every evening at sunset. The combination of the dance, the temple backdrop, and the ocean views creates an unforgettable experience.</p>",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1542332213-31f87348057f?w=800&h=600&fit=crop",
+        "alt": "Uluwatu Temple on clifftop",
+        "caption": "Uluwatu Temple offers breathtaking cliff-top views"
+      },
+      "imagePosition": "right",
+      "order": 2
+    },
+    {
+      "id": "section-3",
+      "type": "text",
+      "title": "Temple Etiquette and Visiting Tips",
+      "content": "<h3>What to Wear</h3><p>When visiting Balinese temples, dress modestly. Cover your shoulders and knees, and wear a sarong (usually provided at temple entrances). Avoid revealing clothing out of respect for the sacred space.</p><h3>Best Times to Visit</h3><p>Early morning (6-8 AM) or late afternoon (4-6 PM) are ideal for avoiding crowds and harsh sunlight. Many temples also look stunning during sunset.</p><h3>Photography</h3><p>While photography is generally allowed in temple courtyards, avoid taking photos during ceremonies and always ask permission before photographing people.</p>",
+      "order": 3
+    },
+    {
+      "id": "section-4",
+      "type": "image-only",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1555400113-28f3e0c56e1b?w=1200&h=800&fit=crop",
+        "alt": "Collection of Balinese temples",
+        "caption": "The diverse architectural styles of Bali's temples showcase centuries of Hindu-Balinese culture"
+      },
+      "imagePosition": "full-width",
+      "order": 4
+    }
+  ],
   "featuredImage": {
     "url": "https://images.unsplash.com/photo-1555400113-28f3e0c56e1b?w=800&h=400&fit=crop",
     "alt": "Tanah Lot Temple at sunset"
@@ -53,6 +99,41 @@
   "slug": "trekking-torres-del-paine-complete-guide-to-patagonias-crown-jewel",
   "excerpt": "Everything you need to know about trekking the famous W Circuit and O Circuit in Torres del Paine National Park.",
   "content": "\n        <p>Torres del Paine National Park is one of the world's premier trekking destinations. This comprehensive guide covers everything you need to know.</p>\n        \n        <h2>The W Circuit (4-5 days)</h2>\n        <p>The most popular trek covering the park's highlights including the Torres Base, Cuernos viewpoint, and Grey Glacier.</p>\n        \n        <h2>The O Circuit (8-10 days)</h2>\n        <p>For experienced trekkers, this full circuit adds the remote northern section of the park.</p>\n        \n        <h2>Best Time to Visit</h2>\n        <p>October to April offers the most stable weather, though expect wind and unpredictable conditions year-round.</p>\n        ",
+  "contentSections": [
+    {
+      "id": "section-1",
+      "type": "image-text",
+      "title": "The Iconic Torres - Base Trek",
+      "content": "<p>The trek to Torres Base is often considered the crown jewel of the park. This challenging 8-hour round trip hike rewards you with incredible views of the three granite towers that give the park its name.</p><p>Start early (around 6 AM) to avoid afternoon winds and to have the best lighting for photography. The final ascent is steep and rocky, but the payoff is worth every step.</p>",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1544737151-6e4b9b1c1b68?w=800&h=600&fit=crop",
+        "alt": "Torres del Paine granite towers",
+        "caption": "The iconic granite towers of Torres del Paine"
+      },
+      "imagePosition": "center",
+      "order": 1
+    },
+    {
+      "id": "section-2",
+      "type": "text",
+      "title": "Essential Packing List",
+      "content": "<h3>Clothing</h3><ul><li>Waterproof jacket and pants (essential!)</li><li>Insulation layers (fleece or down)</li><li>Hiking boots with good ankle support</li><li>Warm hat and sun hat</li><li>Gloves and sunglasses</li></ul><h3>Gear</h3><ul><li>4-season tent or refuge reservations</li><li>Sleeping bag rated to -5°C</li><li>Headlamp with extra batteries</li><li>Water treatment tablets</li><li>High SPF sunscreen</li></ul>",
+      "order": 2
+    },
+    {
+      "id": "section-3",
+      "type": "image-text",
+      "title": "Weather and Conditions",
+      "content": "<p>Patagonian weather is notoriously unpredictable. You can experience four seasons in a single day, with temperatures ranging from -2°C to 20°C. Wind is constant and can reach speeds of 100+ km/h.</p><p>The key to enjoying your trek is being prepared for all conditions. Layer your clothing, keep gear dry, and always have a backup plan for severe weather days.</p>",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1568140293004-f0c2d515b4d5?w=800&h=600&fit=crop",
+        "alt": "Patagonian weather landscape",
+        "caption": "Dramatic Patagonian skies - be prepared for rapidly changing weather"
+      },
+      "imagePosition": "right",
+      "order": 3
+    }
+  ],
   "featuredImage": {
     "url": "https://images.unsplash.com/photo-1544737151-6e4b9b1c1b68?w=800&h=400&fit=crop",
     "alt": "Torres del Paine towers"

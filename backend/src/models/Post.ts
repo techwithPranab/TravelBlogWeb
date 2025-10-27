@@ -5,6 +5,19 @@ export interface IPost extends Document {
   slug: string
   excerpt: string
   content: string
+  contentSections?: Array<{
+    id: string
+    type: 'text' | 'image-text' | 'image-only'
+    title?: string
+    content?: string
+    image?: {
+      url: string
+      alt: string
+      caption?: string
+    }
+    imagePosition?: 'left' | 'right' | 'center' | 'full-width'
+    order: number
+  }>
   featuredImage?: {
     url: string
     alt: string
@@ -70,6 +83,41 @@ const postSchema = new Schema<IPost>({
     type: String,
     required: [true, 'Please provide content']
   },
+  contentSections: [{
+    id: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      enum: ['text', 'image-text', 'image-only'],
+      required: true
+    },
+    title: {
+      type: String,
+      trim: true
+    },
+    content: {
+      type: String,
+      required: function(this: any) {
+        return this.type !== 'image-only'
+      }
+    },
+    image: {
+      url: String,
+      alt: String,
+      caption: String
+    },
+    imagePosition: {
+      type: String,
+      enum: ['left', 'right', 'center', 'full-width'],
+      default: 'left'
+    },
+    order: {
+      type: Number,
+      required: true
+    }
+  }],
   featuredImage: {
     url: String,
     alt: String,

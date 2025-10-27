@@ -17,12 +17,26 @@ import {
   Eye,
   ThumbsUp
 } from 'lucide-react'
+import ContentSection from '@/components/blog/ContentSection'
 import { postsApi } from '@/lib/api'
 
 interface BlogPost {
   id: string
   title: string
   content: string
+  contentSections?: Array<{
+    id: string
+    type: 'text' | 'image-text' | 'image-only'
+    title?: string
+    content: string
+    image?: {
+      url: string
+      alt: string
+      caption?: string
+    }
+    imagePosition?: 'left' | 'right' | 'center' | 'full-width'
+    order: number
+  }>
   excerpt: string
   featuredImage: {
     url: string
@@ -99,6 +113,7 @@ export default function BlogDetailsPage() {
         id: post._id,
         title: post.title,
         content: post.content,
+        contentSections: post.contentSections?.sort((a: any, b: any) => a.order - b.order) || [],
         excerpt: post.excerpt,
         featuredImage: {
           url: (typeof post.featuredImage === 'object' && post.featuredImage?.url) || (typeof post.featuredImage === 'string' ? post.featuredImage : ''),
@@ -394,7 +409,8 @@ export default function BlogDetailsPage() {
   const navigateLightbox = (direction: 'prev' | 'next') => {
     if (!post) return
 
-    const allImages = [post.featuredImage.url, ...post.images]
+    const sectionImages = post.contentSections?.filter(s => s.image).map(s => s.image!.url) || []
+    const allImages = [post.featuredImage.url, ...post.images, ...sectionImages]
     let newIndex = lightboxIndex
 
     if (direction === 'prev') {
@@ -609,10 +625,29 @@ export default function BlogDetailsPage() {
 
       {/* Content */}
       <div className="container mx-auto px-4 pb-16">
-        <div className="max-w-4xl mx-auto">
-          <div className="prose prose-lg max-w-none mb-12">
-            <div dangerouslySetInnerHTML={{ __html: post!.content }} />
-          </div>
+        <div className="max-w-7xl mx-auto">
+          {/* Content Sections */}
+          {post!.contentSections && post!.contentSections.length > 0 ? (
+            <div className="mb-12">
+              {post!.contentSections.map((section) => (
+                <ContentSection
+                  key={section.id}
+                  section={section}
+                  onImageClick={(imageUrl) => {
+                    // Find the index of this image in all images
+                    const allImages = [post!.featuredImage.url, ...post!.images, ...post!.contentSections!.filter(s => s.image).map(s => s.image!.url)]
+                    const index = allImages.findIndex(img => img === imageUrl)
+                    handleImageClick(imageUrl, index >= 0 ? index : 0)
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            /* Fallback to traditional content */
+            <div className="prose prose-lg max-w-none mb-12">
+              <div dangerouslySetInnerHTML={{ __html: post!.content }} />
+            </div>
+          )}
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-8">
@@ -746,7 +781,7 @@ export default function BlogDetailsPage() {
             </button>
 
             {/* Navigation buttons */}
-            {post && (post.images.length > 0) && (
+            {post && (post.images.length > 0 || (post.contentSections && post.contentSections.some(s => s.image))) && (
               <>
                 <button
                   onClick={() => navigateLightbox('prev')}
@@ -781,9 +816,9 @@ export default function BlogDetailsPage() {
             </div>
 
             {/* Image counter */}
-            {post && (post.images.length > 0) && (
+            {post && (post.images.length > 0 || (post.contentSections && post.contentSections.some(s => s.image))) && (
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                {lightboxIndex + 1} / {post.images.length + 1}
+                {lightboxIndex + 1} / {[post.featuredImage.url, ...post.images, ...(post.contentSections?.filter(s => s.image).map(s => s.image!.url) || [])].length}
               </div>
             )}
           </div>

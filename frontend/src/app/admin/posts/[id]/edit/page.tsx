@@ -14,6 +14,7 @@ import {
 import { adminApi } from '@/lib/adminApi'
 import { toast } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
+import ContentSectionManager from '@/components/admin/ContentSectionManager'
 
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
@@ -29,6 +30,7 @@ export default function EditPostPage() {
   const [previewMode, setPreviewMode] = useState(false)
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState('')
+  const [contentSections, setContentSections] = useState<any[]>([])
   
   const [formData, setFormData] = useState({
     title: '',
@@ -119,6 +121,7 @@ export default function EditPostPage() {
       })
       
       setTags(post.tags || [])
+      setContentSections(post.contentSections || [])
     } catch (error) {
       toast.error('Failed to load post')
       console.error('Error loading post:', error)
@@ -258,6 +261,7 @@ export default function EditPostPage() {
         ...formData,
         status,
         tags,
+        contentSections,
         publishedAt: status === 'published' ? new Date().toISOString() : formData.publishedAt
       }
 
@@ -416,6 +420,14 @@ export default function EditPostPage() {
                     style={{ minHeight: '400px' }}
                   />
                 </div>
+              </div>
+
+              {/* Content Sections */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <ContentSectionManager
+                  sections={contentSections}
+                  onChange={setContentSections}
+                />
               </div>
 
               {/* SEO Section */}

@@ -6,6 +6,19 @@ export interface Post {
   title: string
   excerpt: string
   content: string
+  contentSections?: Array<{
+    id: string
+    type: 'text' | 'image-text' | 'image-only'
+    title?: string
+    content: string
+    image?: {
+      url: string
+      alt: string
+      caption?: string
+    }
+    imagePosition?: 'left' | 'right' | 'center' | 'full-width'
+    order: number
+  }>
   slug: string
   author: {
     _id: string
