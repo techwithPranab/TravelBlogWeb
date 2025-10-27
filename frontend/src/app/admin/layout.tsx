@@ -14,7 +14,9 @@ import {
   X,
   LogOut,
   Shield,
-  Camera
+  Camera,
+  MessageSquare,
+  UserCheck
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -51,6 +53,18 @@ const sidebarItems = [
     name: 'Guides',
     href: '/admin/guides',
     icon: BookOpen,
+    badge: null
+  },
+  {
+    name: 'Partners',
+    href: '/admin/partners',
+    icon: UserCheck,
+    badge: null
+  },
+  {
+    name: 'Contact Messages',
+    href: '/admin/contacts',
+    icon: MessageSquare,
     badge: null
   },
   {

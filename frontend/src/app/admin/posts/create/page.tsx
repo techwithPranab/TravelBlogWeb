@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   Save, 
@@ -16,6 +16,8 @@ import {
 import { adminApi } from '@/lib/adminApi'
 import { toast } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
+import ContentSectionManager from '@/components/admin/ContentSectionManager'
+import ContentSection from '@/components/blog/ContentSection'
 
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
@@ -27,6 +29,8 @@ export default function CreatePostPage() {
   const [previewMode, setPreviewMode] = useState(false)
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState('')
+  const [contentSections, setContentSections] = useState<any[]>([])
+  const [availableCategories, setAvailableCategories] = useState<any[]>([])
   
   const [formData, setFormData] = useState({
     title: '',
@@ -38,13 +42,30 @@ export default function CreatePostPage() {
       caption: ''
     },
     images: [] as string[],
-    category: '',
+    categories: [] as string[], // Changed from category to categories array
     destination: '',
     status: 'draft',
+    isFeatured: false,
     seoTitle: '',
     seoDescription: '',
     publishedAt: ''
   })
+
+  useEffect(() => {
+    loadCategories()
+  }, [])
+
+  const loadCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/categories')
+      const result = await response.json()
+      if (result.success) {
+        setAvailableCategories(result.data)
+      }
+    } catch (error) {
+      console.error('Error loading categories:', error)
+    }
+  }
 
   // Quill modules configuration
   const modules = {
@@ -67,19 +88,6 @@ export default function CreatePostPage() {
     'color', 'background', 'list', 'bullet', 'script',
     'indent', 'align', 'blockquote', 'code-block',
     'link', 'image', 'video'
-  ]
-
-  const categories = [
-    'Adventure',
-    'Culture',
-    'Food',
-    'Nature',
-    'City Guide',
-    'Budget Travel',
-    'Luxury Travel',
-    'Backpacking',
-    'Family Travel',
-    'Solo Travel'
   ]
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -212,6 +220,7 @@ export default function CreatePostPage() {
         ...formData,
         status,
         tags,
+        contentSections,
         publishedAt: status === 'published' ? new Date().toISOString() : formData.publishedAt
       }
 
@@ -250,9 +259,22 @@ export default function CreatePostPage() {
           )}
           <h1 className="text-4xl font-bold mb-4">{formData.title || 'Untitled Post'}</h1>
           <p className="text-xl text-gray-600 mb-6">{formData.excerpt}</p>
-          <div className="prose max-w-none">
+          
+          {/* Main content */}
+          <div className="prose max-w-none mb-8">
             <div dangerouslySetInnerHTML={{ __html: formData.content }} />
           </div>
+
+          {/* Content sections */}
+          {contentSections.length > 0 && (
+            <div className="space-y-8">
+              {contentSections
+                .sort((a, b) => a.order - b.order)
+                .map((section) => (
+                  <ContentSection key={section.id} section={section} />
+                ))}
+            </div>
+          )}
         </div>
       </div>
     )
@@ -359,6 +381,18 @@ export default function CreatePostPage() {
                     style={{ minHeight: '400px' }}
                   />
                 </div>
+              </div>
+
+              {/* Content Sections */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Content Sections</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Add rich content sections with text, images, and different layouts to enhance your post.
+                </p>
+                <ContentSectionManager
+                  sections={contentSections}
+                  onChange={setContentSections}
+                />
               </div>
 
               {/* SEO Section */}
@@ -522,20 +556,51 @@ export default function CreatePostPage() {
                 </div>
               </div>
 
-              {/* Category */}
+              {/* Categories */}
               <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Category</h3>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                >
-                  <option value="">Select category</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {availableCategories.map(category => (
+                    <label key={category._id} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={formData.categories.includes(category._id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFormData(prev => ({
+                              ...prev,
+                              categories: [...prev.categories, category._id]
+                            }))
+                          } else {
+                            setFormData(prev => ({
+                              ...prev,
+                              categories: prev.categories.filter(id => id !== category._id)
+                            }))
+                          }
+                        }}
+                        className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">{category.name}</span>
+                    </label>
                   ))}
-                </select>
+                </div>
+                {availableCategories.length === 0 && (
+                  <p className="text-sm text-gray-500">No categories available</p>
+                )}
+              </div>
+
+              {/* Featured Post */}
+              <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Featured Post</h3>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={formData.isFeatured}
+                    onChange={(e) => setFormData(prev => ({ ...prev, isFeatured: e.target.checked }))}
+                    className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Mark as featured post</span>
+                </label>
               </div>
 
               {/* Destination */}

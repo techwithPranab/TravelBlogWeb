@@ -32,6 +32,7 @@ export default function EditPostPage() {
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState('')
   const [contentSections, setContentSections] = useState<any[]>([])
+  const [availableCategories, setAvailableCategories] = useState<any[]>([])
   
   const [formData, setFormData] = useState({
     title: '',
@@ -43,7 +44,7 @@ export default function EditPostPage() {
       caption: ''
     },
     images: [] as string[],
-    category: '',
+    categories: [] as string[], // Changed from category to categories array
     destination: '',
     status: 'draft',
     isFeatured: false,
@@ -51,19 +52,6 @@ export default function EditPostPage() {
     seoDescription: '',
     publishedAt: ''
   })
-
-  const categories = [
-    'Adventure',
-    'Culture',
-    'Food',
-    'Nature',
-    'City Guide',
-    'Budget Travel',
-    'Luxury Travel',
-    'Backpacking',
-    'Family Travel',
-    'Solo Travel'
-  ]
 
   // Quill modules configuration
   const modules = {
@@ -92,7 +80,20 @@ export default function EditPostPage() {
     if (postId) {
       loadPost()
     }
+    loadCategories()
   }, [postId])
+
+  const loadCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/categories')
+      const result = await response.json()
+      if (result.success) {
+        setAvailableCategories(result.data)
+      }
+    } catch (error) {
+      console.error('Error loading categories:', error)
+    }
+  }
 
   const loadPost = async () => {
     try {
@@ -114,7 +115,7 @@ export default function EditPostPage() {
           caption: ''
         },
         images: post.images || [],
-        category: post.category || '',
+        categories: post.categories ? post.categories.map((cat: any) => cat._id || cat) : [], // Handle populated or ObjectId array
         destination: post.destination || '',
         status: post.status || 'draft',
         isFeatured: post.isFeatured || false,
@@ -672,18 +673,31 @@ export default function EditPostPage() {
 
               {/* Category */}
               <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Category</h3>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                >
-                  <option value="">Select category</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {availableCategories.map((category: any) => (
+                    <label key={category._id} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={formData.categories.includes(category._id)}
+                        onChange={(e) => {
+                          const categoryId = category._id
+                          setFormData(prev => ({
+                            ...prev,
+                            categories: e.target.checked
+                              ? [...prev.categories, categoryId]
+                              : prev.categories.filter(id => id !== categoryId)
+                          }))
+                        }}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <span className="ml-2 text-sm text-gray-900">{category.name}</span>
+                    </label>
                   ))}
-                </select>
+                </div>
+                {availableCategories.length === 0 && (
+                  <p className="text-sm text-gray-500">Loading categories...</p>
+                )}
               </div>
 
               {/* Destination */}

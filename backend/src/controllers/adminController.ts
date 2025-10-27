@@ -369,6 +369,7 @@ export const updatePost = async (req: Request, res: Response) => {
       updateData,
       { new: true, runValidators: false } // Disable validators for now to avoid issues
     ).populate('author', 'name email')
+     .populate('categories', 'name slug')
 
     if (!post) {
       return res.status(404).json({
@@ -396,7 +397,9 @@ export const getPost = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
     
-    const post = await Post.findById(id).populate('author', 'name email')
+    const post = await Post.findById(id)
+      .populate('author', 'name email')
+      .populate('categories', 'name slug')
     
     if (!post) {
       return res.status(404).json({

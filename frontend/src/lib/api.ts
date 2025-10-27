@@ -268,6 +268,17 @@ export interface Partner {
   updatedAt?: string
 }
 
+export interface ContactMessage {
+  _id: string
+  name: string
+  email: string
+  subject: string
+  message: string
+  status: 'unread' | 'read' | 'replied'
+  createdAt: string
+  updatedAt?: string
+}
+
 export interface Category {
   _id: string
   name: string
@@ -341,6 +352,42 @@ async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<A
     return data
   } catch (error) {
     console.error(`API Error (${endpoint}):`, error)
+    throw error
+  }
+}
+
+// Authenticated API function for admin requests
+async function authenticatedApiRequest<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
+  const url = `${API_BASE_URL}${endpoint}`
+  
+  // Get admin token from localStorage
+  const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
+  
+  const defaultOptions: RequestInit = {
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` }),
+    },
+  }
+
+  const config = { ...defaultOptions, ...options }
+  
+  // Merge headers properly
+  if (options?.headers) {
+    config.headers = { ...defaultOptions.headers, ...options.headers }
+  }
+
+  try {
+    const response = await fetch(url, config)
+    
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status} ${response.statusText}`)
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error(`Authenticated API Error (${endpoint}):`, error)
     throw error
   }
 }
@@ -497,24 +544,61 @@ export const partnersApi = {
     
     const query = searchParams.toString()
     const endpoint = query ? `/partners?${query}` : '/partners'
-    return apiRequest<{ partners: Partner[]; totalPages: number; currentPage: number; total: number }>(endpoint)
+    return authenticatedApiRequest<{ partners: Partner[]; totalPages: number; currentPage: number; total: number }>(endpoint)
   },
 
   updateStatus: async (partnerId: string, status: 'pending' | 'approved' | 'rejected'): Promise<ApiResponse<Partner>> => {
-    return apiRequest<Partner>(`/partners/${partnerId}/status`, {
+    return authenticatedApiRequest<Partner>(`/partners/${partnerId}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status })
     })
   },
 
   delete: async (partnerId: string): Promise<ApiResponse<{ message: string }>> => {
-    return apiRequest<{ message: string }>(`/partners/${partnerId}`, {
+    return authenticatedApiRequest<{ message: string }>(`/partners/${partnerId}`, {
       method: 'DELETE'
     })
   },
 
   getById: async (partnerId: string): Promise<ApiResponse<Partner>> => {
-    return apiRequest<Partner>(`/partners/${partnerId}`)
+    return authenticatedApiRequest<Partner>(`/partners/${partnerId}`)
+  }
+}
+
+// Contact Messages API
+export const contactApi = {
+  getAll: async (params?: {
+    page?: number
+    limit?: number
+    search?: string
+    status?: string
+  }): Promise<ApiResponse<{ contacts: ContactMessage[]; totalPages: number; currentPage: number; total: number }>> => {
+    const searchParams = new URLSearchParams()
+    if (params?.page) searchParams.append('page', params.page.toString())
+    if (params?.limit) searchParams.append('limit', params.limit.toString())
+    if (params?.search) searchParams.append('search', params.search)
+    if (params?.status) searchParams.append('status', params.status)
+    
+    const query = searchParams.toString()
+    const endpoint = query ? `/contact?${query}` : '/contact'
+    return authenticatedApiRequest<{ contacts: ContactMessage[]; totalPages: number; currentPage: number; total: number }>(endpoint)
+  },
+
+  updateStatus: async (contactId: string, status: 'unread' | 'read' | 'replied'): Promise<ApiResponse<ContactMessage>> => {
+    return authenticatedApiRequest<ContactMessage>(`/contact/${contactId}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    })
+  },
+
+  delete: async (contactId: string): Promise<ApiResponse<{ message: string }>> => {
+    return authenticatedApiRequest<{ message: string }>(`/contact/${contactId}`, {
+      method: 'DELETE'
+    })
+  },
+
+  getById: async (contactId: string): Promise<ApiResponse<ContactMessage>> => {
+    return authenticatedApiRequest<ContactMessage>(`/contact/${contactId}`)
   }
 }
 
@@ -642,6 +726,7 @@ export default {
   destinations: destinationsApi,
   guides: guidesApi,
   partners: partnersApi,
+  contact: contactApi,
   categories: categoriesApi,
   admin: adminApi,
   public: publicApi
