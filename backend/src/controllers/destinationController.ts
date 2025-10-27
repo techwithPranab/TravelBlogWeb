@@ -25,7 +25,7 @@ export const upload = multer({
 // @route   GET /api/destinations
 // @access  Public
 export const getAllDestinations = handleAsync(async (req: Request, res: Response) => {
-  const { page = 1, limit = 10, country, continent, isPopular, isFeatured } = req.query
+  const { page = 1, limit = 10, country, continent, isPopular, isFeatured, search } = req.query
 
   // Build filter object - only show published destinations to public
   const filter: any = { 
@@ -37,6 +37,15 @@ export const getAllDestinations = handleAsync(async (req: Request, res: Response
   if (continent) filter.continent = continent
   if (isPopular) filter.isPopular = isPopular === 'true'
   if (isFeatured) filter.isFeatured = isFeatured === 'true'
+  if (search) {
+    filter.$or = [
+      { name: { $regex: search, $options: 'i' } },
+      { description: { $regex: search, $options: 'i' } },
+      { country: { $regex: search, $options: 'i' } },
+      { continent: { $regex: search, $options: 'i' } },
+      { highlights: { $in: [new RegExp(search as string, 'i')] } }
+    ]
+  }
 
   const destinations = await Destination.find(filter)
     .sort({ createdAt: -1 })

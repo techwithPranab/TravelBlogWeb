@@ -1,35 +1,116 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Quote, Star } from 'lucide-react'
+import { publicApi } from '@/lib/api'
+
+interface Testimonial {
+  id: string
+  name: string
+  role: string
+  avatar?: string
+  rating: number
+  text: string
+  featured?: boolean
+}
 
 export function Testimonials() {
-  const testimonials = [
-    {
-      id: 1,
-      name: 'Sarah Johnson',
-      role: 'Travel Enthusiast',
-      avatar: '/avatars/sarah.jpg',
-      rating: 5,
-      text: 'This travel blog has completely transformed how I plan my trips. The detailed guides and stunning photography inspire me to explore new destinations I never would have considered before.',
-    },
-    {
-      id: 2,
-      name: 'Michael Chen',
-      role: 'Digital Nomad',
-      avatar: '/avatars/michael.jpg',
-      rating: 5,
-      text: 'As someone who travels for work, I rely on authentic travel experiences. The stories here are genuine, practical, and beautifully written. It\'s become my go-to resource for travel inspiration.',
-    },
-    {
-      id: 3,
-      name: 'Emma Rodriguez',
-      role: 'Adventure Seeker',
-      avatar: '/avatars/emma.jpg',
-      rating: 5,
-      text: 'The quality of content and photography is exceptional. Every post makes me want to pack my bags immediately. The travel tips have saved me countless hours of planning.',
-    },
-  ]
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        const response = await publicApi.getTestimonials()
+        setTestimonials(response.data)
+      } catch (error) {
+        console.error('Error fetching testimonials:', error)
+        setError('Failed to load testimonials')
+        // Set fallback testimonials if API fails
+        setTestimonials([
+          {
+            id: '1',
+            name: 'Sarah Johnson',
+            role: 'Travel Enthusiast',
+            avatar: '/avatars/sarah.jpg',
+            rating: 5,
+            text: 'This travel blog has completely transformed how I plan my trips. The detailed guides and stunning photography inspire me to explore new destinations I never would have considered before.',
+            featured: true
+          },
+          {
+            id: '2',
+            name: 'Michael Chen',
+            role: 'Digital Nomad',
+            avatar: '/avatars/michael.jpg',
+            rating: 5,
+            text: 'As someone who travels for work, I rely on authentic travel experiences. The stories here are genuine, practical, and beautifully written. It\'s become my go-to resource for travel inspiration.',
+            featured: true
+          },
+          {
+            id: '3',
+            name: 'Emma Rodriguez',
+            role: 'Adventure Seeker',
+            avatar: '/avatars/emma.jpg',
+            rating: 5,
+            text: 'The quality of content and photography is exceptional. Every post makes me want to pack my bags immediately. The travel tips have saved me countless hours of planning.',
+            featured: true
+          }
+        ])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchTestimonials()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="w-full">
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Quote className="h-8 w-8 text-blue-600" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+              What Our Readers Say
+            </h2>
+          </div>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Join thousands of travelers who trust our stories and guides for their adventures
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 animate-pulse">
+              <div className="flex justify-center mb-4">
+                <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              </div>
+              <div className="flex justify-center gap-1 mb-4">
+                {[...Array(5)].map((_, j) => (
+                  <div key={j} className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                ))}
+              </div>
+              <div className="space-y-2 mb-6">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+              </div>
+              <div className="flex items-center justify-center gap-4">
+                <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full">

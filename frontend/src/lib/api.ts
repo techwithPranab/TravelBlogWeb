@@ -267,6 +267,31 @@ export interface Category {
   updatedAt: string
 }
 
+export interface DashboardStats {
+  totalUsers: number
+  totalPosts: number
+  totalDestinations: number
+  totalGuides: number
+  totalSubscribers: number
+  pendingPosts: number
+  recentUsers: Array<{
+    _id: string
+    name: string
+    email: string
+    createdAt: string
+  }>
+  recentPosts: Array<{
+    _id: string
+    title: string
+    slug: string
+    author: {
+      _id: string
+      name: string
+    }
+    createdAt: string
+  }>
+}
+
 // API Response Types
 export interface ApiResponse<T> {
   success: boolean
@@ -353,15 +378,21 @@ export const postsApi = {
     return apiRequest<Post[]>(endpoint)
   },
 
-  search: async (query: string, params?: {
-    page?: number
-    limit?: number
-  }): Promise<ApiResponse<Post[]>> => {
+  unifiedSearch: async (query: string): Promise<ApiResponse<{
+    posts: { count: number; data: Post[] }
+    destinations: { count: number; data: Destination[] }
+    guides: { count: number; data: Guide[] }
+    photos: { count: number; data: any[] }
+    total: number
+  }>> => {
     const searchParams = new URLSearchParams({ q: query })
-    if (params?.page) searchParams.append('page', params.page.toString())
-    if (params?.limit) searchParams.append('limit', params.limit.toString())
-    
-    return apiRequest<Post[]>(`/posts/search?${searchParams.toString()}`)
+    return apiRequest<{
+      posts: { count: number; data: Post[] }
+      destinations: { count: number; data: Destination[] }
+      guides: { count: number; data: Guide[] }
+      photos: { count: number; data: any[] }
+      total: number
+    }>(`/posts/unified-search?${searchParams.toString()}`)
   }
 }
 
@@ -485,10 +516,120 @@ export const categoriesApi = {
   }
 }
 
+// Admin API
+export const adminApi = {
+  getDashboardStats: async (): Promise<ApiResponse<DashboardStats>> => {
+    return apiRequest<DashboardStats>('/admin/dashboard/stats')
+  }
+}
+
+// Public API
+export const publicApi = {
+  getStats: async (): Promise<ApiResponse<{
+    totalUsers: number
+    totalPosts: number
+    totalDestinations: number
+    totalGuides: number
+    totalSubscribers: number
+  }>> => {
+    return apiRequest<{
+      totalUsers: number
+      totalPosts: number
+      totalDestinations: number
+      totalGuides: number
+      totalSubscribers: number
+    }>('/public/stats')
+  },
+
+  getTestimonials: async (): Promise<ApiResponse<Array<{
+    id: string
+    name: string
+    role: string
+    avatar?: string
+    rating: number
+    text: string
+    featured?: boolean
+  }>>> => {
+    return apiRequest<Array<{
+      id: string
+      name: string
+      role: string
+      avatar?: string
+      rating: number
+      text: string
+      featured?: boolean
+    }>>('/public/testimonials')
+  },
+
+  getContact: async (): Promise<ApiResponse<{
+    email: string
+    phone: string
+    address: {
+      street: string
+      city: string
+      state: string
+      zipCode: string
+      country: string
+    }
+    socialLinks: {
+      facebook: string
+      twitter: string
+      instagram: string
+      youtube: string
+    }
+    businessHours: {
+      monday: string
+      tuesday: string
+      wednesday: string
+      thursday: string
+      friday: string
+      saturday: string
+      sunday: string
+    }
+    support: {
+      email: string
+      responseTime: string
+    }
+  }>> => {
+    return apiRequest<{
+      email: string
+      phone: string
+      address: {
+        street: string
+        city: string
+        state: string
+        zipCode: string
+        country: string
+      }
+      socialLinks: {
+        facebook: string
+        twitter: string
+        instagram: string
+        youtube: string
+      }
+      businessHours: {
+        monday: string
+        tuesday: string
+        wednesday: string
+        thursday: string
+        friday: string
+        saturday: string
+        sunday: string
+      }
+      support: {
+        email: string
+        responseTime: string
+      }
+    }>('/public/contact')
+  }
+}
+
 export default {
   posts: postsApi,
   destinations: destinationsApi,
   guides: guidesApi,
   partners: partnersApi,
-  categories: categoriesApi
+  categories: categoriesApi,
+  admin: adminApi,
+  public: publicApi
 }

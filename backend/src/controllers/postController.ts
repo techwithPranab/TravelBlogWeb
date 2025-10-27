@@ -3,6 +3,9 @@ import Post from '@/models/Post'
 import { IUser } from '@/models/User'
 import { uploadBufferToCloudinary } from '@/config/drive'
 import sharp from 'sharp'
+import Destination from '@/models/Destination'
+import Guide from '@/models/Guide'
+import Photo from '@/models/Photo'
 
 interface AuthenticatedRequest extends Request {
   user?: IUser
@@ -395,6 +398,123 @@ export const getPopularPosts = async (req: Request, res: Response): Promise<void
     res.status(500).json({
       success: false,
       error: error.message || 'Server error'
+    })
+  }
+}
+
+// @desc    Unified search across posts, destinations, guides, and photos
+// @route   GET /api/posts/unified-search
+// @access  Public
+export const unifiedSearch = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { q: searchQuery, limit = 10 } = req.query
+
+    if (!searchQuery || typeof searchQuery !== 'string') {
+      res.status(400).json({
+        success: false,
+        error: 'Search query is required'
+      })
+      return
+    }
+
+    const searchLimit = Math.min(Number(limit), 50) // Cap at 50 results per type
+
+    // Search posts
+    const posts = await Post.find({
+      status: 'published',
+      $or: [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { excerpt: { $regex: searchQuery, $options: 'i' } },
+        { content: { $regex: searchQuery, $options: 'i' } },
+        { tags: { $in: [new RegExp(searchQuery, 'i')] } }
+      ]
+    })
+      .populate('author', 'name avatar')
+      .populate('categories', 'name slug color')
+      .sort('-createdAt')
+      .limit(searchLimit)
+      .select('title slug excerpt featuredImage author categories publishedAt readTime')
+
+    // Search destinations
+    const destinations = await Destination.find({
+      isActive: true,
+      status: 'published',
+      $or: [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { description: { $regex: searchQuery, $options: 'i' } },
+        { country: { $regex: searchQuery, $options: 'i' } },
+        { continent: { $regex: searchQuery, $options: 'i' } },
+        { highlights: { $in: [new RegExp(searchQuery, 'i')] } }
+      ]
+    })
+      .sort('-createdAt')
+      .limit(searchLimit)
+      .select('name slug description country continent featuredImage rating totalReviews')
+
+    // Search guides
+    const guides = await Guide.find({
+      isPublished: true,
+      $or: [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { description: { $regex: searchQuery, $options: 'i' } },
+        { content: { $regex: searchQuery, $options: 'i' } },
+        { tags: { $in: [new RegExp(searchQuery, 'i')] } },
+        { type: { $regex: searchQuery, $options: 'i' } },
+        { difficulty: { $regex: searchQuery, $options: 'i' } }
+      ]
+    })
+      .sort('-publishedAt')
+      .limit(searchLimit)
+      .select('title slug description type difficulty rating totalReviews featuredImage publishedAt')
+
+    // Search photos
+    const photos = await Photo.find({
+      status: 'approved',
+      isPublic: true,
+      $or: [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { description: { $regex: searchQuery, $options: 'i' } },
+        { tags: { $in: [new RegExp(searchQuery, 'i')] } },
+        { category: { $regex: searchQuery, $options: 'i' } },
+        { 'location.country': { $regex: searchQuery, $options: 'i' } },
+        { 'location.city': { $regex: searchQuery, $options: 'i' } },
+        { 'photographer.name': { $regex: searchQuery, $options: 'i' } }
+      ]
+    })
+      .sort('-submittedAt')
+      .limit(searchLimit)
+      .select('title description imageUrl thumbnailUrl category location photographer tags submittedAt')
+
+    const results = {
+      posts: {
+        count: posts.length,
+        data: posts
+      },
+      destinations: {
+        count: destinations.length,
+        data: destinations
+      },
+      guides: {
+        count: guides.length,
+        data: guides
+      },
+      photos: {
+        count: photos.length,
+        data: photos
+      },
+      total: posts.length + destinations.length + guides.length + photos.length
+    }
+
+    res.status(200).json({
+      success: true,
+      query: searchQuery,
+      data: results
+    })
+  } catch (error: any) {
+    console.error('Unified search error:', error)
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Search failed'
     })
   }
 }

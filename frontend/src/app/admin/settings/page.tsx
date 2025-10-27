@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Save, Globe, Mail, Palette, Settings as SettingsIcon } from 'lucide-react'
+import { Save, Globe, Mail, Palette, Settings as SettingsIcon, Phone, MapPin, Clock } from 'lucide-react'
 import { adminApi } from '@/lib/adminApi'
 
 interface SiteSettings {
@@ -11,6 +11,27 @@ interface SiteSettings {
   siteUrl: string
   contactEmail: string
   supportEmail: string
+  contactPhone?: string
+  contactAddress?: {
+    street: string
+    city: string
+    state: string
+    zipCode: string
+    country: string
+  }
+  businessHours?: {
+    monday: string
+    tuesday: string
+    wednesday: string
+    thursday: string
+    friday: string
+    saturday: string
+    sunday: string
+  }
+  supportSettings?: {
+    email: string
+    responseTime: string
+  }
   socialLinks: {
     facebook?: string
     twitter?: string
@@ -57,6 +78,30 @@ export default function AdminSettingsPage() {
           const settingsData = response.data
           const completeSettings = {
             ...settingsData,
+            contactPhone: settingsData.contactPhone || '+1 (555) 123-4567',
+            contactAddress: {
+              street: '123 Travel Street',
+              city: 'San Francisco',
+              state: 'CA',
+              zipCode: '94105',
+              country: 'USA',
+              ...settingsData.contactAddress
+            },
+            businessHours: {
+              monday: '9:00 AM - 6:00 PM',
+              tuesday: '9:00 AM - 6:00 PM',
+              wednesday: '9:00 AM - 6:00 PM',
+              thursday: '9:00 AM - 6:00 PM',
+              friday: '9:00 AM - 6:00 PM',
+              saturday: '10:00 AM - 4:00 PM',
+              sunday: 'Closed',
+              ...settingsData.businessHours
+            },
+            supportSettings: {
+              email: 'support@travelblog.com',
+              responseTime: 'Within 24 hours',
+              ...settingsData.supportSettings
+            },
             socialLinks: {
               facebook: '',
               twitter: '',
@@ -141,6 +186,7 @@ export default function AdminSettingsPage() {
 
   const tabs = [
     { id: 'general', name: 'General', icon: SettingsIcon },
+    { id: 'contact', name: 'Contact', icon: Phone },
     { id: 'seo', name: 'SEO', icon: Globe },
     { id: 'email', name: 'Email', icon: Mail },
     { id: 'theme', name: 'Theme', icon: Palette }
@@ -252,33 +298,6 @@ export default function AdminSettingsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="contactEmail" className="block text-sm font-medium text-gray-700 mb-2">
-                    Contact Email
-                  </label>
-                  <input
-                    id="contactEmail"
-                    type="email"
-                    value={settings.contactEmail || ''}
-                    onChange={(e) => updateSettings('contactEmail', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="supportEmail" className="block text-sm font-medium text-gray-700 mb-2">
-                    Support Email
-                  </label>
-                  <input
-                    id="supportEmail"
-                    type="email"
-                    value={settings.supportEmail || ''}
-                    onChange={(e) => updateSettings('supportEmail', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">General Settings</h3>
                 <div className="space-y-4">
@@ -316,6 +335,255 @@ export default function AdminSettingsPage() {
                       checked={settings.generalSettings?.maintenanceMode ?? false}
                       onChange={(e) => updateSettings('generalSettings.maintenanceMode', e.target.checked)}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'contact' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
+                  <Phone className="h-5 w-5" />
+                  Contact Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="contactPhone" className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <input
+                      id="contactPhone"
+                      type="tel"
+                      value={settings.contactPhone || ''}
+                      onChange={(e) => updateSettings('contactPhone', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="+1 (555) 123-4567"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="contactEmail" className="block text-sm font-medium text-gray-700 mb-2">
+                      Contact Email
+                    </label>
+                    <input
+                      id="contactEmail"
+                      type="email"
+                      value={settings.contactEmail || ''}
+                      onChange={(e) => updateSettings('contactEmail', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="hello@travelblog.com"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  Address
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-2">
+                      Street Address
+                    </label>
+                    <input
+                      id="street"
+                      type="text"
+                      value={settings.contactAddress?.street || ''}
+                      onChange={(e) => updateSettings('contactAddress.street', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="123 Travel Street"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+                      City
+                    </label>
+                    <input
+                      id="city"
+                      type="text"
+                      value={settings.contactAddress?.city || ''}
+                      onChange={(e) => updateSettings('contactAddress.city', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="San Francisco"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
+                      State
+                    </label>
+                    <input
+                      id="state"
+                      type="text"
+                      value={settings.contactAddress?.state || ''}
+                      onChange={(e) => updateSettings('contactAddress.state', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="CA"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-2">
+                      ZIP Code
+                    </label>
+                    <input
+                      id="zipCode"
+                      type="text"
+                      value={settings.contactAddress?.zipCode || ''}
+                      onChange={(e) => updateSettings('contactAddress.zipCode', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="94105"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                      Country
+                    </label>
+                    <input
+                      id="country"
+                      type="text"
+                      value={settings.contactAddress?.country || ''}
+                      onChange={(e) => updateSettings('contactAddress.country', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="USA"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
+                  <Clock className="h-5 w-5" />
+                  Business Hours
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="monday" className="block text-sm font-medium text-gray-700 mb-2">
+                      Monday
+                    </label>
+                    <input
+                      id="monday"
+                      type="text"
+                      value={settings.businessHours?.monday || ''}
+                      onChange={(e) => updateSettings('businessHours.monday', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="9:00 AM - 6:00 PM"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="tuesday" className="block text-sm font-medium text-gray-700 mb-2">
+                      Tuesday
+                    </label>
+                    <input
+                      id="tuesday"
+                      type="text"
+                      value={settings.businessHours?.tuesday || ''}
+                      onChange={(e) => updateSettings('businessHours.tuesday', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="9:00 AM - 6:00 PM"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="wednesday" className="block text-sm font-medium text-gray-700 mb-2">
+                      Wednesday
+                    </label>
+                    <input
+                      id="wednesday"
+                      type="text"
+                      value={settings.businessHours?.wednesday || ''}
+                      onChange={(e) => updateSettings('businessHours.wednesday', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="9:00 AM - 6:00 PM"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="thursday" className="block text-sm font-medium text-gray-700 mb-2">
+                      Thursday
+                    </label>
+                    <input
+                      id="thursday"
+                      type="text"
+                      value={settings.businessHours?.thursday || ''}
+                      onChange={(e) => updateSettings('businessHours.thursday', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="9:00 AM - 6:00 PM"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="friday" className="block text-sm font-medium text-gray-700 mb-2">
+                      Friday
+                    </label>
+                    <input
+                      id="friday"
+                      type="text"
+                      value={settings.businessHours?.friday || ''}
+                      onChange={(e) => updateSettings('businessHours.friday', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="9:00 AM - 6:00 PM"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="saturday" className="block text-sm font-medium text-gray-700 mb-2">
+                      Saturday
+                    </label>
+                    <input
+                      id="saturday"
+                      type="text"
+                      value={settings.businessHours?.saturday || ''}
+                      onChange={(e) => updateSettings('businessHours.saturday', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="10:00 AM - 4:00 PM"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label htmlFor="sunday" className="block text-sm font-medium text-gray-700 mb-2">
+                      Sunday
+                    </label>
+                    <input
+                      id="sunday"
+                      type="text"
+                      value={settings.businessHours?.sunday || ''}
+                      onChange={(e) => updateSettings('businessHours.sunday', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Closed"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Support Settings</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="supportEmail" className="block text-sm font-medium text-gray-700 mb-2">
+                      Support Email
+                    </label>
+                    <input
+                      id="supportEmail"
+                      type="email"
+                      value={settings.supportSettings?.email || ''}
+                      onChange={(e) => updateSettings('supportSettings.email', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="support@travelblog.com"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="responseTime" className="block text-sm font-medium text-gray-700 mb-2">
+                      Response Time
+                    </label>
+                    <input
+                      id="responseTime"
+                      type="text"
+                      value={settings.supportSettings?.responseTime || ''}
+                      onChange={(e) => updateSettings('supportSettings.responseTime', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Within 24 hours"
                     />
                   </div>
                 </div>

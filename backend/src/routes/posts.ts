@@ -10,7 +10,8 @@ import {
   getPostsByCategory,
   getFeaturedPosts,
   getPopularPosts,
-  uploadPostImage
+  uploadPostImage,
+  unifiedSearch
 } from '../controllers/postController'
 import { protect } from '../middleware/auth'
 import multer from 'multer'
@@ -33,6 +34,8 @@ const upload = multer({
 
 // Public routes
 router.get('/', getPosts)
+router.get('/search', getPosts) // Use getPosts for search functionality
+router.get('/unified-search', unifiedSearch) // Unified search across all content types
 router.get('/featured', getFeaturedPosts)
 router.get('/popular', getPopularPosts)
 router.get('/category/:category', getPostsByCategory)

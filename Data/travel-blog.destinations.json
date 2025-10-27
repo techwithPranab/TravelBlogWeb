@@ -681,4 +681,243 @@
     "$date": "2025-10-26T06:30:00.000Z"
   },
   "__v": 0
-}]
+},
+{
+  "_id": {
+    "$oid": "68fdbbb21cc5835ae389b9aa"
+  },
+  "name": "Lahul Spiti Valley, India",
+  "slug": "lahul-spiti-valley-india",
+  "description": "Lahul Spiti Valley, often called the 'Land of the Gods' or 'Little Tibet', is a remote and breathtaking region in the northern Indian state of Himachal Pradesh. This high-altitude desert valley offers stunning landscapes of barren mountains, crystal-clear rivers, ancient monasteries, and pristine lakes. The region is home to some of India's highest motorable roads, including the famous Rohtang Pass and Kunzum Pass. With its rich Buddhist heritage, traditional villages, and unparalleled natural beauty, Lahul Spiti offers an unforgettable adventure for those seeking solitude and spiritual enlightenment in one of the most pristine regions on earth.",
+  "country": "India",
+  "continent": "Asia",
+  "featuredImage": {
+    "url": "https://images.unsplash.com/photo-1580500550469-16b5ab4f10b0?w=800&h=600&fit=crop",
+    "alt": "Lahul Spiti Valley Mountains"
+  },
+  "gallery": [
+    {
+      "url": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+      "alt": "Chandratal Lake Spiti",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235181"
+      }
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&h=600&fit=crop",
+      "alt": "Tabo Monastery",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235182"
+      }
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&h=600&fit=crop",
+      "alt": "Kunzum Pass",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235183"
+      }
+    }
+  ],
+  "coordinates": {
+    "lat": 32.5,
+    "lng": 77.5
+  },
+  "bestTimeToVisit": "June to September (summer season)",
+  "averageTemperature": {
+    "summer": "10-25°C (50-77°F)",
+    "winter": "-20 to -5°C (-4 to 23°F)"
+  },
+  "currency": "INR (Indian Rupee)",
+  "language": "Hindi, Tibetan, English",
+  "timezone": "UTC+5:30 (India Standard Time)",
+  "rating": 4.8,
+  "totalReviews": 2156,
+  "highlights": [
+    "Chandratal Lake (Moon Lake)",
+    "Tabo Monastery (World's Oldest Monastery)",
+    "Kunzum Pass (Highest Motorable Pass)",
+    "Key Monastery",
+    "Pin Valley National Park",
+    "Spiti River Valley"
+  ],
+  "activities": [
+    {
+      "name": "Trek to Chandratal Lake",
+      "icon": "🥾",
+      "description": "Embark on a scenic trek to the pristine Chandratal Lake at 4,300m",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9ab"
+      }
+    },
+    {
+      "name": "Monastery Visits",
+      "icon": "🛕",
+      "description": "Explore ancient Buddhist monasteries and learn about Tibetan culture",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9ac"
+      }
+    },
+    {
+      "name": "Mountain Biking",
+      "icon": "🚴‍♂️",
+      "description": "Experience thrilling mountain biking on high-altitude trails",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9ad"
+      }
+    },
+    {
+      "name": "River Rafting",
+      "icon": "🛶",
+      "description": "Raft through the crystal-clear waters of the Spiti River",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9ae"
+      }
+    },
+    {
+      "name": "Stargazing",
+      "icon": "🌟",
+      "description": "Witness spectacular night skies in this pollution-free region",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9af"
+      }
+    },
+    {
+      "name": "Homestay Experience",
+      "icon": "🏠",
+      "description": "Stay with local families and experience authentic Spiti culture",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9b0"
+      }
+    }
+  ],
+  "accommodation": [
+    {
+      "type": "budget",
+      "name": "Spiti Valley Homestay",
+      "description": "Traditional village homes with basic facilities and authentic local experience",
+      "priceRange": "₹800-1,500",
+      "rating": 4.2,
+      "amenities": ["Home-cooked Meals", "Traditional Heating", "Cultural Immersion"],
+      "bookingUrl": "https://airbnb.com"
+    },
+    {
+      "type": "budget",
+      "name": "Mountain View Guest House",
+      "description": "Simple guesthouses with mountain views and basic amenities",
+      "priceRange": "₹1,000-1,800",
+      "rating": 4.0,
+      "amenities": ["WiFi", "Hot Water", "Breakfast", "Mountain View"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "mid-range",
+      "name": "Hotel Deyzor",
+      "description": "Comfortable hotel in Kaza with modern amenities and great service",
+      "priceRange": "₹3,000-5,000",
+      "rating": 4.4,
+      "amenities": ["AC", "WiFi", "Restaurant", "Room Service", "Parking"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "luxury",
+      "name": "Chandratal Camp",
+      "description": "Luxury tented camp near Chandratal Lake with premium facilities",
+      "priceRange": "₹8,000-15,000",
+      "rating": 4.7,
+      "amenities": ["Luxury Tents", "Fine Dining", "Hot Showers", "Guided Treks"],
+      "bookingUrl": "https://thechandratal.com"
+    }
+  ],
+  "transportation": [
+    "Jeep safaris",
+    "Local buses (seasonal)",
+    "Mountain bikes",
+    "Walking/hiking",
+    "Horse riding",
+    "Private taxis"
+  ],
+  "howToReach": {
+    "byAir": {
+      "nearestAirport": "Kullu Airport (KUU), Bhuntar Airport (KUU)",
+      "distanceFromCity": "Kaza: 200 km, Keylong: 120 km",
+      "travelTime": "Kaza: 8-10 hours, Keylong: 5-6 hours",
+      "domesticFlights": "Delhi, Chandigarh, Shimla",
+      "internationalFlights": "Limited international connections",
+      "transportToCity": "Prepaid taxis, private jeeps, shared cabs",
+      "estimatedCost": "₹2,000-4,000"
+    },
+    "byRail": {
+      "nearestStation": "Chandigarh Railway Station (CDG)",
+      "majorTrains": "Shatabdi Express, numerous trains to Chandigarh",
+      "connections": "Delhi, Mumbai, Kolkata, Amritsar",
+      "travelTime": "Delhi: 4-5 hours, Mumbai: 24-26 hours",
+      "transportToCity": "Buses/taxis from Chandigarh to Manali (8-10 hours), then to Spiti",
+      "estimatedCost": "₹200-800 (depending on class)",
+      "booking": "IRCTC website/app or railway station"
+    },
+    "byRoad": {
+      "majorHighways": "NH-3, NH-505, Spiti Road",
+      "distanceFromDelhi": "650 km to Manali, then 400 km to Kaza",
+      "distanceFromChandigarh": "250 km to Manali, then 400 km to Kaza",
+      "distanceFromShimla": "200 km to Manali, then 400 km to Kaza",
+      "travelTime": "Delhi: 16-18 hours, Chandigarh: 12-14 hours",
+      "busServices": "HRTC buses from Delhi/Chandigarh to Manali, then local buses/jeeps",
+      "privateCar": "Well-maintained but challenging mountain roads",
+      "estimatedCost": "Bus: ₹1,500-3,000, Private car: ₹25,000-35,000 (fuel + tolls)"
+    }
+  },
+  "localCuisine": [
+    "Thukpa (Tibetan noodle soup)",
+    "Momos (dumplings)",
+    "Butter Tea",
+    "Tsampa (roasted barley flour)",
+    "Chhang (local beer)",
+    "Dahi (yogurt)",
+    "Apricot products",
+    "Local cheese"
+  ],
+  "travelTips": [
+    "Obtain Inner Line Permit (ILP) for Spiti Valley",
+    "Carry sufficient warm clothing even in summer",
+    "Book accommodation in advance during peak season",
+    "Be prepared for altitude sickness - acclimatize gradually",
+    "Carry cash as ATMs are scarce",
+    "Respect local customs and monastery etiquette",
+    "Check weather conditions before planning high-altitude treks",
+    "Carry emergency medical supplies and contact numbers"
+  ],
+  "relatedPosts": [
+    {
+      "id": "lahul-spiti-trek-guide",
+      "title": "Complete Trekking Guide to Lahul Spiti Valley",
+      "slug": "complete-trekking-guide-lahul-spiti-valley",
+      "image": "https://images.unsplash.com/photo-1580500550469-16b5ab4f10b0?w=800&h=400&fit=crop",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9b1"
+      }
+    },
+    {
+      "id": "spiti-valley-culture",
+      "title": "Buddhist Culture and Monasteries of Spiti Valley",
+      "slug": "buddhist-culture-monasteries-spiti-valley",
+      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=400&fit=crop",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9b2"
+      }
+    }
+  ],
+  "isPopular": true,
+  "isFeatured": true,
+  "isActive": true,
+  "status": "published",
+  "seoTitle": "Lahul Spiti Valley Travel Guide: High-Altitude Adventure",
+  "seoDescription": "Explore Lahul Spiti Valley's stunning landscapes, ancient monasteries, and pristine lakes. Complete guide to India's remote Himalayan paradise.",
+  "createdAt": {
+    "$date": "2025-10-26T06:35:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-26T06:35:00.000Z"
+  },
+  "__v": 0
+}
+]

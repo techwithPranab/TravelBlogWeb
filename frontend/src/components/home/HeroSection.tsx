@@ -1,16 +1,49 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, MapPin, Calendar, Users } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { publicApi } from '@/lib/api'
 
 export function HeroSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearching, setIsSearching] = useState(false)
+  const [stats, setStats] = useState<{
+    totalUsers: number
+    totalPosts: number
+    totalDestinations: number
+    totalGuides: number
+    totalSubscribers: number
+  } | null>(null)
+  const [statsLoading, setStatsLoading] = useState(true)
   const router = useRouter()
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setStatsLoading(true)
+        const response = await publicApi.getStats()
+        setStats(response.data)
+      } catch (error) {
+        console.error('Error fetching stats:', error)
+        // Set fallback stats if API fails
+        setStats({
+          totalUsers: 1250,
+          totalPosts: 89,
+          totalDestinations: 45,
+          totalGuides: 23,
+          totalSubscribers: 567
+        })
+      } finally {
+        setStatsLoading(false)
+      }
+    }
+
+    fetchStats()
+  }, [])
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,10 +67,22 @@ export function HeroSection() {
     }
   }
 
-  const stats = [
-    { icon: MapPin, label: 'Countries Visited', value: '42' },
-    { icon: Calendar, label: 'Years Traveling', value: '8' },
-    { icon: Users, label: 'Travelers Inspired', value: '10K+' },
+  const heroStats = [
+    { 
+      icon: MapPin, 
+      label: 'Destinations', 
+      value: statsLoading ? '...' : (stats?.totalDestinations || 0).toLocaleString() 
+    },
+    { 
+      icon: Users, 
+      label: 'Travelers', 
+      value: statsLoading ? '...' : (stats?.totalUsers || 0).toLocaleString() 
+    },
+    { 
+      icon: Calendar, 
+      label: 'Stories Shared', 
+      value: statsLoading ? '...' : (stats?.totalPosts || 0).toLocaleString() 
+    },
   ]
 
   return (
@@ -92,7 +137,7 @@ export function HeroSection() {
           </form>
 
           {/* Call to Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-up" style={{ animationDelay: '0.6s' }}>
+          {/* <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-up" style={{ animationDelay: '0.6s' }}>
             <Button
               variant="outline"
               size="lg"
@@ -107,11 +152,11 @@ export function HeroSection() {
             >
               Plan Your Trip
             </Button>
-          </div>
+          </div> */}
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-up" style={{ animationDelay: '0.8s' }}>
-            {stats.map((stat, index) => (
+            {heroStats.map((stat, index) => (
               <div key={stat.label} className="text-center">
                 <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-100 to-fuchsia-100 rounded-full shadow-lg">
                   <stat.icon className="w-8 h-8 text-purple-600" />

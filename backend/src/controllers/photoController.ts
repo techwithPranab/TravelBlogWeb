@@ -25,7 +25,8 @@ export const getPhotos = handleAsync(async (req: Request, res: Response) => {
     tags, 
     featured,
     sortBy = 'submittedAt',
-    sortOrder = 'desc'
+    sortOrder = 'desc',
+    search
   } = req.query;
 
   // Build filter object
@@ -41,6 +42,17 @@ export const getPhotos = handleAsync(async (req: Request, res: Response) => {
     filter.tags = { $in: tagArray };
   }
   if (featured === 'true') filter.isFeatured = true;
+  if (search) {
+    filter.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { description: { $regex: search, $options: 'i' } },
+      { tags: { $in: [new RegExp(search as string, 'i')] } },
+      { category: { $regex: search, $options: 'i' } },
+      { 'location.country': { $regex: search, $options: 'i' } },
+      { 'location.city': { $regex: search, $options: 'i' } },
+      { 'photographer.name': { $regex: search, $options: 'i' } }
+    ];
+  }
 
   // Build sort object
   const sort: any = {};

@@ -111,6 +111,181 @@ app.get('/health', (req, res) => {
   })
 })
 
+// Public stats endpoint for home page metrics
+app.get('/api/public/stats', async (req, res) => {
+  try {
+    const [
+      totalUsers,
+      totalPosts,
+      totalDestinations,
+      totalGuides,
+      totalSubscribers
+    ] = await Promise.all([
+      require('./models/User').default.countDocuments(),
+      require('./models/Post').default.countDocuments({ status: 'published' }),
+      require('./models/Destination').default.countDocuments({ isActive: true }),
+      require('./models/Guide').default.countDocuments({ isPublished: true }),
+      require('./models/Newsletter').default.countDocuments()
+    ])
+
+    res.json({
+      success: true,
+      data: {
+        totalUsers,
+        totalPosts,
+        totalDestinations,
+        totalGuides,
+        totalSubscribers
+      }
+    })
+  } catch (error) {
+    console.error('Public stats error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch public stats'
+    })
+  }
+})
+
+// Public testimonials endpoint for home page
+app.get('/api/public/testimonials', async (req, res) => {
+  try {
+    // For now, return curated testimonials
+    // In a real application, this could fetch from a testimonials collection
+    const testimonials = [
+      {
+        id: '1',
+        name: 'Sarah Johnson',
+        role: 'Adventure Traveler',
+        avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        rating: 5,
+        text: 'TravelBlog has been my go-to resource for planning amazing adventures. The detailed guides and real traveler experiences are invaluable.',
+        featured: true
+      },
+      {
+        id: '2',
+        name: 'Mike Chen',
+        role: 'Photography Enthusiast',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        rating: 5,
+        text: 'The photography tips and destination guides have helped me capture stunning travel photos. Highly recommend for any travel photographer.',
+        featured: true
+      },
+      {
+        id: '3',
+        name: 'Emma Rodriguez',
+        role: 'Solo Female Traveler',
+        avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+        rating: 5,
+        text: 'As a solo female traveler, I appreciate the safety tips and community support. TravelBlog makes solo travel feel safe and exciting.',
+        featured: true
+      }
+    ]
+
+    res.status(200).json({
+      success: true,
+      data: testimonials
+    })
+  } catch (error) {
+    console.error('Public testimonials error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch testimonials'
+    })
+  }
+})
+
+// Public contact/site information endpoint
+app.get('/api/public/contact', async (req, res) => {
+  try {
+    // Fetch contact information from site settings
+    const SiteSettings = (await import('./models/SiteSettings')).default
+    let settings = await SiteSettings.findOne()
+
+    if (!settings) {
+      // Create default settings if none exist
+      settings = new SiteSettings({
+        siteName: 'Travel Blog',
+        siteDescription: 'Discover amazing travel destinations and guides',
+        siteUrl: 'https://yourdomain.com',
+        contactEmail: 'hello@travelblog.com',
+        supportEmail: 'support@travelblog.com',
+        contactPhone: '+1 (555) 123-4567',
+        contactAddress: {
+          street: '123 Travel Street',
+          city: 'San Francisco',
+          state: 'CA',
+          zipCode: '94105',
+          country: 'United States'
+        },
+        businessHours: {
+          monday: '9:00 AM - 6:00 PM',
+          tuesday: '9:00 AM - 6:00 PM',
+          wednesday: '9:00 AM - 6:00 PM',
+          thursday: '9:00 AM - 6:00 PM',
+          friday: '9:00 AM - 6:00 PM',
+          saturday: '10:00 AM - 4:00 PM',
+          sunday: 'Closed'
+        },
+        supportSettings: {
+          email: 'support@travelblog.com',
+          responseTime: 'Within 24 hours'
+        },
+        socialLinks: {
+          facebook: 'https://facebook.com/travelblog',
+          twitter: 'https://twitter.com/travelblog',
+          instagram: 'https://instagram.com/travelblog',
+          youtube: 'https://youtube.com/travelblog'
+        }
+      })
+      await settings.save()
+    }
+
+    // Return contact information from settings
+    const contactInfo = {
+      email: settings.contactEmail,
+      phone: settings.contactPhone || '+1 (555) 123-4567',
+      address: settings.contactAddress || {
+        street: '123 Travel Street',
+        city: 'San Francisco',
+        state: 'CA',
+        zipCode: '94105',
+        country: 'United States'
+      },
+      socialLinks: {
+        facebook: settings.socialLinks?.facebook || 'https://facebook.com/travelblog',
+        twitter: settings.socialLinks?.twitter || 'https://twitter.com/travelblog',
+        instagram: settings.socialLinks?.instagram || 'https://instagram.com/travelblog',
+        youtube: settings.socialLinks?.youtube || 'https://youtube.com/travelblog'
+      },
+      businessHours: settings.businessHours || {
+        monday: '9:00 AM - 6:00 PM',
+        tuesday: '9:00 AM - 6:00 PM',
+        wednesday: '9:00 AM - 6:00 PM',
+        thursday: '9:00 AM - 6:00 PM',
+        friday: '9:00 AM - 6:00 PM',
+        saturday: '10:00 AM - 4:00 PM',
+        sunday: 'Closed'
+      },
+      support: settings.supportSettings || {
+        email: 'support@travelblog.com',
+        responseTime: 'Within 24 hours'
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      data: contactInfo
+    })
+  } catch (error) {
+    console.error('Public contact error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch contact information'
+    })
+  }
+})
+
 // Debug endpoint to check environment variables
 app.get('/debug/env', (req, res) => {
   res.status(200).json({

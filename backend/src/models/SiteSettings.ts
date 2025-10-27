@@ -7,6 +7,27 @@ export interface ISiteSettings extends Document {
   siteUrl: string
   contactEmail: string
   supportEmail: string
+  contactPhone?: string
+  contactAddress?: {
+    street: string
+    city: string
+    state: string
+    zipCode: string
+    country: string
+  }
+  businessHours?: {
+    monday: string
+    tuesday: string
+    wednesday: string
+    thursday: string
+    friday: string
+    saturday: string
+    sunday: string
+  }
+  supportSettings?: {
+    email: string
+    responseTime: string
+  }
   socialLinks: {
     facebook?: string
     twitter?: string
@@ -69,6 +90,30 @@ const siteSettingsSchema = new Schema<ISiteSettings>({
   supportEmail: {
     type: String,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
+  },
+  contactPhone: {
+    type: String,
+    default: '+1 (555) 123-4567'
+  },
+  contactAddress: {
+    street: { type: String, default: '123 Travel Street' },
+    city: { type: String, default: 'San Francisco' },
+    state: { type: String, default: 'CA' },
+    zipCode: { type: String, default: '94105' },
+    country: { type: String, default: 'USA' }
+  },
+  businessHours: {
+    monday: { type: String, default: '9:00 AM - 6:00 PM' },
+    tuesday: { type: String, default: '9:00 AM - 6:00 PM' },
+    wednesday: { type: String, default: '9:00 AM - 6:00 PM' },
+    thursday: { type: String, default: '9:00 AM - 6:00 PM' },
+    friday: { type: String, default: '9:00 AM - 6:00 PM' },
+    saturday: { type: String, default: '10:00 AM - 4:00 PM' },
+    sunday: { type: String, default: 'Closed' }
+  },
+  supportSettings: {
+    email: { type: String, default: 'support@travelblog.com' },
+    responseTime: { type: String, default: 'Within 24 hours' }
   },
   socialLinks: {
     facebook: String,

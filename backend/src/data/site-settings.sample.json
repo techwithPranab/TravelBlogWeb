@@ -1,0 +1,71 @@
+{
+  "siteName": "TravelBlog",
+  "siteDescription": "Discover amazing destinations, get practical travel tips, and find inspiration for your next adventure. Join thousands of travelers exploring the world one story at a time.",
+  "siteUrl": "https://travelblog.com",
+  "contactEmail": "hello@travelblog.com",
+  "supportEmail": "support@travelblog.com",
+  "contactPhone": "+1 (555) 123-4567",
+  "contactAddress": {
+    "street": "123 Travel Street",
+    "city": "San Francisco",
+    "state": "CA",
+    "zipCode": "94105",
+    "country": "USA"
+  },
+  "businessHours": {
+    "monday": "9:00 AM - 6:00 PM",
+    "tuesday": "9:00 AM - 6:00 PM",
+    "wednesday": "9:00 AM - 6:00 PM",
+    "thursday": "9:00 AM - 6:00 PM",
+    "friday": "9:00 AM - 6:00 PM",
+    "saturday": "10:00 AM - 4:00 PM",
+    "sunday": "Closed"
+  },
+  "supportSettings": {
+    "email": "support@travelblog.com",
+    "responseTime": "Within 24 hours"
+  },
+  "socialLinks": {
+    "facebook": "https://facebook.com/travelblog",
+    "twitter": "https://twitter.com/travelblog",
+    "instagram": "https://instagram.com/travelblog",
+    "youtube": "https://youtube.com/travelblog",
+    "linkedin": "https://linkedin.com/company/travelblog"
+  },
+  "seoSettings": {
+    "metaTitle": "TravelBlog - Discover Amazing Destinations & Travel Tips",
+    "metaDescription": "Discover amazing travel destinations, guides, and tips from experienced travelers around the world. Plan your next adventure with TravelBlog.",
+    "metaKeywords": [
+      "travel",
+      "destinations",
+      "travel guides",
+      "travel tips",
+      "adventure",
+      "vacation",
+      "tourism",
+      "wanderlust"
+    ],
+    "ogImage": "https://travelblog.com/images/og-image.jpg"
+  },
+  "emailSettings": {
+    "smtpHost": "smtp.gmail.com",
+    "smtpPort": 587,
+    "smtpUser": "noreply@travelblog.com",
+    "smtpPassword": "your-smtp-password",
+    "fromEmail": "noreply@travelblog.com",
+    "fromName": "TravelBlog"
+  },
+  "generalSettings": {
+    "postsPerPage": 12,
+    "commentsEnabled": true,
+    "registrationEnabled": true,
+    "maintenanceMode": false,
+    "analyticsCode": "GA_MEASUREMENT_ID"
+  },
+  "theme": {
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#8B5CF6",
+    "logo": "https://travelblog.com/images/logo.png",
+    "favicon": "https://travelblog.com/images/favicon.ico"
+  }
+}

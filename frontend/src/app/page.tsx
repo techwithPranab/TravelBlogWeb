@@ -1,4 +1,5 @@
 import { HeroSection } from '@/components/home/HeroSection'
+import { MetricsSection } from '@/components/home/MetricsSection'
 import { FeaturedStories } from '@/components/home/FeaturedStories'
 import { LatestPosts } from '@/components/home/LatestPosts'
 import { Categories } from '@/components/home/Categories'
@@ -105,6 +106,9 @@ export default function HomePage() {
       <div className="min-h-screen w-full overflow-x-hidden">
         {/* Hero Section with Search */}
         <HeroSection />
+
+        {/* Metrics Section */}
+        {/* <MetricsSection /> */}
 
         {/* Featured Stories */}
         <section className="section-padding bg-gray-50 dark:bg-gray-800">

@@ -13,7 +13,7 @@ export const upload = multer({ storage })
 // @route   GET /api/guides
 // @access  Public
 export const getAllGuides = handleAsync(async (req: Request, res: Response) => {
-  const { page = 1, limit = 10, type, difficulty, destination, category } = req.query
+  const { page = 1, limit = 10, type, difficulty, destination, category, search } = req.query
 
   // Build filter object
   const filter: any = { isPublished: true }
@@ -22,6 +22,16 @@ export const getAllGuides = handleAsync(async (req: Request, res: Response) => {
   if (difficulty) filter.difficulty = difficulty
   if (destination) filter['destination.slug'] = destination
   if (category) filter.category = category
+  if (search) {
+    filter.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { description: { $regex: search, $options: 'i' } },
+      { content: { $regex: search, $options: 'i' } },
+      { tags: { $in: [new RegExp(search as string, 'i')] } },
+      { type: { $regex: search, $options: 'i' } },
+      { difficulty: { $regex: search, $options: 'i' } }
+    ]
+  }
 
   const guides = await Guide.find(filter)
     .sort({ publishedAt: -1 })

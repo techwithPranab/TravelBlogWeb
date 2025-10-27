@@ -1,8 +1,46 @@
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { MapPin, Mail, Phone, Facebook, Twitter, Instagram, Youtube } from 'lucide-react'
+import { publicApi } from '@/lib/api'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+
+  const [contactInfo, setContactInfo] = useState<{
+    email: string
+    phone: string
+    address: {
+      street: string
+      city: string
+      state: string
+      zipCode: string
+      country: string
+    }
+    socialLinks: {
+      facebook: string
+      twitter: string
+      instagram: string
+      youtube: string
+    }
+  } | null>(null)
+  const [contactLoading, setContactLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const response = await publicApi.getContact()
+        if (response.success) {
+          setContactInfo(response.data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch contact info:', error)
+      } finally {
+        setContactLoading(false)
+      }
+    }
+
+    fetchContactInfo()
+  }, [])
 
   const footerLinks = {
     explore: [
@@ -21,21 +59,21 @@ export function Footer() {
       { name: 'About', href: '/about' },
       { name: 'Contact', href: '/contact' },
       { name: 'Privacy Policy', href: '/privacy' },
-      { name: 'Terms of Service', href: '/terms' },
+      { name: 'Terms of Service', href: '/terms-of-service' },
     ],
     support: [
       { name: 'Help Center', href: '/help' },
-      { name: 'Community', href: '/community' },
+      // { name: 'Community', href: '/communities' },
       { name: 'Newsletter', href: '/newsletter' },
       { name: 'Partner with Us', href: '/partner-with-us' },
     ],
   }
 
   const socialLinks = [
-    { name: 'Facebook', icon: Facebook, href: 'https://facebook.com/travelblog' },
-    { name: 'Twitter', icon: Twitter, href: 'https://twitter.com/travelblog' },
-    { name: 'Instagram', icon: Instagram, href: 'https://instagram.com/travelblog' },
-    { name: 'YouTube', icon: Youtube, href: 'https://youtube.com/travelblog' },
+    { name: 'Facebook', icon: Facebook, href: contactInfo?.socialLinks?.facebook || 'https://facebook.com/travelblog' },
+    { name: 'Twitter', icon: Twitter, href: contactInfo?.socialLinks?.twitter || 'https://twitter.com/travelblog' },
+    { name: 'Instagram', icon: Instagram, href: contactInfo?.socialLinks?.instagram || 'https://instagram.com/travelblog' },
+    { name: 'YouTube', icon: Youtube, href: contactInfo?.socialLinks?.youtube || 'https://youtube.com/travelblog' },
   ]
 
   return (
@@ -61,15 +99,25 @@ export function Footer() {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-primary-400" />
-                <span className="text-gray-300">hello@travelblog.com</span>
+                <span className="text-gray-300">
+                  {contactLoading ? 'Loading...' : (contactInfo?.email || 'hello@travelblog.com')}
+                </span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-primary-400" />
-                <span className="text-gray-300">+1 (555) 123-4567</span>
+                <span className="text-gray-300">
+                  {contactLoading ? 'Loading...' : (contactInfo?.phone || '+1 (555) 123-4567')}
+                </span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-primary-400" />
-                <span className="text-gray-300">San Francisco, CA</span>
+                <span className="text-gray-300">
+                  {contactLoading ? 'Loading...' : (
+                    contactInfo?.address 
+                      ? `${contactInfo.address.city}, ${contactInfo.address.state}` 
+                      : 'San Francisco, CA'
+                  )}
+                </span>
               </div>
             </div>
 
@@ -191,7 +239,7 @@ export function Footer() {
             <Link href="/privacy" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">
+            <Link href="/terms-of-service" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">
               Terms of Service
             </Link>
             <Link href="/cookies" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">

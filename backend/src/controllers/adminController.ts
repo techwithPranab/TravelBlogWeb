@@ -878,6 +878,27 @@ export const getSettings = async (req: Request, res: Response) => {
         siteUrl: 'https://yourdomain.com',
         contactEmail: 'contact@example.com',
         supportEmail: 'support@example.com',
+        contactPhone: '+1 (555) 123-4567',
+        contactAddress: {
+          street: '123 Travel Street',
+          city: 'San Francisco',
+          state: 'CA',
+          zipCode: '94105',
+          country: 'USA'
+        },
+        businessHours: {
+          monday: '9:00 AM - 6:00 PM',
+          tuesday: '9:00 AM - 6:00 PM',
+          wednesday: '9:00 AM - 6:00 PM',
+          thursday: '9:00 AM - 6:00 PM',
+          friday: '9:00 AM - 6:00 PM',
+          saturday: '10:00 AM - 4:00 PM',
+          sunday: 'Closed'
+        },
+        supportSettings: {
+          email: 'support@travelblog.com',
+          responseTime: 'Within 24 hours'
+        },
         socialLinks: {
           facebook: '',
           twitter: '',
@@ -933,6 +954,27 @@ export const updateSettings = async (req: Request, res: Response) => {
         siteUrl: 'https://yourdomain.com',
         contactEmail: 'contact@example.com',
         supportEmail: 'support@example.com',
+        contactPhone: '+1 (555) 123-4567',
+        contactAddress: {
+          street: '123 Travel Street',
+          city: 'San Francisco',
+          state: 'CA',
+          zipCode: '94105',
+          country: 'USA'
+        },
+        businessHours: {
+          monday: '9:00 AM - 6:00 PM',
+          tuesday: '9:00 AM - 6:00 PM',
+          wednesday: '9:00 AM - 6:00 PM',
+          thursday: '9:00 AM - 6:00 PM',
+          friday: '9:00 AM - 6:00 PM',
+          saturday: '10:00 AM - 4:00 PM',
+          sunday: 'Closed'
+        },
+        supportSettings: {
+          email: 'support@travelblog.com',
+          responseTime: 'Within 24 hours'
+        },
         socialLinks: {
           facebook: '',
           twitter: '',

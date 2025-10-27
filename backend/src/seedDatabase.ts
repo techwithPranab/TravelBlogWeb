@@ -10,6 +10,7 @@ import Post from './models/Post'
 import Guide from './models/Guide'
 import Resource from './models/Resource'
 import Comment from './models/Comment'
+import SiteSettings from './models/SiteSettings'
 
 dotenv.config()
 
@@ -557,6 +558,7 @@ const seedDatabase = async () => {
     await Guide.deleteMany({})
     await Resource.deleteMany({})
     await Comment.deleteMany({})
+    await SiteSettings.deleteMany({})
 
     // Create users
     console.log('Creating users...')
@@ -868,6 +870,21 @@ const seedDatabase = async () => {
       resources.push(await resource.save())
     }
 
+    // Create site settings
+    console.log('Creating site settings...')
+    const fs = require('fs')
+    const path = require('path')
+    const siteSettingsPath = path.join(__dirname, 'data', 'site-settings.sample.json')
+    
+    if (fs.existsSync(siteSettingsPath)) {
+      const siteSettingsData = JSON.parse(fs.readFileSync(siteSettingsPath, 'utf8'))
+      const siteSettings = new SiteSettings(siteSettingsData)
+      await siteSettings.save()
+      console.log('Site settings created successfully')
+    } else {
+      console.log('Site settings sample file not found, skipping...')
+    }
+
     console.log('Database seeded successfully!')
     console.log(`Created:`)
     console.log(`- ${users.length} users`)
@@ -876,6 +893,7 @@ const seedDatabase = async () => {
     console.log(`- ${posts.length} posts`)
     console.log(`- ${guides.length} guides`)
     console.log(`- ${resources.length} resources`)
+    console.log(`- Site settings initialized`)
 
   } catch (error) {
     console.error('Error seeding database:', error)
