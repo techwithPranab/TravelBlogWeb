@@ -35,6 +35,7 @@ export interface IPost extends Document {
   }
   status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived' | 'inactive'
   isPremium: boolean
+  isFeatured: boolean
   readTime: number
   viewCount: number
   likeCount: number
@@ -164,6 +165,10 @@ const postSchema = new Schema<IPost>({
     type: Boolean,
     default: false
   },
+  isFeatured: {
+    type: Boolean,
+    default: false
+  },
   readTime: {
     type: Number,
     default: 0
@@ -258,6 +263,7 @@ postSchema.index({ categories: 1 })
 postSchema.index({ tags: 1 })
 postSchema.index({ status: 1 })
 postSchema.index({ isPremium: 1 })
+postSchema.index({ isFeatured: 1 })
 postSchema.index({ publishedAt: -1 })
 postSchema.index({ viewCount: -1 })
 postSchema.index({ createdAt: -1 })

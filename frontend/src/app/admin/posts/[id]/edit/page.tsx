@@ -15,6 +15,7 @@ import { adminApi } from '@/lib/adminApi'
 import { toast } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 import ContentSectionManager from '@/components/admin/ContentSectionManager'
+import ContentSection from '@/components/blog/ContentSection'
 
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
@@ -45,6 +46,7 @@ export default function EditPostPage() {
     category: '',
     destination: '',
     status: 'draft',
+    isFeatured: false,
     seoTitle: '',
     seoDescription: '',
     publishedAt: ''
@@ -115,6 +117,7 @@ export default function EditPostPage() {
         category: post.category || '',
         destination: post.destination || '',
         status: post.status || 'draft',
+        isFeatured: post.isFeatured || false,
         seoTitle: post.seo?.title || '',
         seoDescription: post.seo?.description || '',
         publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : ''
@@ -257,13 +260,23 @@ export default function EditPostPage() {
     setLoading(true)
 
     try {
-      const postData = {
+      const postData: any = {
         ...formData,
         status,
         tags,
         contentSections,
-        publishedAt: status === 'published' ? new Date().toISOString() : formData.publishedAt
+        publishedAt: status === 'published' ? new Date().toISOString() : (formData.publishedAt && formData.publishedAt.trim() ? new Date(formData.publishedAt).toISOString() : undefined)
       }
+
+      // Remove undefined fields
+      Object.keys(postData).forEach(key => {
+        if (postData[key] === undefined) {
+          delete postData[key]
+        }
+      })
+
+      console.log('Sending post data:', postData)
+      console.log('isFeatured value:', postData.isFeatured)
 
       await adminApi.updatePost(postId, postData)
       toast.success(`Post ${status === 'published' ? 'published' : 'updated'} successfully!`)
@@ -300,19 +313,53 @@ export default function EditPostPage() {
             Exit Preview
           </button>
         </div>
-        <div className="max-w-4xl mx-auto p-8 text-black">
+        <div className="max-w-7xl mx-auto p-8">
           {formData.featuredImage.url && (
             <img 
               src={formData.featuredImage.url} 
               alt={formData.featuredImage.alt || formData.title}
-              className="w-full h-64 object-cover rounded-lg mb-6"
+              className="w-full h-96 md:h-[600px] object-cover rounded-2xl mb-8"
             />
           )}
-          <h1 className="text-4xl font-bold mb-4 text-black">{formData.title || 'Untitled Post'}</h1>
-          <p className="text-xl mb-6 text-black">{formData.excerpt}</p>
-          <div className="prose max-w-none text-black">
-            <div dangerouslySetInnerHTML={{ __html: formData.content }} />
-          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-black leading-tight">
+            {formData.title || 'Untitled Post'}
+          </h1>
+          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+            {formData.excerpt}
+          </p>
+
+          {/* Content Sections */}
+          {contentSections && contentSections.length > 0 ? (
+            <div className="mb-12">
+              {contentSections.map((section) => (
+                <ContentSection
+                  key={section.id}
+                  section={section}
+                  onImageClick={(imageUrl: string) => {
+                    // Simple lightbox for preview
+                    const lightbox = document.createElement('div')
+                    lightbox.className = 'fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4'
+                    lightbox.innerHTML = `
+                      <div class="relative max-w-5xl max-h-full">
+                        <button class="absolute top-4 right-4 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black/70" onclick="this.parentElement.parentElement.remove()">
+                          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                        <img src="${imageUrl}" alt="Preview image" class="max-w-full max-h-[80vh] object-contain" />
+                      </div>
+                    `
+                    document.body.appendChild(lightbox)
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            /* Fallback to traditional content */
+            <div className="prose prose-xl max-w-none mb-12 text-black">
+              <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+            </div>
+          )}
         </div>
       </div>
     )
@@ -471,16 +518,33 @@ export default function EditPostPage() {
               {/* Status */}
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Status</h3>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                >
-                  <option value="draft">Draft</option>
-                  <option value="published">Published</option>
-                  <option value="inactive">Inactive</option>
-                </select>
+                <div className="space-y-4">
+                  <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                  >
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                  
+                  {/* Featured Post Checkbox */}
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="isFeatured"
+                      name="isFeatured"
+                      checked={formData.isFeatured}
+                      onChange={(e) => setFormData(prev => ({ ...prev, isFeatured: e.target.checked }))}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="isFeatured" className="ml-2 block text-sm text-gray-900">
+                      Mark as Featured Post
+                    </label>
+                  </div>
+                </div>
               </div>
 
               {/* Featured Image */}

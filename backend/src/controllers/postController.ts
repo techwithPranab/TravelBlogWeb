@@ -359,7 +359,8 @@ export const getFeaturedPosts = async (req: Request, res: Response): Promise<voi
       status: 'published'
     })
       .populate('author', 'name avatar email')
-      .sort('-createdAt')
+      .populate('categories', 'name slug')
+      .sort('-publishedAt -createdAt')
       .limit(limit)
 
     res.status(200).json({
