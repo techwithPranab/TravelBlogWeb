@@ -1,0 +1,312 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.verifyEmail = exports.resetPassword = exports.forgotPassword = exports.updatePassword = exports.updateProfile = exports.getMe = exports.logout = exports.login = exports.register = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const crypto_1 = __importDefault(require("crypto"));
+const User_1 = __importDefault(require("../models/User"));
+// Generate JWT Token
+const signToken = (id) => {
+    const secret = process.env.JWT_SECRET || '';
+    const expiresIn = process.env.JWT_EXPIRE || '7d';
+    // Use any to bypass TypeScript type checking for expiresIn
+    return jsonwebtoken_1.default.sign({ id }, secret, { expiresIn });
+};
+// Send token response
+const sendTokenResponse = (user, statusCode, res) => {
+    // Always convert _id to string for JWT
+    const userId = user._id ? user._id.toString() : '';
+    const token = signToken(userId);
+    res.status(statusCode).json({
+        success: true,
+        token,
+        user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            avatar: user.avatar,
+            isPremium: user.isPremium,
+        },
+    });
+};
+// @desc    Register user
+// @route   POST /api/auth/register
+// @access  Public
+const register = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        // Check if user exists
+        const existingUser = await User_1.default.findOne({ email });
+        if (existingUser) {
+            res.status(400).json({
+                success: false,
+                error: 'User already exists with this email'
+            });
+            return;
+        }
+        // Create user
+        const user = await User_1.default.create({
+            name,
+            email,
+            password,
+        });
+        sendTokenResponse(user, 201, res);
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Server error during registration'
+        });
+    }
+};
+exports.register = register;
+// @desc    Login user
+// @route   POST /api/auth/login
+// @access  Public
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        console.log('Login attempt:', email);
+        console.log('Login attempt:', password);
+        // Find user by email (include password for comparison)
+        const user = await User_1.default.findOne({ email }).select('+password');
+        if (!user) {
+            res.status(401).json({
+                success: false,
+                error: 'Invalid credentials'
+            });
+            return;
+        }
+        console.log('User found:', user);
+        // Check password
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            res.status(401).json({
+                success: false,
+                error: 'Invalid credentials'
+            });
+            return;
+        }
+        sendTokenResponse(user, 200, res);
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Server error during login'
+        });
+    }
+};
+exports.login = login;
+// @desc    Logout user
+// @route   POST /api/auth/logout
+// @access  Public
+const logout = (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'User logged out successfully'
+    });
+};
+exports.logout = logout;
+// @desc    Get current logged in user
+// @route   GET /api/auth/me
+// @access  Private
+const getMe = async (req, res) => {
+    try {
+        const user = await User_1.default.findById(req.user?._id);
+        res.status(200).json({
+            success: true,
+            data: user
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Server error'
+        });
+    }
+};
+exports.getMe = getMe;
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+const updateProfile = async (req, res) => {
+    try {
+        const fieldsToUpdate = {
+            name: req.body.name,
+            bio: req.body.bio,
+            socialLinks: req.body.socialLinks,
+        };
+        const user = await User_1.default.findByIdAndUpdate(req.user?._id, fieldsToUpdate, {
+            new: true,
+            runValidators: true,
+        });
+        res.status(200).json({
+            success: true,
+            data: user
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Server error'
+        });
+    }
+};
+exports.updateProfile = updateProfile;
+// @desc    Update password
+// @route   PUT /api/auth/password
+// @access  Private
+const updatePassword = async (req, res) => {
+    try {
+        const user = await User_1.default.findById(req.user?._id).select('+password');
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                error: 'User not found'
+            });
+            return;
+        }
+        // Check current password
+        const isMatch = await user.comparePassword(req.body.currentPassword);
+        if (!isMatch) {
+            res.status(401).json({
+                success: false,
+                error: 'Current password is incorrect'
+            });
+            return;
+        }
+        user.password = req.body.newPassword;
+        await user.save();
+        sendTokenResponse(user, 200, res);
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Server error'
+        });
+    }
+};
+exports.updatePassword = updatePassword;
+// @desc    Forgot password
+// @route   POST /api/auth/forgot-password
+// @access  Public
+const forgotPassword = async (req, res) => {
+    try {
+        const user = await User_1.default.findOne({ email: req.body.email });
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                error: 'No user found with that email'
+            });
+            return;
+        }
+        // Generate reset token
+        const resetToken = crypto_1.default.randomBytes(20).toString('hex');
+        // Hash token and set to resetPasswordToken field
+        user.passwordResetToken = crypto_1.default
+            .createHash('sha256')
+            .update(resetToken)
+            .digest('hex');
+        // Set expire
+        user.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+        await user.save({ validateBeforeSave: false });
+        try {
+            // Here you would send email
+            // await sendEmail({
+            //   email: user.email,
+            //   subject: 'Password reset token',
+            //   message: `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${req.protocol}://${req.get('host')}/api/auth/reset-password/${resetToken}`
+            // })
+            res.status(200).json({
+                success: true,
+                message: 'Email sent'
+            });
+        }
+        catch (_err) {
+            user.passwordResetToken = undefined;
+            user.passwordResetExpires = undefined;
+            await user.save({ validateBeforeSave: false });
+            res.status(500).json({
+                success: false,
+                error: 'Email could not be sent'
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Server error'
+        });
+    }
+};
+exports.forgotPassword = forgotPassword;
+// @desc    Reset password
+// @route   PUT /api/auth/reset-password/:resettoken
+// @access  Public
+const resetPassword = async (req, res) => {
+    try {
+        // Get hashed token
+        const resetPasswordToken = crypto_1.default
+            .createHash('sha256')
+            .update(req.params.token)
+            .digest('hex');
+        const user = await User_1.default.findOne({
+            passwordResetToken: resetPasswordToken,
+            passwordResetExpires: { $gt: Date.now() },
+        });
+        if (!user) {
+            res.status(400).json({
+                success: false,
+                error: 'Invalid token'
+            });
+            return;
+        }
+        // Set new password
+        user.password = req.body.password;
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+        await user.save();
+        sendTokenResponse(user, 200, res);
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Server error'
+        });
+    }
+};
+exports.resetPassword = resetPassword;
+// @desc    Verify email
+// @route   GET /api/auth/verify-email/:token
+// @access  Public
+const verifyEmail = async (req, res) => {
+    try {
+        const user = await User_1.default.findOne({
+            emailVerificationToken: req.params.token,
+        });
+        if (!user) {
+            res.status(400).json({
+                success: false,
+                error: 'Invalid verification token'
+            });
+            return;
+        }
+        user.isEmailVerified = true;
+        user.emailVerificationToken = undefined;
+        await user.save();
+        res.status(200).json({
+            success: true,
+            message: 'Email verified successfully'
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Server error'
+        });
+    }
+};
+exports.verifyEmail = verifyEmail;
