@@ -91,8 +91,66 @@ interface Destination {
     }
     byRoad: {
       majorHighways: string
-      distanceFromDelhi: string
-      distanceFromLucknow: string
+      distances?: Array<{
+        label: string
+        value: string
+      }>
+      distanceFromDelhi?: string
+      distanceFromLucknow?: string
+      distanceFromMumbai?: string
+      distanceFromBeijing?: string
+      distanceFromShanghai?: string
+      distanceFromTokyo?: string
+      distanceFromOsaka?: string
+      distanceFromBangkok?: string
+      distanceFromChiangMai?: string
+      distanceFromHanoi?: string
+      distanceFromHoChiMinhCity?: string
+      distanceFromJakarta?: string
+      distanceFromBali?: string
+      distanceFromKualaLumpur?: string
+      distanceFromPenang?: string
+      distanceFromSingapore?: string
+      distanceFromJohorBahru?: string
+      distanceFromLosAngeles?: string
+      distanceFromSanFrancisco?: string
+      distanceFromToronto?: string
+      distanceFromVancouver?: string
+      distanceFromMexicoCity?: string
+      distanceFromCancun?: string
+      distanceFromNewYork?: string
+      distanceFromLondon?: string
+      distanceFromManchester?: string
+      distanceFromParis?: string
+      distanceFromLyon?: string
+      distanceFromBerlin?: string
+      distanceFromMunich?: string
+      distanceFromRome?: string
+      distanceFromMilan?: string
+      distanceFromMadrid?: string
+      distanceFromBarcelona?: string
+      distanceFromAmsterdam?: string
+      distanceFromRotterdam?: string
+      distanceFromCairo?: string
+      distanceFromAlexandria?: string
+      distanceFromCapeTown?: string
+      distanceFromJohannesburg?: string
+      distanceFromMarrakech?: string
+      distanceFromCasablanca?: string
+      distanceFromNairobi?: string
+      distanceFromMombasa?: string
+      distanceFromSaoPaulo?: string
+      distanceFromRioDeJaneiro?: string
+      distanceFromBuenosAires?: string
+      distanceFromCordoba?: string
+      distanceFromSantiago?: string
+      distanceFromValparaiso?: string
+      distanceFromLima?: string
+      distanceFromCusco?: string
+      distanceFromSydney?: string
+      distanceFromMelbourne?: string
+      distanceFromAuckland?: string
+      distanceFromWellington?: string
       distanceFromKanpur?: string
       distanceFromPatna?: string
       travelTime: string
@@ -350,14 +408,57 @@ export default function DestinationDetailsPage() {
                       <span className="font-medium">Major Highways:</span><br/>
                       {destination.howToReach.byRoad.majorHighways}
                     </div>
-                    <div>
-                      <span className="font-medium">Distance from Delhi:</span><br/>
-                      {destination.howToReach.byRoad.distanceFromDelhi}
-                    </div>
-                    <div>
-                      <span className="font-medium">Distance from Lucknow:</span><br/>
-                      {destination.howToReach.byRoad.distanceFromLucknow}
-                    </div>
+                    {destination.howToReach.byRoad.distances && destination.howToReach.byRoad.distances.length > 0 ? (
+                      <div>
+                        <span className="font-medium">Distances:</span>
+                        <div className="mt-2 space-y-1">
+                          {destination.howToReach.byRoad.distances.map((distance, index) => (
+                            <div key={`distance-${index}`} className="text-xs">
+                              {distance.label}: {distance.value}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      (() => {
+                        // Fallback to old structure - show relevant distances based on country
+                        const distances = []
+                        if (destination.country === 'India') {
+                          if (destination.howToReach.byRoad.distanceFromDelhi) {
+                            distances.push({ label: 'Distance from Delhi', value: destination.howToReach.byRoad.distanceFromDelhi })
+                          }
+                          if (destination.howToReach.byRoad.distanceFromLucknow) {
+                            distances.push({ label: 'Distance from Lucknow', value: destination.howToReach.byRoad.distanceFromLucknow })
+                          }
+                          if (destination.howToReach.byRoad.distanceFromKanpur) {
+                            distances.push({ label: 'Distance from Kanpur', value: destination.howToReach.byRoad.distanceFromKanpur })
+                          }
+                          if (destination.howToReach.byRoad.distanceFromPatna) {
+                            distances.push({ label: 'Distance from Patna', value: destination.howToReach.byRoad.distanceFromPatna })
+                          }
+                        } else if (destination.country === 'USA') {
+                          if (destination.howToReach.byRoad.distanceFromLosAngeles) {
+                            distances.push({ label: 'Distance from Los Angeles', value: destination.howToReach.byRoad.distanceFromLosAngeles })
+                          }
+                          if (destination.howToReach.byRoad.distanceFromSanFrancisco) {
+                            distances.push({ label: 'Distance from San Francisco', value: destination.howToReach.byRoad.distanceFromSanFrancisco })
+                          }
+                        }
+                        
+                        return distances.length > 0 ? (
+                          <div>
+                            <span className="font-medium">Distances:</span>
+                            <div className="mt-2 space-y-1">
+                              {distances.map((distance, index) => (
+                                <div key={`fallback-distance-${index}`} className="text-xs">
+                                  {distance.label}: {distance.value}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null
+                      })()
+                    )}
                     <div>
                       <span className="font-medium">Travel Time:</span><br/>
                       {destination.howToReach.byRoad.travelTime}

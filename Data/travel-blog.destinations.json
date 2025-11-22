@@ -158,9 +158,20 @@
     },
     "byRoad": {
       "majorHighways": "NH-19 (Delhi-Kolkata), NH-31 (Patna-Guwahati)",
-      "distanceFromDelhi": "780 km",
-      "distanceFromLucknow": "280 km",
-      "distanceFromPatna": "240 km",
+      "distances": [
+        {
+          "label": "Distance from Delhi",
+          "value": "780 km"
+        },
+        {
+          "label": "Distance from Lucknow",
+          "value": "280 km"
+        },
+        {
+          "label": "Distance from Patna",
+          "value": "240 km"
+        }
+      ],
       "travelTime": "Delhi: 12-14 hours, Lucknow: 4-5 hours",
       "busServices": "AC/Non-AC buses from major cities",
       "privateCar": "Well-maintained highways, toll plazas",
@@ -387,9 +398,20 @@
     },
     "byRoad": {
       "majorHighways": "NH-27, NH-28",
-      "distanceFromDelhi": "650 km",
-      "distanceFromLucknow": "140 km",
-      "distanceFromKanpur": "200 km",
+      "distances": [
+        {
+          "label": "Distance from Delhi",
+          "value": "650 km"
+        },
+        {
+          "label": "Distance from Lucknow",
+          "value": "140 km"
+        },
+        {
+          "label": "Distance from Kanpur",
+          "value": "200 km"
+        }
+      ],
       "travelTime": "Delhi: 10-12 hours, Lucknow: 2.5-3 hours",
       "busServices": "Regular AC/Non-AC buses from major cities",
       "privateCar": "Well-maintained highways with toll plazas",
@@ -619,9 +641,20 @@
     },
     "byRoad": {
       "majorHighways": "NH-19, NH-27, NH-30",
-      "distanceFromDelhi": "650 km",
-      "distanceFromLucknow": "200 km",
-      "distanceFromKanpur": "80 km",
+      "distances": [
+        {
+          "label": "Distance from Delhi",
+          "value": "650 km"
+        },
+        {
+          "label": "Distance from Lucknow",
+          "value": "200 km"
+        },
+        {
+          "label": "Distance from Kanpur",
+          "value": "80 km"
+        }
+      ],
       "travelTime": "Delhi: 10-12 hours, Lucknow: 3-4 hours",
       "busServices": "AC/Non-AC buses from major cities",
       "privateCar": "Well-maintained highways with toll plazas",
@@ -857,9 +890,20 @@
     },
     "byRoad": {
       "majorHighways": "NH-3, NH-505, Spiti Road",
-      "distanceFromDelhi": "650 km to Manali, then 400 km to Kaza",
-      "distanceFromChandigarh": "250 km to Manali, then 400 km to Kaza",
-      "distanceFromShimla": "200 km to Manali, then 400 km to Kaza",
+      "distances": [
+        {
+          "label": "Distance from Delhi",
+          "value": "650 km to Manali, then 400 km to Kaza"
+        },
+        {
+          "label": "Distance from Chandigarh",
+          "value": "250 km to Manali, then 400 km to Kaza"
+        },
+        {
+          "label": "Distance from Shimla",
+          "value": "200 km to Manali, then 400 km to Kaza"
+        }
+      ],
       "travelTime": "Delhi: 16-18 hours, Chandigarh: 12-14 hours",
       "busServices": "HRTC buses from Delhi/Chandigarh to Manali, then local buses/jeeps",
       "privateCar": "Well-maintained but challenging mountain roads",
@@ -917,6 +961,245 @@
   },
   "updatedAt": {
     "$date": "2025-10-26T06:35:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68fdbbb21cc5835ae389b9c0"
+  },
+  "name": "Mammoth Lake, California USA",
+  "slug": "mammoth-lake-california-usa",
+  "description": "Mammoth Lake is a stunning alpine destination in California's Sierra Nevada mountains, renowned for its breathtaking scenery, world-class skiing, and outdoor adventures. Located at an elevation of 7,381 feet, this picturesque lake community offers crystal-clear waters perfect for swimming, boating, and fishing during summer, while winter transforms it into a premier ski resort destination. Surrounded by towering peaks, dense pine forests, and pristine wilderness, Mammoth Lake provides year-round recreational opportunities including hiking, camping, mountain biking, rock climbing, and wildlife viewing. The area is also known for its vibrant mountain town atmosphere with excellent restaurants, galleries, and accommodations catering to adventure enthusiasts and nature lovers alike.",
+  "country": "USA",
+  "continent": "North America",
+  "featuredImage": {
+    "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+    "alt": "Mammoth Lake California Sierra Nevada"
+  },
+  "gallery": [
+    {
+      "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+      "alt": "Mammoth Lake Panoramic View",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235190"
+      }
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",
+      "alt": "Mammoth Mountain Ski Resort",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235191"
+      }
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&h=600&fit=crop",
+      "alt": "Mammoth Lakes Trail Hiking",
+      "_id": {
+        "$oid": "68fdbd73794bb2703e235192"
+      }
+    }
+  ],
+  "coordinates": {
+    "lat": 37.6304,
+    "lng": -118.9733
+  },
+  "bestTimeToVisit": "Year-round (Summer: June-September, Winter: December-March)",
+  "averageTemperature": {
+    "summer": "12-24°C (54-75°F)",
+    "winter": "-8 to 0°C (18-32°F)"
+  },
+  "currency": "USD (US Dollar)",
+  "language": "English",
+  "timezone": "UTC-8 (Pacific Standard Time)",
+  "rating": 4.7,
+  "totalReviews": 3892,
+  "highlights": [
+    "Mammoth Mountain Ski Resort",
+    "Crystal-clear Alpine Lake",
+    "High Sierra Wilderness",
+    "Scenic Mountain Trails",
+    "The Village at Mammoth",
+    "Ancient Bristlecone Pine Forest"
+  ],
+  "activities": [
+    {
+      "name": "Skiing & Snowboarding",
+      "icon": "⛷️",
+      "description": "World-class winter sports at Mammoth Mountain Ski Resort",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9c1"
+      }
+    },
+    {
+      "name": "Alpine Hiking",
+      "icon": "🥾",
+      "description": "Explore extensive network of scenic mountain trails",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9c2"
+      }
+    },
+    {
+      "name": "Lake Activities",
+      "icon": "🚣",
+      "description": "Swimming, boating, kayaking, and fishing in pristine alpine waters",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9c3"
+      }
+    },
+    {
+      "name": "Mountain Biking",
+      "icon": "🚴‍♂️",
+      "description": "Ride professional mountain bike trails and downhill courses",
+      "_id": {
+        "$oit": "68fdbbb21cc5835ae389b9c4"
+      }
+    },
+    {
+      "name": "Rock Climbing",
+      "icon": "🧗‍♂️",
+      "description": "Challenge yourself on granite cliffs and boulders",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9c5"
+      }
+    },
+    {
+      "name": "Wildlife Watching",
+      "icon": "🦌",
+      "description": "Spot bears, elk, mountain lions, and diverse alpine wildlife",
+      "_id": {
+        "$oid": "68fdbbb21cc5835ae389b9c6"
+      }
+    }
+  ],
+  "accommodation": [
+    {
+      "type": "budget",
+      "name": "Mammoth Alpine Hostel",
+      "description": "Budget-friendly hostel with shared and private rooms, great for solo travelers",
+      "priceRange": "$60-120",
+      "rating": 4.1,
+      "amenities": ["WiFi", "Kitchen Access", "Community Lounge", "Laundry"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "budget",
+      "name": "Motel 6-Mammoth Lakes, CA",
+      "description": "Great location at 3372 Main Street, Mammoth Lakes, CA 93546, United States. Clean, comfortable rooms with basic amenities and convenient access to town and trails",
+      "priceRange": "$70-130",
+      "rating": 4.0,
+      "amenities": ["WiFi", "Free Parking", "Pet Friendly", "24-Hour Front Desk"],
+      "bookingUrl": "https://motel6.com"
+    },
+    {
+      "type": "budget",
+      "name": "Sierra Nevada Resort",
+      "description": "Affordable lodge with cozy cabins and mountain views",
+      "priceRange": "$80-150",
+      "rating": 4.0,
+      "amenities": ["WiFi", "Mountain View", "Fireplace", "Kitchenette"],
+      "bookingUrl": "https://airbnb.com"
+    },
+    {
+      "type": "mid-range",
+      "name": "Mammoth Mountain Inn",
+      "description": "Comfortable hotel at the base of Mammoth Mountain with ski access",
+      "priceRange": "$150-250",
+      "rating": 4.5,
+      "amenities": ["AC", "WiFi", "Restaurant", "Hot Tub", "Ski Storage"],
+      "bookingUrl": "https://booking.com"
+    },
+    {
+      "type": "luxury",
+      "name": "The Village at Mammoth Lakes",
+      "description": "Luxury resort with world-class amenities, spas, and fine dining",
+      "priceRange": "$300-500",
+      "rating": 4.8,
+      "amenities": ["Spa", "Fine Dining", "Pool", "Concierge", "Premium Suites"],
+      "bookingUrl": "https://thevillagealmammoth.com"
+    }
+  ],
+  "transportation": [
+    "Rental cars",
+    "Shuttle services",
+    "Bus lines",
+    "Walking in town",
+    "Ski shuttle",
+    "Mountain bikes",
+    "Hiking trails"
+  ],
+  "howToReach": {
+    "byAir": {
+      "nearestAirport": "Mammoth Yosemite Airport (MMH), Reno-Tahoe Airport (RNO)",
+      "distanceFromCity": "MMH: 5 km, Reno: 240 km",
+      "travelTime": "MMH: 10 minutes, Reno: 3.5-4 hours",
+      "domesticFlights": "Los Angeles, San Francisco, Las Vegas, Reno",
+      "internationalFlights": "Via major hubs like San Francisco or Los Angeles",
+      "transportToCity": "Rental cars, shuttle services, ride-sharing",
+      "estimatedCost": "$25-50 from local airport, $200-300 from Reno"
+    },
+    "byRail": {
+      "nearestStation": "Reno, Nevada (350 km away)",
+      "majorTrains": "Amtrak service to Reno",
+      "connections": "Los Angeles, Sacramento, Chicago",
+      "travelTime": "From Reno: 3.5-4 hours by car",
+      "transportToCity": "Car rental or shuttle services from Reno station",
+      "estimatedCost": "$150-250 train fare + $50-100 car rental",
+      "booking": "Amtrak website or station ticket counter"
+    },
+    "byRoad": {
+      "majorHighways": "US-395, CA-203, CA-120",
+      "distances": [
+        {
+          "label": "Distance from Los Angeles",
+          "value": "330 miles"
+        },
+        {
+          "label": "Distance from San Francisco",
+          "value": "250 miles"
+        },
+        {
+          "label": "Distance from Yosemite",
+          "value": "87 miles"
+        }
+      ],
+      "travelTime": "Los Angeles: 5-6 hours, San Francisco: 4-5 hours",
+      "busServices": "Greyhound and regional bus services via California",
+      "privateCar": "Well-maintained highways, scenic drives",
+      "estimatedCost": "Gas: $40-60, Bus: $60-100"
+    }
+  },
+  "localCuisine": [
+    "Craft Cocktails & Craft Beer",
+    "Grilled Mountain Trout",
+    "Wild Game Dishes",
+    "Sierra Nevada Pine Nut Cuisine",
+    "Farm-to-Table Restaurants",
+    "BBQ & Smokehouses",
+    "Alpine Comfort Food",
+    "Craft Coffee & Espresso"
+  ],
+  "travelTips": [
+    "Book accommodations well in advance during peak ski season",
+    "Carry sunscreen and sunglasses - high altitude intensifies UV rays",
+    "Prepare for sudden weather changes, especially at higher elevations",
+    "High altitude requires proper acclimatization - stay hydrated",
+    "Carry chains or winter tires November through April",
+    "Visit in summer for best hiking and lake activities",
+    "Use public transportation to avoid parking hassles in town",
+    "Reserve restaurant tables ahead during peak seasons"
+  ],
+  "isPopular": true,
+  "isFeatured": true,
+  "isActive": true,
+  "status": "published",
+  "seoTitle": "Mammoth Lake California Travel Guide: Alpine Adventure",
+  "seoDescription": "Discover Mammoth Lake California's world-class skiing, alpine lakes, and Sierra Nevada beauty. Complete guide to year-round mountain adventures.",
+  "createdAt": {
+    "$date": "2025-11-22T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-22T00:00:00.000Z"
   },
   "__v": 0
 }
