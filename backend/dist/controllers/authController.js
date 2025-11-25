@@ -9,7 +9,11 @@ const crypto_1 = __importDefault(require("crypto"));
 const User_1 = __importDefault(require("../models/User"));
 // Generate JWT Token
 const signToken = (id) => {
-    const secret = process.env.JWT_SECRET || '';
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        console.error('JWT_SECRET environment variable is not set!');
+        throw new Error('JWT_SECRET environment variable is required');
+    }
     const expiresIn = process.env.JWT_EXPIRE || '7d';
     // Use any to bypass TypeScript type checking for expiresIn
     return jsonwebtoken_1.default.sign({ id }, secret, { expiresIn });
@@ -37,7 +41,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 // @access  Public
 const register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
         // Check if user exists
         const existingUser = await User_1.default.findOne({ email });
         if (existingUser) {
@@ -52,6 +56,7 @@ const register = async (req, res) => {
             name,
             email,
             password,
+            role: role || 'reader', // Default to reader if no role provided
         });
         sendTokenResponse(user, 201, res);
     }
@@ -69,30 +74,44 @@ exports.register = register;
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log('Login attempt:', email);
-        console.log('Login attempt:', password);
+        console.log('Login attempt for email:', email);
+        // Validate input
+        if (!email || !password) {
+            console.log('Missing email or password');
+            res.status(400).json({
+                success: false,
+                error: 'Please provide email and password'
+            });
+            return;
+        }
         // Find user by email (include password for comparison)
+        console.log('Looking up user in database...');
         const user = await User_1.default.findOne({ email }).select('+password');
         if (!user) {
+            console.log('User not found for email:', email);
             res.status(401).json({
                 success: false,
                 error: 'Invalid credentials'
             });
             return;
         }
-        console.log('User found:', user);
+        console.log('User found, comparing password...');
         // Check password
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
+            console.log('Password mismatch for user:', email);
             res.status(401).json({
                 success: false,
                 error: 'Invalid credentials'
             });
             return;
         }
+        console.log('Login successful for user:', email);
         sendTokenResponse(user, 200, res);
     }
     catch (error) {
+        console.error('Login error:', error);
+        console.error('Error stack:', error.stack);
         res.status(500).json({
             success: false,
             error: error.message || 'Server error during login'

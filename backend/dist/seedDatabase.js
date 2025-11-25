@@ -5,11 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-// Import models
-const User_1 = __importDefault(require("./models/User"));
 const Category_1 = __importDefault(require("./models/Category"));
-const SiteSettings_1 = __importDefault(require("./models/SiteSettings"));
 dotenv_1.default.config();
 const connectDB = async () => {
     try {
@@ -43,36 +39,42 @@ const sampleUsers = [
 const sampleCategories = [
     {
         name: 'Adventure Travel',
+        slug: 'adventure-travel',
         description: 'Thrilling adventures and outdoor activities around the world',
         color: '#FF6B35',
         image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop'
     },
     {
         name: 'Cultural Experiences',
+        slug: 'cultural-experiences',
         description: 'Immersive cultural experiences and local traditions',
         color: '#1E88E5',
         image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73299?w=400&h=200&fit=crop'
     },
     {
         name: 'Food & Cuisine',
+        slug: 'food-cuisine',
         description: 'Culinary adventures and local food experiences',
         color: '#FFC107',
         image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop'
     },
     {
         name: 'Budget Travel',
+        slug: 'budget-travel',
         description: 'Affordable travel tips and budget-friendly destinations',
         color: '#4CAF50',
         image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=200&fit=crop'
     },
     {
         name: 'Luxury Travel',
+        slug: 'luxury-travel',
         description: 'High-end travel experiences and luxury accommodations',
         color: '#9C27B0',
         image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=200&fit=crop'
     },
     {
         name: 'Solo Travel',
+        slug: 'solo-travel',
         description: 'Tips and guides for independent travelers',
         color: '#FF9800',
         image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop'
@@ -511,21 +513,21 @@ const seedDatabase = async () => {
     try {
         // Clear existing data
         console.log('Clearing existing data...');
-        await User_1.default.deleteMany({});
+        //await User.deleteMany({})
         await Category_1.default.deleteMany({});
-        await SiteSettings_1.default.deleteMany({});
+        //await SiteSettings.deleteMany({})
         // Create users
-        console.log('Creating users...');
-        const users = [];
-        for (const userData of sampleUsers) {
-            const salt = await bcryptjs_1.default.genSalt(12);
-            const hashedPassword = await bcryptjs_1.default.hash(userData.password, salt);
-            const user = new User_1.default({
-                ...userData,
-                password: hashedPassword
-            });
-            users.push(await user.save());
-        }
+        // console.log('Creating users...')
+        // const users = []
+        // for (const userData of sampleUsers) {
+        //   const salt = await bcrypt.genSalt(12)
+        //   const hashedPassword = await bcrypt.hash(userData.password, salt)
+        //   const user = new User({
+        //     ...userData,
+        //     password: hashedPassword
+        //   })
+        //   users.push(await user.save())
+        // }
         // Create categories
         console.log('Creating categories...');
         const categories = [];
@@ -535,7 +537,7 @@ const seedDatabase = async () => {
         }
         console.log('Database seeded successfully!');
         console.log(`Created:`);
-        console.log(`- ${users.length} users`);
+        //console.log(`- ${users.length} users`)
         console.log(`- ${categories.length} categories`);
     }
     catch (error) {

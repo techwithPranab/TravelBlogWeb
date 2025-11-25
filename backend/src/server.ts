@@ -292,12 +292,13 @@ app.get('/debug/env', async (req, res) => {
   try {
     // Test database connection
     const dbStatus = mongoose.connection.readyState;
-    const dbStatusText = {
+    const statusMap: { [key: number]: string } = {
       0: 'disconnected',
       1: 'connected',
       2: 'connecting',
       3: 'disconnecting'
-    }[dbStatus as keyof typeof dbStatusText] || 'unknown';
+    };
+    const dbStatusText = statusMap[dbStatus] || 'unknown';
 
     // Test user count
     let userCount = 0;
