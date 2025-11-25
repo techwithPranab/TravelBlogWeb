@@ -8,6 +8,7 @@ import rateLimit from 'express-rate-limit'
 import mongoSanitize from 'express-mongo-sanitize'
 import hpp from 'hpp'
 import path from 'path'
+import mongoose from 'mongoose'
 
 // Load environment variables FIRST
 dotenv.config()
@@ -286,20 +287,60 @@ app.get('/api/public/contact', async (req, res) => {
   }
 })
 
-// Debug endpoint to check environment variables
-app.get('/debug/env', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Environment variables check',
-    cloudinary: {
-      CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME ? 'SET' : 'NOT SET',
-      CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? 'SET' : 'NOT SET',
-      CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? 'SET' : 'NOT SET'
-    },
-    port: process.env.PORT,
-    node_env: process.env.NODE_ENV
-  })
-})
+// Debug endpoint to check environment variables and database
+app.get('/debug/env', async (req, res) => {
+  try {
+    // Test database connection
+    const dbStatus = mongoose.connection.readyState;
+    const dbStatusText = {
+      0: 'disconnected',
+      1: 'connected',
+      2: 'connecting',
+      3: 'disconnecting'
+    }[dbStatus as keyof typeof dbStatusText] || 'unknown';
+
+    // Test user count
+    let userCount = 0;
+    try {
+      const User = (await import('./models/User')).default;
+      userCount = await User.countDocuments();
+    } catch (dbError) {
+      console.error('Database test error:', dbError);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Environment and database check',
+      environment: {
+        NODE_ENV: process.env.NODE_ENV,
+        PORT: process.env.PORT,
+        FRONTEND_URL: process.env.FRONTEND_URL ? 'SET' : 'NOT SET'
+      },
+      database: {
+        status: dbStatusText,
+        userCount: userCount,
+        mongoUri: process.env.MONGODB_URI ? 'SET' : 'NOT SET'
+      },
+      jwt: {
+        JWT_SECRET: process.env.JWT_SECRET ? 'SET' : 'NOT SET',
+        JWT_EXPIRE: process.env.JWT_EXPIRE
+      },
+      cloudinary: {
+        CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME ? 'SET' : 'NOT SET',
+        CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? 'SET' : 'NOT SET',
+        CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? 'SET' : 'NOT SET'
+      },
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Debug endpoint error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Debug endpoint failed',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
 
 // Rate limit status endpoint
 app.get('/api/rate-limit-status', (req, res) => {

@@ -9,7 +9,12 @@ interface AuthenticatedRequest extends Request {
 
 // Generate JWT Token
 const signToken = (id: string): string => {
-  const secret = process.env.JWT_SECRET || '';
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.error('JWT_SECRET environment variable is not set!');
+    throw new Error('JWT_SECRET environment variable is required');
+  }
+  
   const expiresIn = process.env.JWT_EXPIRE || '7d';
   // Use any to bypass TypeScript type checking for expiresIn
   return jwt.sign({ id }, secret, { expiresIn } as any);
@@ -75,23 +80,24 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body
-    console.log('Login attempt:', email);
-    console.log('Login attempt:', password);
+    console.log('Login attempt for email:', email);
+
+    // Validate input
+    if (!email || !password) {
+      console.log('Missing email or password');
+      res.status(400).json({
+        success: false,
+        error: 'Please provide email and password'
+      })
+      return
+    }
 
     // Find user by email (include password for comparison)
+    console.log('Looking up user in database...');
     const user = await User.findOne({ email }).select('+password')
     
     if (!user) {
-      res.status(401).json({
-        success: false,
-        error: 'Invalid credentials'
-      })
-      return
-    }
-    console.log('User found:', user);
-    // Check password
-    const isMatch = await user.comparePassword(password)
-    if (!isMatch) {
+      console.log('User not found for email:', email);
       res.status(401).json({
         success: false,
         error: 'Invalid credentials'
@@ -99,8 +105,23 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return
     }
 
+    console.log('User found, comparing password...');
+    // Check password
+    const isMatch = await user.comparePassword(password)
+    if (!isMatch) {
+      console.log('Password mismatch for user:', email);
+      res.status(401).json({
+        success: false,
+        error: 'Invalid credentials'
+      })
+      return
+    }
+
+    console.log('Login successful for user:', email);
     sendTokenResponse(user, 200, res)
   } catch (error: any) {
+    console.error('Login error:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
       error: error.message || 'Server error during login'
