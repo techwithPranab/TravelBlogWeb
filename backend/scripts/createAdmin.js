@@ -21,12 +21,22 @@ async function createAdmin() {
     const existingAdmin = await User.findOne({ email: 'admin@travelblog.com' })
     
     if (existingAdmin) {
-      console.log('Admin user already exists:', existingAdmin.email)
+      console.log('Admin user already exists, updating password...')
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash('Admin@123456', 12)
+      
+      // Update the existing admin user
+      existingAdmin.password = hashedPassword
+      await existingAdmin.save()
+      
+      console.log('Admin password updated successfully!')
+      console.log('Email: admin@travelblog.com')
+      console.log('Password: Admin@123456')
       return
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash('admin123', 12)
+    const hashedPassword = await bcrypt.hash('Admin@123456', 12)
 
     // Create admin user
     const admin = new User({
@@ -39,7 +49,7 @@ async function createAdmin() {
     await admin.save()
     console.log('Admin user created successfully!')
     console.log('Email: admin@travelblog.com')
-    console.log('Password: admin123')
+    console.log('Password: Admin@123456')
   } catch (error) {
     console.error('Error creating admin user:', error)
   } finally {

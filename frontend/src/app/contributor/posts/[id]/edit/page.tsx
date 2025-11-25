@@ -62,8 +62,8 @@ export default function EditPostPage() {
       try {
         // Load categories and destinations
         const [categoriesResponse, destinationsResponse] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/categories`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/destinations`)
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/destinations`)
         ])
 
         if (categoriesResponse.ok) {

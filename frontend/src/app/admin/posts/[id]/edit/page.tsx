@@ -85,7 +85,7 @@ export default function EditPostPage() {
 
   const loadCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/categories')
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
       const result = await response.json()
       if (result.success) {
         setAvailableCategories(result.data)
@@ -167,7 +167,7 @@ export default function EditPostPage() {
       formData.append('image', file)
 
       // Upload to our API endpoint
-      const response = await fetch('http://localhost:5000/api/posts/upload-image', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/upload-image`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
@@ -215,7 +215,7 @@ export default function EditPostPage() {
         const formData = new FormData()
         formData.append('image', file)
 
-        const response = await fetch('http://localhost:5000/api/posts/upload-image', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/upload-image`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('adminToken')}`

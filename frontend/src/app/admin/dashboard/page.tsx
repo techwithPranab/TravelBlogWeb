@@ -276,7 +276,7 @@ export default function AdminDashboard() {
                     <p className="text-sm font-medium text-gray-900 line-clamp-1">
                       {post.title}
                     </p>
-                    <p className="text-xs text-gray-500">by {post.author.name}</p>
+                    <p className="text-xs text-gray-500">by {post.author?.name || 'Unknown Author'}</p>
                   </div>
                 </div>
                 <div className="text-right">

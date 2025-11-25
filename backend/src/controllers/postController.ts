@@ -46,13 +46,23 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
 
     const skip = (page - 1) * limit
 
-    const posts = await Post.find(query)
+  const posts = await Post.find(query)
       .populate('author', 'name avatar email')
       .sort(sort)
       .skip(skip)
       .limit(limit)
 
     const total = await Post.countDocuments(query)
+
+  // Ensure author object exists on each post
+    const transformedPosts = posts.map((p) => {
+      const obj = p.toObject ? p.toObject() : p
+      if (!obj.author) {
+        obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' } as any
+      }
+      return obj
+    })
+  console.log('Debug: transformedPosts[0].author=', transformedPosts[0]?.author)
 
     res.status(200).json({
       success: true,
@@ -63,7 +73,7 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
         limit,
         pages: Math.ceil(total / limit)
       },
-      data: posts
+  data: transformedPosts
     })
   } catch (error: any) {
     res.status(500).json({
@@ -97,12 +107,18 @@ export const getPost = async (req: Request, res: Response): Promise<void> => {
       .populate('author', 'name avatar email bio socialLinks')
       .populate('categories', 'name slug')
 
-    if (!post) {
+  if (!post) {
       res.status(404).json({
         success: false,
         error: 'Post not found'
       })
       return
+    }
+
+    // Ensure author fallback
+    const postObj = post.toObject ? post.toObject() : post
+    if (!postObj.author) {
+      postObj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' } as any
     }
 
     // Increment view count
@@ -111,7 +127,7 @@ export const getPost = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       success: true,
-      data: post
+      data: postObj
     })
   } catch (error: any) {
     console.error('Error in getPost:', error)
@@ -328,6 +344,12 @@ export const getPostsByCategory = async (req: Request, res: Response): Promise<v
       status: 'published'
     })
 
+    const transformedPosts = posts.map(p => {
+      const obj = p.toObject ? p.toObject() : p
+  if (!obj.author) obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' } as any
+      return obj
+    })
+
     res.status(200).json({
       success: true,
       count: posts.length,
@@ -337,7 +359,7 @@ export const getPostsByCategory = async (req: Request, res: Response): Promise<v
         limit,
         pages: Math.ceil(total / limit)
       },
-      data: posts
+  data: transformedPosts
     })
   } catch (error: any) {
     res.status(500).json({
@@ -363,10 +385,16 @@ export const getFeaturedPosts = async (req: Request, res: Response): Promise<voi
       .sort('-publishedAt -createdAt')
       .limit(limit)
 
+    const transformedPosts = posts.map(p => {
+      const obj = p.toObject ? p.toObject() : p
+  if (!obj.author) obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' } as any
+      return obj
+    })
+
     res.status(200).json({
       success: true,
       count: posts.length,
-      data: posts
+      data: transformedPosts
     })
   } catch (error: any) {
     res.status(500).json({
@@ -390,10 +418,16 @@ export const getPopularPosts = async (req: Request, res: Response): Promise<void
       .sort('-views -likes')
       .limit(limit)
 
+    const transformedPosts = posts.map(p => {
+      const obj = p.toObject ? p.toObject() : p
+  if (!obj.author) obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' } as any
+      return obj
+    })
+
     res.status(200).json({
       success: true,
       count: posts.length,
-      data: posts
+      data: transformedPosts
     })
   } catch (error: any) {
     res.status(500).json({
@@ -421,7 +455,7 @@ export const unifiedSearch = async (req: Request, res: Response): Promise<void> 
     const searchLimit = Math.min(Number(limit), 50) // Cap at 50 results per type
 
     // Search posts
-    const posts = await Post.find({
+  const posts = await Post.find({
       status: 'published',
       $or: [
         { title: { $regex: searchQuery, $options: 'i' } },
@@ -486,10 +520,16 @@ export const unifiedSearch = async (req: Request, res: Response): Promise<void> 
       .limit(searchLimit)
       .select('title description imageUrl thumbnailUrl category location photographer tags submittedAt')
 
+    const transformedPosts = posts.map(p => {
+      const obj = p.toObject ? p.toObject() : p
+  if (!obj.author) obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' } as any
+      return obj
+    })
+
     const results = {
       posts: {
         count: posts.length,
-        data: posts
+        data: transformedPosts
       },
       destinations: {
         count: destinations.length,

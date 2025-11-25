@@ -1,6 +1,11 @@
 // Simple API test utility for debugging
 export const testAPI = async () => {
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+  const baseURL = process.env.NEXT_PUBLIC_API_URL
+  
+  if (!baseURL) {
+    console.error('NEXT_PUBLIC_API_URL environment variable is not set')
+    return
+  }
   
   console.log('Testing API connection...')
   console.log('Base URL:', baseURL)
@@ -29,7 +34,10 @@ export const testAPI = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(testUser),
+      body: JSON.stringify({
+        ...testUser,
+        role: 'contributor'
+      }),
     })
     
     console.log('Register response status:', registerResponse.status)

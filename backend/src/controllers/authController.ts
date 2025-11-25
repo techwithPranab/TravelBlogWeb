@@ -40,7 +40,7 @@ const sendTokenResponse = (user: IUser, statusCode: number, res: Response): void
 // @access  Public
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, email, password } = req.body
+    const { name, email, password, role } = req.body
 
     // Check if user exists
     const existingUser = await User.findOne({ email })
@@ -57,6 +57,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       name,
       email,
       password,
+      role: role || 'reader', // Default to reader if no role provided
     })
 
     sendTokenResponse(user, 201, res)

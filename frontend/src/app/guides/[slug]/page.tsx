@@ -179,20 +179,25 @@ export default function GuideDetailsPage() {
               
               <div className="flex items-center space-x-6 mb-8">
                 <div className="flex items-center space-x-4">
-                  {guide.author && (
+                  {guide.author ? (
                     <>
                       <img 
-                        src={guide.author.avatar} 
-                        alt={guide.author.name}
+                        src={guide.author?.avatar || '/images/default-avatar.jpg'} 
+                        alt={guide.author?.name || 'Unknown Author'}
                         className="w-12 h-12 rounded-full"
                       />
                       <div>
-                        <div className="font-medium text-gray-900">{guide.author.name}</div>
+                        <div className="font-medium text-gray-900">{guide.author?.name || 'Unknown Author'}</div>
                         <div className="text-sm text-gray-600">
                           Updated {new Date(guide.lastUpdated).toLocaleDateString()}
                         </div>
                       </div>
                     </>
+                  ) : (
+                    <div>
+                      <div className="font-medium text-gray-900">Unknown Author</div>
+                      <div className="text-sm text-gray-600">Updated {new Date(guide.lastUpdated).toLocaleDateString()}</div>
+                    </div>
                   )}
                 </div>
                 
@@ -483,18 +488,23 @@ export default function GuideDetailsPage() {
             <section className="mb-12">
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="flex items-start space-x-4">
-                  {guide.author && (
+                  {guide.author ? (
                     <>
                       <img 
-                        src={guide.author.avatar} 
-                        alt={guide.author.name}
+                        src={guide.author?.avatar || '/images/default-avatar.jpg'} 
+                        alt={guide.author?.name || 'Unknown Author'}
                         className="w-16 h-16 rounded-full"
                       />
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">About {guide.author.name}</h3>
-                        <p className="text-gray-600">{guide.author.bio}</p>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">About {guide.author?.name || 'Unknown Author'}</h3>
+                        <p className="text-gray-600">{guide.author?.bio || 'Travel author and local expert'}</p>
                       </div>
                     </>
+                  ) : (
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">About Unknown Author</h3>
+                      <p className="text-gray-600">Travel author and local expert</p>
+                    </div>
                   )}
                 </div>
               </div>

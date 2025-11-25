@@ -45,6 +45,15 @@ const getPosts = async (req, res) => {
             .skip(skip)
             .limit(limit);
         const total = await Post_1.default.countDocuments(query);
+        // Ensure author object exists on each post
+        const transformedPosts = posts.map((p) => {
+            const obj = p.toObject ? p.toObject() : p;
+            if (!obj.author) {
+                obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' };
+            }
+            return obj;
+        });
+        console.log('Debug: transformedPosts[0].author=', transformedPosts[0]?.author);
         res.status(200).json({
             success: true,
             count: posts.length,
@@ -54,7 +63,7 @@ const getPosts = async (req, res) => {
                 limit,
                 pages: Math.ceil(total / limit)
             },
-            data: posts
+            data: transformedPosts
         });
     }
     catch (error) {
@@ -92,12 +101,17 @@ const getPost = async (req, res) => {
             });
             return;
         }
+        // Ensure author fallback
+        const postObj = post.toObject ? post.toObject() : post;
+        if (!postObj.author) {
+            postObj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' };
+        }
         // Increment view count
         post.viewCount = (post.viewCount || 0) + 1;
         await post.save();
         res.status(200).json({
             success: true,
-            data: post
+            data: postObj
         });
     }
     catch (error) {
@@ -298,6 +312,12 @@ const getPostsByCategory = async (req, res) => {
             category: req.params.category,
             status: 'published'
         });
+        const transformedPosts = posts.map(p => {
+            const obj = p.toObject ? p.toObject() : p;
+            if (!obj.author)
+                obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' };
+            return obj;
+        });
         res.status(200).json({
             success: true,
             count: posts.length,
@@ -307,7 +327,7 @@ const getPostsByCategory = async (req, res) => {
                 limit,
                 pages: Math.ceil(total / limit)
             },
-            data: posts
+            data: transformedPosts
         });
     }
     catch (error) {
@@ -332,10 +352,16 @@ const getFeaturedPosts = async (req, res) => {
             .populate('categories', 'name slug')
             .sort('-publishedAt -createdAt')
             .limit(limit);
+        const transformedPosts = posts.map(p => {
+            const obj = p.toObject ? p.toObject() : p;
+            if (!obj.author)
+                obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' };
+            return obj;
+        });
         res.status(200).json({
             success: true,
             count: posts.length,
-            data: posts
+            data: transformedPosts
         });
     }
     catch (error) {
@@ -358,10 +384,16 @@ const getPopularPosts = async (req, res) => {
             .populate('author', 'name avatar email')
             .sort('-views -likes')
             .limit(limit);
+        const transformedPosts = posts.map(p => {
+            const obj = p.toObject ? p.toObject() : p;
+            if (!obj.author)
+                obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' };
+            return obj;
+        });
         res.status(200).json({
             success: true,
             count: posts.length,
-            data: posts
+            data: transformedPosts
         });
     }
     catch (error) {
@@ -448,10 +480,16 @@ const unifiedSearch = async (req, res) => {
             .sort('-submittedAt')
             .limit(searchLimit)
             .select('title description imageUrl thumbnailUrl category location photographer tags submittedAt');
+        const transformedPosts = posts.map(p => {
+            const obj = p.toObject ? p.toObject() : p;
+            if (!obj.author)
+                obj.author = { name: 'Unknown Author', avatar: '/images/default-avatar.jpg' };
+            return obj;
+        });
         const results = {
             posts: {
                 count: posts.length,
-                data: posts
+                data: transformedPosts
             },
             destinations: {
                 count: destinations.length,

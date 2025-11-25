@@ -87,7 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, role: 'contributor' }),
       })
 
       if (!response.ok) {

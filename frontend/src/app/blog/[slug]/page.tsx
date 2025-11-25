@@ -153,7 +153,7 @@ export default function BlogDetailsPage() {
 
   const fetchComments = async (postId: string): Promise<CommentsApiResponse> => {
     try {
-      const response = await fetch(`http://localhost:5000/api/comments/blog/${postId}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments/blog/${postId}`)
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -207,7 +207,7 @@ export default function BlogDetailsPage() {
 
   const submitComment = async (postId: string, content: string): Promise<CommentSubmitResponse> => {
     try {
-      const response = await fetch('http://localhost:5000/api/comments', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -374,11 +374,16 @@ export default function BlogDetailsPage() {
       return
     }
 
+    if (!post?.id) {
+      setCommentError('Unable to post comment. Please try again.')
+      return
+    }
+
     setIsSubmittingComment(true)
     setCommentError(null)
 
     try {
-      const response = await submitComment(post!.id, newComment.trim())
+  const response = await submitComment(post.id, newComment.trim())
       
       if (response.success) {
         setComments([response.data, ...comments])
@@ -474,49 +479,49 @@ export default function BlogDetailsPage() {
           </Link>
           
           <div className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
-            <Link href={`/blog/category/${post!.category.slug}`} className="text-blue-600 hover:text-blue-800">
-              {post!.category.name}
+            <Link href={`/blog/category/${post?.category?.slug || 'uncategorized'}`} className="text-blue-600 hover:text-blue-800">
+              {post?.category?.name || 'Uncategorized'}
             </Link>
-            {post!.destination && (
+            {post?.destination && (
               <>
                 <span>•</span>
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-1" />
-                  {post!.destination.city ? `${post!.destination.city}, ` : ''}{post!.destination.country}
+                  {post?.destination?.city ? `${post.destination.city}, ` : ''}{post?.destination?.country}
                 </div>
               </>
             )}
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            {post!.title}
+            {post?.title || ''}
           </h1>
           
           <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            {post!.excerpt}
+            {post?.excerpt || ''}
           </p>
           
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <img 
-                src={post!.author.avatar} 
-                alt={post!.author.name}
+                src={post?.author?.avatar || '/images/default-avatar.jpg'} 
+                alt={post?.author?.name || 'Unknown Author'}
                 className="w-12 h-12 rounded-full"
               />
               <div>
-                <div className="font-medium text-gray-900">{post!.author.name}</div>
+                <div className="font-medium text-gray-900">{post?.author?.name || 'Unknown Author'}</div>
                 <div className="flex items-center space-x-4 text-sm text-gray-600">
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
-                    {new Date(post!.publishedAt).toLocaleDateString()}
+                    {new Date(post?.publishedAt || new Date().toISOString()).toLocaleDateString()}
                   </div>
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-1" />
-                    {post!.readTime} min read
+                    {post?.readTime || 0} min read
                   </div>
                   <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
-                    {(post!.views || 0).toLocaleString()} views
+                    {(post?.views || 0).toLocaleString()} views
                   </div>
                 </div>
               </div>
@@ -526,24 +531,24 @@ export default function BlogDetailsPage() {
               <button
                 onClick={handleLike}
                 className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
-                  post!.isLiked 
+                  (post?.isLiked ?? false) 
                     ? 'bg-red-100 text-red-600' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                <Heart className={`w-4 h-4 ${post!.isLiked ? 'fill-current' : ''}`} />
-                <span>{post!.likes}</span>
+                <Heart className={`w-4 h-4 ${post?.isLiked ? 'fill-current' : ''}`} />
+                <span>{post?.likes ?? 0}</span>
               </button>
               
               <button
                 onClick={handleBookmark}
                 className={`p-2 rounded-lg transition-colors ${
-                  post!.isBookmarked 
+                  (post?.isBookmarked ?? false) 
                     ? 'bg-blue-100 text-blue-600' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                <Bookmark className={`w-4 h-4 ${post!.isBookmarked ? 'fill-current' : ''}`} />
+                <Bookmark className={`w-4 h-4 ${post?.isBookmarked ? 'fill-current' : ''}`} />
               </button>
               
               <button
@@ -560,20 +565,20 @@ export default function BlogDetailsPage() {
       {/* Featured Image */}
       <div className="container mx-auto px-4 py-8">
         <div className="relative h-96 md:h-[600px] rounded-2xl overflow-hidden group cursor-pointer">
-          <Image
-            src={post!.featuredImage.url}
-            alt={post!.featuredImage.alt}
+            <Image
+            src={post?.featuredImage?.url || '/images/default-image.jpg'}
+            alt={post?.featuredImage?.alt || 'Featured image'}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          {post!.featuredImage.caption && (
+          {post?.featuredImage?.caption && (
             <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded-lg text-sm">
-              {post!.featuredImage.caption}
+              {post.featuredImage.caption}
             </div>
           )}
           {/* Click overlay */}
           <button
-            onClick={() => handleImageClick(post!.featuredImage.url, 0)}
+            onClick={() => post?.featuredImage?.url && handleImageClick(post.featuredImage.url, 0)}
             className="absolute inset-0 w-full h-full bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-2xl"
             aria-label="View featured image in full size"
           >
@@ -589,12 +594,12 @@ export default function BlogDetailsPage() {
       </div>
 
       {/* Additional Images Gallery */}
-      {post!.images && post!.images.length > 0 && (
+  {post?.images && post.images.length > 0 && (
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Gallery</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {post!.images.map((imageUrl, index) => (
+              {post.images.map((imageUrl, index) => (
                 <button
                   key={`${imageUrl}-${index}`}
                   className="relative group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
@@ -627,15 +632,15 @@ export default function BlogDetailsPage() {
       <div className="container mx-auto px-4 pb-16">
         <div className="max-w-7xl mx-auto">
           {/* Content Sections */}
-          {post!.contentSections && post!.contentSections.length > 0 ? (
+          {post?.contentSections && post.contentSections.length > 0 ? (
             <div className="mb-12">
-              {post!.contentSections.map((section) => (
+              {post?.contentSections?.map((section) => (
                 <ContentSection
                   key={section.id}
                   section={section}
                   onImageClick={(imageUrl) => {
                     // Find the index of this image in all images
-                    const allImages = [post!.featuredImage.url, ...post!.images, ...post!.contentSections!.filter(s => s.image).map(s => s.image!.url)]
+                    const allImages = [post?.featuredImage?.url || '', ...(post?.images || []), ...(post?.contentSections?.filter(s => s.image).map(s => s.image!.url) || [])]
                     const index = allImages.findIndex(img => img === imageUrl)
                     handleImageClick(imageUrl, index >= 0 ? index : 0)
                   }}
@@ -645,13 +650,13 @@ export default function BlogDetailsPage() {
           ) : (
             /* Fallback to traditional content */
             <div className="prose prose-lg max-w-none mb-12">
-              <div dangerouslySetInnerHTML={{ __html: post!.content }} />
+              <div dangerouslySetInnerHTML={{ __html: post?.content || '' }} />
             </div>
           )}
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-8">
-            {post!.tags.map((tag) => (
+            {post?.tags?.map((tag) => (
               <span
                 key={tag}
                 className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
@@ -665,14 +670,14 @@ export default function BlogDetailsPage() {
           {/* Author Bio */}
           <div className="bg-gray-50 rounded-2xl p-6 mb-12">
             <div className="flex items-start space-x-4">
-              <img 
-                src={post!.author.avatar} 
-                alt={post!.author.name}
+                      <img 
+                src={post?.author?.avatar || '/images/default-avatar.jpg'} 
+                alt={post?.author?.name || 'Unknown Author'}
                 className="w-16 h-16 rounded-full"
               />
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">About {post!.author.name}</h3>
-                <p className="text-gray-600">{post!.author.bio}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">About {post?.author?.name || 'Unknown Author'}</h3>
+                <p className="text-gray-600">{post?.author?.bio || 'Travel enthusiast and writer'}</p>
               </div>
             </div>
           </div>
@@ -710,13 +715,13 @@ export default function BlogDetailsPage() {
                 <div key={comment.id} className="bg-white border border-gray-200 rounded-lg p-6">
                   <div className="flex items-start space-x-4">
                     <img 
-                      src={comment.author.avatar} 
-                      alt={comment.author.name}
+                      src={comment.author?.avatar || '/images/default-avatar.jpg'} 
+                      alt={comment.author?.name || 'Anonymous'}
                       className="w-10 h-10 rounded-full"
                     />
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
-                        <span className="font-medium text-gray-900">{comment.author.name}</span>
+                        <span className="font-medium text-gray-900">{comment.author?.name || 'Anonymous'}</span>
                         <span className="text-sm text-gray-500">
                           {new Date(comment.createdAt).toLocaleDateString()}
                         </span>
@@ -735,14 +740,14 @@ export default function BlogDetailsPage() {
                       {comment.replies.map((reply) => (
                         <div key={reply.id} className="bg-gray-50 rounded-lg p-4">
                           <div className="flex items-start space-x-3">
-                            <img 
-                              src={reply.author.avatar} 
-                              alt={reply.author.name}
+                              <img 
+                              src={reply.author?.avatar || '/images/default-avatar.jpg'} 
+                              alt={reply.author?.name || 'Anonymous'}
                               className="w-8 h-8 rounded-full"
                             />
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-1">
-                                <span className="font-medium text-gray-900 text-sm">{reply.author.name}</span>
+                                <span className="font-medium text-gray-900 text-sm">{reply.author?.name || 'Anonymous'}</span>
                                 <span className="text-xs text-gray-500">
                                   {new Date(reply.createdAt).toLocaleDateString()}
                                 </span>

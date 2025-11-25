@@ -1,0 +1,114 @@
+[{
+  "_id": {
+    "$oid": "6925026815c8664cc0f7590b"
+  },
+  "name": "Adventure Travel",
+  "slug": "adventure-travel",
+  "description": "Thrilling adventures and outdoor activities around the world",
+  "color": "#FF6B35",
+  "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop",
+  "postCount": 0,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-11-25T01:12:08.612Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-25T01:12:08.612Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6925026815c8664cc0f7590d"
+  },
+  "name": "Cultural Experiences",
+  "slug": "cultural-experiences",
+  "description": "Immersive cultural experiences and local traditions",
+  "color": "#1E88E5",
+  "image": "https://images.unsplash.com/photo-1539650116574-75c0c6d73299?w=400&h=200&fit=crop",
+  "postCount": 0,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-11-25T01:12:08.705Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-25T01:12:08.705Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6925026815c8664cc0f7590f"
+  },
+  "name": "Food & Cuisine",
+  "slug": "food-cuisine",
+  "description": "Culinary adventures and local food experiences",
+  "color": "#FFC107",
+  "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop",
+  "postCount": 0,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-11-25T01:12:08.792Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-25T01:12:08.792Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6925026815c8664cc0f75911"
+  },
+  "name": "Budget Travel",
+  "slug": "budget-travel",
+  "description": "Affordable travel tips and budget-friendly destinations",
+  "color": "#4CAF50",
+  "image": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=200&fit=crop",
+  "postCount": 0,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-11-25T01:12:08.881Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-25T01:12:08.881Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6925026815c8664cc0f75913"
+  },
+  "name": "Luxury Travel",
+  "slug": "luxury-travel",
+  "description": "High-end travel experiences and luxury accommodations",
+  "color": "#9C27B0",
+  "image": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=200&fit=crop",
+  "postCount": 0,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-11-25T01:12:08.967Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-25T01:12:08.967Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6925026915c8664cc0f75915"
+  },
+  "name": "Solo Travel",
+  "slug": "solo-travel",
+  "description": "Tips and guides for independent travelers",
+  "color": "#FF9800",
+  "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop",
+  "postCount": 0,
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-11-25T01:12:09.055Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-25T01:12:09.055Z"
+  },
+  "__v": 0
+}]

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic'

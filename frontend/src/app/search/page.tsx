@@ -146,7 +146,7 @@ export default function SearchPage() {
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-1">
                       <User className="w-4 h-4" />
-                      <span>{post.author.name}</span>
+                      <span>{post.author?.name || 'Unknown Author'}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-4 h-4" />

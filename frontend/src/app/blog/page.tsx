@@ -305,7 +305,7 @@ export default function BlogPage() {
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <User className="h-4 w-4" />
-                        <span>{post.author.name}</span>
+                        <span>{post.author?.name || 'Unknown Author'}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />

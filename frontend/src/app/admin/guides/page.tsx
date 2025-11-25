@@ -226,8 +226,8 @@ export default function AdminGuidesPage() {
                         <User className="h-4 w-4 text-gray-600" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{guide.author.name}</p>
-                        <p className="text-xs text-gray-500">{guide.author.email}</p>
+                        <p className="text-sm font-medium text-gray-900">{guide.author?.name || 'Unknown Author'}</p>
+                        <p className="text-xs text-gray-500">{guide.author?.email || 'No email'}</p>
                       </div>
                     </div>
                   </td>

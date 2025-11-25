@@ -1,6 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
-
-// Type definitions
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
 export interface ContributorStats {
   totalPosts: number
   publishedPosts: number
@@ -90,26 +88,21 @@ export interface CreatePostRequest {
   title: string
   excerpt: string
   content: string
-  featuredImage: {
+  featuredImage?: {
     url: string
     alt: string
     caption?: string
   }
+  images?: string[]
   categories: string[]
   tags?: string[]
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-    focusKeyword?: string
-  }
-  destination?: {
-    country: string
-    city?: string
-    coordinates?: {
-      lat: number
-      lng: number
-    }
-  }
+  destination?: string
+  status?: 'draft' | 'pending' | 'inactive'
+  isFeatured?: boolean
+  seoTitle?: string
+  seoDescription?: string
+  publishedAt?: string
+  contentSections?: any[]
 }
 
 // Contributor API utility functions

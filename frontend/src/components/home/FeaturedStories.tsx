@@ -38,7 +38,7 @@ export function FeaturedStories() {
     const fetchFeaturedPosts = async () => {
       try {
         setLoading(true)
-        const response = await fetch('http://localhost:5000/api/posts/featured?limit=6')
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/featured?limit=6`)
         
         if (!response.ok) {
           throw new Error('Failed to fetch featured posts')
@@ -165,12 +165,12 @@ export function FeaturedStories() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <img 
-                    src={story.author.avatar || 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face'} 
-                    alt={story.author.name}
+                    src={story.author?.avatar || 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face'} 
+                    alt={story.author?.name || 'Unknown Author'}
                     className="w-8 h-8 rounded-full"
                   />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {story.author.name}
+                    {story.author?.name || 'Unknown Author'}
                   </span>
                 </div>
                 <span className="text-sm text-gray-500 dark:text-gray-400">

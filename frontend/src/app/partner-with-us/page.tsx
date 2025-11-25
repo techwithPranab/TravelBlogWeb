@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft, Building2, Camera, Users, Globe, TrendingUp, Star, Mail, Phone, MapPin, DollarSign, Target, Megaphone, CheckCircle } from 'lucide-react'
 import { useState } from 'react'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function PartnerWithUsPage() {
   const [formData, setFormData] = useState({
