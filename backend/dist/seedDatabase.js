@@ -28,7 +28,7 @@ const createSlug = (text) => {
 const sampleUsers = [
     {
         name: 'Admin User',
-        email: 'admin@travelblog.com',
+        email: 'admin@bagpackstories.in',
         password: 'Admin@123456',
         role: 'admin',
         bio: 'Travel blog administrator and content curator.',

@@ -8,12 +8,12 @@
   "country": "India",
   "continent": "Asia",
   "featuredImage": {
-    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459558/TravelBlog/destinations/TravelBlog/destinations/1761459558469-srivatsan-balaji-T5s48osIQTU-unsplash.jpg",
+    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459558/BagPackStories/destinations/BagPackStories/destinations/1761459558469-srivatsan-balaji-T5s48osIQTU-unsplash.jpg",
     "alt": "srivatsan-balaji-T5s48osIQTU-unsplash.jpeg"
   },
   "gallery": [
     {
-      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459569/TravelBlog/destinations/TravelBlog/destinations/1761459568867-jannes-jacobs-NfsB3jPVlcM-unsplash.jpg",
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459569/BagPackStories/destinations/BagPackStories/destinations/1761459568867-jannes-jacobs-NfsB3jPVlcM-unsplash.jpg",
       "alt": "jannes-jacobs-NfsB3jPVlcM-unsplash.jpeg",
       "_id": {
         "$oid": "68fdbd73794bb2703e235176"

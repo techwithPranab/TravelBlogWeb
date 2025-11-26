@@ -70,7 +70,7 @@ const siteSettingsSchema = new Schema<ISiteSettings>({
   siteName: {
     type: String,
     required: [true, 'Site name is required'],
-    default: 'Travel Blog'
+    default: 'BagPackStories'
   },
   siteDescription: {
     type: String,
@@ -112,7 +112,7 @@ const siteSettingsSchema = new Schema<ISiteSettings>({
     sunday: { type: String, default: 'Closed' }
   },
   supportSettings: {
-    email: { type: String, default: 'support@travelblog.com' },
+    email: { type: String, default: 'support@bagpackstories.in' },
     responseTime: { type: String, default: 'Within 24 hours' }
   },
   socialLinks: {
@@ -125,7 +125,7 @@ const siteSettingsSchema = new Schema<ISiteSettings>({
   seoSettings: {
     metaTitle: {
       type: String,
-      default: 'Travel Blog - Discover Amazing Destinations'
+      default: 'BagPackStories - Discover Amazing Destinations'
     },
     metaDescription: {
       type: String,

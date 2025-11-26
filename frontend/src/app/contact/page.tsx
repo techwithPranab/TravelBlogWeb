@@ -48,26 +48,26 @@ export default function ContactPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ContactPage",
-            "name": "Contact Us - TravelBlog",
-            "description": "Get in touch with TravelBlog for travel tips, collaborations, and questions about our travel stories.",
-            "url": "https://travelblog.com/contact",
+            "name": "Contact Us - BagPackStories",
+            "description": "Get in touch with BagPackStories for travel tips, collaborations, and questions about our travel stories.",
+            "url": "https://bagpackstories.in/contact",
             "mainEntity": {
               "@type": "Organization",
-              "name": "TravelBlog",
+              "name": "BagPackStories",
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+1-555-TRAVEL",
                 "contactType": "customer service",
-                "email": "hello@travelblog.com",
+                "email": "hello@bagpackstories.in",
                 "availableLanguage": "English"
               }
             },
             "publisher": {
               "@type": "Organization",
-              "name": "TravelBlog",
+              "name": "BagPackStories",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://travelblog.com/images/logo.png"
+                "url": "https://bagpackstories.in/images/logo.png"
               }
             }
           })
@@ -194,8 +194,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">Email</h3>
-                    <p className="text-gray-600">hello@travelblog.com</p>
-                    <p className="text-gray-600">support@travelblog.com</p>
+                    <p className="text-gray-600">hello@bagpackstories.in</p>
+                    <p className="text-gray-600">support@bagpackstories.in</p>
                   </div>
                 </div>
 
@@ -243,7 +243,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">How can I collaborate with TravelBlog?</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">How can I collaborate with BagPackStories?</h3>
                   <p className="text-gray-600">We're always looking for partnerships. Reach out with your collaboration idea and let's create something amazing together.</p>
                 </div>
               </div>

@@ -213,7 +213,7 @@ export default function PartnerWithUsPage() {
     {
       name: 'Maria Rodriguez',
       title: 'Marketing Manager, Sunset Resort Bali',
-      content: 'Our partnership with TravelBlog resulted in a 40% increase in direct bookings. Their authentic reviews and beautiful content perfectly captured our resort\'s essence.',
+      content: 'Our partnership with BagPackStories resulted in a 40% increase in direct bookings. Their authentic reviews and beautiful content perfectly captured our resort\'s essence.',
       rating: 5
     },
     {
@@ -225,7 +225,7 @@ export default function PartnerWithUsPage() {
     {
       name: 'Sarah Thompson',
       title: 'Brand Manager, TravelGear Pro',
-      content: 'TravelBlog\'s authentic product reviews and integration into their travel stories gave our brand incredible exposure to the right audience.',
+      content: 'BagPackStories\'s authentic product reviews and integration into their travel stories gave our brand incredible exposure to the right audience.',
       rating: 5
     }
   ]
@@ -250,7 +250,7 @@ export default function PartnerWithUsPage() {
             </div>
 
             <p className="text-xl text-indigo-100 mb-8 max-w-3xl mx-auto">
-              Join forces with TravelBlog to reach millions of passionate travelers worldwide.
+              Join forces with BagPackStories to reach millions of passionate travelers worldwide.
               Let's create authentic partnerships that inspire and enable amazing travel experiences.
             </p>
 
@@ -331,7 +331,7 @@ export default function PartnerWithUsPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Partner with TravelBlog?</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Partner with BagPackStories?</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Our platform connects you with engaged travel enthusiasts who trust our recommendations.
             </p>
@@ -388,7 +388,7 @@ export default function PartnerWithUsPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Partner Success Stories</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Hear from our partners about their experience working with TravelBlog.
+              Hear from our partners about their experience working with BagPackStories.
             </p>
           </div>
 
@@ -434,7 +434,7 @@ export default function PartnerWithUsPage() {
                     <Mail className="w-6 h-6 text-indigo-600 mr-4 mt-1" />
                     <div>
                       <div className="font-semibold text-gray-900">Email</div>
-                      <div className="text-gray-600">partnerships@travelblog.com</div>
+                      <div className="text-gray-600">partnerships@bagpackstories.in</div>
                       <div className="text-sm text-gray-500">For partnership inquiries</div>
                     </div>
                   </div>

@@ -794,7 +794,7 @@ const getSettings = async (req, res) => {
         if (!settings) {
             // Create default settings if none exist
             settings = new SiteSettings_1.default({
-                siteName: 'Travel Blog',
+                siteName: 'BagPackStories',
                 siteDescription: 'Discover amazing travel destinations and guides',
                 siteUrl: 'https://yourdomain.com',
                 contactEmail: 'contact@example.com',
@@ -817,7 +817,7 @@ const getSettings = async (req, res) => {
                     sunday: 'Closed'
                 },
                 supportSettings: {
-                    email: 'support@travelblog.com',
+                    email: 'support@bagpackstories.in',
                     responseTime: 'Within 24 hours'
                 },
                 socialLinks: {
@@ -828,13 +828,13 @@ const getSettings = async (req, res) => {
                     linkedin: ''
                 },
                 seoSettings: {
-                    metaTitle: 'Travel Blog - Discover Amazing Destinations',
+                    metaTitle: 'BagPackStories - Discover Amazing Destinations',
                     metaDescription: 'Discover amazing travel destinations, guides, and tips from experienced travelers around the world.',
                     metaKeywords: []
                 },
                 emailSettings: {
                     fromEmail: 'noreply@example.com',
-                    fromName: 'Travel Blog'
+                    fromName: 'BagPackStories'
                 },
                 generalSettings: {
                     postsPerPage: 12,
@@ -869,7 +869,7 @@ const updateSettings = async (req, res) => {
         if (!settings) {
             // Create new settings with complete structure if none exist
             const defaultSettings = {
-                siteName: 'Travel Blog',
+                siteName: 'BagPackStories',
                 siteDescription: 'Discover amazing travel destinations and guides',
                 siteUrl: 'https://yourdomain.com',
                 contactEmail: 'contact@example.com',
@@ -892,7 +892,7 @@ const updateSettings = async (req, res) => {
                     sunday: 'Closed'
                 },
                 supportSettings: {
-                    email: 'support@travelblog.com',
+                    email: 'support@bagpackstories.in',
                     responseTime: 'Within 24 hours'
                 },
                 socialLinks: {
@@ -903,13 +903,13 @@ const updateSettings = async (req, res) => {
                     linkedin: ''
                 },
                 seoSettings: {
-                    metaTitle: 'Travel Blog - Discover Amazing Destinations',
+                    metaTitle: 'BagPackStories - Discover Amazing Destinations',
                     metaDescription: 'Discover amazing travel destinations, guides, and tips from experienced travelers around the world.',
                     metaKeywords: []
                 },
                 emailSettings: {
                     fromEmail: 'noreply@example.com',
-                    fromName: 'Travel Blog'
+                    fromName: 'BagPackStories'
                 },
                 generalSettings: {
                     postsPerPage: 12,

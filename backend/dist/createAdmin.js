@@ -19,14 +19,14 @@ const createAdminUser = async () => {
         // Create admin user
         const adminUser = new User_1.default({
             name: 'Admin User',
-            email: 'admin@travelblog.com',
+            email: 'admin@bagpackstories.in',
             password: 'admin123',
             role: 'admin',
             isEmailVerified: true
         });
         await adminUser.save();
         console.log('✅ Admin user created successfully!');
-        console.log('Email: admin@travelblog.com');
+        console.log('Email: admin@bagpackstories.in');
         console.log('Password: admin123');
         console.log('Role: admin');
         process.exit(0);

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import GalleryClient from './GalleryClient';
 
 export const metadata: Metadata = {
-  title: 'Photo Gallery | TravelBlog - Travel Photography Collection',
+  title: 'Photo Gallery | BagPackStories - Travel Photography Collection',
   description: 'Explore stunning travel photography from destinations around the world. Discover inspiring travel moments captured by adventurers and share your own travel photos.',
   keywords: [
     'travel photos',
@@ -15,28 +15,28 @@ export const metadata: Metadata = {
     'landscape photography'
   ],
   openGraph: {
-    title: 'Travel Photo Gallery | TravelBlog',
+    title: 'Travel Photo Gallery | BagPackStories',
     description: 'Discover amazing travel moments captured by adventurers around the world',
     type: 'website',
-    url: 'https://travelblog.com/gallery',
-    siteName: 'TravelBlog',
+    url: 'https://bagpackstories.in/gallery',
+    siteName: 'BagPackStories',
     images: [
       {
-        url: 'https://travelblog.com/images/gallery-hero.jpg',
+        url: 'https://bagpackstories.in/images/gallery-hero.jpg',
         width: 1200,
         height: 630,
-        alt: 'TravelBlog Photo Gallery',
+        alt: 'BagPackStories Photo Gallery',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Travel Photo Gallery | TravelBlog',
+    title: 'Travel Photo Gallery | BagPackStories',
     description: 'Discover amazing travel moments captured by adventurers around the world',
-    images: ['https://travelblog.com/images/gallery-hero.jpg'],
+    images: ['https://bagpackstories.in/images/gallery-hero.jpg'],
   },
   alternates: {
-    canonical: 'https://travelblog.com/gallery',
+    canonical: 'https://bagpackstories.in/gallery',
   },
 };
 

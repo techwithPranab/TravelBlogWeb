@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Travel Blog Backend Development Setup Script
+# BagPackStories Backend Development Setup Script
 
-echo "🚀 Setting up Travel Blog Backend..."
+echo "🚀 Setting up BagPackStories Backend..."
 
 # Check if we're in the backend directory
 if [ ! -f "package.json" ]; then
@@ -19,14 +19,14 @@ NODE_ENV=development
 PORT=5000
 
 # Database
-MONGODB_URI=mongodb://localhost:27017/travelblog
+MONGODB_URI=mongodb://localhost:27017/bagpackstories
 
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 JWT_EXPIRE=7d
 
 # Email Configuration (Optional - for production)
-EMAIL_FROM=noreply@travelblog.com
+EMAIL_FROM=noreply@bagpackstories.in
 SENDGRID_API_KEY=your-sendgrid-api-key
 
 # Cloudinary Configuration (Optional - for file uploads)

@@ -1,9 +1,9 @@
 {
-  "siteName": "TravelBlog",
+  "siteName": "BagPackStories",
   "siteDescription": "Discover amazing destinations, get practical travel tips, and find inspiration for your next adventure. Join thousands of travelers exploring the world one story at a time.",
-  "siteUrl": "https://travelblog.com",
-  "contactEmail": "hello@travelblog.com",
-  "supportEmail": "support@travelblog.com",
+  "siteUrl": "https://bagpackstories.in",
+  "contactEmail": "hello@bagpackstories.in",
+  "supportEmail": "support@bagpackstories.in",
   "contactPhone": "+1 (555) 123-4567",
   "contactAddress": {
     "street": "123 Travel Street",
@@ -22,19 +22,19 @@
     "sunday": "Closed"
   },
   "supportSettings": {
-    "email": "support@travelblog.com",
+    "email": "support@bagpackstories.in",
     "responseTime": "Within 24 hours"
   },
   "socialLinks": {
-    "facebook": "https://facebook.com/travelblog",
-    "twitter": "https://twitter.com/travelblog",
-    "instagram": "https://instagram.com/travelblog",
-    "youtube": "https://youtube.com/travelblog",
-    "linkedin": "https://linkedin.com/company/travelblog"
+    "facebook": "https://facebook.com/bagpackstories",
+    "twitter": "https://twitter.com/bagpackstories",
+    "instagram": "https://instagram.com/bagpackstories",
+    "youtube": "https://youtube.com/bagpackstories",
+    "linkedin": "https://linkedin.com/company/bagpackstories"
   },
   "seoSettings": {
-    "metaTitle": "TravelBlog - Discover Amazing Destinations & Travel Tips",
-    "metaDescription": "Discover amazing travel destinations, guides, and tips from experienced travelers around the world. Plan your next adventure with TravelBlog.",
+    "metaTitle": "BagPackStories - Discover Amazing Destinations & Travel Tips",
+    "metaDescription": "Discover amazing travel destinations, guides, and tips from experienced travelers around the world. Plan your next adventure with BagPackStories.",
     "metaKeywords": [
       "travel",
       "destinations",
@@ -45,15 +45,15 @@
       "tourism",
       "wanderlust"
     ],
-    "ogImage": "https://travelblog.com/images/og-image.jpg"
+    "ogImage": "https://bagpackstories.in/images/og-image.jpg"
   },
   "emailSettings": {
     "smtpHost": "smtp.gmail.com",
     "smtpPort": 587,
-    "smtpUser": "noreply@travelblog.com",
+    "smtpUser": "noreply@bagpackstories.in",
     "smtpPassword": "your-smtp-password",
-    "fromEmail": "noreply@travelblog.com",
-    "fromName": "TravelBlog"
+    "fromEmail": "noreply@bagpackstories.in",
+    "fromName": "BagPackStories"
   },
   "generalSettings": {
     "postsPerPage": 12,
@@ -65,7 +65,7 @@
   "theme": {
     "primaryColor": "#3B82F6",
     "secondaryColor": "#8B5CF6",
-    "logo": "https://travelblog.com/images/logo.png",
-    "favicon": "https://travelblog.com/images/favicon.ico"
+    "logo": "https://bagpackstories.in/images/logo.png",
+    "favicon": "https://bagpackstories.in/images/favicon.ico"
   }
 }

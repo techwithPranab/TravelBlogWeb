@@ -582,10 +582,10 @@ export const uploadPostImage = async (req: AuthenticatedRequest, res: Response):
     // Generate unique filename
     const timestamp = Date.now()
     const originalName = req.file.originalname.replace(/\.[^/.]+$/, "")
-    const fileName = `TravelBlog/posts/${timestamp}-${originalName}.jpg`
+    const fileName = `BagPackStories/posts/${timestamp}-${originalName}.jpg`
 
     // Upload to Cloudinary
-    const result = await uploadBufferToCloudinary(processedImage, fileName, 'TravelBlog/posts')
+    const result = await uploadBufferToCloudinary(processedImage, fileName, 'BagPackStories/posts')
 
     res.status(200).json({
       success: true,

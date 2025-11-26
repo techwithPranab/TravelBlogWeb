@@ -176,7 +176,7 @@ app.get('/api/public/testimonials', async (req, res) => {
                 role: 'Adventure Traveler',
                 avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
                 rating: 5,
-                text: 'TravelBlog has been my go-to resource for planning amazing adventures. The detailed guides and real traveler experiences are invaluable.',
+                text: 'BagPackStories has been my go-to resource for planning amazing adventures. The detailed guides and real traveler experiences are invaluable.',
                 featured: true
             },
             {
@@ -194,7 +194,7 @@ app.get('/api/public/testimonials', async (req, res) => {
                 role: 'Solo Female Traveler',
                 avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
                 rating: 5,
-                text: 'As a solo female traveler, I appreciate the safety tips and community support. TravelBlog makes solo travel feel safe and exciting.',
+                text: 'As a solo female traveler, I appreciate the safety tips and community support. BagPackStories makes solo travel feel safe and exciting.',
                 featured: true
             }
         ];
@@ -220,11 +220,11 @@ app.get('/api/public/contact', async (req, res) => {
         if (!settings) {
             // Create default settings if none exist
             settings = new SiteSettings({
-                siteName: 'Travel Blog',
+                siteName: 'BagPackStories',
                 siteDescription: 'Discover amazing travel destinations and guides',
                 siteUrl: 'https://yourdomain.com',
-                contactEmail: 'hello@travelblog.com',
-                supportEmail: 'support@travelblog.com',
+                contactEmail: 'hello@bagpackstories.in',
+                supportEmail: 'support@bagpackstories.in',
                 contactPhone: '+1 (555) 123-4567',
                 contactAddress: {
                     street: '123 Travel Street',
@@ -243,14 +243,14 @@ app.get('/api/public/contact', async (req, res) => {
                     sunday: 'Closed'
                 },
                 supportSettings: {
-                    email: 'support@travelblog.com',
+                    email: 'support@bagpackstories.in',
                     responseTime: 'Within 24 hours'
                 },
                 socialLinks: {
-                    facebook: 'https://facebook.com/travelblog',
-                    twitter: 'https://twitter.com/travelblog',
-                    instagram: 'https://instagram.com/travelblog',
-                    youtube: 'https://youtube.com/travelblog'
+                    facebook: 'https://facebook.com/bagpackstories',
+                    twitter: 'https://twitter.com/bagpackstories',
+                    instagram: 'https://instagram.com/bagpackstories',
+                    youtube: 'https://youtube.com/bagpackstories'
                 }
             });
             await settings.save();
@@ -267,10 +267,10 @@ app.get('/api/public/contact', async (req, res) => {
                 country: 'United States'
             },
             socialLinks: {
-                facebook: settings.socialLinks?.facebook || 'https://facebook.com/travelblog',
-                twitter: settings.socialLinks?.twitter || 'https://twitter.com/travelblog',
-                instagram: settings.socialLinks?.instagram || 'https://instagram.com/travelblog',
-                youtube: settings.socialLinks?.youtube || 'https://youtube.com/travelblog'
+                facebook: settings.socialLinks?.facebook || 'https://facebook.com/bagpackstories',
+                twitter: settings.socialLinks?.twitter || 'https://twitter.com/bagpackstories',
+                instagram: settings.socialLinks?.instagram || 'https://instagram.com/bagpackstories',
+                youtube: settings.socialLinks?.youtube || 'https://youtube.com/bagpackstories'
             },
             businessHours: settings.businessHours || {
                 monday: '9:00 AM - 6:00 PM',
@@ -282,7 +282,7 @@ app.get('/api/public/contact', async (req, res) => {
                 sunday: 'Closed'
             },
             support: settings.supportSettings || {
-                email: 'support@travelblog.com',
+                email: 'support@bagpackstories.in',
                 responseTime: 'Within 24 hours'
             }
         };

@@ -11,7 +11,7 @@ import Head from 'next/head'
 export default function HomePage() {
   // Generate SEO metadata for homepage
   const generateSEOMetadata = () => {
-    const title = 'TravelBlog - Discover Amazing Destinations & Travel Stories'
+    const title = 'BagPackStories - Discover Amazing Destinations & Travel Stories'
     const description = 'Explore breathtaking destinations, read inspiring travel stories, and get expert travel guides from experienced travelers around the world. Your ultimate travel companion.'
     const keywords = [
       'travel blog',
@@ -36,12 +36,12 @@ export default function HomePage() {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "TravelBlog",
+      "name": "BagPackStories",
       "description": seoData.description,
       "url": process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
       "publisher": {
         "@type": "Organization",
-        "name": "TravelBlog",
+        "name": "BagPackStories",
         "logo": {
           "@type": "ImageObject",
           "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/logo.png`
@@ -79,7 +79,7 @@ export default function HomePage() {
         <meta property="og:title" content={seoData.title} />
         <meta property="og:description" content={seoData.description} />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-homepage.jpg`} />
-        <meta property="og:site_name" content="TravelBlog" />
+        <meta property="og:site_name" content="BagPackStories" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -90,7 +90,7 @@ export default function HomePage() {
 
         {/* Additional SEO */}
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="TravelBlog Team" />
+        <meta name="author" content="BagPackStories Team" />
         <meta name="language" content="English" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'} />
 

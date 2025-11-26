@@ -1,8 +1,8 @@
-# TravelBlog Chat Mode Configuration
+# BagPackStories Chat Mode Configuration
 
 ## 🤖 AI Assistant Context Configuration
 
-This file configures the contextual information available to AI assistants working on the TravelBlog project. The AI assistant should use the documentation in the `docs/` folder to understand the project structure, implement new features consistently, and maintain code quality standards.
+This file configures the contextual information available to AI assistants working on the BagPackStories project. The AI assistant should use the documentation in the `docs/` folder to understand the project structure, implement new features consistently, and maintain code quality standards.
 
 ## 📁 Documentation References
 

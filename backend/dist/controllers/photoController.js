@@ -140,8 +140,8 @@ exports.submitPhoto = (0, handleAsync_1.handleAsync)(async (req, res) => {
         const originalName = req.file.originalname.replace(/\.[^/.]+$/, "");
         // Upload to Cloudinary
         const [imageResult, thumbnailResult] = await Promise.all([
-            (0, drive_1.uploadBufferToCloudinary)(processedImage, `TravelBlog/photos/${timestamp}-${originalName}.jpg`, 'TravelBlog/photos'),
-            (0, drive_1.uploadThumbnailToCloudinary)(thumbnail, `TravelBlog/photos/thumbnails/${timestamp}-${originalName}-thumb.jpg`, 'TravelBlog/photos/thumbnails')
+            (0, drive_1.uploadBufferToCloudinary)(processedImage, `BagPackStories/photos/${timestamp}-${originalName}.jpg`, 'BagPackStories/photos'),
+            (0, drive_1.uploadThumbnailToCloudinary)(thumbnail, `BagPackStories/photos/thumbnails/${timestamp}-${originalName}-thumb.jpg`, 'BagPackStories/photos/thumbnails')
         ]);
         // Extract URLs and public IDs from Cloudinary results
         const imageUrl = imageResult.url;

@@ -70,10 +70,10 @@ export function Footer() {
   }
 
   const socialLinks = [
-    { name: 'Facebook', icon: Facebook, href: contactInfo?.socialLinks?.facebook || 'https://facebook.com/travelblog' },
-    { name: 'Twitter', icon: Twitter, href: contactInfo?.socialLinks?.twitter || 'https://twitter.com/travelblog' },
-    { name: 'Instagram', icon: Instagram, href: contactInfo?.socialLinks?.instagram || 'https://instagram.com/travelblog' },
-    { name: 'YouTube', icon: Youtube, href: contactInfo?.socialLinks?.youtube || 'https://youtube.com/travelblog' },
+    { name: 'Facebook', icon: Facebook, href: contactInfo?.socialLinks?.facebook || 'https://facebook.com/bagpackstories' },
+    { name: 'Twitter', icon: Twitter, href: contactInfo?.socialLinks?.twitter || 'https://twitter.com/bagpackstories' },
+    { name: 'Instagram', icon: Instagram, href: contactInfo?.socialLinks?.instagram || 'https://instagram.com/bagpackstories' },
+    { name: 'YouTube', icon: Youtube, href: contactInfo?.socialLinks?.youtube || 'https://youtube.com/bagpackstories' },
   ]
 
   return (
@@ -87,7 +87,7 @@ export function Footer() {
               <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
                 <MapPin className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold">TravelBlog</span>
+              <span className="text-2xl font-bold">BagPackStories</span>
             </div>
             
             <p className="text-gray-300 mb-6 max-w-md">
@@ -100,7 +100,7 @@ export function Footer() {
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-primary-400" />
                 <span className="text-gray-300">
-                  {contactLoading ? 'Loading...' : (contactInfo?.email || 'hello@travelblog.com')}
+                  {contactLoading ? 'Loading...' : (contactInfo?.email || 'hello@bagpackstories.in')}
                 </span>
               </div>
               <div className="flex items-center space-x-3">
@@ -232,7 +232,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">
-            © {currentYear} TravelBlog. All rights reserved.
+            © {currentYear} BagPackStories. All rights reserved.
           </p>
           
           <div className="flex items-center space-x-6 mt-4 md:mt-0">

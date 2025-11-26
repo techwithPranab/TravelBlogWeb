@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { ArrowLeft, Shield, Eye, Lock, UserCheck, Globe, Mail } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | TravelBlog',
-  description: 'Learn how TravelBlog collects, uses, and protects your personal information. Our commitment to your privacy and data security.',
+  title: 'Privacy Policy | BagPackStories',
+  description: 'Learn how BagPackStories collects, uses, and protects your personal information. Our commitment to your privacy and data security.',
   keywords: 'privacy policy, data protection, personal information, GDPR, CCPA, data security',
 }
 
@@ -173,7 +173,7 @@ export default function PrivacyPolicyPage() {
                   <li>Withdraw consent at any time</li>
                 </ul>
                 <p>
-                  To exercise these rights, please contact us at privacy@travelblog.com
+                  To exercise these rights, please contact us at privacy@bagpackstories.in
                 </p>
               </div>
             </section>
@@ -230,8 +230,8 @@ export default function PrivacyPolicyPage() {
                   If you have questions about this privacy policy or our data practices, please contact us:
                 </p>
                 <div className="space-y-2 text-gray-700">
-                  <p><strong>Email:</strong> privacy@travelblog.com</p>
-                  <p><strong>Address:</strong> TravelBlog Privacy Team, 123 Travel Street, Adventure City, AC 12345</p>
+                  <p><strong>Email:</strong> privacy@bagpackstories.in</p>
+                  <p><strong>Address:</strong> BagPackStories Privacy Team, 123 Travel Street, Adventure City, AC 12345</p>
                   <p><strong>Phone:</strong> +1 (555) 123-4567</p>
                 </div>
               </div>

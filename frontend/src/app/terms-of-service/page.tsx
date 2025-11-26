@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { ArrowLeft, Scale, FileText, Shield, AlertTriangle, CheckCircle, Gavel } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | TravelBlog',
-  description: 'Read our terms of service to understand your rights and responsibilities when using TravelBlog platform.',
+  title: 'Terms of Service | BagPackStories',
+  description: 'Read our terms of service to understand your rights and responsibilities when using BagPackStories platform.',
   keywords: 'terms of service, user agreement, legal terms, conditions, website rules',
 }
 
@@ -78,12 +78,12 @@ export default function TermsOfServicePage() {
               
               <div className="space-y-4 text-gray-700">
                 <p>
-                  By accessing and using TravelBlog ("the Service"), you accept and agree to be bound by the terms 
+                  By accessing and using BagPackStories ("the Service"), you accept and agree to be bound by the terms 
                   and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
                 </p>
                 <p>
-                  These Terms of Service ("Terms") govern your use of our website located at travelblog.com 
-                  (the "Service") operated by TravelBlog ("us", "we", or "our").
+                  These Terms of Service ("Terms") govern your use of our website located at bagpackstories.in 
+                  (the "Service") operated by BagPackStories ("us", "we", or "our").
                 </p>
               </div>
             </section>
@@ -93,7 +93,7 @@ export default function TermsOfServicePage() {
               
               <div className="space-y-4 text-gray-700">
                 <p>
-                  Permission is granted to temporarily download one copy of the materials on TravelBlog's website 
+                  Permission is granted to temporarily download one copy of the materials on BagPackStories's website 
                   for personal, non-commercial transitory viewing only. This is the grant of a license, not a 
                   transfer of title, and under this license you may not:
                 </p>
@@ -105,7 +105,7 @@ export default function TermsOfServicePage() {
                 </ul>
                 <p>
                   This license shall automatically terminate if you violate any of these restrictions and may be 
-                  terminated by TravelBlog at any time.
+                  terminated by BagPackStories at any time.
                 </p>
               </div>
             </section>
@@ -177,7 +177,7 @@ export default function TermsOfServicePage() {
               <div className="space-y-4 text-gray-700">
                 <p>
                   The Service and its original content, features and functionality are and will remain the 
-                  exclusive property of TravelBlog and its licensors. The Service is protected by copyright, 
+                  exclusive property of BagPackStories and its licensors. The Service is protected by copyright, 
                   trademark, and other laws. Our trademarks and trade dress may not be used in connection 
                   with any product or service without our prior written consent.
                 </p>
@@ -224,7 +224,7 @@ export default function TermsOfServicePage() {
               
               <div className="space-y-4 text-gray-700">
                 <p>
-                  In no event shall TravelBlog, nor its directors, employees, partners, agents, suppliers, or 
+                  In no event shall BagPackStories, nor its directors, employees, partners, agents, suppliers, or 
                   affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, 
                   including without limitation, loss of profits, data, use, goodwill, or other intangible losses, 
                   resulting from your use of the Service.
@@ -283,8 +283,8 @@ export default function TermsOfServicePage() {
                   If you have any questions about these Terms of Service, please contact us:
                 </p>
                 <div className="space-y-2 text-gray-700">
-                  <p><strong>Email:</strong> legal@travelblog.com</p>
-                  <p><strong>Address:</strong> TravelBlog Legal Team, 123 Travel Street, Adventure City, AC 12345</p>
+                  <p><strong>Email:</strong> legal@bagpackstories.in</p>
+                  <p><strong>Address:</strong> BagPackStories Legal Team, 123 Travel Street, Adventure City, AC 12345</p>
                   <p><strong>Phone:</strong> +1 (555) 123-4567</p>
                 </div>
               </div>

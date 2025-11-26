@@ -20,7 +20,7 @@ async function updateAdminPassword() {
     await connectDB()
     
     // Find the admin user
-    const admin = await User.findOne({ email: 'admin@travelblog.com' })
+    const admin = await User.findOne({ email: 'admin@bagpackstories.in' })
     
     if (!admin) {
       console.log('Admin user not found. Creating new admin user...')
@@ -28,7 +28,7 @@ async function updateAdminPassword() {
       // Create new admin user
       const newAdmin = new User({
         name: 'Admin User',
-        email: 'admin@travelblog.com',
+        email: 'admin@bagpackstories.in',
         password: 'Admin@123456', // This will be hashed by the pre-save middleware
         role: 'admin',
         bio: 'Travel blog administrator and content curator.',
@@ -48,11 +48,11 @@ async function updateAdminPassword() {
       console.log('Admin password updated successfully!')
     }
     
-    console.log('Email: admin@travelblog.com')
+    console.log('Email: admin@bagpackstories.in')
     console.log('Password: Admin@123456')
     
     // Test password comparison
-    const testAdmin = await User.findOne({ email: 'admin@travelblog.com' }).select('+password')
+    const testAdmin = await User.findOne({ email: 'admin@bagpackstories.in' }).select('+password')
     if (testAdmin) {
       const isMatch = await testAdmin.comparePassword('Admin@123456')
       console.log('Password verification test:', isMatch ? 'PASSED' : 'FAILED')

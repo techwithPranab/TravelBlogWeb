@@ -114,9 +114,9 @@ export default function GalleryClient() {
     return {
       "@context": "https://schema.org",
       "@type": "ImageGallery",
-      "name": "TravelBlog Photo Gallery",
+      "name": "BagPackStories Photo Gallery",
       "description": `Curated collection of ${photoCount} travel photos from around the world`,
-      "url": "https://travelblog.com/gallery",
+      "url": "https://bagpackstories.in/gallery",
       "image": photos.slice(0, 5).map(photo => ({
         "@type": "ImageObject",
         "url": photo.imageUrl,
@@ -133,8 +133,8 @@ export default function GalleryClient() {
       },
       "provider": {
         "@type": "Organization",
-        "name": "TravelBlog",
-        "url": "https://travelblog.com"
+        "name": "BagPackStories",
+        "url": "https://bagpackstories.in"
       }
     };
   };

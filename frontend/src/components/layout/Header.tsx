@@ -83,7 +83,7 @@ export function Header() {
                   <Map className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
                 <span className="text-lg md:text-xl font-bold text-white">
-                  TravelBlog
+                  BagPackStories
                 </span>
               </Link>
             </div>

@@ -7,8 +7,8 @@ import Head from 'next/head'
 export default function AboutPage() {
   // Generate SEO metadata for about page
   const generateSEOMetadata = () => {
-    const title = 'About Us - TravelBlog | Passionate Travelers Sharing Authentic Stories'
-    const description = 'Learn about TravelBlog\'s journey, our team of experienced travelers, and our mission to inspire authentic travel experiences around the world. Discover our story and values.'
+    const title = 'About Us - BagPackStories | Passionate Travelers Sharing Authentic Stories'
+    const description = 'Learn about BagPackStories\'s journey, our team of experienced travelers, and our mission to inspire authentic travel experiences around the world. Discover our story and values.'
     const keywords = [
       'about travel blog',
       'travel team',
@@ -32,23 +32,23 @@ export default function AboutPage() {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "AboutPage",
-      "name": "About TravelBlog",
+      "name": "About BagPackStories",
       "description": seoData.description,
       "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`,
       "publisher": {
         "@type": "Organization",
-        "name": "TravelBlog",
+        "name": "BagPackStories",
         "foundingDate": "2018",
         "description": "A travel blog dedicated to sharing authentic travel experiences and inspiring adventures around the world.",
         "sameAs": [
-          "https://facebook.com/travelblog",
-          "https://twitter.com/travelblog",
-          "https://instagram.com/travelblog"
+          "https://facebook.com/bagpackstories",
+          "https://twitter.com/bagpackstories",
+          "https://instagram.com/bagpackstories"
         ]
       },
       "mainEntity": {
         "@type": "Organization",
-        "name": "TravelBlog",
+        "name": "BagPackStories",
         "description": "Passionate travelers sharing authentic stories, practical guides, and inspiring adventures from around the world.",
         "founder": {
           "@type": "Person",
@@ -144,7 +144,7 @@ export default function AboutPage() {
         <meta property="og:title" content={seoData.title} />
         <meta property="og:description" content={seoData.description} />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-about.jpg`} />
-        <meta property="og:site_name" content="TravelBlog" />
+        <meta property="og:site_name" content="BagPackStories" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -155,7 +155,7 @@ export default function AboutPage() {
 
         {/* Additional SEO */}
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="TravelBlog Team" />
+        <meta name="author" content="BagPackStories Team" />
         <meta name="language" content="English" />
         <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`} />
 

@@ -18,7 +18,7 @@ export default function DestinationsPage() {
 
   // Generate SEO metadata for destinations page
   const generateSEOMetadata = () => {
-    const title = 'Travel Destinations - Explore Amazing Places Around the World | TravelBlog'
+    const title = 'Travel Destinations - Explore Amazing Places Around the World | BagPackStories'
     const description = 'Discover incredible travel destinations with detailed guides, photos, and insider tips. From hidden gems to popular hotspots, find your perfect travel destination.'
     const keywords = [
       'travel destinations',
@@ -149,7 +149,7 @@ export default function DestinationsPage() {
         <meta property="og:title" content={seoData.title} />
         <meta property="og:description" content={seoData.description} />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-destinations.jpg`} />
-        <meta property="og:site_name" content="TravelBlog" />
+        <meta property="og:site_name" content="BagPackStories" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -160,7 +160,7 @@ export default function DestinationsPage() {
 
         {/* Additional SEO */}
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="TravelBlog Team" />
+        <meta name="author" content="BagPackStories Team" />
         <meta name="language" content="English" />
         <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/destinations`} />
 

@@ -172,8 +172,8 @@ export const submitPhoto = handleAsync(async (req: Request, res: Response) => {
 
     // Upload to Cloudinary
     const [imageResult, thumbnailResult] = await Promise.all([
-      uploadBufferToCloudinary(processedImage, `TravelBlog/photos/${timestamp}-${originalName}.jpg`, 'TravelBlog/photos'),
-      uploadThumbnailToCloudinary(thumbnail, `TravelBlog/photos/thumbnails/${timestamp}-${originalName}-thumb.jpg`, 'TravelBlog/photos/thumbnails')
+      uploadBufferToCloudinary(processedImage, `BagPackStories/photos/${timestamp}-${originalName}.jpg`, 'BagPackStories/photos'),
+      uploadThumbnailToCloudinary(thumbnail, `BagPackStories/photos/thumbnails/${timestamp}-${originalName}-thumb.jpg`, 'BagPackStories/photos/thumbnails')
     ]);
 
     // Extract URLs and public IDs from Cloudinary results

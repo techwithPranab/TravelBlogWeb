@@ -139,7 +139,7 @@ export function isValidUrl(url: string): boolean {
   }
 }
 
-export function generateSEOTitle(title: string, siteName = 'Travel Blog'): string {
+export function generateSEOTitle(title: string, siteName = 'BagPackStories'): string {
   if (title.includes(siteName)) return title
   return `${title} | ${siteName}`
 }

@@ -38,7 +38,7 @@ const siteSettingsSchema = new mongoose_1.Schema({
     siteName: {
         type: String,
         required: [true, 'Site name is required'],
-        default: 'Travel Blog'
+        default: 'BagPackStories'
     },
     siteDescription: {
         type: String,
@@ -80,7 +80,7 @@ const siteSettingsSchema = new mongoose_1.Schema({
         sunday: { type: String, default: 'Closed' }
     },
     supportSettings: {
-        email: { type: String, default: 'support@travelblog.com' },
+        email: { type: String, default: 'support@bagpackstories.in' },
         responseTime: { type: String, default: 'Within 24 hours' }
     },
     socialLinks: {
@@ -93,7 +93,7 @@ const siteSettingsSchema = new mongoose_1.Schema({
     seoSettings: {
         metaTitle: {
             type: String,
-            default: 'Travel Blog - Discover Amazing Destinations'
+            default: 'BagPackStories - Discover Amazing Destinations'
         },
         metaDescription: {
             type: String,

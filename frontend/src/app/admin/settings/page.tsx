@@ -98,7 +98,7 @@ export default function AdminSettingsPage() {
               ...settingsData.businessHours
             },
             supportSettings: {
-              email: 'support@travelblog.com',
+              email: 'support@bagpackstories.in',
               responseTime: 'Within 24 hours',
               ...settingsData.supportSettings
             },
@@ -111,14 +111,14 @@ export default function AdminSettingsPage() {
               ...settingsData.socialLinks
             },
             seoSettings: {
-              metaTitle: 'Travel Blog - Discover Amazing Destinations',
+              metaTitle: 'BagPackStories - Discover Amazing Destinations',
               metaDescription: 'Discover amazing travel destinations, guides, and tips from experienced travelers around the world.',
               metaKeywords: [],
               ...settingsData.seoSettings
             },
             emailSettings: {
               fromEmail: 'noreply@example.com',
-              fromName: 'Travel Blog',
+              fromName: 'BagPackStories',
               ...settingsData.emailSettings
             },
             generalSettings: {
@@ -377,7 +377,7 @@ export default function AdminSettingsPage() {
                       value={settings.contactEmail || ''}
                       onChange={(e) => updateSettings('contactEmail', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="hello@travelblog.com"
+                      placeholder="hello@bagpackstories.in"
                     />
                   </div>
                 </div>
@@ -570,7 +570,7 @@ export default function AdminSettingsPage() {
                       value={settings.supportSettings?.email || ''}
                       onChange={(e) => updateSettings('supportSettings.email', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="support@travelblog.com"
+                      placeholder="support@bagpackstories.in"
                     />
                   </div>
                   <div>

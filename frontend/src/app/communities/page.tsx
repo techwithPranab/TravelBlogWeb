@@ -4,7 +4,7 @@ import { ArrowLeft, Users, MessageCircle, Camera, MapPin, Heart, Star, Globe, Co
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-  title: 'Communities | TravelBlog',
+  title: 'Communities | BagPackStories',
   description: 'Join our vibrant travel communities. Connect with fellow travelers, share experiences, and discover new destinations together.',
   keywords: 'travel community, travel groups, travel forum, travelers, travel social network, travel friends',
 }

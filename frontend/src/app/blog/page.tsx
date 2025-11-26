@@ -19,7 +19,7 @@ export default function BlogPage() {
 
   // Generate SEO metadata for blog page
   const generateSEOMetadata = () => {
-    const title = 'Travel Blog - Stories, Guides & Travel Tips | TravelBlog'
+    const title = 'BagPackStories - Stories, Guides & Travel Tips | BagPackStories'
     const description = 'Discover inspiring travel stories, destination guides, and practical travel tips from experienced travelers around the world. Your ultimate resource for adventure and exploration.'
     const keywords = [
       'travel blog',
@@ -44,12 +44,12 @@ export default function BlogPage() {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "Blog",
-      "name": "TravelBlog",
+      "name": "BagPackStories",
       "description": seoData.description,
       "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`,
       "publisher": {
         "@type": "Organization",
-        "name": "TravelBlog",
+        "name": "BagPackStories",
         "logo": {
           "@type": "ImageObject",
           "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/logo.png`
@@ -170,7 +170,7 @@ export default function BlogPage() {
         <meta property="og:title" content={seoData.title} />
         <meta property="og:description" content={seoData.description} />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-blog.jpg`} />
-        <meta property="og:site_name" content="TravelBlog" />
+        <meta property="og:site_name" content="BagPackStories" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -181,7 +181,7 @@ export default function BlogPage() {
 
         {/* Additional SEO */}
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="TravelBlog Team" />
+        <meta name="author" content="BagPackStories Team" />
         <meta name="language" content="English" />
         <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/blog`} />
 

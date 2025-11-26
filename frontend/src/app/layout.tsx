@@ -20,14 +20,14 @@ const merriweather = Merriweather({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Travel Blog - Discover Amazing Destinations',
-    template: '%s | Travel Blog'
+    default: 'BagPackStories - Discover Amazing Destinations',
+    template: '%s | BagPackStories'
   },
   description: 'Discover amazing travel destinations, read inspiring stories, and get practical travel tips from experienced travelers around the world.',
   keywords: ['travel', 'blog', 'destinations', 'travel tips', 'travel guides', 'adventure', 'backpacking'],
   authors: [{ name: 'TechWithPranab' }],
   creator: 'TechWithPranab',
-  publisher: 'Travel Blog',
+  publisher: 'BagPackStories',
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   alternates: {
     canonical: '/',
@@ -36,21 +36,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Travel Blog',
-    title: 'Travel Blog - Discover Amazing Destinations',
+    siteName: 'BagPackStories',
+    title: 'BagPackStories - Discover Amazing Destinations',
     description: 'Discover amazing travel destinations, read inspiring stories, and get practical travel tips from experienced travelers around the world.',
     images: [
       {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Travel Blog',
+        alt: 'BagPackStories',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Travel Blog - Discover Amazing Destinations',
+    title: 'BagPackStories - Discover Amazing Destinations',
     description: 'Discover amazing travel destinations, read inspiring stories, and get practical travel tips from experienced travelers around the world.',
     images: ['/images/og-image.jpg'],
     creator: '@techwithpranab',

@@ -10,7 +10,7 @@ if [ ! -f ".env" ]; then
     cat > .env << EOL
 NODE_ENV=development
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/travelblog
+MONGODB_URI=mongodb://localhost:27017/bagpackstories
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 JWT_EXPIRE=7d
 CLIENT_URL=http://localhost:3000

@@ -81,7 +81,7 @@ export const MetricsSection = () => {
         <div className="container-max w-full">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              TravelBlog by Numbers
+              BagPackStories by Numbers
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Loading our community metrics...
@@ -158,7 +158,7 @@ export const MetricsSection = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            TravelBlog by Numbers
+            BagPackStories by Numbers
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Join our growing community of travelers sharing their adventures and discoveries from around the world

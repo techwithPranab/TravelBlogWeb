@@ -1,27 +1,27 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Travel Photo Gallery | TravelBlog - Amazing Travel Photos',
+  title: 'Travel Photo Gallery | BagPackStories - Amazing Travel Photos',
   description: 'Explore our curated collection of amazing travel photos from destinations around the world. Search by location, tags, and discover incredible travel moments shared by fellow adventurers.',
   keywords: 'travel photos, travel gallery, travel photography, destinations, travel moments, photo collection, travel images',
   openGraph: {
-    title: 'Travel Photo Gallery | TravelBlog',
+    title: 'Travel Photo Gallery | BagPackStories',
     description: 'Explore our curated collection of amazing travel photos from destinations around the world. Search by location, tags, and discover incredible travel moments.',
     type: 'website',
-    url: 'https://travelblog.com/gallery',
-    siteName: 'TravelBlog',
+    url: 'https://bagpackstories.in/gallery',
+    siteName: 'BagPackStories',
     images: [
       {
         url: '/images/gallery-og.jpg',
         width: 1200,
         height: 630,
-        alt: 'TravelBlog Photo Gallery',
+        alt: 'BagPackStories Photo Gallery',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Travel Photo Gallery | TravelBlog',
+    title: 'Travel Photo Gallery | BagPackStories',
     description: 'Explore our curated collection of amazing travel photos from destinations around the world.',
     images: ['/images/gallery-twitter.jpg'],
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://travelblog.com/gallery',
+    canonical: 'https://bagpackstories.in/gallery',
   },
 };
 
