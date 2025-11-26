@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext'
 import { useRouter, useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { contributorApi } from '@/lib/contributorApi'
+import YouTubeVideoManager from '@/components/admin/YouTubeVideoManager'
 import {
   ArrowLeft,
   Save,
@@ -42,6 +43,7 @@ export default function EditPostPage() {
   const [selectedImages, setSelectedImages] = useState<File[]>([])
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
   const [existingImages, setExistingImages] = useState<string[]>([])
+  const [youtubeVideos, setYoutubeVideos] = useState<any[]>([])
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
@@ -100,6 +102,9 @@ export default function EditPostPage() {
         if (post.featuredImage?.url) {
           setExistingImages([post.featuredImage.url])
         }
+
+        // Set YouTube videos
+        setYoutubeVideos(post.youtubeVideos || [])
 
       } catch (error) {
         console.error('Error loading data:', error)
@@ -193,7 +198,8 @@ export default function EditPostPage() {
         destination: formData.destination ? {
           country: formData.destination,
           city: ''
-        } : undefined
+        } : undefined,
+        youtubeVideos: youtubeVideos
       }
 
       // Handle featured image
@@ -434,6 +440,14 @@ export default function EditPostPage() {
                 Mark as featured post
               </span>
             </label>
+          </div>
+
+          {/* YouTube Videos Section */}
+          <div className="mb-6 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+            <YouTubeVideoManager
+              videos={youtubeVideos}
+              onChange={setYoutubeVideos}
+            />
           </div>
 
           {/* Image Upload */}

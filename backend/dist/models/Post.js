@@ -101,6 +101,31 @@ const postSchema = new mongoose_1.Schema({
     images: [{
             type: String
         }],
+    youtubeVideos: [{
+            id: {
+                type: String,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true,
+                trim: true
+            },
+            url: {
+                type: String,
+                required: true,
+                trim: true
+            },
+            description: {
+                type: String,
+                trim: true
+            },
+            order: {
+                type: Number,
+                required: true,
+                default: 0
+            }
+        }],
     author: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',

@@ -15,9 +15,11 @@ import {
   ArrowLeft,
   MessageCircle,
   Eye,
-  ThumbsUp
+  ThumbsUp,
+  Youtube
 } from 'lucide-react'
 import ContentSection from '@/components/blog/ContentSection'
+import YouTubeVideo from '@/components/blog/YouTubeVideo'
 import { postsApi } from '@/lib/api'
 
 interface BlogPost {
@@ -35,6 +37,13 @@ interface BlogPost {
       caption?: string
     }
     imagePosition?: 'left' | 'right' | 'center' | 'full-width'
+    order: number
+  }>
+  youtubeVideos?: Array<{
+    id: string
+    title: string
+    url: string
+    description?: string
     order: number
   }>
   excerpt: string
@@ -114,6 +123,7 @@ export default function BlogDetailsPage() {
         title: post.title,
         content: post.content,
         contentSections: post.contentSections?.sort((a: any, b: any) => a.order - b.order) || [],
+        youtubeVideos: post.youtubeVideos?.sort((a: any, b: any) => a.order - b.order) || [],
         excerpt: post.excerpt,
         featuredImage: {
           url: (typeof post.featuredImage === 'object' && post.featuredImage?.url) || (typeof post.featuredImage === 'string' ? post.featuredImage : ''),
@@ -651,6 +661,23 @@ export default function BlogDetailsPage() {
             /* Fallback to traditional content */
             <div className="prose prose-lg max-w-none mb-12">
               <div dangerouslySetInnerHTML={{ __html: post?.content || '' }} />
+            </div>
+          )}
+
+          {/* YouTube Videos Section */}
+          {post?.youtubeVideos && post.youtubeVideos.length > 0 && (
+            <div className="mb-12">
+              <div className="flex items-center gap-2 mb-6">
+                <Youtube className="w-6 h-6 text-red-600" />
+                <h2 className="text-2xl font-bold text-gray-900">Related Videos</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {post.youtubeVideos
+                  .sort((a, b) => a.order - b.order)
+                  .map((video) => (
+                    <YouTubeVideo key={video.id} video={video} />
+                  ))}
+              </div>
             </div>
           )}
 

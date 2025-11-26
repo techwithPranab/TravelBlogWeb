@@ -87,6 +87,22 @@
     "alt": "Varanasi ghats at sunrise"
   },
   "images": [],
+  "youtubeVideos": [
+    {
+      "id": "video-1",
+      "title": "Ganga Aarti Ceremony at Dashashwamedh Ghat",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "description": "Experience the mesmerizing evening Ganga Aarti ceremony at the famous Dashashwamedh Ghat in Varanasi",
+      "order": 0
+    },
+    {
+      "id": "video-2",
+      "title": "Sunrise Boat Ride on the Ganges",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "description": "Take a peaceful sunrise boat ride along the sacred Ganges River and witness the ghats come alive",
+      "order": 1
+    }
+  ],
   "author": {
     "$oid": "68fdbb0fdd08ede9e662a188"
   },
@@ -215,6 +231,15 @@
     "alt": "Ram Mandir Ayodhya"
   },
   "images": [],
+  "youtubeVideos": [
+    {
+      "id": "video-1",
+      "title": "Ram Mandir Ayodhya - A Divine Journey",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "description": "Explore the magnificent Ram Mandir complex and its stunning architecture",
+      "order": 0
+    }
+  ],
   "author": {
     "$oid": "68fdbb0fdd08ede9e662a188"
   },
@@ -343,6 +368,22 @@
     "alt": "Triveni Sangam Prayagraj"
   },
   "images": [],
+  "youtubeVideos": [
+    {
+      "id": "video-1",
+      "title": "Kumbh Mela - The Largest Gathering on Earth",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "description": "Witness the spectacular Kumbh Mela at Prayagraj, where millions gather for spiritual purification",
+      "order": 0
+    },
+    {
+      "id": "video-2",
+      "title": "Triveni Sangam - The Sacred Confluence",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "description": "Experience the divine confluence where three holy rivers meet at Prayagraj",
+      "order": 1
+    }
+  ],
   "author": {
     "$oid": "68fdbb0fdd08ede9e662a188"
   },

@@ -16,6 +16,7 @@ import { toast } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 import ContentSectionManager from '@/components/admin/ContentSectionManager'
 import ContentSection from '@/components/blog/ContentSection'
+import YouTubeVideoManager from '@/components/admin/YouTubeVideoManager'
 
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
@@ -32,6 +33,7 @@ export default function EditPostPage() {
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState('')
   const [contentSections, setContentSections] = useState<any[]>([])
+  const [youtubeVideos, setYoutubeVideos] = useState<any[]>([])
   const [availableCategories, setAvailableCategories] = useState<any[]>([])
   
   const [formData, setFormData] = useState({
@@ -126,6 +128,7 @@ export default function EditPostPage() {
       
       setTags(post.tags || [])
       setContentSections(post.contentSections || [])
+      setYoutubeVideos(post.youtubeVideos || [])
     } catch (error) {
       toast.error('Failed to load post')
       console.error('Error loading post:', error)
@@ -266,6 +269,7 @@ export default function EditPostPage() {
         status,
         tags,
         contentSections,
+        youtubeVideos,
         publishedAt: status === 'published' ? new Date().toISOString() : (formData.publishedAt && formData.publishedAt.trim() ? new Date(formData.publishedAt).toISOString() : undefined)
       }
 
@@ -475,6 +479,14 @@ export default function EditPostPage() {
                 <ContentSectionManager
                   sections={contentSections}
                   onChange={setContentSections}
+                />
+              </div>
+
+              {/* YouTube Videos Section */}
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <YouTubeVideoManager
+                  videos={youtubeVideos}
+                  onChange={setYoutubeVideos}
                 />
               </div>
 

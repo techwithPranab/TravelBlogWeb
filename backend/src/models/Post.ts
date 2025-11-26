@@ -24,6 +24,13 @@ export interface IPost extends Document {
     caption?: string
   }
   images?: string[]
+  youtubeVideos?: Array<{
+    id: string
+    title: string
+    url: string
+    description?: string
+    order: number
+  }>
   author: mongoose.Types.ObjectId
   categories: mongoose.Types.ObjectId[]
   tags: string[]
@@ -126,6 +133,31 @@ const postSchema = new Schema<IPost>({
   },
   images: [{
     type: String
+  }],
+  youtubeVideos: [{
+    id: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    url: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      trim: true
+    },
+    order: {
+      type: Number,
+      required: true,
+      default: 0
+    }
   }],
   author: {
     type: Schema.Types.ObjectId,
