@@ -55,8 +55,28 @@ export interface Post {
   slug: string
   excerpt: string
   content: string
+  contentSections?: Array<{
+    id: string
+    type: 'text' | 'image-text' | 'image-only'
+    title?: string
+    content?: string
+    image?: {
+      url: string
+      alt: string
+      caption?: string
+    }
+    imagePosition?: 'left' | 'right' | 'center' | 'full-width'
+    order: number
+  }>
   featuredImage?: string
   images?: string[]
+  youtubeVideos?: Array<{
+    id: string
+    title: string
+    url: string
+    description?: string
+    order: number
+  }>
   author: Author
   categories: Category[]
   tags: Tag[]

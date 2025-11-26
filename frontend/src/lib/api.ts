@@ -41,6 +41,13 @@ export interface Post {
     caption?: string
   }
   images?: string[]
+  youtubeVideos?: Array<{
+    id: string
+    title: string
+    url: string
+    description?: string
+    order: number
+  }>
   tags: string[]
   status: 'draft' | 'published' | 'inactive'
   publishedAt: string

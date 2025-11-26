@@ -47,6 +47,13 @@ export interface ContributorPost {
     slug: string
   }[]
   tags: string[]
+  youtubeVideos?: Array<{
+    id: string
+    title: string
+    url: string
+    description?: string
+    order: number
+  }>
   status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived' | 'inactive'
   isPremium: boolean
   readTime: number
@@ -97,6 +104,13 @@ export interface CreatePostRequest {
   categories: string[]
   tags?: string[]
   destination?: string
+  youtubeVideos?: Array<{
+    id: string
+    title: string
+    url: string
+    description?: string
+    order: number
+  }>
   status?: 'draft' | 'pending' | 'inactive'
   isFeatured?: boolean
   seoTitle?: string
