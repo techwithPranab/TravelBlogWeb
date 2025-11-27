@@ -92,9 +92,20 @@ export const createContributorPost = handleAsync(async (req: AuthenticatedReques
     counter++
   }
 
+  // Filter out empty content sections before creating the post
+  const filteredContentSections = req.body.contentSections?.filter((section: any) => {
+    // Keep image-only sections (they don't require content)
+    if (section.type === 'image-only') {
+      return true
+    }
+    // For text and image-text sections, ensure content is not empty
+    return section.content && section.content.trim() !== ''
+  }) || []
+
   // Set default status for contributors
   const postData = {
     ...req.body,
+    contentSections: filteredContentSections,
     slug: uniqueSlug,
     author: userId,
     status: 'pending', // Contributors submit posts for approval
@@ -142,6 +153,18 @@ export const updateContributorPost = handleAsync(async (req: AuthenticatedReques
     ...req.body,
     status: post.status === 'rejected' ? 'pending' : req.body.status || post.status,
     submittedAt: post.status === 'rejected' ? new Date() : post.submittedAt
+  }
+
+  // Filter out empty content sections before updating the post
+  if (updateData.contentSections) {
+    updateData.contentSections = updateData.contentSections.filter((section: any) => {
+      // Keep image-only sections (they don't require content)
+      if (section.type === 'image-only') {
+        return true
+      }
+      // For text and image-text sections, ensure content is not empty
+      return section.content && section.content.trim() !== ''
+    })
   }
 
   // Generate new slug if title is being updated

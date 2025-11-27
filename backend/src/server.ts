@@ -38,6 +38,9 @@ import partnerRoutes from '@/routes/partnerRoutes'
 // Connect to database
 connectDB()
 
+// Initialize email scheduler
+import { emailScheduler } from '@/services/emailScheduler'
+
 // Create Express app
 const app = express()
 

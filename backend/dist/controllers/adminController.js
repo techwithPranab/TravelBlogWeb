@@ -3,13 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateSettings = exports.getSettings = exports.getGuide = exports.updateGuide = exports.createGuide = exports.deleteGuide = exports.getAllGuidesAdmin = exports.getDestination = exports.updateDestination = exports.createDestination = exports.deleteDestination = exports.getAllDestinationsAdmin = exports.submitPostForReview = exports.moderatePost = exports.getPendingPosts = exports.approvePost = exports.getPost = exports.updatePost = exports.createPost = exports.deletePost = exports.updatePostStatus = exports.getAllPostsAdmin = exports.deleteUser = exports.updateUser = exports.createUser = exports.getAllUsers = exports.getDashboardStats = void 0;
+exports.sendTestEmail = exports.deleteEmailTemplate = exports.createEmailTemplate = exports.updateEmailTemplate = exports.getEmailTemplate = exports.getEmailTemplates = exports.updateSettings = exports.getSettings = exports.getGuide = exports.updateGuide = exports.createGuide = exports.deleteGuide = exports.getAllGuidesAdmin = exports.getDestination = exports.updateDestination = exports.createDestination = exports.deleteDestination = exports.getAllDestinationsAdmin = exports.submitPostForReview = exports.moderatePost = exports.getPendingPosts = exports.approvePost = exports.getPost = exports.updatePost = exports.createPost = exports.deletePost = exports.updatePostStatus = exports.getAllPostsAdmin = exports.deleteUser = exports.updateUser = exports.createUser = exports.getAllUsers = exports.getDashboardStats = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const Post_1 = __importDefault(require("../models/Post"));
 const Destination_1 = __importDefault(require("../models/Destination"));
 const Guide_1 = __importDefault(require("../models/Guide"));
 const Newsletter_1 = __importDefault(require("../models/Newsletter"));
 const SiteSettings_1 = __importDefault(require("../models/SiteSettings"));
+const EmailTemplate_1 = __importDefault(require("../models/EmailTemplate"));
+const emailService_1 = require("../services/emailService");
 // Admin Dashboard Stats
 const getDashboardStats = async (req, res) => {
     try {
@@ -388,6 +390,17 @@ const approvePost = async (req, res) => {
                 message: 'Post not found'
             });
         }
+        // Send approval notification email to contributor
+        if (post.author && typeof post.author === 'object' && 'email' in post.author) {
+            try {
+                await emailService_1.emailService.sendPostApprovedNotification(post, post.author);
+                console.log('✅ Approval notification sent to contributor');
+            }
+            catch (emailError) {
+                console.error('❌ Failed to send approval notification:', emailError);
+                // Don't fail the request if email fails
+            }
+        }
         res.json({
             success: true,
             data: post,
@@ -468,6 +481,17 @@ const moderatePost = async (req, res) => {
                 message: 'Post not found'
             });
         }
+        // Send approval notification email to contributor if approved
+        if (status === 'published' && post.author && typeof post.author === 'object' && 'email' in post.author) {
+            try {
+                await emailService_1.emailService.sendPostApprovedNotification(post, post.author);
+                console.log('✅ Post approval notification sent to contributor');
+            }
+            catch (emailError) {
+                console.error('❌ Failed to send approval notification:', emailError);
+                // Don't fail the request if email fails
+            }
+        }
         res.json({
             success: true,
             data: post,
@@ -496,6 +520,17 @@ const submitPostForReview = async (req, res) => {
                 success: false,
                 message: 'Post not found'
             });
+        }
+        // Send notification email to admin team about new submission
+        if (post.author && typeof post.author === 'object' && 'email' in post.author) {
+            try {
+                await emailService_1.emailService.sendContributorSubmissionNotification(post, post.author);
+                console.log('✅ Submission notification sent to admin team');
+            }
+            catch (emailError) {
+                console.error('❌ Failed to send submission notification:', emailError);
+                // Don't fail the request if email fails
+            }
         }
         res.json({
             success: true,
@@ -945,3 +980,190 @@ const updateSettings = async (req, res) => {
     }
 };
 exports.updateSettings = updateSettings;
+// Email Templates Management
+const getEmailTemplates = async (req, res) => {
+    try {
+        const templates = await EmailTemplate_1.default.find().sort({ createdAt: -1 });
+        res.json({
+            success: true,
+            data: templates
+        });
+    }
+    catch (error) {
+        console.error('Get email templates error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch email templates'
+        });
+    }
+};
+exports.getEmailTemplates = getEmailTemplates;
+const getEmailTemplate = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const template = await EmailTemplate_1.default.findById(id);
+        if (!template) {
+            return res.status(404).json({
+                success: false,
+                message: 'Email template not found'
+            });
+        }
+        res.json({
+            success: true,
+            data: template
+        });
+    }
+    catch (error) {
+        console.error('Get email template error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch email template'
+        });
+    }
+};
+exports.getEmailTemplate = getEmailTemplate;
+const updateEmailTemplate = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, subject, htmlContent, textContent, variables, isActive, description } = req.body;
+        const template = await EmailTemplate_1.default.findByIdAndUpdate(id, {
+            name,
+            subject,
+            htmlContent,
+            textContent,
+            variables,
+            isActive,
+            description
+        }, { new: true, runValidators: true });
+        if (!template) {
+            return res.status(404).json({
+                success: false,
+                message: 'Email template not found'
+            });
+        }
+        res.json({
+            success: true,
+            data: template,
+            message: 'Email template updated successfully'
+        });
+    }
+    catch (error) {
+        console.error('Update email template error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update email template'
+        });
+    }
+};
+exports.updateEmailTemplate = updateEmailTemplate;
+const createEmailTemplate = async (req, res) => {
+    try {
+        const template = await EmailTemplate_1.default.create(req.body);
+        res.status(201).json({
+            success: true,
+            data: template,
+            message: 'Email template created successfully'
+        });
+    }
+    catch (error) {
+        console.error('Create email template error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to create email template'
+        });
+    }
+};
+exports.createEmailTemplate = createEmailTemplate;
+const deleteEmailTemplate = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const template = await EmailTemplate_1.default.findByIdAndDelete(id);
+        if (!template) {
+            return res.status(404).json({
+                success: false,
+                message: 'Email template not found'
+            });
+        }
+        res.json({
+            success: true,
+            message: 'Email template deleted successfully'
+        });
+    }
+    catch (error) {
+        console.error('Delete email template error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete email template'
+        });
+    }
+};
+exports.deleteEmailTemplate = deleteEmailTemplate;
+// Send test email
+const sendTestEmail = async (req, res) => {
+    try {
+        const { templateType, testEmail } = req.body;
+        if (!testEmail || !templateType) {
+            return res.status(400).json({
+                success: false,
+                message: 'Test email address and template type are required'
+            });
+        }
+        // Mock data for testing
+        const mockPost = {
+            _id: 'test-post-id',
+            title: 'Sample Travel Blog Post',
+            slug: 'sample-travel-blog-post',
+            categories: [{ name: 'Adventure Travel' }],
+            submittedAt: new Date(),
+            publishedAt: new Date(),
+            author: {
+                name: 'John Doe',
+                email: testEmail
+            }
+        };
+        const mockUser = {
+            name: 'Test User',
+            email: testEmail
+        };
+        let result;
+        switch (templateType) {
+            case 'contributorSubmission':
+                result = await emailService_1.emailService.sendContributorSubmissionNotification(mockPost, mockUser);
+                break;
+            case 'postApproved':
+                result = await emailService_1.emailService.sendPostApprovedNotification(mockPost, mockUser);
+                break;
+            case 'weeklyNewsletter':
+                // Send test newsletter
+                const testSubscribers = [{ email: testEmail, name: 'Test Subscriber' }];
+                const newsletterData = {
+                    posts: [mockPost],
+                    weekRange: {
+                        start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                        end: new Date()
+                    }
+                };
+                result = await emailService_1.emailService.sendWeeklyNewsletter(testSubscribers, newsletterData);
+                break;
+            default:
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid template type'
+                });
+        }
+        res.json({
+            success: true,
+            message: 'Test email sent successfully',
+            data: result
+        });
+    }
+    catch (error) {
+        console.error('Send test email error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to send test email',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+};
+exports.sendTestEmail = sendTestEmail;

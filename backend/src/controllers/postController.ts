@@ -6,6 +6,7 @@ import sharp from 'sharp'
 import Destination from '@/models/Destination'
 import Guide from '@/models/Guide'
 import Photo from '@/models/Photo'
+import { emailService } from '@/services/emailService'
 
 interface AuthenticatedRequest extends Request {
   user?: IUser
@@ -143,10 +144,43 @@ export const getPost = async (req: Request, res: Response): Promise<void> => {
 // @access  Private (Author/Admin)
 export const createPost = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
+    // Filter out empty content sections before validation
+    if (req.body.contentSections && Array.isArray(req.body.contentSections)) {
+      req.body.contentSections = req.body.contentSections.filter((section: any) => {
+        // Keep image-only sections regardless of content
+        if (section.type === 'image-only') return true
+        
+        // For text and image-text sections, require non-empty content
+        return section.content && section.content.trim().length > 0
+      })
+    }
+
     // Add author to req.body
     req.body.author = req.user?._id
 
     const post = await Post.create(req.body)
+    
+    // Populate author information for email notification
+    await post.populate('author', 'name email');
+
+    // Send notification to admin team if post is submitted for review (pending status)
+    if (post.status === 'pending' && req.user) {
+      console.log('📧 Post Controller: Sending contributor submission notification email');
+      console.log('📧 Email details:', {
+        postId: post._id,
+        postTitle: post.title,
+        contributorEmail: req.user.email,
+        contributorName: req.user.name,
+        submittedAt: post.submittedAt
+      });
+      try {
+        await emailService.sendContributorSubmissionNotification(post, req.user);
+        console.log('✅ Post Controller: Submission notification sent successfully');
+      } catch (emailError) {
+        console.error('❌ Post Controller: Failed to send submission notification:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
 
     res.status(201).json({
       success: true,
@@ -184,7 +218,20 @@ export const updatePost = async (req: AuthenticatedRequest, res: Response): Prom
       return
     }
 
-    post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+    // Filter out empty content sections before updating the post
+    const updateData = { ...req.body }
+    if (updateData.contentSections) {
+      updateData.contentSections = updateData.contentSections.filter((section: any) => {
+        // Keep image-only sections (they don't require content)
+        if (section.type === 'image-only') {
+          return true
+        }
+        // For text and image-text sections, ensure content is not empty
+        return section.content && section.content.trim() !== ''
+      })
+    }
+
+    post = await Post.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
     })

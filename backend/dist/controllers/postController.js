@@ -10,6 +10,7 @@ const sharp_1 = __importDefault(require("sharp"));
 const Destination_1 = __importDefault(require("../models/Destination"));
 const Guide_1 = __importDefault(require("../models/Guide"));
 const Photo_1 = __importDefault(require("../models/Photo"));
+const emailService_1 = require("../services/emailService");
 // @desc    Get all posts
 // @route   GET /api/posts
 // @access  Public
@@ -131,6 +132,19 @@ const createPost = async (req, res) => {
         // Add author to req.body
         req.body.author = req.user?._id;
         const post = await Post_1.default.create(req.body);
+        // Populate author information for email notification
+        await post.populate('author', 'name email');
+        // Send notification to admin team if post is submitted for review (pending status)
+        if (post.status === 'pending' && req.user) {
+            try {
+                await emailService_1.emailService.sendContributorSubmissionNotification(post, req.user);
+                console.log('✅ Submission notification sent to admin team');
+            }
+            catch (emailError) {
+                console.error('❌ Failed to send submission notification:', emailError);
+                // Don't fail the request if email fails
+            }
+        }
         res.status(201).json({
             success: true,
             data: post

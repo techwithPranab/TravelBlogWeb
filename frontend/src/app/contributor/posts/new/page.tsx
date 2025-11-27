@@ -412,6 +412,7 @@ export default function NewPostPage() {
                 <ContentSectionManager
                   sections={contentSections}
                   onChange={setContentSections}
+                  authToken={localStorage.getItem('token') || undefined}
                 />
               </div>
 

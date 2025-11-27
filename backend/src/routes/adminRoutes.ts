@@ -26,7 +26,13 @@ import {
   updateGuide,
   getGuide,
   getSettings,
-  updateSettings
+  updateSettings,
+  sendTestEmail,
+  getEmailTemplates,
+  getEmailTemplate,
+  updateEmailTemplate,
+  createEmailTemplate,
+  deleteEmailTemplate
 } from '../controllers/adminController'
 import { requireAdmin } from '../middleware/adminAuth'
 import { uploadGuideImage, upload } from '../controllers/guideController'
@@ -75,5 +81,15 @@ router.post('/guides/upload-image', upload.single('image'), uploadGuideImage)
 // Settings Management
 router.get('/settings', getSettings)
 router.put('/settings', updateSettings)
+
+// Email Management
+router.post('/test-email', sendTestEmail)
+
+// Email Templates Management
+router.get('/email-templates', getEmailTemplates)
+router.get('/email-templates/:id', getEmailTemplate)
+router.put('/email-templates/:id', updateEmailTemplate)
+router.post('/email-templates', createEmailTemplate)
+router.delete('/email-templates/:id', deleteEmailTemplate)
 
 export default router

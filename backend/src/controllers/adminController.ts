@@ -5,7 +5,9 @@ import Destination from '../models/Destination'
 import Guide from '../models/Guide'
 import Newsletter from '../models/Newsletter'
 import SiteSettings from '../models/SiteSettings'
+import EmailTemplate from '../models/EmailTemplate'
 import { AuthenticatedRequest } from '../middleware/adminAuth'
+import { emailService } from '../services/emailService'
 
 // Admin Dashboard Stats
 export const getDashboardStats = async (req: AuthenticatedRequest, res: Response) => {
@@ -442,6 +444,24 @@ export const approvePost = async (req: Request, res: Response) => {
       })
     }
 
+    // Send approval notification email to contributor
+    if (post.author && typeof post.author === 'object' && 'email' in post.author) {
+      try {
+        console.log('📧 Admin Controller: Sending approval notification email');
+        console.log('📧 Email details:', {
+          postId: post._id,
+          postTitle: post.title,
+          contributorEmail: (post.author as any).email,
+          contributorName: (post.author as any).name
+        });
+        await emailService.sendPostApprovedNotification(post, post.author as any);
+        console.log('✅ Admin Controller: Approval notification sent successfully');
+      } catch (emailError) {
+        console.error('❌ Admin Controller: Failed to send approval notification:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
+
     res.json({
       success: true,
       data: post,
@@ -532,6 +552,26 @@ export const moderatePost = async (req: Request, res: Response) => {
       })
     }
 
+    // Send approval notification email to contributor if approved
+    if (status === 'published' && post.author && typeof post.author === 'object' && 'email' in post.author) {
+      try {
+        console.log('📧 Admin Controller: Sending post approval notification email');
+        console.log('📧 Email details:', {
+          postId: post._id,
+          postTitle: post.title,
+          status: status,
+          contributorEmail: (post.author as any).email,
+          contributorName: (post.author as any).name,
+          moderatedBy: (post.moderatedBy as any)?.name || 'Unknown'
+        });
+        await emailService.sendPostApprovedNotification(post, post.author as any);
+        console.log('✅ Admin Controller: Post approval notification sent successfully');
+      } catch (emailError) {
+        console.error('❌ Admin Controller: Failed to send approval notification:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
+
     res.json({
       success: true,
       data: post,
@@ -565,6 +605,25 @@ export const submitPostForReview = async (req: Request, res: Response) => {
         success: false,
         message: 'Post not found'
       })
+    }
+
+    // Send notification email to admin team about new submission
+    if (post.author && typeof post.author === 'object' && 'email' in post.author) {
+      try {
+        console.log('📧 Admin Controller: Sending contributor submission notification email');
+        console.log('📧 Email details:', {
+          postId: post._id,
+          postTitle: post.title,
+          contributorEmail: (post.author as any).email,
+          contributorName: (post.author as any).name,
+          submittedAt: post.submittedAt
+        });
+        await emailService.sendContributorSubmissionNotification(post, post.author as any);
+        console.log('✅ Admin Controller: Submission notification sent successfully');
+      } catch (emailError) {
+        console.error('❌ Admin Controller: Failed to send submission notification:', emailError);
+        // Don't fail the request if email fails
+      }
     }
 
     res.json({
@@ -1038,6 +1097,215 @@ export const updateSettings = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'Failed to update settings'
+    })
+  }
+}
+
+// Email Templates Management
+export const getEmailTemplates = async (req: Request, res: Response) => {
+  try {
+    const templates = await EmailTemplate.find().sort({ createdAt: -1 })
+
+    res.json({
+      success: true,
+      data: templates
+    })
+  } catch (error) {
+    console.error('Get email templates error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch email templates'
+    })
+  }
+}
+
+export const getEmailTemplate = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const template = await EmailTemplate.findById(id)
+
+    if (!template) {
+      return res.status(404).json({
+        success: false,
+        message: 'Email template not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: template
+    })
+  } catch (error) {
+    console.error('Get email template error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch email template'
+    })
+  }
+}
+
+export const updateEmailTemplate = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const { name, subject, htmlContent, textContent, variables, isActive, description } = req.body
+
+    const template = await EmailTemplate.findByIdAndUpdate(
+      id,
+      {
+        name,
+        subject,
+        htmlContent,
+        textContent,
+        variables,
+        isActive,
+        description
+      },
+      { new: true, runValidators: true }
+    )
+
+    if (!template) {
+      return res.status(404).json({
+        success: false,
+        message: 'Email template not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      data: template,
+      message: 'Email template updated successfully'
+    })
+  } catch (error) {
+    console.error('Update email template error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update email template'
+    })
+  }
+}
+
+export const createEmailTemplate = async (req: Request, res: Response) => {
+  try {
+    const template = await EmailTemplate.create(req.body)
+
+    res.status(201).json({
+      success: true,
+      data: template,
+      message: 'Email template created successfully'
+    })
+  } catch (error) {
+    console.error('Create email template error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create email template'
+    })
+  }
+}
+
+export const deleteEmailTemplate = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const template = await EmailTemplate.findByIdAndDelete(id)
+
+    if (!template) {
+      return res.status(404).json({
+        success: false,
+        message: 'Email template not found'
+      })
+    }
+
+    res.json({
+      success: true,
+      message: 'Email template deleted successfully'
+    })
+  } catch (error) {
+    console.error('Delete email template error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete email template'
+    })
+  }
+}
+
+// Send test email
+export const sendTestEmail = async (req: Request, res: Response) => {
+  try {
+    const { templateType, testEmail } = req.body
+
+    console.log('🧪 Admin Controller: Starting test email process');
+    console.log('🧪 Test email parameters:', { templateType, testEmail });
+
+    if (!testEmail || !templateType) {
+      console.log('❌ Admin Controller: Missing required parameters for test email');
+      return res.status(400).json({
+        success: false,
+        message: 'Test email address and template type are required'
+      })
+    }
+
+    // Mock data for testing
+    const mockPost = {
+      _id: 'test-post-id',
+      title: 'Sample Travel Blog Post',
+      slug: 'sample-travel-blog-post',
+      categories: [{ name: 'Adventure Travel' }],
+      submittedAt: new Date(),
+      publishedAt: new Date(),
+      author: {
+        name: 'John Doe',
+        email: testEmail
+      }
+    }
+
+    const mockUser = {
+      name: 'Test User',
+      email: testEmail
+    } as any
+
+    let result
+    console.log('📧 Admin Controller: Sending test email of type:', templateType);
+    switch (templateType) {
+      case 'contributorSubmission':
+        console.log('📧 Test email: Contributor submission notification');
+        result = await emailService.sendContributorSubmissionNotification(mockPost as any, mockUser)
+        break
+      case 'postApproved':
+        console.log('📧 Test email: Post approval notification');
+        result = await emailService.sendPostApprovedNotification(mockPost as any, mockUser)
+        break
+      case 'weeklyNewsletter':
+        console.log('📧 Test email: Weekly newsletter');
+        // Send test newsletter
+        const testSubscribers = [{ email: testEmail, name: 'Test Subscriber' }] as any
+        const newsletterData = {
+          posts: [mockPost as any],
+          weekRange: {
+            start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+            end: new Date()
+          }
+        }
+        result = await emailService.sendWeeklyNewsletter(testSubscribers, newsletterData)
+        break
+      default:
+        console.log('❌ Admin Controller: Invalid template type for test email:', templateType);
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid template type'
+        })
+    }
+
+    console.log('✅ Admin Controller: Test email sent successfully');
+    res.json({
+      success: true,
+      message: 'Test email sent successfully',
+      data: result
+    })
+  } catch (error) {
+    console.error('❌ Admin Controller: Send test email error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to send test email',
+      error: error instanceof Error ? error.message : 'Unknown error'
     })
   }
 }

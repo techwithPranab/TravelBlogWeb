@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import { toast } from 'react-hot-toast'
 
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
@@ -39,9 +40,10 @@ interface ContentSection {
 interface ContentSectionManagerProps {
   sections: ContentSection[]
   onChange: (sections: ContentSection[]) => void
+  authToken?: string
 }
 
-export default function ContentSectionManager({ sections, onChange }: ContentSectionManagerProps) {
+export default function ContentSectionManager({ sections, onChange, authToken }: ContentSectionManagerProps) {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set())
 
   const generateId = () => `section_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -119,18 +121,51 @@ export default function ContentSectionManager({ sections, onChange }: ContentSec
     })
   }
 
-  const handleImageUpload = (sectionId: string, file: File) => {
-    // In a real implementation, this would upload to your image service
-    // For now, we'll create a placeholder URL
-    const imageUrl = URL.createObjectURL(file)
-    
-    updateSection(sectionId, {
-      image: {
-        url: imageUrl,
-        alt: file.name,
-        caption: ''
+  const handleImageUpload = async (sectionId: string, file: File) => {
+    // Show loading state
+    const loadingToast = toast.loading('Uploading image...')
+
+    try {
+      // Create FormData for file upload
+      const uploadFormData = new FormData()
+      uploadFormData.append('image', file)
+
+      // Get auth token - use prop if provided, otherwise try localStorage
+      const token = authToken || localStorage.getItem('adminToken') || localStorage.getItem('token')
+
+      // Upload to our API endpoint
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/upload-image`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: uploadFormData
+      })
+
+      if (!response.ok) {
+        throw new Error('Upload failed')
       }
-    })
+
+      const result = await response.json()
+
+      if (result.success) {
+        updateSection(sectionId, {
+          image: {
+            url: result.data.url,
+            alt: file.name,
+            caption: ''
+          }
+        })
+        toast.success('Image uploaded successfully')
+      } else {
+        throw new Error(result.error || 'Upload failed')
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      toast.error('Failed to upload image. Please try again.')
+    } finally {
+      toast.dismiss(loadingToast)
+    }
   }
 
   const quillModules = {

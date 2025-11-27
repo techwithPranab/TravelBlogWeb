@@ -44,4 +44,12 @@ router.post('/guides/upload-image', guideController_1.upload.single('image'), gu
 // Settings Management
 router.get('/settings', adminController_1.getSettings);
 router.put('/settings', adminController_1.updateSettings);
+// Email Management
+router.post('/test-email', adminController_1.sendTestEmail);
+// Email Templates Management
+router.get('/email-templates', adminController_1.getEmailTemplates);
+router.get('/email-templates/:id', adminController_1.getEmailTemplate);
+router.put('/email-templates/:id', adminController_1.updateEmailTemplate);
+router.post('/email-templates', adminController_1.createEmailTemplate);
+router.delete('/email-templates/:id', adminController_1.deleteEmailTemplate);
 exports.default = router;

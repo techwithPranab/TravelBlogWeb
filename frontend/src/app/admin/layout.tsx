@@ -16,7 +16,8 @@ import {
   Shield,
   Camera,
   MessageSquare,
-  UserCheck
+  UserCheck,
+  Mail
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -71,6 +72,12 @@ const sidebarItems = [
     name: 'Users',
     href: '/admin/users',
     icon: Users,
+    badge: null
+  },
+  {
+    name: 'Email Templates',
+    href: '/admin/email-templates',
+    icon: Mail,
     badge: null
   },
   {
