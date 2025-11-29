@@ -6,7 +6,8 @@ import {
   verifyEmail,
   updatePreferences,
   getStats,
-  getSubscribers
+  getSubscribers,
+  getMetrics
 } from '@/controllers/newsletterController';
 import { protect, adminOnly } from '@/middleware/auth';
 import { validate } from '@/middleware/validate';
@@ -26,12 +27,24 @@ const subscribeValidation = [
     .withMessage('Name must be between 2 and 50 characters'),
   body('source')
     .optional()
-    .isIn(['homepage', 'blog', 'popup', 'footer', 'manual'])
+    .isIn(['homepage', 'blog', 'popup', 'footer', 'manual', 'newsletter-page'])
     .withMessage('Invalid subscription source'),
+  body('preferences.weekly')
+    .optional()
+    .isBoolean()
+    .withMessage('Weekly preference must be a boolean'),
+  body('preferences.deals')
+    .optional()
+    .isBoolean()
+    .withMessage('Deals preference must be a boolean'),
   body('preferences.destinations')
     .optional()
     .isBoolean()
     .withMessage('Destinations preference must be a boolean'),
+  body('preferences.tips')
+    .optional()
+    .isBoolean()
+    .withMessage('Tips preference must be a boolean'),
   body('preferences.travelTips')
     .optional()
     .isBoolean()
@@ -72,6 +85,7 @@ const preferencesValidation = [
 ];
 
 // Public routes
+router.get('/public/metrics', getMetrics);
 router.post('/subscribe', subscribeValidation, validate, subscribe);
 router.post('/unsubscribe', unsubscribeValidation, validate, unsubscribe);
 router.get('/verify/:token', verifyEmail);

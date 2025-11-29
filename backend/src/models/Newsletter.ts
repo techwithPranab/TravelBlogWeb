@@ -7,10 +7,13 @@ export interface INewsletter extends Document {
   subscribedAt: Date;
   unsubscribedAt?: Date;
   preferences?: {
+    weekly: boolean;
+    deals: boolean;
     destinations: boolean;
+    tips: boolean;
+    weeklyDigest: boolean;
     travelTips: boolean;
     photography: boolean;
-    weeklyDigest: boolean;
   };
   source?: string; // Where they subscribed from
   verificationToken?: string;
@@ -48,14 +51,17 @@ const NewsletterSchema: Schema = new Schema({
     type: Date
   },
   preferences: {
+    weekly: { type: Boolean, default: true },
+    deals: { type: Boolean, default: false },
     destinations: { type: Boolean, default: true },
+    tips: { type: Boolean, default: true },
+    weeklyDigest: { type: Boolean, default: true },
     travelTips: { type: Boolean, default: true },
-    photography: { type: Boolean, default: true },
-    weeklyDigest: { type: Boolean, default: true }
+    photography: { type: Boolean, default: true }
   },
   source: {
     type: String,
-    enum: ['homepage', 'blog', 'popup', 'footer', 'manual'],
+    enum: ['homepage', 'blog', 'popup', 'footer', 'manual', 'newsletter-page'],
     default: 'homepage'
   },
   verificationToken: {
