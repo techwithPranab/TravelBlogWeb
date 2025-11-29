@@ -218,6 +218,9 @@ export const updatePost = async (req: AuthenticatedRequest, res: Response): Prom
       return
     }
 
+    // Store original status to check if it changed to 'published'
+    const originalStatus = post.status
+
     // Filter out empty content sections before updating the post
     const updateData = { ...req.body }
     if (updateData.contentSections) {
@@ -231,10 +234,35 @@ export const updatePost = async (req: AuthenticatedRequest, res: Response): Prom
       })
     }
 
+    // Set publishedAt timestamp if status is being changed to 'published'
+    if (updateData.status === 'published' && originalStatus !== 'published') {
+      updateData.publishedAt = new Date()
+    }
+
     post = await Post.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
-    })
+    }).populate('author', 'name email')
+
+    // Send approval notification email to contributor if status changed to 'published'
+    if (updateData.status === 'published' && originalStatus !== 'published' && post?.author && typeof post.author === 'object' && 'email' in post.author) {
+      try {
+        console.log('📧 Post Controller: Sending post approval notification email');
+        console.log('📧 Email details:', {
+          postId: post._id,
+          postTitle: post.title,
+          originalStatus: originalStatus,
+          newStatus: updateData.status,
+          contributorEmail: (post.author as any).email,
+          contributorName: (post.author as any).name
+        });
+        await emailService.sendPostApprovedNotification(post, post.author as any);
+        console.log('✅ Post Controller: Post approval notification sent successfully');
+      } catch (emailError) {
+        console.error('❌ Post Controller: Failed to send approval notification:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
 
     res.status(200).json({
       success: true,

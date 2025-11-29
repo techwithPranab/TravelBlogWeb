@@ -157,15 +157,23 @@ class EmailSchedulerService {
                 }
             };
             // Send newsletter
-            console.log('📤 Sending weekly newsletter to subscribers...');
+            console.log('� Email Scheduler: Sending weekly newsletter to subscribers');
+            console.log('📧 Newsletter details:', {
+                postsCount: weeklyPosts.length,
+                subscribersCount: subscribers.length,
+                weekRange: {
+                    start: oneWeekAgo.toISOString(),
+                    end: now.toISOString()
+                }
+            });
             const success = await emailService_1.emailService.sendWeeklyNewsletter(subscribers, newsletterData);
             if (success) {
-                console.log('✅ Weekly newsletter sent successfully');
+                console.log('✅ Email Scheduler: Weekly newsletter sent successfully');
                 // Log newsletter send in database (optional)
                 await this.logNewsletterSend(weeklyPosts.length, subscribers.length);
             }
             else {
-                console.error('❌ Failed to send weekly newsletter');
+                console.error('❌ Email Scheduler: Failed to send weekly newsletter');
             }
         }
         catch (error) {
@@ -231,12 +239,13 @@ class EmailSchedulerService {
      */
     async sendTestNewsletter() {
         try {
-            console.log('🧪 Sending test newsletter...');
+            console.log('🧪 Email Scheduler: Starting test newsletter process');
             const adminEmail = process.env.ADMIN_EMAIL;
             if (!adminEmail) {
-                console.error('ADMIN_EMAIL not configured');
+                console.error('❌ Email Scheduler: ADMIN_EMAIL not configured');
                 return false;
             }
+            console.log('🧪 Email Scheduler: Fetching recent posts for test newsletter');
             // Get recent posts for test
             const recentPosts = await Post_1.default.find({
                 status: 'published'
@@ -246,9 +255,10 @@ class EmailSchedulerService {
                 .sort({ publishedAt: -1 })
                 .limit(3);
             if (recentPosts.length === 0) {
-                console.log('No posts available for test newsletter');
+                console.log('🧪 Email Scheduler: No posts available for test newsletter');
                 return false;
             }
+            console.log('🧪 Email Scheduler: Creating test subscriber and newsletter data');
             // Create test subscriber
             const testSubscriber = {
                 _id: 'test-id',
@@ -274,17 +284,23 @@ class EmailSchedulerService {
                     end: new Date()
                 }
             };
+            console.log('📧 Email Scheduler: Sending test newsletter');
+            console.log('📧 Test newsletter details:', {
+                postsCount: recentPosts.length,
+                testEmail: adminEmail,
+                weekRange: newsletterData.weekRange
+            });
             const success = await emailService_1.emailService.sendWeeklyNewsletter([testSubscriber], newsletterData);
             if (success) {
-                console.log('✅ Test newsletter sent successfully');
+                console.log('✅ Email Scheduler: Test newsletter sent successfully');
             }
             else {
-                console.error('❌ Failed to send test newsletter');
+                console.error('❌ Email Scheduler: Failed to send test newsletter');
             }
             return success;
         }
         catch (error) {
-            console.error('Error sending test newsletter:', error);
+            console.error('❌ Email Scheduler: Error sending test newsletter:', error);
             return false;
         }
     }

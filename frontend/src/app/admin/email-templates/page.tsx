@@ -36,7 +36,8 @@ export default function EmailTemplatesPage() {
   const fetchTemplates = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/admin/email-templates', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+      const response = await fetch(`${apiUrl}/admin/email-templates`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }
@@ -61,7 +62,8 @@ export default function EmailTemplatesPage() {
 
     try {
       setSaving(true)
-      const response = await fetch(`/api/admin/email-templates/${editingTemplate._id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+      const response = await fetch(`${apiUrl}/admin/email-templates/${editingTemplate._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +92,8 @@ export default function EmailTemplatesPage() {
     setSendingTestEmail(true)
     try {
       const testEmail = prompt('Enter test email address:') || 'admin@bagpackstories.in'
-      const response = await fetch('/api/admin/test-email', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+      const response = await fetch(`${apiUrl}/admin/test-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

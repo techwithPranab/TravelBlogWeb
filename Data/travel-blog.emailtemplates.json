@@ -1,0 +1,83 @@
+[{
+  "_id": {
+    "$oid": "69275f0f93d047a2215fe001"
+  },
+  "name": "Contributor Submission Notification",
+  "key": "contributor_submission",
+  "subject": "New Post Submitted for Review - {{postTitle}}",
+  "htmlContent": "\n<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n  <h2 style=\"color: #333;\">New Post Submitted for Review</h2>\n  <p>Hello Admin Team,</p>\n  <p>A new blog post has been submitted for review by <strong>{{contributorName}}</strong>.</p>\n  \n  <div style=\"background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;\">\n    <h3 style=\"margin: 0 0 10px 0; color: #333;\">Post Details:</h3>\n    <p><strong>Title:</strong> {{postTitle}}</p>\n    <p><strong>Author:</strong> {{contributorName}} ({{contributorEmail}})</p>\n    <p><strong>Category:</strong> {{postCategory}}</p>\n    <p><strong>Submitted:</strong> {{submissionDate}}</p>\n  </div>\n  \n  <p>Please review and take appropriate action in the admin panel.</p>\n  \n  <div style=\"margin: 30px 0;\">\n    <a href=\"{{adminPanelUrl}}\" style=\"background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;\">\n      Review Post in Admin Panel\n    </a>\n  </div>\n  \n  <p>Best regards,<br>BagPackStories Team</p>\n</div>",
+  "textContent": "New Post Submitted for Review\n\nHello Admin Team,\n\nA new blog post has been submitted for review by {{contributorName}}.\n\nPost Details:\n- Title: {{postTitle}}\n- Author: {{contributorName}} ({{contributorEmail}})\n- Category: {{postCategory}}\n- Submitted: {{submissionDate}}\n\nPlease review and take appropriate action in the admin panel: {{adminPanelUrl}}\n\nBest regards,\nBagPackStories Team",
+  "variables": [
+    "postTitle",
+    "contributorName",
+    "contributorEmail",
+    "postCategory",
+    "submissionDate",
+    "adminPanelUrl"
+  ],
+  "type": "contributor_submission",
+  "isActive": true,
+  "description": "Email sent to admin team when a contributor submits a post for review",
+  "createdAt": {
+    "$date": "2025-11-26T20:11:59.771Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-26T20:11:59.771Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69275f0f93d047a2215fe004"
+  },
+  "name": "Post Approval Notification",
+  "key": "post_approved",
+  "subject": "Your Post \"{{postTitle}}\" Has Been Approved!",
+  "htmlContent": "\n<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n  <h2 style=\"color: #28a745;\">🎉 Your Post Has Been Approved!</h2>\n  <p>Hello {{contributorName}},</p>\n  <p>Great news! Your blog post has been approved and is now published on BagPackStories.</p>\n  \n  <div style=\"background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #28a745;\">\n    <h3 style=\"margin: 0 0 10px 0; color: #333;\">Published Post:</h3>\n    <p><strong>Title:</strong> {{postTitle}}</p>\n    <p><strong>Category:</strong> {{postCategory}}</p>\n    <p><strong>Published Date:</strong> {{publishedDate}}</p>\n  </div>\n  \n  <p>Your story is now live and readers can discover your amazing content! Thank you for your valuable contribution to our travel community.</p>\n  \n  <div style=\"margin: 30px 0;\">\n    <a href=\"{{postUrl}}\" style=\"background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; margin-right: 10px;\">\n      View Your Published Post\n    </a>\n    <a href=\"{{contributorPanelUrl}}\" style=\"background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;\">\n      Contributor Dashboard\n    </a>\n  </div>\n  \n  <p>Keep sharing your travel experiences with our community!</p>\n  <p>Best regards,<br>BagPackStories Team</p>\n</div>",
+  "textContent": "🎉 Your Post Has Been Approved!\n\nHello {{contributorName}},\n\nGreat news! Your blog post has been approved and is now published on BagPackStories.\n\nPublished Post:\n- Title: {{postTitle}}\n- Category: {{postCategory}}\n- Published Date: {{publishedDate}}\n\nYour story is now live and readers can discover your amazing content! Thank you for your valuable contribution to our travel community.\n\nView your published post: {{postUrl}}\nContributor Dashboard: {{contributorPanelUrl}}\n\nKeep sharing your travel experiences with our community!\n\nBest regards,\nBagPackStories Team",
+  "variables": [
+    "postTitle",
+    "contributorName",
+    "postCategory",
+    "publishedDate",
+    "postUrl",
+    "contributorPanelUrl"
+  ],
+  "type": "post_approved",
+  "isActive": true,
+  "description": "Email sent to contributor when their post is approved and published",
+  "createdAt": {
+    "$date": "2025-11-26T20:11:59.950Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-26T20:11:59.950Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69275f1093d047a2215fe007"
+  },
+  "name": "Weekly Newsletter",
+  "key": "weekly_newsletter",
+  "subject": "Weekly Travel Inspiration - New Posts from BagPackStories",
+  "htmlContent": "\n<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">\n  <div style=\"text-align: center; padding: 20px 0; border-bottom: 1px solid #eee;\">\n    <h1 style=\"color: #333; margin: 0;\">BagPackStories</h1>\n    <p style=\"color: #666; margin: 5px 0 0 0;\">Weekly Travel Inspiration</p>\n  </div>\n  \n  <div style=\"padding: 30px 20px;\">\n    <h2 style=\"color: #333;\">✈️ This Week's Travel Stories</h2>\n    <p>Hello {{subscriberName}},</p>\n    <p>Discover the amazing travel stories published this week on BagPackStories. Get inspired for your next adventure!</p>\n    \n    <div style=\"margin: 30px 0;\">\n      {{weeklyPosts}}\n    </div>\n    \n    <div style=\"text-align: center; margin: 40px 0;\">\n      <a href=\"{{websiteUrl}}\" style=\"background: #007bff; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;\">\n        Visit BagPackStories\n      </a>\n    </div>\n    \n    <p>Happy travels!</p>\n    <p>Best regards,<br>The BagPackStories Team</p>\n  </div>\n  \n  <div style=\"background: #f8f9fa; padding: 20px; text-align: center; color: #666; font-size: 12px;\">\n    <p>You're receiving this email because you subscribed to BagPackStories newsletter.</p>\n    <p><a href=\"{{unsubscribeUrl}}\" style=\"color: #666;\">Unsubscribe</a> | <a href=\"{{websiteUrl}}\" style=\"color: #666;\">Visit Website</a></p>\n  </div>\n</div>",
+  "textContent": "BagPackStories - Weekly Travel Inspiration\n\nHello {{subscriberName}},\n\nThis week's travel stories are here! Discover amazing destinations and get inspired for your next adventure.\n\n{{weeklyPostsText}}\n\nVisit BagPackStories: {{websiteUrl}}\n\nHappy travels!\nThe BagPackStories Team\n\nYou're receiving this email because you subscribed to BagPackStories newsletter.\nUnsubscribe: {{unsubscribeUrl}}",
+  "variables": [
+    "subscriberName",
+    "weeklyPosts",
+    "weeklyPostsText",
+    "websiteUrl",
+    "unsubscribeUrl"
+  ],
+  "type": "weekly_newsletter",
+  "isActive": true,
+  "description": "Weekly newsletter sent to subscribers with latest blog posts",
+  "createdAt": {
+    "$date": "2025-11-26T20:12:00.149Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-29T16:05:12.092Z"
+  },
+  "__v": 0
+}]

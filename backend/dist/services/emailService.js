@@ -44,6 +44,8 @@ class EmailService {
         // Check if username/password are configured for SMTP
         const brevoUsername = process.env.BREVO_USERNAME;
         const brevoPassword = process.env.BREVO_PASSWORD;
+        console.log('📧 [EMAIL SERVICE] Initializing email service...');
+        console.log('📧 [EMAIL SERVICE] BREVO_USERNAME:', brevoUsername);
         if (brevoUsername && brevoPassword) {
             // Configure SMTP with username/password
             this.smtpConfig = {
@@ -57,19 +59,33 @@ class EmailService {
             };
             // Create nodemailer transporter
             this.transporter = nodemailer.createTransport(this.smtpConfig);
-            console.log('Email service configured with SMTP (username/password)');
+            console.log('✅ [EMAIL SERVICE] Email service initialized with SMTP (username/password)');
+            console.log('📧 [EMAIL SERVICE] SMTP Config:', {
+                host: this.smtpConfig.host,
+                port: this.smtpConfig.port,
+                secure: this.smtpConfig.secure,
+                hasAuth: !!this.smtpConfig.auth?.user
+            });
         }
         else {
             this.smtpConfig = {};
-            console.warn('BREVO_USERNAME/BREVO_PASSWORD is not configured. Email service will not work.');
+            console.warn('⚠️ [EMAIL SERVICE] BREVO_USERNAME/BREVO_PASSWORD is not configured. Email service will not work.');
         }
     }
     async sendEmail(emailData) {
         try {
+            console.log('📧 [EMAIL SERVICE] Starting email send process...');
             if (!this.transporter) {
-                console.error('SMTP transporter is not configured');
+                console.error('❌ [EMAIL SERVICE] SMTP transporter is not configured');
                 return false;
             }
+            console.log('📧 [EMAIL SERVICE] Email details:', {
+                from: emailData.sender.email,
+                to: emailData.to.map(r => r.email),
+                subject: emailData.subject,
+                smtpHost: this.smtpConfig.host,
+                smtpPort: this.smtpConfig.port
+            });
             // Convert BrevoEmailRequest format to nodemailer format
             const mailOptions = {
                 from: {
@@ -84,22 +100,43 @@ class EmailService {
                 html: emailData.htmlContent,
                 text: emailData.textContent
             };
+            console.log('📧 [EMAIL SERVICE] Sending email via SMTP...');
             const result = await this.transporter.sendMail(mailOptions);
-            console.log('Email sent successfully via SMTP:', result.messageId);
+            console.log('✅ [EMAIL SERVICE] Email sent successfully via SMTP:', {
+                messageId: result.messageId,
+                envelope: result.envelope,
+                accepted: result.accepted,
+                rejected: result.rejected,
+                pending: result.pending
+            });
             return true;
         }
         catch (error) {
-            console.error('Error sending email via SMTP:', error);
+            console.error('❌ [EMAIL SERVICE] Error sending email via SMTP:', {
+                error: error instanceof Error ? error.message : 'Unknown error',
+                stack: error instanceof Error ? error.stack : undefined,
+                emailData: {
+                    to: emailData.to.map(r => r.email),
+                    subject: emailData.subject
+                }
+            });
             return false;
         }
     }
     async getTemplate(key) {
         try {
+            console.log(`📧 [TEMPLATE] Fetching email template: ${key}`);
             const template = await EmailTemplate_1.default.findOne({ key, isActive: true });
+            if (template) {
+                console.log(`✅ [TEMPLATE] Template '${key}' found and active`);
+            }
+            else {
+                console.log(`❌ [TEMPLATE] Template '${key}' not found or inactive`);
+            }
             return template;
         }
         catch (error) {
-            console.error(`Failed to fetch template ${key}:`, error);
+            console.error(`❌ [TEMPLATE] Failed to fetch template ${key}:`, error);
             return null;
         }
     }
@@ -353,16 +390,18 @@ Manage preferences: {{managePreferencesUrl}}
      */
     async sendContributorSubmissionNotification(post, contributor) {
         try {
+            console.log('📧 [CONTRIBUTOR SUBMISSION] Starting notification process for post:', post.title);
             const template = await this.getTemplate('contributor_submission');
             if (!template) {
-                console.error('Contributor submission email template not found');
+                console.error('❌ [CONTRIBUTOR SUBMISSION] Contributor submission email template not found');
                 return false;
             }
             const adminEmails = process.env.ADMIN_EMAIL?.split(',').map(email => email.trim()) || [];
             if (adminEmails.length === 0) {
-                console.error('No admin emails configured');
+                console.error('❌ [CONTRIBUTOR SUBMISSION] No admin emails configured');
                 return false;
             }
+            console.log('📧 [CONTRIBUTOR SUBMISSION] Admin emails configured:', adminEmails.length);
             // Get category name from categories array
             const categoryName = post.categories && post.categories.length > 0 ? 'Travel' : 'General';
             const variables = {
@@ -380,6 +419,11 @@ Manage preferences: {{managePreferencesUrl}}
                 wordCount: post.content.split(' ').length.toString(),
                 reviewUrl: `${process.env.FRONTEND_URL}/admin/posts/${post._id}/review`
             };
+            console.log('📧 [CONTRIBUTOR SUBMISSION] Template variables prepared:', {
+                postTitle: variables.postTitle,
+                contributorEmail: variables.contributorEmail,
+                adminCount: adminEmails.length
+            });
             const htmlContent = this.replaceTemplateVariables(template.htmlContent, variables);
             const textContent = this.replaceTemplateVariables(template.textContent || '', variables);
             const subject = this.replaceTemplateVariables(template.subject, variables);
@@ -393,14 +437,18 @@ Manage preferences: {{managePreferencesUrl}}
                 htmlContent,
                 textContent
             };
+            console.log('📧 [CONTRIBUTOR SUBMISSION] Sending email to admin team...');
             const success = await this.sendEmail(emailData);
             if (success) {
-                console.log(`Contributor submission notification sent to admin team for post: ${post.title}`);
+                console.log(`✅ [CONTRIBUTOR SUBMISSION] Notification sent successfully to ${adminEmails.length} admin(s) for post: ${post.title}`);
+            }
+            else {
+                console.log(`❌ [CONTRIBUTOR SUBMISSION] Failed to send notification for post: ${post.title}`);
             }
             return success;
         }
         catch (error) {
-            console.error('Error sending contributor submission notification:', error);
+            console.error('❌ [CONTRIBUTOR SUBMISSION] Error sending contributor submission notification:', error);
             return false;
         }
     }
@@ -409,11 +457,13 @@ Manage preferences: {{managePreferencesUrl}}
      */
     async sendPostApprovedNotification(post, contributor) {
         try {
+            console.log('📧 [POST APPROVAL] Starting approval notification for post:', post.title);
             const template = await this.getTemplate('post_approved');
             if (!template) {
-                console.error('Post approval email template not found');
+                console.error('❌ [POST APPROVAL] Post approval email template not found');
                 return false;
             }
+            console.log('📧 [POST APPROVAL] Template found, preparing variables for contributor:', contributor.email);
             // Get category name from categories array
             const categoryName = post.categories && post.categories.length > 0 ? 'Travel' : 'General';
             const variables = {
@@ -430,6 +480,11 @@ Manage preferences: {{managePreferencesUrl}}
                 viewCount: (post.viewCount || 0).toString(),
                 supportEmail: process.env.SUPPORT_EMAIL || process.env.ADMIN_EMAIL || 'support@bagpackstories.in'
             };
+            console.log('📧 [POST APPROVAL] Variables prepared:', {
+                postTitle: variables.postTitle,
+                postUrl: variables.postUrl,
+                contributorEmail: contributor.email
+            });
             const htmlContent = this.replaceTemplateVariables(template.htmlContent, variables);
             const textContent = this.replaceTemplateVariables(template.textContent || '', variables);
             const subject = this.replaceTemplateVariables(template.subject, variables);
@@ -443,14 +498,18 @@ Manage preferences: {{managePreferencesUrl}}
                 htmlContent,
                 textContent
             };
+            console.log('📧 [POST APPROVAL] Sending approval notification to contributor...');
             const success = await this.sendEmail(emailData);
             if (success) {
-                console.log(`Post approved notification sent to contributor: ${contributor.email} for post: ${post.title}`);
+                console.log(`✅ [POST APPROVAL] Approval notification sent successfully to ${contributor.email} for post: ${post.title}`);
+            }
+            else {
+                console.log(`❌ [POST APPROVAL] Failed to send approval notification to ${contributor.email} for post: ${post.title}`);
             }
             return success;
         }
         catch (error) {
-            console.error('Error sending post approved notification:', error);
+            console.error('❌ [POST APPROVAL] Error sending post approved notification:', error);
             return false;
         }
     }
@@ -459,19 +518,23 @@ Manage preferences: {{managePreferencesUrl}}
      */
     async sendWeeklyNewsletter(subscribers, newsletterData) {
         try {
+            console.log('📧 [NEWSLETTER] Starting weekly newsletter process...');
+            console.log('📧 [NEWSLETTER] Subscribers count:', subscribers.length);
+            console.log('📧 [NEWSLETTER] Posts count:', newsletterData.posts.length);
             const template = await this.getTemplate('weekly_newsletter');
             if (!template) {
-                console.error('Weekly newsletter email template not found');
+                console.error('❌ [NEWSLETTER] Weekly newsletter email template not found');
                 return false;
             }
             if (subscribers.length === 0) {
-                console.log('No subscribers found for weekly newsletter');
+                console.log('⚠️ [NEWSLETTER] No subscribers found for weekly newsletter');
                 return true;
             }
             if (newsletterData.posts.length === 0) {
-                console.log('No posts published this week, skipping newsletter');
+                console.log('⚠️ [NEWSLETTER] No posts published this week, skipping newsletter');
                 return true;
             }
+            console.log('📧 [NEWSLETTER] Preparing newsletter content...');
             // Prepare featured posts HTML
             const featuredPostsHtml = newsletterData.posts.slice(0, 3).map(post => `
         <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
@@ -494,13 +557,17 @@ ${post.title}
 ${post.excerpt || post.content.substring(0, 120) + '...'}
 Read more: ${process.env.FRONTEND_URL}/blog/${post.slug}
       `).join('\n---\n');
+            console.log('📧 [NEWSLETTER] Content prepared, starting batch sending...');
             // Send to subscribers in batches
             const batchSize = 50;
             let successCount = 0;
+            let totalProcessed = 0;
             for (let i = 0; i < subscribers.length; i += batchSize) {
                 const batch = subscribers.slice(i, i + batchSize);
+                console.log(`📧 [NEWSLETTER] Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(subscribers.length / batchSize)} (${batch.length} subscribers)`);
                 for (const subscriber of batch) {
                     try {
+                        totalProcessed++;
                         const variables = {
                             subscriberName: subscriber.name || 'Fellow Traveler',
                             weekRange: `${newsletterData.weekRange.start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${newsletterData.weekRange.end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
@@ -528,20 +595,21 @@ Read more: ${process.env.FRONTEND_URL}/blog/${post.slug}
                             successCount++;
                         }
                         // Small delay to avoid rate limiting
-                        if (successCount % 10 === 0) {
+                        if (totalProcessed % 10 === 0) {
+                            console.log(`📧 [NEWSLETTER] Progress: ${totalProcessed}/${subscribers.length} processed, ${successCount} successful`);
                             await new Promise(resolve => setTimeout(resolve, 1000));
                         }
                     }
                     catch (error) {
-                        console.error(`Failed to send newsletter to ${subscriber.email}:`, error);
+                        console.error(`❌ [NEWSLETTER] Failed to send newsletter to ${subscriber.email}:`, error);
                     }
                 }
             }
-            console.log(`Weekly newsletter sent successfully to ${successCount}/${subscribers.length} subscribers`);
+            console.log(`✅ [NEWSLETTER] Weekly newsletter completed: ${successCount}/${subscribers.length} subscribers successfully received the newsletter`);
             return successCount > 0;
         }
         catch (error) {
-            console.error('Error sending weekly newsletter:', error);
+            console.error('❌ [NEWSLETTER] Error sending weekly newsletter:', error);
             return false;
         }
     }
@@ -549,6 +617,7 @@ Read more: ${process.env.FRONTEND_URL}/blog/${post.slug}
      * Replace template variables with actual values
      */
     replaceTemplateVariables(template, variables) {
+        console.log('📧 [TEMPLATE] Replacing variables in template, variables count:', Object.keys(variables).length);
         let result = template;
         for (const [key, value] of Object.entries(variables)) {
             const regex = new RegExp(`{{${key}}}`, 'g');
@@ -563,6 +632,7 @@ Read more: ${process.env.FRONTEND_URL}/blog/${post.slug}
                 result = result.replace(regex, String(value || ''));
             }
         }
+        console.log('✅ [TEMPLATE] Template variables replaced successfully');
         return result;
     }
     /**
@@ -570,7 +640,9 @@ Read more: ${process.env.FRONTEND_URL}/blog/${post.slug}
      */
     async sendCustomEmail(to, subject, htmlContent, textContent) {
         try {
+            console.log('📧 [CUSTOM EMAIL] Starting custom email send...');
             const recipients = Array.isArray(to) ? to : [to];
+            console.log('📧 [CUSTOM EMAIL] Recipients:', recipients.length, 'Subject:', subject.substring(0, 50) + '...');
             const emailData = {
                 sender: {
                     email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
@@ -581,14 +653,18 @@ Read more: ${process.env.FRONTEND_URL}/blog/${post.slug}
                 htmlContent,
                 textContent
             };
+            console.log('📧 [CUSTOM EMAIL] Sending custom email...');
             const success = await this.sendEmail(emailData);
             if (success) {
-                console.log(`Custom email sent successfully to: ${recipients.join(', ')}`);
+                console.log(`✅ [CUSTOM EMAIL] Custom email sent successfully to: ${recipients.join(', ')}`);
+            }
+            else {
+                console.log(`❌ [CUSTOM EMAIL] Failed to send custom email to: ${recipients.join(', ')}`);
             }
             return success;
         }
         catch (error) {
-            console.error('Error sending custom email:', error);
+            console.error('❌ [CUSTOM EMAIL] Error sending custom email:', error);
             return false;
         }
     }
@@ -603,7 +679,15 @@ Read more: ${process.env.FRONTEND_URL}/blog/${post.slug}
      */
     async testEmailConfig() {
         try {
+            console.log('🧪 [EMAIL TEST] Starting email configuration test...');
             const testEmail = process.env.ADMIN_EMAIL || 'test@bagpackstories.in';
+            console.log('🧪 [EMAIL TEST] Test email will be sent to:', testEmail);
+            console.log('🧪 [EMAIL TEST] SMTP Configuration:', {
+                host: this.smtpConfig.host,
+                port: this.smtpConfig.port,
+                secure: this.smtpConfig.secure,
+                hasAuth: !!this.smtpConfig.auth?.user
+            });
             const emailData = {
                 sender: {
                     email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
@@ -634,14 +718,18 @@ Username: ${this.smtpConfig.auth?.user || 'Not configured'}
 If you received this email, your SMTP configuration is successful!
         `
             };
+            console.log('🧪 [EMAIL TEST] Sending test email...');
             const success = await this.sendEmail(emailData);
             if (success) {
-                console.log('Test email sent successfully using SMTP');
+                console.log('✅ [EMAIL TEST] Test email sent successfully using SMTP');
+            }
+            else {
+                console.log('❌ [EMAIL TEST] Test email failed to send');
             }
             return success;
         }
         catch (error) {
-            console.error('Email configuration test failed:', error);
+            console.error('❌ [EMAIL TEST] Email configuration test failed:', error);
             return false;
         }
     }

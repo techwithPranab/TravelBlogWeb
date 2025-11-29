@@ -129,6 +129,16 @@ exports.getPost = getPost;
 // @access  Private (Author/Admin)
 const createPost = async (req, res) => {
     try {
+        // Filter out empty content sections before validation
+        if (req.body.contentSections && Array.isArray(req.body.contentSections)) {
+            req.body.contentSections = req.body.contentSections.filter((section) => {
+                // Keep image-only sections regardless of content
+                if (section.type === 'image-only')
+                    return true;
+                // For text and image-text sections, require non-empty content
+                return section.content && section.content.trim().length > 0;
+            });
+        }
         // Add author to req.body
         req.body.author = req.user?._id;
         const post = await Post_1.default.create(req.body);
@@ -136,12 +146,20 @@ const createPost = async (req, res) => {
         await post.populate('author', 'name email');
         // Send notification to admin team if post is submitted for review (pending status)
         if (post.status === 'pending' && req.user) {
+            console.log('📧 Post Controller: Sending contributor submission notification email');
+            console.log('📧 Email details:', {
+                postId: post._id,
+                postTitle: post.title,
+                contributorEmail: req.user.email,
+                contributorName: req.user.name,
+                submittedAt: post.submittedAt
+            });
             try {
                 await emailService_1.emailService.sendContributorSubmissionNotification(post, req.user);
-                console.log('✅ Submission notification sent to admin team');
+                console.log('✅ Post Controller: Submission notification sent successfully');
             }
             catch (emailError) {
-                console.error('❌ Failed to send submission notification:', emailError);
+                console.error('❌ Post Controller: Failed to send submission notification:', emailError);
                 // Don't fail the request if email fails
             }
         }
@@ -179,10 +197,48 @@ const updatePost = async (req, res) => {
             });
             return;
         }
-        post = await Post_1.default.findByIdAndUpdate(req.params.id, req.body, {
+        // Store original status to check if it changed to 'published'
+        const originalStatus = post.status;
+        // Filter out empty content sections before updating the post
+        const updateData = { ...req.body };
+        if (updateData.contentSections) {
+            updateData.contentSections = updateData.contentSections.filter((section) => {
+                // Keep image-only sections (they don't require content)
+                if (section.type === 'image-only') {
+                    return true;
+                }
+                // For text and image-text sections, ensure content is not empty
+                return section.content && section.content.trim() !== '';
+            });
+        }
+        // Set publishedAt timestamp if status is being changed to 'published'
+        if (updateData.status === 'published' && originalStatus !== 'published') {
+            updateData.publishedAt = new Date();
+        }
+        post = await Post_1.default.findByIdAndUpdate(req.params.id, updateData, {
             new: true,
             runValidators: true,
-        });
+        }).populate('author', 'name email');
+        // Send approval notification email to contributor if status changed to 'published'
+        if (updateData.status === 'published' && originalStatus !== 'published' && post?.author && typeof post.author === 'object' && 'email' in post.author) {
+            try {
+                console.log('📧 Post Controller: Sending post approval notification email');
+                console.log('📧 Email details:', {
+                    postId: post._id,
+                    postTitle: post.title,
+                    originalStatus: originalStatus,
+                    newStatus: updateData.status,
+                    contributorEmail: post.author.email,
+                    contributorName: post.author.name
+                });
+                await emailService_1.emailService.sendPostApprovedNotification(post, post.author);
+                console.log('✅ Post Controller: Post approval notification sent successfully');
+            }
+            catch (emailError) {
+                console.error('❌ Post Controller: Failed to send approval notification:', emailError);
+                // Don't fail the request if email fails
+            }
+        }
         res.status(200).json({
             success: true,
             data: post

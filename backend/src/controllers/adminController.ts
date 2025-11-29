@@ -282,6 +282,25 @@ export const updatePostStatus = async (req: Request, res: Response) => {
       })
     }
 
+    // Send approval notification email to contributor if approved
+    if (status === 'published' && post.author && typeof post.author === 'object' && 'email' in post.author) {
+      try {
+        console.log('📧 Admin Controller: Sending post approval notification email');
+        console.log('📧 Email details:', {
+          postId: post._id,
+          postTitle: post.title,
+          status: status,
+          contributorEmail: (post.author as any).email,
+          contributorName: (post.author as any).name
+        });
+        await emailService.sendPostApprovedNotification(post, post.author as any);
+        console.log('✅ Admin Controller: Post approval notification sent successfully');
+      } catch (emailError) {
+        console.error('❌ Admin Controller: Failed to send approval notification:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
+
     res.json({
       success: true,
       data: post,
@@ -356,12 +375,29 @@ export const updatePost = async (req: Request, res: Response) => {
     console.log('isFeatured value:', req.body.isFeatured)
     console.log('isFeatured type:', typeof req.body.isFeatured)
 
+    // Get original post to check status change
+    const originalPost = await Post.findById(id).populate('author', 'name email')
+    
+    if (!originalPost) {
+      return res.status(404).json({
+        success: false,
+        message: 'Post not found'
+      })
+    }
+
+    const originalStatus = originalPost.status
+
     // Prepare update data
     const updateData = { ...req.body }
     
     // Ensure isFeatured is boolean
     if (updateData.isFeatured !== undefined) {
       updateData.isFeatured = Boolean(updateData.isFeatured)
+    }
+
+    // Set publishedAt timestamp if status is being changed to 'published'
+    if (updateData.status === 'published' && originalStatus !== 'published') {
+      updateData.publishedAt = new Date()
     }
 
     console.log('Update data:', updateData)
@@ -381,6 +417,26 @@ export const updatePost = async (req: Request, res: Response) => {
     }
 
     console.log('Updated post isFeatured:', post.isFeatured)
+
+    // Send approval notification email to contributor if status changed to 'published'
+    if (updateData.status === 'published' && originalStatus !== 'published' && post.author && typeof post.author === 'object' && 'email' in post.author) {
+      try {
+        console.log('📧 Admin Controller (updatePost): Sending post approval notification email');
+        console.log('📧 Email details:', {
+          postId: post._id,
+          postTitle: post.title,
+          originalStatus: originalStatus,
+          newStatus: updateData.status,
+          contributorEmail: (post.author as any).email,
+          contributorName: (post.author as any).name
+        });
+        await emailService.sendPostApprovedNotification(post, post.author as any);
+        console.log('✅ Admin Controller (updatePost): Post approval notification sent successfully');
+      } catch (emailError) {
+        console.error('❌ Admin Controller (updatePost): Failed to send approval notification:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
 
     res.json({
       success: true,

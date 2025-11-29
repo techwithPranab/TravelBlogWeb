@@ -247,6 +247,25 @@ const updatePostStatus = async (req, res) => {
                 message: 'Post not found'
             });
         }
+        // Send approval notification email to contributor if approved
+        if (status === 'published' && post.author && typeof post.author === 'object' && 'email' in post.author) {
+            try {
+                console.log('📧 Admin Controller: Sending post approval notification email');
+                console.log('📧 Email details:', {
+                    postId: post._id,
+                    postTitle: post.title,
+                    status: status,
+                    contributorEmail: post.author.email,
+                    contributorName: post.author.name
+                });
+                await emailService_1.emailService.sendPostApprovedNotification(post, post.author);
+                console.log('✅ Admin Controller: Post approval notification sent successfully');
+            }
+            catch (emailError) {
+                console.error('❌ Admin Controller: Failed to send approval notification:', emailError);
+                // Don't fail the request if email fails
+            }
+        }
         res.json({
             success: true,
             data: post,
@@ -318,11 +337,24 @@ const updatePost = async (req, res) => {
         console.log('Update post request body:', req.body);
         console.log('isFeatured value:', req.body.isFeatured);
         console.log('isFeatured type:', typeof req.body.isFeatured);
+        // Get original post to check status change
+        const originalPost = await Post_1.default.findById(id).populate('author', 'name email');
+        if (!originalPost) {
+            return res.status(404).json({
+                success: false,
+                message: 'Post not found'
+            });
+        }
+        const originalStatus = originalPost.status;
         // Prepare update data
         const updateData = { ...req.body };
         // Ensure isFeatured is boolean
         if (updateData.isFeatured !== undefined) {
             updateData.isFeatured = Boolean(updateData.isFeatured);
+        }
+        // Set publishedAt timestamp if status is being changed to 'published'
+        if (updateData.status === 'published' && originalStatus !== 'published') {
+            updateData.publishedAt = new Date();
         }
         console.log('Update data:', updateData);
         const post = await Post_1.default.findByIdAndUpdate(id, updateData, { new: true, runValidators: false } // Disable validators for now to avoid issues
@@ -335,6 +367,26 @@ const updatePost = async (req, res) => {
             });
         }
         console.log('Updated post isFeatured:', post.isFeatured);
+        // Send approval notification email to contributor if status changed to 'published'
+        if (updateData.status === 'published' && originalStatus !== 'published' && post.author && typeof post.author === 'object' && 'email' in post.author) {
+            try {
+                console.log('📧 Admin Controller (updatePost): Sending post approval notification email');
+                console.log('📧 Email details:', {
+                    postId: post._id,
+                    postTitle: post.title,
+                    originalStatus: originalStatus,
+                    newStatus: updateData.status,
+                    contributorEmail: post.author.email,
+                    contributorName: post.author.name
+                });
+                await emailService_1.emailService.sendPostApprovedNotification(post, post.author);
+                console.log('✅ Admin Controller (updatePost): Post approval notification sent successfully');
+            }
+            catch (emailError) {
+                console.error('❌ Admin Controller (updatePost): Failed to send approval notification:', emailError);
+                // Don't fail the request if email fails
+            }
+        }
         res.json({
             success: true,
             data: post,
@@ -393,11 +445,18 @@ const approvePost = async (req, res) => {
         // Send approval notification email to contributor
         if (post.author && typeof post.author === 'object' && 'email' in post.author) {
             try {
+                console.log('📧 Admin Controller: Sending approval notification email');
+                console.log('📧 Email details:', {
+                    postId: post._id,
+                    postTitle: post.title,
+                    contributorEmail: post.author.email,
+                    contributorName: post.author.name
+                });
                 await emailService_1.emailService.sendPostApprovedNotification(post, post.author);
-                console.log('✅ Approval notification sent to contributor');
+                console.log('✅ Admin Controller: Approval notification sent successfully');
             }
             catch (emailError) {
-                console.error('❌ Failed to send approval notification:', emailError);
+                console.error('❌ Admin Controller: Failed to send approval notification:', emailError);
                 // Don't fail the request if email fails
             }
         }
@@ -484,11 +543,20 @@ const moderatePost = async (req, res) => {
         // Send approval notification email to contributor if approved
         if (status === 'published' && post.author && typeof post.author === 'object' && 'email' in post.author) {
             try {
+                console.log('📧 Admin Controller: Sending post approval notification email');
+                console.log('📧 Email details:', {
+                    postId: post._id,
+                    postTitle: post.title,
+                    status: status,
+                    contributorEmail: post.author.email,
+                    contributorName: post.author.name,
+                    moderatedBy: post.moderatedBy?.name || 'Unknown'
+                });
                 await emailService_1.emailService.sendPostApprovedNotification(post, post.author);
-                console.log('✅ Post approval notification sent to contributor');
+                console.log('✅ Admin Controller: Post approval notification sent successfully');
             }
             catch (emailError) {
-                console.error('❌ Failed to send approval notification:', emailError);
+                console.error('❌ Admin Controller: Failed to send approval notification:', emailError);
                 // Don't fail the request if email fails
             }
         }
@@ -524,11 +592,19 @@ const submitPostForReview = async (req, res) => {
         // Send notification email to admin team about new submission
         if (post.author && typeof post.author === 'object' && 'email' in post.author) {
             try {
+                console.log('📧 Admin Controller: Sending contributor submission notification email');
+                console.log('📧 Email details:', {
+                    postId: post._id,
+                    postTitle: post.title,
+                    contributorEmail: post.author.email,
+                    contributorName: post.author.name,
+                    submittedAt: post.submittedAt
+                });
                 await emailService_1.emailService.sendContributorSubmissionNotification(post, post.author);
-                console.log('✅ Submission notification sent to admin team');
+                console.log('✅ Admin Controller: Submission notification sent successfully');
             }
             catch (emailError) {
-                console.error('❌ Failed to send submission notification:', emailError);
+                console.error('❌ Admin Controller: Failed to send submission notification:', emailError);
                 // Don't fail the request if email fails
             }
         }
@@ -1102,7 +1178,10 @@ exports.deleteEmailTemplate = deleteEmailTemplate;
 const sendTestEmail = async (req, res) => {
     try {
         const { templateType, testEmail } = req.body;
+        console.log('🧪 Admin Controller: Starting test email process');
+        console.log('🧪 Test email parameters:', { templateType, testEmail });
         if (!testEmail || !templateType) {
+            console.log('❌ Admin Controller: Missing required parameters for test email');
             return res.status(400).json({
                 success: false,
                 message: 'Test email address and template type are required'
@@ -1126,14 +1205,18 @@ const sendTestEmail = async (req, res) => {
             email: testEmail
         };
         let result;
+        console.log('📧 Admin Controller: Sending test email of type:', templateType);
         switch (templateType) {
             case 'contributorSubmission':
+                console.log('📧 Test email: Contributor submission notification');
                 result = await emailService_1.emailService.sendContributorSubmissionNotification(mockPost, mockUser);
                 break;
             case 'postApproved':
+                console.log('📧 Test email: Post approval notification');
                 result = await emailService_1.emailService.sendPostApprovedNotification(mockPost, mockUser);
                 break;
             case 'weeklyNewsletter':
+                console.log('📧 Test email: Weekly newsletter');
                 // Send test newsletter
                 const testSubscribers = [{ email: testEmail, name: 'Test Subscriber' }];
                 const newsletterData = {
@@ -1146,11 +1229,13 @@ const sendTestEmail = async (req, res) => {
                 result = await emailService_1.emailService.sendWeeklyNewsletter(testSubscribers, newsletterData);
                 break;
             default:
+                console.log('❌ Admin Controller: Invalid template type for test email:', templateType);
                 return res.status(400).json({
                     success: false,
                     message: 'Invalid template type'
                 });
         }
+        console.log('✅ Admin Controller: Test email sent successfully');
         res.json({
             success: true,
             message: 'Test email sent successfully',
@@ -1158,7 +1243,7 @@ const sendTestEmail = async (req, res) => {
         });
     }
     catch (error) {
-        console.error('Send test email error:', error);
+        console.error('❌ Admin Controller: Send test email error:', error);
         res.status(500).json({
             success: false,
             message: 'Failed to send test email',

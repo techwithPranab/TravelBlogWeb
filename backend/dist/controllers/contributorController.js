@@ -8,6 +8,7 @@ const Post_1 = __importDefault(require("../models/Post"));
 const handleAsync_1 = require("../utils/handleAsync");
 const drive_1 = require("../config/drive");
 const sharp_1 = __importDefault(require("sharp"));
+const emailService_1 = require("../services/emailService");
 // Helper function to generate slug from title
 const generateSlug = (title) => {
     return title
@@ -79,17 +80,52 @@ exports.createContributorPost = (0, handleAsync_1.handleAsync)(async (req, res) 
         uniqueSlug = `${slug}-${counter}`;
         counter++;
     }
+    // Filter out empty content sections before creating the post
+    const filteredContentSections = req.body.contentSections?.filter((section) => {
+        // Keep image-only sections (they don't require content)
+        if (section.type === 'image-only') {
+            return true;
+        }
+        // For text and image-text sections, ensure content is not empty
+        return section.content && section.content.trim() !== '';
+    }) || [];
     // Set default status for contributors
     const postData = {
         ...req.body,
+        contentSections: filteredContentSections,
         slug: uniqueSlug,
         author: userId,
         status: 'pending', // Contributors submit posts for approval
         submittedAt: new Date()
     };
+    console.log('📝 Contributor Controller: Creating new post with data:', postData);
     const post = await Post_1.default.create(postData);
+    console.log('📝 Contributor Controller: New post created with ID:', post._id);
     await post.populate('author', 'name email');
     await post.populate('categories', 'name slug');
+    // Debug logging
+    console.log('🔍 Debug - Post created with status:', post.status);
+    console.log('🔍 Debug - User exists:', !!req.user);
+    console.log('🔍 Debug - User details:', req.user ? { name: req.user.name, email: req.user.email } : 'No user');
+    // Send notification to admin team since post is submitted for review (pending status)
+    if (post.status === 'pending' && req.user) {
+        console.log('📧 Contributor Controller: Sending contributor submission notification email');
+        console.log('📧 Email details:', {
+            postId: post._id,
+            postTitle: post.title,
+            contributorEmail: req.user.email,
+            contributorName: req.user.name,
+            submittedAt: post.submittedAt
+        });
+        try {
+            await emailService_1.emailService.sendContributorSubmissionNotification(post, req.user);
+            console.log('✅ Contributor Controller: Submission notification sent successfully');
+        }
+        catch (emailError) {
+            console.error('❌ Contributor Controller: Failed to send submission notification:', emailError);
+            // Don't fail the request if email fails
+        }
+    }
     res.status(201).json({
         success: true,
         message: 'Post submitted successfully and is pending approval',
@@ -122,6 +158,17 @@ exports.updateContributorPost = (0, handleAsync_1.handleAsync)(async (req, res) 
         status: post.status === 'rejected' ? 'pending' : req.body.status || post.status,
         submittedAt: post.status === 'rejected' ? new Date() : post.submittedAt
     };
+    // Filter out empty content sections before updating the post
+    if (updateData.contentSections) {
+        updateData.contentSections = updateData.contentSections.filter((section) => {
+            // Keep image-only sections (they don't require content)
+            if (section.type === 'image-only') {
+                return true;
+            }
+            // For text and image-text sections, ensure content is not empty
+            return section.content && section.content.trim() !== '';
+        });
+    }
     // Generate new slug if title is being updated
     if (req.body.title && req.body.title !== post.title) {
         const slug = generateSlug(req.body.title);
@@ -139,6 +186,25 @@ exports.updateContributorPost = (0, handleAsync_1.handleAsync)(async (req, res) 
         runValidators: true
     }).populate('author', 'name email')
         .populate('categories', 'name slug');
+    // Send notification to admin team if rejected post is being resubmitted for review
+    if (post.status === 'rejected' && updateData.status === 'pending' && req.user) {
+        console.log('📧 Contributor Controller: Sending resubmission notification email for updated post');
+        console.log('📧 Email details:', {
+            postId: updatedPost?._id,
+            postTitle: updatedPost?.title,
+            contributorEmail: req.user.email,
+            contributorName: req.user.name,
+            resubmittedAt: updateData.submittedAt
+        });
+        try {
+            await emailService_1.emailService.sendContributorSubmissionNotification(updatedPost, req.user);
+            console.log('✅ Contributor Controller: Resubmission notification sent successfully');
+        }
+        catch (emailError) {
+            console.error('❌ Contributor Controller: Failed to send resubmission notification:', emailError);
+            // Don't fail the request if email fails
+        }
+    }
     res.status(200).json({
         success: true,
         message: post.status === 'rejected' ? 'Post updated and resubmitted for approval' : 'Post updated successfully',

@@ -3,6 +3,7 @@ import Post from '../models/Post'
 import { handleAsync } from '../utils/handleAsync'
 import { uploadBufferToCloudinary } from '../config/drive'
 import sharp from 'sharp'
+import { emailService } from '../services/emailService'
 
 interface AuthenticatedRequest extends Request {
   user?: any
@@ -111,11 +112,35 @@ export const createContributorPost = handleAsync(async (req: AuthenticatedReques
     status: 'pending', // Contributors submit posts for approval
     submittedAt: new Date()
   }
-
+  console.log('📝 Contributor Controller: Creating new post with data:', postData);
   const post = await Post.create(postData)
-
+  console.log('📝 Contributor Controller: New post created with ID:', post._id);
   await post.populate('author', 'name email')
   await post.populate('categories', 'name slug')
+
+  // Debug logging
+  console.log('🔍 Debug - Post created with status:', post.status);
+  console.log('🔍 Debug - User exists:', !!req.user);
+  console.log('🔍 Debug - User details:', req.user ? { name: req.user.name, email: req.user.email } : 'No user');
+
+  // Send notification to admin team since post is submitted for review (pending status)
+  if (post.status === 'pending' && req.user) {
+    console.log('📧 Contributor Controller: Sending contributor submission notification email');
+    console.log('📧 Email details:', {
+      postId: post._id,
+      postTitle: post.title,
+      contributorEmail: req.user.email,
+      contributorName: req.user.name,
+      submittedAt: post.submittedAt
+    });
+    try {
+      await emailService.sendContributorSubmissionNotification(post, req.user);
+      console.log('✅ Contributor Controller: Submission notification sent successfully');
+    } catch (emailError) {
+      console.error('❌ Contributor Controller: Failed to send submission notification:', emailError);
+      // Don't fail the request if email fails
+    }
+  }
 
   res.status(201).json({
     success: true,
@@ -187,6 +212,25 @@ export const updateContributorPost = handleAsync(async (req: AuthenticatedReques
     runValidators: true
   }).populate('author', 'name email')
    .populate('categories', 'name slug')
+
+  // Send notification to admin team if rejected post is being resubmitted for review
+  if (post.status === 'rejected' && updateData.status === 'pending' && req.user) {
+    console.log('📧 Contributor Controller: Sending resubmission notification email for updated post');
+    console.log('📧 Email details:', {
+      postId: updatedPost?._id,
+      postTitle: updatedPost?.title,
+      contributorEmail: req.user.email,
+      contributorName: req.user.name,
+      resubmittedAt: updateData.submittedAt
+    });
+    try {
+      await emailService.sendContributorSubmissionNotification(updatedPost as any, req.user);
+      console.log('✅ Contributor Controller: Resubmission notification sent successfully');
+    } catch (emailError) {
+      console.error('❌ Contributor Controller: Failed to send resubmission notification:', emailError);
+      // Don't fail the request if email fails
+    }
+  }
 
   res.status(200).json({
     success: true,
