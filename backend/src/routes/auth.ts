@@ -53,9 +53,14 @@ const forgotPasswordValidation = [
 const resetPasswordValidation = [
   body('password')
     .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number')
+    .withMessage('Password must be at least 6 characters'),
+  body('confirmPassword')
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('Passwords do not match');
+      }
+      return true;
+    })
 ]
 
 const updateProfileValidation = [
@@ -104,7 +109,7 @@ router.post('/login', loginValidation, validate, login)
 router.post('/logout', logout)
 router.get('/me', protect, getMe)
 router.post('/forgot-password', forgotPasswordValidation, validate, forgotPassword)
-router.put('/reset-password/:token', resetPasswordValidation, validate, resetPassword)
+router.post('/reset-password/:token', resetPasswordValidation, validate, resetPassword)
 router.put('/profile', protect, updateProfileValidation, validate, updateProfile)
 router.put('/password', protect, updatePasswordValidation, validate, updatePassword)
 router.get('/verify-email/:token', verifyEmail)

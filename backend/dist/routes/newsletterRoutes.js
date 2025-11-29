@@ -22,12 +22,24 @@ const subscribeValidation = [
         .withMessage('Name must be between 2 and 50 characters'),
     (0, express_validator_1.body)('source')
         .optional()
-        .isIn(['homepage', 'blog', 'popup', 'footer', 'manual'])
+        .isIn(['homepage', 'blog', 'popup', 'footer', 'manual', 'newsletter-page'])
         .withMessage('Invalid subscription source'),
+    (0, express_validator_1.body)('preferences.weekly')
+        .optional()
+        .isBoolean()
+        .withMessage('Weekly preference must be a boolean'),
+    (0, express_validator_1.body)('preferences.deals')
+        .optional()
+        .isBoolean()
+        .withMessage('Deals preference must be a boolean'),
     (0, express_validator_1.body)('preferences.destinations')
         .optional()
         .isBoolean()
         .withMessage('Destinations preference must be a boolean'),
+    (0, express_validator_1.body)('preferences.tips')
+        .optional()
+        .isBoolean()
+        .withMessage('Tips preference must be a boolean'),
     (0, express_validator_1.body)('preferences.travelTips')
         .optional()
         .isBoolean()
@@ -65,6 +77,7 @@ const preferencesValidation = [
         .withMessage('Invalid token')
 ];
 // Public routes
+router.get('/public/metrics', newsletterController_1.getMetrics);
 router.post('/subscribe', subscribeValidation, validate_1.validate, newsletterController_1.subscribe);
 router.post('/unsubscribe', unsubscribeValidation, validate_1.validate, newsletterController_1.unsubscribe);
 router.get('/verify/:token', newsletterController_1.verifyEmail);

@@ -733,6 +733,120 @@ If you received this email, your SMTP configuration is successful!
             return false;
         }
     }
+    /**
+     * Send password reset email with reset link
+     */
+    async sendPasswordResetEmail(email, name, resetUrl, resetToken) {
+        try {
+            console.log('📧 [PASSWORD RESET] Sending password reset email to:', email);
+            const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Password Reset - Travel Blog</title>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+            .button { display: inline-block; padding: 15px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; font-weight: bold; }
+            .button:hover { background: #5a67d8; }
+            .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; }
+            .warning { background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>🔒 Password Reset Request</h1>
+            </div>
+            <div class="content">
+              <p>Hello ${name},</p>
+              
+              <p>We received a request to reset your password for your Travel Blog account. If you made this request, click the button below to reset your password:</p>
+              
+              <div style="text-align: center;">
+                <a href="${resetUrl}" class="button">Reset Your Password</a>
+              </div>
+              
+              <div class="warning">
+                <p><strong>⏰ Important:</strong> This link will expire in <strong>1 hour</strong> for security purposes.</p>
+              </div>
+              
+              <p>If you can't click the button, copy and paste this link into your browser:</p>
+              <p style="word-break: break-all; background: #f4f4f4; padding: 10px; border-radius: 3px;">${resetUrl}</p>
+              
+              <p><strong>If you didn't request this password reset:</strong></p>
+              <ul>
+                <li>You can safely ignore this email</li>
+                <li>Your password will remain unchanged</li>
+                <li>Consider changing your password if you're concerned about account security</li>
+              </ul>
+              
+              <p>For security reasons, we recommend:</p>
+              <ul>
+                <li>Using a strong, unique password</li>
+                <li>Enabling two-factor authentication if available</li>
+                <li>Not sharing your login credentials</li>
+              </ul>
+            </div>
+            <div class="footer">
+              <p>This is an automated message from Travel Blog. Please do not reply to this email.</p>
+              <p>If you need help, contact our support team.</p>
+              <p>&copy; ${new Date().getFullYear()} Travel Blog. All rights reserved.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+            const textContent = `
+        Password Reset Request - Travel Blog
+        
+        Hello ${name},
+        
+        We received a request to reset your password for your Travel Blog account.
+        
+        If you made this request, click the link below to reset your password:
+        ${resetUrl}
+        
+        ⏰ Important: This link will expire in 1 hour for security purposes.
+        
+        If you didn't request this password reset, you can safely ignore this email.
+        Your password will remain unchanged.
+        
+        For security, we recommend using a strong, unique password and enabling 
+        two-factor authentication if available.
+        
+        ---
+        This is an automated message from Travel Blog.
+        © ${new Date().getFullYear()} Travel Blog. All rights reserved.
+      `;
+            const emailData = {
+                sender: {
+                    email: process.env.BREVO_SENDER_EMAIL || 'noreply@travelblog.com',
+                    name: 'Travel Blog'
+                },
+                to: [{ email, name }],
+                subject: '🔒 Password Reset Request - Travel Blog',
+                htmlContent,
+                textContent
+            };
+            const success = await this.sendEmail(emailData);
+            if (success) {
+                console.log('✅ [PASSWORD RESET] Password reset email sent successfully to:', email);
+            }
+            else {
+                console.error('❌ [PASSWORD RESET] Failed to send password reset email to:', email);
+            }
+            return success;
+        }
+        catch (error) {
+            console.error('❌ [PASSWORD RESET] Error sending password reset email:', error);
+            return false;
+        }
+    }
 }
 exports.emailService = new EmailService();
 exports.default = EmailService;

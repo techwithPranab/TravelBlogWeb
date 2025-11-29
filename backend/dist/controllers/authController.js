@@ -229,22 +229,22 @@ const forgotPassword = async (req, res) => {
             .createHash('sha256')
             .update(resetToken)
             .digest('hex');
-        // Set expire
-        user.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+        // Set expire to 1 hour
+        user.passwordResetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
         await user.save({ validateBeforeSave: false });
+        // Create reset URL for frontend
+        const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/reset-password?token=${resetToken}`;
         try {
-            // Here you would send email
-            // await sendEmail({
-            //   email: user.email,
-            //   subject: 'Password reset token',
-            //   message: `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${req.protocol}://${req.get('host')}/api/auth/reset-password/${resetToken}`
-            // })
+            // Send email using email service
+            const { emailService } = require('../services/emailService');
+            await emailService.sendPasswordResetEmail(user.email, user.name, resetUrl, resetToken);
             res.status(200).json({
                 success: true,
-                message: 'Email sent'
+                message: 'Password reset email sent successfully'
             });
         }
-        catch (_err) {
+        catch (error) {
+            console.error('Error sending password reset email:', error);
             user.passwordResetToken = undefined;
             user.passwordResetExpires = undefined;
             await user.save({ validateBeforeSave: false });
@@ -263,10 +263,33 @@ const forgotPassword = async (req, res) => {
 };
 exports.forgotPassword = forgotPassword;
 // @desc    Reset password
-// @route   PUT /api/auth/reset-password/:resettoken
+// @route   POST /api/auth/reset-password/:token
 // @access  Public
 const resetPassword = async (req, res) => {
     try {
+        const { password, confirmPassword } = req.body;
+        // Validate password and confirmPassword
+        if (!password || !confirmPassword) {
+            res.status(400).json({
+                success: false,
+                error: 'Please provide both password and confirm password'
+            });
+            return;
+        }
+        if (password !== confirmPassword) {
+            res.status(400).json({
+                success: false,
+                error: 'Passwords do not match'
+            });
+            return;
+        }
+        if (password.length < 6) {
+            res.status(400).json({
+                success: false,
+                error: 'Password must be at least 6 characters long'
+            });
+            return;
+        }
         // Get hashed token
         const resetPasswordToken = crypto_1.default
             .createHash('sha256')
@@ -279,16 +302,19 @@ const resetPassword = async (req, res) => {
         if (!user) {
             res.status(400).json({
                 success: false,
-                error: 'Invalid token'
+                error: 'Invalid or expired token'
             });
             return;
         }
         // Set new password
-        user.password = req.body.password;
+        user.password = password;
         user.passwordResetToken = undefined;
         user.passwordResetExpires = undefined;
         await user.save();
-        sendTokenResponse(user, 200, res);
+        res.status(200).json({
+            success: true,
+            message: 'Password reset successful'
+        });
     }
     catch (error) {
         res.status(500).json({
@@ -329,3 +355,4 @@ const verifyEmail = async (req, res) => {
     }
 };
 exports.verifyEmail = verifyEmail;
+// @desc    Forgot password

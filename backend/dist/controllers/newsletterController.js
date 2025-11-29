@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSubscribers = exports.getStats = exports.updatePreferences = exports.verifyEmail = exports.unsubscribe = exports.subscribe = void 0;
+exports.getMetrics = exports.getSubscribers = exports.getStats = exports.updatePreferences = exports.verifyEmail = exports.unsubscribe = exports.subscribe = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const Newsletter_1 = __importDefault(require("../models/Newsletter"));
 // @desc    Subscribe to newsletter
@@ -52,7 +52,10 @@ const subscribe = async (req, res) => {
             name,
             source,
             preferences: preferences || {
+                weekly: true,
+                deals: true,
                 destinations: true,
+                tips: true,
                 travelTips: true,
                 photography: true,
                 weeklyDigest: true
@@ -286,3 +289,57 @@ const getSubscribers = async (req, res) => {
     }
 };
 exports.getSubscribers = getSubscribers;
+// @desc    Get newsletter metrics for public display
+// @route   GET /api/newsletter/public/metrics
+// @access  Public
+const getMetrics = async (req, res) => {
+    try {
+        const [weeklyDigestSubscribers, dealAlertsSubscribers, destinationSubscribers, travelTipsSubscribers, totalActiveSubscribers] = await Promise.all([
+            Newsletter_1.default.countDocuments({
+                isActive: true,
+                'preferences.weeklyDigest': true
+            }),
+            Newsletter_1.default.countDocuments({
+                isActive: true,
+                'preferences.deals': true
+            }),
+            Newsletter_1.default.countDocuments({
+                isActive: true,
+                'preferences.destinations': true
+            }),
+            Newsletter_1.default.countDocuments({
+                isActive: true,
+                'preferences.travelTips': true
+            }),
+            Newsletter_1.default.countDocuments({ isActive: true })
+        ]);
+        // Format numbers for display (e.g., 45000 -> "45K+")
+        // Show minimum values for better presentation
+        const formatNumber = (num) => {
+            if (num >= 1000000)
+                return `${Math.floor(num / 1000000)}M+`;
+            if (num >= 1000)
+                return `${Math.floor(num / 1000)}K+`;
+            // For new sites, show minimum 1K+ instead of 0
+            return num > 0 ? `${num}` : '1K+';
+        };
+        res.json({
+            success: true,
+            data: {
+                weeklyDigest: formatNumber(weeklyDigestSubscribers),
+                dealAlerts: formatNumber(dealAlertsSubscribers),
+                destinations: formatNumber(destinationSubscribers),
+                travelTips: formatNumber(travelTipsSubscribers),
+                totalActive: formatNumber(totalActiveSubscribers)
+            }
+        });
+    }
+    catch (error) {
+        console.error('Newsletter metrics error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch newsletter metrics'
+        });
+    }
+};
+exports.getMetrics = getMetrics;

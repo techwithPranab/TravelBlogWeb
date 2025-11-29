@@ -99,10 +99,14 @@ userSchema.index({ isPremium: 1 })
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
+  console.log('🔐 [USER MODEL] Pre-save hook triggered. Password modified:', this.isModified('password'))
+  
   if (!this.isModified('password')) return next()
   
+  console.log('🔐 [USER MODEL] Hashing password for user:', this.email)
   const salt = await bcrypt.genSalt(12)
   this.password = await bcrypt.hash(this.password, salt)
+  console.log('✅ [USER MODEL] Password hashed successfully')
   next()
 })
 

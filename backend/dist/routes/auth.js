@@ -43,9 +43,14 @@ const forgotPasswordValidation = [
 const resetPasswordValidation = [
     (0, express_validator_1.body)('password')
         .isLength({ min: 6 })
-        .withMessage('Password must be at least 6 characters')
-        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-        .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number')
+        .withMessage('Password must be at least 6 characters'),
+    (0, express_validator_1.body)('confirmPassword')
+        .custom((value, { req }) => {
+        if (value !== req.body.password) {
+            throw new Error('Passwords do not match');
+        }
+        return true;
+    })
 ];
 const updateProfileValidation = [
     (0, express_validator_1.body)('name')
@@ -91,7 +96,7 @@ router.post('/login', loginValidation, validate_1.validate, authController_1.log
 router.post('/logout', authController_1.logout);
 router.get('/me', auth_1.protect, authController_1.getMe);
 router.post('/forgot-password', forgotPasswordValidation, validate_1.validate, authController_1.forgotPassword);
-router.put('/reset-password/:token', resetPasswordValidation, validate_1.validate, authController_1.resetPassword);
+router.post('/reset-password/:token', resetPasswordValidation, validate_1.validate, authController_1.resetPassword);
 router.put('/profile', auth_1.protect, updateProfileValidation, validate_1.validate, authController_1.updateProfile);
 router.put('/password', auth_1.protect, updatePasswordValidation, validate_1.validate, authController_1.updatePassword);
 router.get('/verify-email/:token', authController_1.verifyEmail);
