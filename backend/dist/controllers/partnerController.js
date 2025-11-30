@@ -65,13 +65,16 @@ const getPartners = async (req, res) => {
             .select('-__v');
         const total = await Partner_1.default.countDocuments(query);
         res.status(200).json({
-            partners,
-            pagination: {
-                currentPage: pageNum,
-                totalPages: Math.ceil(total / limitNum),
-                totalPartners: total,
-                hasNextPage: pageNum * limitNum < total,
-                hasPrevPage: pageNum > 1
+            success: true,
+            data: {
+                partners,
+                pagination: {
+                    currentPage: pageNum,
+                    totalPages: Math.ceil(total / limitNum),
+                    totalPartners: total,
+                    hasNextPage: pageNum * limitNum < total,
+                    hasPrevPage: pageNum > 1
+                }
             }
         });
     }
@@ -86,13 +89,22 @@ const getPartnerById = async (req, res) => {
         const { id } = req.params;
         const partner = await Partner_1.default.findById(id);
         if (!partner) {
-            return res.status(404).json({ error: 'Partnership proposal not found.' });
+            return res.status(404).json({
+                success: false,
+                error: 'Partnership proposal not found.'
+            });
         }
-        res.status(200).json(partner);
+        res.status(200).json({
+            success: true,
+            data: partner
+        });
     }
     catch (error) {
         console.error('Error fetching partner:', error);
-        res.status(500).json({ error: 'Failed to fetch partnership proposal.' });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch partnership proposal.'
+        });
     }
 };
 exports.getPartnerById = getPartnerById;
@@ -102,7 +114,10 @@ const updatePartnerStatus = async (req, res) => {
         const { status, adminNotes } = req.body;
         const validStatuses = ['pending', 'reviewed', 'approved', 'rejected'];
         if (!validStatuses.includes(status)) {
-            return res.status(400).json({ error: 'Invalid status value.' });
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid status value.'
+            });
         }
         const updateData = {
             status,
@@ -114,16 +129,23 @@ const updatePartnerStatus = async (req, res) => {
         }
         const partner = await Partner_1.default.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
         if (!partner) {
-            return res.status(404).json({ error: 'Partnership proposal not found.' });
+            return res.status(404).json({
+                success: false,
+                error: 'Partnership proposal not found.'
+            });
         }
         res.status(200).json({
-            message: 'Partnership proposal updated successfully.',
-            partner
+            success: true,
+            data: partner,
+            message: 'Partnership proposal updated successfully.'
         });
     }
     catch (error) {
         console.error('Error updating partner:', error);
-        res.status(500).json({ error: 'Failed to update partnership proposal.' });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to update partnership proposal.'
+        });
     }
 };
 exports.updatePartnerStatus = updatePartnerStatus;
@@ -132,13 +154,22 @@ const deletePartner = async (req, res) => {
         const { id } = req.params;
         const partner = await Partner_1.default.findByIdAndDelete(id);
         if (!partner) {
-            return res.status(404).json({ error: 'Partnership proposal not found.' });
+            return res.status(404).json({
+                success: false,
+                error: 'Partnership proposal not found.'
+            });
         }
-        res.status(200).json({ message: 'Partnership proposal deleted successfully.' });
+        res.status(200).json({
+            success: true,
+            data: { message: 'Partnership proposal deleted successfully.' }
+        });
     }
     catch (error) {
         console.error('Error deleting partner:', error);
-        res.status(500).json({ error: 'Failed to delete partnership proposal.' });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to delete partnership proposal.'
+        });
     }
 };
 exports.deletePartner = deletePartner;
@@ -158,13 +189,16 @@ const getPartnerStats = async (req, res) => {
             createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } // Last 30 days
         });
         res.status(200).json({
-            total: totalPartners,
-            pending: pendingPartners,
-            recent: recentPartners,
-            byStatus: stats.reduce((acc, stat) => {
-                acc[stat._id] = stat.count;
-                return acc;
-            }, {})
+            success: true,
+            data: {
+                total: totalPartners,
+                pending: pendingPartners,
+                recent: recentPartners,
+                byStatus: stats.reduce((acc, stat) => {
+                    acc[stat._id] = stat.count;
+                    return acc;
+                }, {})
+            }
         });
     }
     catch (error) {

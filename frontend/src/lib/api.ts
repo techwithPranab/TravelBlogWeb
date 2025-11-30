@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api' 
 // Types
 export interface Post {
   _id: string
@@ -285,6 +285,68 @@ export interface ContactMessage {
   updatedAt?: string
 }
 
+export interface Resource {
+  _id: string
+  title: string
+  slug: string
+  description: string
+  category: 'Booking' | 'Gear' | 'Apps' | 'Websites' | 'Services' | 'Transportation' | 'Insurance' | 'Other'
+  type: 'Tool' | 'Service' | 'Product' | 'Website' | 'App' | 'Guide' | 'Template'
+  url?: string
+  images: Array<{
+    url: string
+    alt: string
+    caption?: string
+  }>
+  features: string[]
+  pros: string[]
+  cons: string[]
+  pricing: {
+    type: 'Free' | 'Paid' | 'Freemium' | 'Subscription'
+    amount?: number
+    currency?: string
+    description: string
+  }
+  rating: {
+    overall: number
+    usability: number
+    value: number
+    support: number
+    features: number
+  }
+  tags: string[]
+  destinations: Array<{
+    _id: string
+    name: string
+    slug: string
+  }>
+  isAffiliate: boolean
+  affiliateLink?: string
+  isRecommended: boolean
+  isFeatured: boolean
+  isActive: boolean
+  author: {
+    _id: string
+    name: string
+    avatar?: string
+  }
+  reviews: Array<{
+    user: {
+      _id: string
+      name: string
+    }
+    rating: number
+    comment: string
+    date: string
+  }>
+  totalReviews: number
+  averageRating: number
+  clickCount: number
+  lastUpdated: string
+  createdAt: string
+  updatedAt: string
+}
+
 export interface Category {
   _id: string
   name: string
@@ -534,6 +596,71 @@ export const guidesApi = {
   }
 }
 
+// Resources API
+export const resourcesApi = {
+  getAll: async (params?: {
+    page?: number
+    limit?: number
+    category?: string
+    type?: string
+    isRecommended?: boolean
+    isFeatured?: boolean
+    search?: string
+  }): Promise<ApiResponse<{ resources: Resource[]; pagination: { page: number; limit: number; total: number; pages: number }; count: number }>> => {
+    const searchParams = new URLSearchParams()
+    if (params?.page) searchParams.append('page', params.page.toString())
+    if (params?.limit) searchParams.append('limit', params.limit.toString())
+    if (params?.category) searchParams.append('category', params.category)
+    if (params?.type) searchParams.append('type', params.type)
+    if (params?.isRecommended !== undefined) searchParams.append('isRecommended', params.isRecommended.toString())
+    if (params?.isFeatured !== undefined) searchParams.append('isFeatured', params.isFeatured.toString())
+    if (params?.search) searchParams.append('search', params.search)
+    
+    const query = searchParams.toString()
+    const endpoint = query ? `/resources?${query}` : '/resources'
+    return apiRequest<{ resources: Resource[]; pagination: { page: number; limit: number; total: number; pages: number }; count: number }>(endpoint)
+  },
+
+  getBySlug: async (slug: string): Promise<ApiResponse<Resource>> => {
+    return apiRequest<Resource>(`/resources/${slug}`)
+  },
+
+  getFeatured: async (): Promise<ApiResponse<Resource[]>> => {
+    return apiRequest<Resource[]>('/resources/featured')
+  },
+
+  getByCategory: async (category: string): Promise<ApiResponse<Resource[]>> => {
+    return apiRequest<Resource[]>(`/resources/category/${category}`)
+  },
+
+  trackClick: async (resourceId: string): Promise<ApiResponse<{ message: string }>> => {
+    return apiRequest<{ message: string }>(`/resources/${resourceId}/click`, {
+      method: 'POST'
+    })
+  },
+
+  // Admin functions
+  create: async (resourceData: Partial<Resource>): Promise<ApiResponse<Resource>> => {
+    return authenticatedApiRequest<Resource>('/resources', {
+      method: 'POST',
+      body: JSON.stringify(resourceData)
+    })
+  },
+
+  update: async (resourceId: string, resourceData: Partial<Resource>): Promise<ApiResponse<Resource>> => {
+    return authenticatedApiRequest<Resource>(`/resources/${resourceId}`, {
+      method: 'PUT',
+      body: JSON.stringify(resourceData)
+    })
+  },
+
+  delete: async (resourceId: string): Promise<ApiResponse<{ message: string }>> => {
+    return authenticatedApiRequest<{ message: string }>(`/resources/${resourceId}`, {
+      method: 'DELETE'
+    })
+  }
+}
+
 // Partners API
 export const partnersApi = {
   getAll: async (params?: {
@@ -541,7 +668,7 @@ export const partnersApi = {
     limit?: number
     search?: string
     status?: string
-  }): Promise<ApiResponse<{ partners: Partner[]; totalPages: number; currentPage: number; total: number }>> => {
+  }): Promise<ApiResponse<{ partners: Partner[]; pagination: { currentPage: number; totalPages: number; totalPartners: number; hasNextPage: boolean; hasPrevPage: boolean } }>> => {
     const searchParams = new URLSearchParams()
     if (params?.page) searchParams.append('page', params.page.toString())
     if (params?.limit) searchParams.append('limit', params.limit.toString())
@@ -550,7 +677,7 @@ export const partnersApi = {
     
     const query = searchParams.toString()
     const endpoint = query ? `/partners?${query}` : '/partners'
-    return authenticatedApiRequest<{ partners: Partner[]; totalPages: number; currentPage: number; total: number }>(endpoint)
+    return authenticatedApiRequest<{ partners: Partner[]; pagination: { currentPage: number; totalPages: number; totalPartners: number; hasNextPage: boolean; hasPrevPage: boolean } }>(endpoint)
   },
 
   updateStatus: async (partnerId: string, status: 'pending' | 'approved' | 'rejected'): Promise<ApiResponse<Partner>> => {
@@ -731,6 +858,7 @@ export default {
   posts: postsApi,
   destinations: destinationsApi,
   guides: guidesApi,
+  resources: resourcesApi,
   partners: partnersApi,
   contact: contactApi,
   categories: categoriesApi,

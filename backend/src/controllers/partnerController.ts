@@ -69,13 +69,16 @@ export const getPartners = async (req: Request, res: Response) => {
     const total = await Partner.countDocuments(query)
 
     res.status(200).json({
-      partners,
-      pagination: {
-        currentPage: pageNum,
-        totalPages: Math.ceil(total / limitNum),
-        totalPartners: total,
-        hasNextPage: pageNum * limitNum < total,
-        hasPrevPage: pageNum > 1
+      success: true,
+      data: {
+        partners,
+        pagination: {
+          currentPage: pageNum,
+          totalPages: Math.ceil(total / limitNum),
+          totalPartners: total,
+          hasNextPage: pageNum * limitNum < total,
+          hasPrevPage: pageNum > 1
+        }
       }
     })
   } catch (error) {
@@ -90,13 +93,22 @@ export const getPartnerById = async (req: Request, res: Response) => {
     const partner = await Partner.findById(id)
 
     if (!partner) {
-      return res.status(404).json({ error: 'Partnership proposal not found.' })
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Partnership proposal not found.' 
+      })
     }
 
-    res.status(200).json(partner)
+    res.status(200).json({
+      success: true,
+      data: partner
+    })
   } catch (error) {
     console.error('Error fetching partner:', error)
-    res.status(500).json({ error: 'Failed to fetch partnership proposal.' })
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to fetch partnership proposal.' 
+    })
   }
 }
 
@@ -107,7 +119,10 @@ export const updatePartnerStatus = async (req: Request, res: Response) => {
 
     const validStatuses = ['pending', 'reviewed', 'approved', 'rejected']
     if (!validStatuses.includes(status)) {
-      return res.status(400).json({ error: 'Invalid status value.' })
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Invalid status value.' 
+      })
     }
 
     const updateData: any = {
@@ -127,16 +142,23 @@ export const updatePartnerStatus = async (req: Request, res: Response) => {
     )
 
     if (!partner) {
-      return res.status(404).json({ error: 'Partnership proposal not found.' })
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Partnership proposal not found.' 
+      })
     }
 
     res.status(200).json({
-      message: 'Partnership proposal updated successfully.',
-      partner
+      success: true,
+      data: partner,
+      message: 'Partnership proposal updated successfully.'
     })
   } catch (error) {
     console.error('Error updating partner:', error)
-    res.status(500).json({ error: 'Failed to update partnership proposal.' })
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to update partnership proposal.' 
+    })
   }
 }
 
@@ -146,13 +168,22 @@ export const deletePartner = async (req: Request, res: Response) => {
     const partner = await Partner.findByIdAndDelete(id)
 
     if (!partner) {
-      return res.status(404).json({ error: 'Partnership proposal not found.' })
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Partnership proposal not found.' 
+      })
     }
 
-    res.status(200).json({ message: 'Partnership proposal deleted successfully.' })
+    res.status(200).json({ 
+      success: true,
+      data: { message: 'Partnership proposal deleted successfully.' }
+    })
   } catch (error) {
     console.error('Error deleting partner:', error)
-    res.status(500).json({ error: 'Failed to delete partnership proposal.' })
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to delete partnership proposal.' 
+    })
   }
 }
 
@@ -174,13 +205,16 @@ export const getPartnerStats = async (req: Request, res: Response) => {
     })
 
     res.status(200).json({
-      total: totalPartners,
-      pending: pendingPartners,
-      recent: recentPartners,
-      byStatus: stats.reduce((acc, stat) => {
-        acc[stat._id] = stat.count
-        return acc
-      }, {})
+      success: true,
+      data: {
+        total: totalPartners,
+        pending: pendingPartners,
+        recent: recentPartners,
+        byStatus: stats.reduce((acc, stat) => {
+          acc[stat._id] = stat.count
+          return acc
+        }, {})
+      }
     })
   } catch (error) {
     console.error('Error fetching partner stats:', error)

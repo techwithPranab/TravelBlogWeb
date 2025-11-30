@@ -17,7 +17,8 @@ import {
   Camera,
   MessageSquare,
   UserCheck,
-  Mail
+  Mail,
+  Folder
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -54,6 +55,12 @@ const sidebarItems = [
     name: 'Guides',
     href: '/admin/guides',
     icon: BookOpen,
+    badge: null
+  },
+  {
+    name: 'Resources',
+    href: '/admin/resources',
+    icon: Folder,
     badge: null
   },
   {

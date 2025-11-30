@@ -825,8 +825,8 @@ If you received this email, your SMTP configuration is successful!
       `;
             const emailData = {
                 sender: {
-                    email: process.env.BREVO_SENDER_EMAIL || 'noreply@travelblog.com',
-                    name: 'Travel Blog'
+                    email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+                    name: process.env.FROM_NAME || 'BagPackStories'
                 },
                 to: [{ email, name }],
                 subject: '🔒 Password Reset Request - Travel Blog',

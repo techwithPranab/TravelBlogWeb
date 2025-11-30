@@ -353,15 +353,13 @@ export default function BlogPage() {
             <p className="text-xl mb-6 text-blue-100">
               Subscribe to our newsletter for the latest travel guides and inspiration.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-              <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+            <div className="max-w-md mx-auto">
+              <Link
+                href="/newsletter"
+                className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors inline-block"
+              >
                 Subscribe
-              </button>
+              </Link>
             </div>
           </motion.div>
         </div>

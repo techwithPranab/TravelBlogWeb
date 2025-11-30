@@ -23,8 +23,8 @@ export default function PartnersAdminPage() {
       });
 
       setPartners(response.data.partners);
-      setTotalPages(response.data.totalPages);
-      setCurrentPage(response.data.currentPage);
+      setTotalPages(response.data.pagination.totalPages);
+      setCurrentPage(response.data.pagination.currentPage);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

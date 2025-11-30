@@ -8,12 +8,41 @@ const Contact_1 = __importDefault(require("../models/Contact"));
 const createContact = async (req, res) => {
     try {
         const { name, email, subject, message } = req.body;
-        const contact = new Contact_1.default({ name, email, subject, message });
+        // Create new contact
+        const contact = new Contact_1.default({
+            name: name.trim(),
+            email: email.toLowerCase().trim(),
+            subject: subject.trim(),
+            message: message.trim()
+        });
         await contact.save();
-        res.status(201).json({ message: 'Contact message saved successfully.' });
+        res.status(201).json({
+            success: true,
+            message: 'Thank you for your message! We will get back to you soon.'
+        });
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to save contact message.' });
+        console.error('Contact creation error:', error);
+        // Handle validation errors
+        if (error.name === 'ValidationError') {
+            const errors = Object.values(error.errors).map((err) => err.message);
+            return res.status(400).json({
+                success: false,
+                error: 'Validation failed',
+                details: errors
+            });
+        }
+        // Handle duplicate key errors
+        if (error.code === 11000) {
+            return res.status(400).json({
+                success: false,
+                error: 'A contact message with this information already exists.'
+            });
+        }
+        res.status(500).json({
+            success: false,
+            error: 'Failed to save contact message. Please try again.'
+        });
     }
 };
 exports.createContact = createContact;
@@ -45,10 +74,13 @@ const getContacts = async (req, res) => {
             .limit(limit);
         const totalPages = Math.ceil(total / limit);
         res.status(200).json({
-            contacts,
-            currentPage: page,
-            totalPages,
-            total
+            success: true,
+            data: {
+                contacts,
+                currentPage: page,
+                totalPages,
+                total
+            }
         });
     }
     catch (error) {
@@ -61,12 +93,21 @@ const getContactById = async (req, res) => {
         const { id } = req.params;
         const contact = await Contact_1.default.findById(id);
         if (!contact) {
-            return res.status(404).json({ error: 'Contact message not found.' });
+            return res.status(404).json({
+                success: false,
+                error: 'Contact message not found.'
+            });
         }
-        res.status(200).json(contact);
+        res.status(200).json({
+            success: true,
+            data: contact
+        });
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to fetch contact message.' });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch contact message.'
+        });
     }
 };
 exports.getContactById = getContactById;
@@ -75,16 +116,28 @@ const updateContactStatus = async (req, res) => {
         const { id } = req.params;
         const { status } = req.body;
         if (!['unread', 'read', 'replied'].includes(status)) {
-            return res.status(400).json({ error: 'Invalid status provided.' });
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid status provided.'
+            });
         }
         const contact = await Contact_1.default.findByIdAndUpdate(id, { status }, { new: true });
         if (!contact) {
-            return res.status(404).json({ error: 'Contact message not found.' });
+            return res.status(404).json({
+                success: false,
+                error: 'Contact message not found.'
+            });
         }
-        res.status(200).json(contact);
+        res.status(200).json({
+            success: true,
+            data: contact
+        });
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to update contact status.' });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to update contact status.'
+        });
     }
 };
 exports.updateContactStatus = updateContactStatus;
@@ -93,12 +146,21 @@ const deleteContact = async (req, res) => {
         const { id } = req.params;
         const contact = await Contact_1.default.findByIdAndDelete(id);
         if (!contact) {
-            return res.status(404).json({ error: 'Contact message not found.' });
+            return res.status(404).json({
+                success: false,
+                error: 'Contact message not found.'
+            });
         }
-        res.status(200).json({ message: 'Contact message deleted successfully.' });
+        res.status(200).json({
+            success: true,
+            data: { message: 'Contact message deleted successfully.' }
+        });
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to delete contact message.' });
+        res.status(500).json({
+            success: false,
+            error: 'Failed to delete contact message.'
+        });
     }
 };
 exports.deleteContact = deleteContact;

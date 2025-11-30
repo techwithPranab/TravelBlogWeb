@@ -267,9 +267,13 @@ exports.forgotPassword = forgotPassword;
 // @access  Public
 const resetPassword = async (req, res) => {
     try {
+        console.log('🔄 [RESET PASSWORD] Reset password request received');
+        console.log('🔄 [RESET PASSWORD] Token:', req.params.token);
+        console.log('🔄 [RESET PASSWORD] Body:', { password: !!req.body.password, confirmPassword: !!req.body.confirmPassword });
         const { password, confirmPassword } = req.body;
         // Validate password and confirmPassword
         if (!password || !confirmPassword) {
+            console.log('❌ [RESET PASSWORD] Missing password or confirmPassword');
             res.status(400).json({
                 success: false,
                 error: 'Please provide both password and confirm password'
@@ -295,11 +299,22 @@ const resetPassword = async (req, res) => {
             .createHash('sha256')
             .update(req.params.token)
             .digest('hex');
+        console.log('🔍 [RESET PASSWORD] Looking for user with hashed token:', resetPasswordToken);
+        console.log('🔍 [RESET PASSWORD] Current time:', Date.now());
         const user = await User_1.default.findOne({
             passwordResetToken: resetPasswordToken,
             passwordResetExpires: { $gt: Date.now() },
         });
         if (!user) {
+            console.log('❌ [RESET PASSWORD] User not found with token or token expired');
+            // Check if user exists with any reset token (for debugging)
+            const userWithToken = await User_1.default.findOne({ passwordResetToken: resetPasswordToken });
+            if (userWithToken) {
+                console.log('🔍 [RESET PASSWORD] User found but token expired. Expires at:', userWithToken.passwordResetExpires);
+            }
+            else {
+                console.log('🔍 [RESET PASSWORD] No user found with this token');
+            }
             res.status(400).json({
                 success: false,
                 error: 'Invalid or expired token'
@@ -307,10 +322,13 @@ const resetPassword = async (req, res) => {
             return;
         }
         // Set new password
+        console.log('📝 [RESET PASSWORD] Updating password for user:', user.email);
         user.password = password;
         user.passwordResetToken = undefined;
         user.passwordResetExpires = undefined;
+        console.log('📝 [RESET PASSWORD] Saving user with new password...');
         await user.save();
+        console.log('✅ [RESET PASSWORD] Password successfully updated for user:', user.email);
         res.status(200).json({
             success: true,
             message: 'Password reset successful'

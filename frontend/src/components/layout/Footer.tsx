@@ -46,14 +46,12 @@ export function Footer() {
     explore: [
       { name: 'Destinations', href: '/destinations' },
       { name: 'Travel Guides', href: '/guides' },
-      { name: 'Travel Tips', href: '/blog?category=travel-tips' },
-      { name: 'Photography', href: '/blog?category=photography' },
+      { name: 'Blogs', href: '/blog' },
     ],
     resources: [
       { name: 'Travel Resources', href: '/resources' },
       { name: 'Photo Gallery', href: '/gallery' },
       // { name: 'Trip Planning', href: '/planning' },
-      { name: 'Gear Reviews', href: '/blog?category=gear' },
     ],
     company: [
       { name: 'About', href: '/about' },
@@ -206,46 +204,11 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Newsletter Signup */}
-        <div className="border-t border-gray-800 pt-8 mb-8">
-          <div className="max-w-2xl">
-            <h3 className="font-semibold text-lg mb-2">Stay in the Loop</h3>
-            <p className="text-gray-300 mb-4">
-              Get travel tips, destination guides, and exclusive content delivered to your inbox.
-            </p>
-            <form className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-1 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </div>
-
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-gray-800 pt-8 flex justify-center items-center">
           <p className="text-gray-400 text-sm">
             © {currentYear} BagPackStories. All rights reserved.
           </p>
-          
-          <div className="flex items-center space-x-6 mt-4 md:mt-0">
-            <Link href="/privacy" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms-of-service" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">
-              Terms of Service
-            </Link>
-            <Link href="/cookies" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">
-              Cookie Policy
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

@@ -34,7 +34,16 @@ export const getAllResources = handleAsync(async (req: Request, res: Response) =
       total,
       pages: Math.ceil(total / Number(limit))
     },
-    data: resources
+    data: {
+      resources,
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total,
+        pages: Math.ceil(total / Number(limit))
+      },
+      count: resources.length
+    }
   })
 })
 

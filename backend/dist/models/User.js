@@ -107,10 +107,13 @@ userSchema.index({ role: 1 });
 userSchema.index({ isPremium: 1 });
 // Hash password before saving
 userSchema.pre('save', async function (next) {
+    console.log('🔐 [USER MODEL] Pre-save hook triggered. Password modified:', this.isModified('password'));
     if (!this.isModified('password'))
         return next();
+    console.log('🔐 [USER MODEL] Hashing password for user:', this.email);
     const salt = await bcryptjs_1.default.genSalt(12);
     this.password = await bcryptjs_1.default.hash(this.password, salt);
+    console.log('✅ [USER MODEL] Password hashed successfully');
     next();
 });
 // Compare password method
