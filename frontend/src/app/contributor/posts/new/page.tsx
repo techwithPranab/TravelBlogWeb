@@ -53,7 +53,14 @@ export default function NewPostPage() {
     },
     images: [] as string[],
     categories: [] as string[], // Changed from category to categories array
-    destination: '',
+    destination: {
+      country: '',
+      city: '',
+      coordinates: {
+        lat: 0,
+        lng: 0
+      }
+    },
     status: 'pending',
     isFeatured: false,
     seoTitle: '',
@@ -635,14 +642,70 @@ export default function NewPostPage() {
               {/* Destination */}
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Destination</h3>
-                <input
-                  type="text"
-                  name="destination"
-                  value={formData.destination}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Paris, France"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                    <input
+                      type="text"
+                      value={formData.destination.country}
+                      onChange={(e) => setFormData(prev => ({ 
+                        ...prev, 
+                        destination: { ...prev.destination, country: e.target.value }
+                      }))}
+                      placeholder="e.g., India"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                    <input
+                      type="text"
+                      value={formData.destination.city}
+                      onChange={(e) => setFormData(prev => ({ 
+                        ...prev, 
+                        destination: { ...prev.destination, city: e.target.value }
+                      }))}
+                      placeholder="e.g., Mumbai"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={formData.destination.coordinates.lat}
+                      onChange={(e) => setFormData(prev => ({ 
+                        ...prev, 
+                        destination: { 
+                          ...prev.destination, 
+                          coordinates: { ...prev.destination.coordinates, lat: parseFloat(e.target.value) || 0 }
+                        }
+                      }))}
+                      placeholder="e.g., 19.0760"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Longitude</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={formData.destination.coordinates.lng}
+                      onChange={(e) => setFormData(prev => ({ 
+                        ...prev, 
+                        destination: { 
+                          ...prev.destination, 
+                          coordinates: { ...prev.destination.coordinates, lng: parseFloat(e.target.value) || 0 }
+                        }
+                      }))}
+                      placeholder="e.g., 72.8777"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Tags */}

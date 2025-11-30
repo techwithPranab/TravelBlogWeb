@@ -49,7 +49,14 @@ export default function EditPostPage() {
     excerpt: '',
     content: '',
     category: '',
-    destination: '',
+    destination: {
+      country: '',
+      city: '',
+      coordinates: {
+        lat: 0,
+        lng: 0
+      }
+    },
     tags: '',
     featured: false
   })
@@ -93,7 +100,21 @@ export default function EditPostPage() {
           excerpt: post.excerpt,
           content: post.content,
           category: post.categories?.[0]?._id || '',
-          destination: '', // Destination not included in ContributorPost interface
+          destination: post.destination ? {
+            country: post.destination.country || '',
+            city: post.destination.city || '',
+            coordinates: {
+              lat: post.destination.coordinates?.lat || 0,
+              lng: post.destination.coordinates?.lng || 0
+            }
+          } : {
+            country: '',
+            city: '',
+            coordinates: {
+              lat: 0,
+              lng: 0
+            }
+          },
           tags: post.tags.join(', '),
           featured: post.isPremium || false
         })
@@ -385,25 +406,75 @@ export default function EditPostPage() {
               </select>
             </div>
 
-            <div>
-              <label htmlFor="destination" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <MapPin className="w-4 h-4 inline mr-1" />
                 Destination
               </label>
-              <select
-                id="destination"
-                name="destination"
-                value={formData.destination}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-              >
-                <option value="">Select a destination</option>
-                {destinations.map(destination => (
-                  <option key={destination._id} value={destination._id}>
-                    {destination.name}
-                  </option>
-                ))}
-              </select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Country</label>
+                  <input
+                    type="text"
+                    value={formData.destination.country}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      destination: { ...prev.destination, country: e.target.value }
+                    }))}
+                    placeholder="e.g., India"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">City</label>
+                  <input
+                    type="text"
+                    value={formData.destination.city}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      destination: { ...prev.destination, city: e.target.value }
+                    }))}
+                    placeholder="e.g., Mumbai"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Latitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={formData.destination.coordinates.lat}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      destination: { 
+                        ...prev.destination, 
+                        coordinates: { ...prev.destination.coordinates, lat: parseFloat(e.target.value) || 0 }
+                      }
+                    }))}
+                    placeholder="e.g., 19.0760"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Longitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={formData.destination.coordinates.lng}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      destination: { 
+                        ...prev.destination, 
+                        coordinates: { ...prev.destination.coordinates, lng: parseFloat(e.target.value) || 0 }
+                      }
+                    }))}
+                    placeholder="e.g., 72.8777"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 

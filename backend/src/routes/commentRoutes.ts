@@ -10,9 +10,10 @@ import {
   moderateComment,
   getComment,
   getCommentStats,
-  getFlaggedComments
+  getFlaggedComments,
+  getAllCommentsAdmin
 } from '../controllers/commentController'
-import { protect, restrictTo } from '../middleware/auth'
+import { protect, restrictTo, optionalAuth } from '../middleware/auth'
 
 const router = express.Router()
 
@@ -20,19 +21,22 @@ const router = express.Router()
 router.get('/:resourceType/:resourceId', getComments)
 router.get('/stats/:resourceType/:resourceId', getCommentStats)
 router.get('/flagged', getFlaggedComments)
-router.get('/:id', getComment)
-router.post('/', submitComment) // Make comment submission public
+router.post('/', optionalAuth, submitComment) // Allow both authenticated and anonymous users
+
+// Admin only routes (before protected middleware)
+router.get('/admin/all', protect, restrictTo('admin'), getAllCommentsAdmin)
 
 // Protected routes
 router.use(protect)
 
+router.get('/:id', getComment)
 router.put('/:id', editComment)
-router.delete('/:id', deleteComment)
 router.post('/:id/like', likeComment)
 router.post('/:id/dislike', dislikeComment)
 router.post('/:id/flag', flagComment)
 
 // Admin only routes
 router.patch('/:id/moderate', restrictTo('admin'), moderateComment)
+router.delete('/:id', restrictTo('admin'), deleteComment)
 
 export default router

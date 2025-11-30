@@ -103,7 +103,14 @@ export interface CreatePostRequest {
   images?: string[]
   categories: string[]
   tags?: string[]
-  destination?: string
+  destination?: {
+    country?: string
+    city?: string
+    coordinates?: {
+      lat: number
+      lng: number
+    }
+  }
   youtubeVideos?: Array<{
     id: string
     title: string

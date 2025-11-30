@@ -16,9 +16,12 @@ import {
   Shield,
   Camera,
   MessageSquare,
+  MessageCircle,
   UserCheck,
   Mail,
-  Folder
+  Folder,
+  ChevronDown,
+  ChevronRight
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -26,78 +29,110 @@ interface AdminLayoutProps {
   readonly children: React.ReactNode
 }
 
-const sidebarItems = [
+const sidebarGroups = [
   {
-    name: 'Dashboard',
-    href: '/admin/dashboard',
-    icon: LayoutDashboard,
-    badge: null
+    name: 'Overview',
+    items: [
+      {
+        name: 'Dashboard',
+        href: '/admin/dashboard',
+        icon: LayoutDashboard,
+        badge: null
+      }
+    ]
   },
   {
-    name: 'Blog Posts',
-    href: '/admin/posts',
-    icon: FileText,
-    badge: 'Posts'
+    name: 'Content Management',
+    items: [
+      {
+        name: 'Blog Posts',
+        href: '/admin/posts',
+        icon: FileText,
+        badge: 'Posts'
+      },
+      {
+        name: 'Photos',
+        href: '/admin/photos',
+        icon: Camera,
+        badge: null
+      },
+      {
+        name: 'Destinations',
+        href: '/admin/destinations',
+        icon: MapPin,
+        badge: null
+      },
+      {
+        name: 'Guides',
+        href: '/admin/guides',
+        icon: BookOpen,
+        badge: null
+      },
+      {
+        name: 'Resources',
+        href: '/admin/resources',
+        icon: Folder,
+        badge: null
+      }
+    ]
   },
   {
-    name: 'Photos',
-    href: '/admin/photos',
-    icon: Camera,
-    badge: null
+    name: 'Community & Engagement',
+    items: [
+      {
+        name: 'Comments',
+        href: '/admin/comments',
+        icon: MessageCircle,
+        badge: null
+      },
+      {
+        name: 'Contact Messages',
+        href: '/admin/contacts',
+        icon: MessageSquare,
+        badge: null
+      },
+      {
+        name: 'Partners',
+        href: '/admin/partners',
+        icon: UserCheck,
+        badge: null
+      }
+    ]
   },
   {
-    name: 'Destinations',
-    href: '/admin/destinations',
-    icon: MapPin,
-    badge: null
+    name: 'User Management',
+    items: [
+      {
+        name: 'Users',
+        href: '/admin/users',
+        icon: Users,
+        badge: null
+      }
+    ]
   },
   {
-    name: 'Guides',
-    href: '/admin/guides',
-    icon: BookOpen,
-    badge: null
-  },
-  {
-    name: 'Resources',
-    href: '/admin/resources',
-    icon: Folder,
-    badge: null
-  },
-  {
-    name: 'Partners',
-    href: '/admin/partners',
-    icon: UserCheck,
-    badge: null
-  },
-  {
-    name: 'Contact Messages',
-    href: '/admin/contacts',
-    icon: MessageSquare,
-    badge: null
-  },
-  {
-    name: 'Users',
-    href: '/admin/users',
-    icon: Users,
-    badge: null
-  },
-  {
-    name: 'Email Templates',
-    href: '/admin/email-templates',
-    icon: Mail,
-    badge: null
-  },
-  {
-    name: 'Settings',
-    href: '/admin/settings',
-    icon: Settings,
-    badge: null
+    name: 'System',
+    items: [
+      {
+        name: 'Email Templates',
+        href: '/admin/email-templates',
+        icon: Mail,
+        badge: null
+      },
+      {
+        name: 'Settings',
+        href: '/admin/settings',
+        icon: Settings,
+        badge: null
+      }
+    ]
   }
 ]
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set())
   const router = useRouter()
   const pathname = usePathname()
 
@@ -133,6 +168,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     localStorage.removeItem('adminToken')
     localStorage.removeItem('adminUser')
     router.push('/admin/login')
+  }
+
+  const toggleSection = (sectionName: string) => {
+    setCollapsedSections(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(sectionName)) {
+        newSet.delete(sectionName)
+      } else {
+        newSet.add(sectionName)
+      }
+      return newSet
+    })
   }
 
   if (pathname === '/admin/login') {
@@ -196,35 +243,74 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-2">
-          {sidebarItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
+        <nav className="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
+          {sidebarGroups.map((group, groupIndex) => {
+            const isCollapsed = collapsedSections.has(group.name)
+            const hasActiveItem = group.items.some(item => pathname === item.href)
             
             return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                }`}
-              >
-                <Icon className={`h-5 w-5 transition-colors ${
-                  isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'
-                }`} />
-                <span className="flex-1">{item.name}</span>
-                {item.badge && (
-                  <span className={`px-2 py-1 text-xs rounded-full ${
-                    isActive 
-                      ? 'bg-white/20 text-white' 
-                      : 'bg-gray-700 text-gray-300 group-hover:bg-gray-600'
-                  }`}>
-                    {item.badge}
-                  </span>
-                )}
-              </Link>
+              <div key={group.name} className="space-y-2">
+                <button
+                  onClick={() => toggleSection(group.name)}
+                  className={`w-full flex items-center justify-between px-4 py-2 text-xs font-semibold uppercase tracking-wider rounded-lg transition-all duration-200 ${
+                    hasActiveItem
+                      ? 'text-blue-300 bg-blue-500/10'
+                      : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <span>{group.name}</span>
+                  {isCollapsed ? (
+                    <ChevronRight className="h-4 w-4 transition-transform" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 transition-transform" />
+                  )}
+                </button>
+                
+                <AnimatePresence>
+                  {!isCollapsed && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="space-y-1 pl-2">
+                        {group.items.map((item) => {
+                          const Icon = item.icon
+                          const isActive = pathname === item.href
+                          
+                          return (
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              className={`group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                                isActive
+                                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                              }`}
+                            >
+                              <Icon className={`h-5 w-5 transition-colors ${
+                                isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'
+                              }`} />
+                              <span className="flex-1">{item.name}</span>
+                              {item.badge && (
+                                <span className={`px-2 py-1 text-xs rounded-full ${
+                                  isActive 
+                                    ? 'bg-white/20 text-white' 
+                                    : 'bg-gray-700 text-gray-300 group-hover:bg-gray-600'
+                                }`}>
+                                  {item.badge}
+                                </span>
+                              )}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             )
           })}
         </nav>

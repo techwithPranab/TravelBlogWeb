@@ -49,6 +49,7 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
 
   const posts = await Post.find(query)
       .populate('author', 'name avatar email')
+      .populate('categories', 'name slug')
       .sort(sort)
       .skip(skip)
       .limit(limit)

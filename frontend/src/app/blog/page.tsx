@@ -115,15 +115,27 @@ export default function BlogPage() {
                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || 
                            post.categories.some(cat => cat.slug === selectedCategory)
-    const matchesCountry = selectedCountry === 'all' ||
-                          post.destinations?.some(dest => dest.name === selectedCountry)
+    
+    // Fix country matching to work with actual data structure
+    let matchesCountry = true;
+    if (selectedCountry !== 'all') {
+      if (post.destination && typeof post.destination === 'object' && post.destination.country) {
+        matchesCountry = post.destination.country === selectedCountry
+      } else {
+        matchesCountry = false
+      }
+    }
+    
     return matchesSearch && matchesCategory && matchesCountry
   })
 
-  // Extract countries from posts
-  const countries = posts.flatMap(post => 
-    post.destinations?.map(dest => dest.name).filter(Boolean) || []
-  )
+  // Extract countries from posts - fix to work with actual data structure
+  const countries = posts.flatMap(post => {
+    if (post.destination && typeof post.destination === 'object' && post.destination.country) {
+      return [post.destination.country]
+    }
+    return []
+  }).filter(Boolean)
 
   const blogCategories = [
     { slug: 'all', name: 'All Posts' },

@@ -132,6 +132,14 @@
   "commentCount": 0,
   "likes": [],
   "comments": [],
+  "destination": {
+    "country": "India",
+    "city": "Varanasi",
+    "coordinates": {
+      "lat": 25.3176,
+      "lng": 82.9739
+    }
+  },
   "publishedAt": {
     "$date": "2025-10-25T06:09:22.095Z"
   },
@@ -269,6 +277,14 @@
   "commentCount": 0,
   "likes": [],
   "comments": [],
+  "destination": {
+    "country": "India",
+    "city": "Ayodhya",
+    "coordinates": {
+      "lat": 26.7922,
+      "lng": 82.1998
+    }
+  },
   "publishedAt": {
     "$date": "2025-10-24T06:09:22.095Z"
   },
@@ -414,6 +430,14 @@
   "commentCount": 0,
   "likes": [],
   "comments": [],
+  "destination": {
+    "country": "India",
+    "city": "Prayagraj",
+    "coordinates": {
+      "lat": 25.4358,
+      "lng": 81.8463
+    }
+  },
   "publishedAt": {
     "$date": "2025-10-26T06:09:22.095Z"
   },

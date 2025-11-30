@@ -4,6 +4,7 @@ import Post from '../models/Post'
 import Destination from '../models/Destination'
 import Guide from '../models/Guide'
 import Newsletter from '../models/Newsletter'
+import Comment from '../models/Comment'
 import SiteSettings from '../models/SiteSettings'
 import EmailTemplate from '../models/EmailTemplate'
 import { AuthenticatedRequest } from '../middleware/adminAuth'
@@ -19,6 +20,8 @@ export const getDashboardStats = async (req: AuthenticatedRequest, res: Response
       totalGuides,
       totalSubscribers,
       pendingPosts,
+      totalComments,
+      pendingComments,
       recentUsers,
       recentPosts
     ] = await Promise.all([
@@ -28,6 +31,8 @@ export const getDashboardStats = async (req: AuthenticatedRequest, res: Response
       Guide.countDocuments(),
       Newsletter.countDocuments(),
       Post.countDocuments({ status: 'draft' }),
+      Comment.countDocuments(),
+      Comment.countDocuments({ status: 'pending' }),
       User.find().sort({ createdAt: -1 }).limit(5).select('name email role createdAt'),
       Post.find().sort({ createdAt: -1 }).limit(5).populate('author', 'name').select('title author status createdAt')
     ])
@@ -41,7 +46,9 @@ export const getDashboardStats = async (req: AuthenticatedRequest, res: Response
           totalDestinations,
           totalGuides,
           totalSubscribers,
-          pendingPosts
+          pendingPosts,
+          totalComments,
+          pendingComments
         },
         recentActivity: {
           recentUsers,

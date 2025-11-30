@@ -30,11 +30,14 @@ export interface Post {
     slug: string
     color: string
   }>
-  destinations?: Array<{
-    _id: string
-    name: string
-    slug: string
-  }>
+  destination?: {
+    country?: string
+    city?: string
+    coordinates?: {
+      lat: number
+      lng: number
+    }
+  }
   featuredImage?: {
     url: string
     alt: string
@@ -61,14 +64,6 @@ export interface Post {
   viewCount?: number
   likeCount?: number
   commentCount?: number
-  destination?: {
-    country: string
-    city?: string
-    coordinates?: {
-      lat: number
-      lng: number
-    }
-  }
 }
 
 export interface Destination {
@@ -750,6 +745,79 @@ export const categoriesApi = {
 export const adminApi = {
   getDashboardStats: async (): Promise<ApiResponse<DashboardStats>> => {
     return apiRequest<DashboardStats>('/admin/dashboard/stats')
+  },
+
+  // Comments management
+  getAllComments: async (params?: {
+    page?: number
+    limit?: number
+    sortBy?: string
+    sortOrder?: string
+    status?: string
+    resourceType?: string
+    searchTerm?: string
+  }): Promise<ApiResponse<{
+    comments: Array<{
+      _id: string
+      content: string
+      author: {
+        name: string
+        email: string
+        avatar: string
+      }
+      resourceType: string
+      resourceId: {
+        _id: string
+        title?: string
+        slug?: string
+      }
+      status: 'pending' | 'approved' | 'rejected' | 'flagged'
+      createdAt: string
+      updatedAt: string
+      likes: number
+      dislikes: number
+      flagCount: number
+      ipAddress?: string
+      userAgent?: string
+    }>
+    pagination: {
+      page: number
+      limit: number
+      total: number
+      pages: number
+    }
+    stats: {
+      approved: number
+      pending: number
+      rejected: number
+      flagged: number
+    }
+  }>> => {
+    const searchParams = new URLSearchParams()
+    if (params?.page) searchParams.append('page', params.page.toString())
+    if (params?.limit) searchParams.append('limit', params.limit.toString())
+    if (params?.sortBy) searchParams.append('sortBy', params.sortBy)
+    if (params?.sortOrder) searchParams.append('sortOrder', params.sortOrder)
+    if (params?.status) searchParams.append('status', params.status)
+    if (params?.resourceType) searchParams.append('resourceType', params.resourceType)
+    if (params?.searchTerm) searchParams.append('searchTerm', params.searchTerm)
+    
+    const query = searchParams.toString()
+    const endpoint = query ? `/comments/admin/all?${query}` : '/comments/admin/all'
+    return authenticatedApiRequest(endpoint)
+  },
+
+  deleteComment: async (commentId: string): Promise<ApiResponse<{ message: string }>> => {
+    return authenticatedApiRequest(`/comments/${commentId}`, {
+      method: 'DELETE'
+    })
+  },
+
+  moderateComment: async (commentId: string, action: 'approve' | 'reject' | 'flag'): Promise<ApiResponse<{ message: string }>> => {
+    return authenticatedApiRequest(`/comments/${commentId}/moderate`, {
+      method: 'PATCH',
+      body: JSON.stringify({ action })
+    })
   }
 }
 

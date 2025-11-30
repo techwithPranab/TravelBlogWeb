@@ -11,7 +11,8 @@ import {
   Mail, 
   Clock,
   TrendingUp,
-  Eye
+  Eye,
+  MessageCircle
 } from 'lucide-react'
 import { adminApi } from '@/lib/adminApi'
 
@@ -24,6 +25,8 @@ interface DashboardStats {
   pendingPosts: number
   totalPartners: number
   pendingPartners: number
+  totalComments: number
+  pendingComments: number
 }
 
 interface RecentActivity {
@@ -174,6 +177,20 @@ export default function AdminDashboard() {
       icon: Clock,
       color: 'bg-red-500',
       change: stats?.pendingPartners ? 'Needs Review' : 'All Clear'
+    },
+    {
+      name: 'Total Comments',
+      value: stats?.totalComments || 0,
+      icon: MessageCircle,
+      color: 'bg-teal-500',
+      change: '+18%'
+    },
+    {
+      name: 'Pending Comments',
+      value: stats?.pendingComments || 0,
+      icon: Clock,
+      color: 'bg-amber-500',
+      change: stats?.pendingComments ? 'Needs Review' : 'All Clear'
     }
   ]
 
@@ -312,6 +329,13 @@ export default function AdminDashboard() {
           >
             <Users className="h-5 w-5 text-indigo-600" />
             <span className="text-sm font-medium text-gray-900">Manage Partners</span>
+          </button>
+          <button 
+            onClick={() => router.push('/admin/comments')}
+            className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <MessageCircle className="h-5 w-5 text-orange-600" />
+            <span className="text-sm font-medium text-gray-900">Manage Comments</span>
           </button>
           <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             <Users className="h-5 w-5 text-blue-600" />

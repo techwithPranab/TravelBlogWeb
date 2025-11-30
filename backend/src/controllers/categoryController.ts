@@ -1,17 +1,60 @@
 import { Request, Response } from 'express'
 import Category from '../models/Category'
+import Post from '../models/Post'
 import { handleAsync } from '../utils/handleAsync'
 
 // @desc    Get all categories
 // @route   GET /api/categories
 // @access  Public
 export const getAllCategories = handleAsync(async (req: Request, res: Response) => {
-  const categories = await Category.find({ isActive: true }).sort({ name: 1 })
+  // Get categories with dynamic post counts
+  const categoriesWithPostCount = await Category.aggregate([
+    {
+      $match: { isActive: true }
+    },
+    {
+      $lookup: {
+        from: 'posts',
+        let: { categoryId: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $in: ['$$categoryId', '$categories'] },
+                  { $eq: ['$status', 'published'] }
+                ]
+              }
+            }
+          },
+          {
+            $count: 'postCount'
+          }
+        ],
+        as: 'postCountResult'
+      }
+    },
+    {
+      $addFields: {
+        postCount: {
+          $ifNull: [{ $arrayElemAt: ['$postCountResult.postCount', 0] }, 0]
+        }
+      }
+    },
+    {
+      $project: {
+        postCountResult: 0
+      }
+    },
+    {
+      $sort: { name: 1 }
+    }
+  ])
   
   res.status(200).json({
     success: true,
-    count: categories.length,
-    data: categories
+    count: categoriesWithPostCount.length,
+    data: categoriesWithPostCount
   })
 })
 

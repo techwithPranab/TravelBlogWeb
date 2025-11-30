@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
 import Image from 'next/image'
 import Link from 'next/link'
 import { 
@@ -20,7 +21,9 @@ import {
 } from 'lucide-react'
 import ContentSection from '@/components/blog/ContentSection'
 import YouTubeVideo from '@/components/blog/YouTubeVideo'
+import CommentSection from '@/components/blog/CommentSection'
 import { postsApi } from '@/lib/api'
+import { containsProfanity, getProfanityError } from '@/utils/profanityFilter'
 
 interface BlogPost {
   id: string
@@ -101,6 +104,7 @@ interface CommentSubmitResponse extends ApiResponse<Comment> {}
 
 export default function BlogDetailsPage() {
   const params = useParams()
+  const { user, isAuthenticated } = useAuth()
   const [post, setPost] = useState<BlogPost | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [newComment, setNewComment] = useState('')
@@ -217,18 +221,29 @@ export default function BlogDetailsPage() {
 
   const submitComment = async (postId: string, content: string): Promise<CommentSubmitResponse> => {
     try {
+      // Check for profanity before submitting
+      if (containsProfanity(content)) {
+        throw new Error(getProfanityError())
+      }
+
+      // Get user info from auth context
+      const authorName = isAuthenticated && user ? user.name : 'Anonymous User'
+      const authorEmail = isAuthenticated && user ? user.email : 'anonymous@example.com'
+      const authorAvatar = isAuthenticated && user?.avatar ? user.avatar : '/images/default-avatar.jpg'
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(isAuthenticated ? { 'Authorization': `Bearer ${localStorage.getItem('token')}` } : {})
         },
         body: JSON.stringify({
           resourceType: 'blog',
           resourceId: postId,
           author: {
-            name: 'Anonymous User', // In a real app, this would come from user authentication
-            email: 'user@example.com', // In a real app, this would come from user authentication
-            avatar: '/images/default-avatar.jpg'
+            name: authorName,
+            email: authorEmail,
+            avatar: authorAvatar
           },
           content: content.trim()
         })
@@ -250,8 +265,8 @@ export default function BlogDetailsPage() {
         id: data.data?.comment?._id || data.data?.commentId || Date.now().toString(),
         content: content.trim(),
         author: {
-          name: 'Anonymous User',
-          avatar: '/images/default-avatar.jpg'
+          name: authorName,
+          avatar: authorAvatar
         },
         createdAt: new Date().toISOString(),
         likes: 0,
@@ -366,48 +381,17 @@ export default function BlogDetailsPage() {
     }
   }
 
-  const handleCommentSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!newComment.trim()) {
-      setCommentError('Please enter a comment')
-      return
-    }
-
-    if (newComment.trim().length < 10) {
-      setCommentError('Comment must be at least 10 characters long')
-      return
-    }
-
-    if (newComment.length > 1000) {
-      setCommentError('Comment must be less than 1000 characters')
-      return
-    }
-
+  const handleCommentSubmit = async (content: string) => {
     if (!post?.id) {
-      setCommentError('Unable to post comment. Please try again.')
-      return
+      throw new Error('Unable to post comment. Please try again.')
     }
 
-    setIsSubmittingComment(true)
-    setCommentError(null)
-
-    try {
-  const response = await submitComment(post.id, newComment.trim())
-      
-      if (response.success) {
-        setComments([response.data, ...comments])
-        setNewComment('')
-        // Show success message
-        alert('Comment posted successfully!')
-      } else {
-        setCommentError(response.message || 'Failed to post comment')
-      }
-    } catch (err) {
-      console.error('Comment submission error:', err)
-      setCommentError(err instanceof Error ? err.message : 'Failed to post comment. Please try again.')
-    } finally {
-      setIsSubmittingComment(false)
+    const response = await submitComment(post.id, content)
+    
+    if (response.success) {
+      setComments([response.data, ...comments])
+    } else {
+      throw new Error(response.message || 'Failed to post comment')
     }
   }
 
@@ -710,90 +694,12 @@ export default function BlogDetailsPage() {
           </div>
 
           {/* Comments Section */}
-          <div className="border-t border-gray-200 pt-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
-              <MessageCircle className="w-6 h-6 mr-2" />
-              Comments ({comments.length})
-            </h3>
-
-            {/* Comment Form */}
-            <form onSubmit={handleCommentSubmit} className="mb-8">
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Share your thoughts..."
-                className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                rows={4}
-              />
-              <div className="mt-4">
-                <button
-                  type="submit"
-                  disabled={isSubmittingComment || !newComment.trim()}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {isSubmittingComment ? 'Posting...' : 'Post Comment'}
-                </button>
-              </div>
-            </form>
-
-            {/* Comments List */}
-            <div className="space-y-6">
-              {comments.map((comment) => (
-                <div key={comment.id} className="bg-white border border-gray-200 rounded-lg p-6">
-                  <div className="flex items-start space-x-4">
-                    <img 
-                      src={comment.author?.avatar || '/images/default-avatar.jpg'} 
-                      alt={comment.author?.name || 'Anonymous'}
-                      className="w-10 h-10 rounded-full"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <span className="font-medium text-gray-900">{comment.author?.name || 'Anonymous'}</span>
-                        <span className="text-sm text-gray-500">
-                          {new Date(comment.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <p className="text-gray-700 mb-3">{comment.content}</p>
-                      <button className="flex items-center space-x-1 text-sm text-gray-500 hover:text-blue-600">
-                        <ThumbsUp className="w-4 h-4" />
-                        <span>{comment.likes}</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Replies */}
-                  {comment.replies && comment.replies.length > 0 && (
-                    <div className="ml-14 mt-4 space-y-4">
-                      {comment.replies.map((reply) => (
-                        <div key={reply.id} className="bg-gray-50 rounded-lg p-4">
-                          <div className="flex items-start space-x-3">
-                              <img 
-                              src={reply.author?.avatar || '/images/default-avatar.jpg'} 
-                              alt={reply.author?.name || 'Anonymous'}
-                              className="w-8 h-8 rounded-full"
-                            />
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2 mb-1">
-                                <span className="font-medium text-gray-900 text-sm">{reply.author?.name || 'Anonymous'}</span>
-                                <span className="text-xs text-gray-500">
-                                  {new Date(reply.createdAt).toLocaleDateString()}
-                                </span>
-                              </div>
-                              <p className="text-gray-700 text-sm mb-2">{reply.content}</p>
-                              <button className="flex items-center space-x-1 text-xs text-gray-500 hover:text-blue-600">
-                                <ThumbsUp className="w-3 h-3" />
-                                <span>{reply.likes}</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <CommentSection
+            resourceId={post?.id || ''}
+            resourceType="blog"
+            comments={comments}
+            onCommentSubmit={handleCommentSubmit}
+          />
         </div>
       </div>
 

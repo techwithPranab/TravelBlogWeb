@@ -104,3 +104,37 @@ export const adminOnly = (req: AuthenticatedRequest, res: Response, next: NextFu
 
   next()
 }
+
+// Optional authentication - doesn't fail if no token provided
+export const optionalAuth = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    let token: string | undefined
+
+    // Check for token in Authorization header
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1]
+    }
+
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string }
+        const user = await User.findById(decoded.id).select('-password')
+        if (user) {
+          req.user = user
+        }
+      } catch (error) {
+        // Invalid token, but we continue without authentication
+        console.log('Invalid token in optional auth:', error)
+      }
+    }
+
+    next()
+  } catch (error) {
+    // Even on error, continue without authentication
+    next()
+  }
+}

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import Comment from '../models/Comment'
 import { validationResult, body } from 'express-validator'
+import { containsProfanity, getProfanityError } from '../utils/profanityFilter'
 
 // Validation rules for comment submission
 export const validateComment = [
@@ -106,6 +107,14 @@ export const submitComment = async (req: Request, res: Response) => {
       attachments = []
     } = req.body
 
+    // Check for inappropriate content
+    if (containsProfanity(content)) {
+      return res.status(400).json({
+        success: false,
+        error: getProfanityError()
+      })
+    }
+
     // Validate parent comment if provided
     if (parentId) {
       const parentComment = await Comment.findById(parentId)
@@ -124,15 +133,24 @@ export const submitComment = async (req: Request, res: Response) => {
       }
     }
 
+    // Use authenticated user info if available, otherwise use provided author info
+    const authenticatedUser = (req as any).user
+    const commentAuthor = authenticatedUser ? {
+      name: authenticatedUser.name,
+      email: authenticatedUser.email,
+      avatar: authenticatedUser.avatar || '/images/default-avatar.jpg',
+      website: authenticatedUser.website || author.website
+    } : {
+      name: author.name.trim(),
+      email: author.email.toLowerCase().trim(),
+      avatar: author.avatar || '/images/default-avatar.jpg',
+      website: author.website
+    }
+
     const comment = new Comment({
       resourceType,
       resourceId,
-      author: {
-        name: author.name.trim(),
-        email: author.email.toLowerCase().trim(),
-        avatar: author.avatar,
-        website: author.website
-      },
+      author: commentAuthor,
       content: content.trim(),
       parentId,
       attachments,
@@ -502,6 +520,113 @@ export const deleteComment = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       error: 'Failed to delete comment'
+    })
+  }
+}
+
+// Get all comments for admin (admin only)
+export const getAllCommentsAdmin = async (req: Request, res: Response) => {
+  try {
+    console.log('🔍 getAllCommentsAdmin called with query:', req.query)
+    
+    // Check total comments in database first
+    const totalCommentsInDB = await Comment.countDocuments()
+    console.log('📊 Total comments in database:', totalCommentsInDB)
+    
+    const {
+      page = 1,
+      limit = 20,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+      status,
+      resourceType,
+      searchTerm
+    } = req.query
+
+    const options = {
+      page: parseInt(page as string),
+      limit: parseInt(limit as string),
+      sortBy: sortBy as string,
+      sortOrder: sortOrder as string
+    }
+
+    // Build filter object
+    const filter: any = {}
+    
+    if (status && status !== 'all') {
+      filter.status = status
+    }
+    
+    if (resourceType && resourceType !== 'all') {
+      filter.resourceType = resourceType
+    }
+    
+    if (searchTerm) {
+      filter.$or = [
+        { content: { $regex: searchTerm, $options: 'i' } },
+        { 'author.name': { $regex: searchTerm, $options: 'i' } },
+        { 'author.email': { $regex: searchTerm, $options: 'i' } }
+      ]
+    }
+
+    console.log('📊 Filter object:', filter)
+    console.log('⚙️ Options:', options)
+
+    // Get comments with pagination
+    const comments = await Comment.find(filter)
+      .sort({ [options.sortBy]: options.sortOrder === 'desc' ? -1 : 1 })
+      .limit(options.limit)
+      .skip((options.page - 1) * options.limit)
+      .populate('resourceId', 'title slug')
+      .lean()
+
+    // Get total count
+    const totalComments = await Comment.countDocuments(filter)
+    console.log('📝 Total comments found:', totalComments)
+    console.log('💬 Comments data:', comments.length, 'comments retrieved')
+
+    // Get stats
+    const stats = await Comment.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 }
+        }
+      }
+    ])
+    console.log('📈 Stats data:', stats)
+
+    const statusStats = {
+      approved: 0,
+      pending: 0,
+      rejected: 0,
+      flagged: 0
+    }
+
+    stats.forEach(stat => {
+      if (stat._id && statusStats.hasOwnProperty(stat._id)) {
+        statusStats[stat._id as keyof typeof statusStats] = stat.count
+      }
+    })
+
+    res.json({
+      success: true,
+      data: {
+        comments,
+        pagination: {
+          page: options.page,
+          limit: options.limit,
+          total: totalComments,
+          pages: Math.ceil(totalComments / options.limit)
+        },
+        stats: statusStats
+      }
+    })
+  } catch (error) {
+    console.error('Error fetching all comments for admin:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch comments'
     })
   }
 }
