@@ -40,7 +40,7 @@ export default function GuidesPage() {
   // Get unique types, difficulties, and countries from guides
   const types = ['all', ...Array.from(new Set(guides.map(guide => guide.type)))]
   const difficulties = ['all', 'Easy', 'Moderate', 'Challenging']
-  const countries = Array.from(new Set(guides.map(guide => guide.destination?.name).filter(Boolean)))
+  const countries = Array.from(new Set(guides.map(guide => guide.destination?.country).filter(Boolean)))
 
   // Filter guides
   const filteredGuides = guides.filter(guide => {
@@ -48,7 +48,7 @@ export default function GuidesPage() {
                          guide.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesType = selectedType === 'all' || guide.type === selectedType
     const matchesDifficulty = selectedDifficulty === 'all' || guide.difficulty === selectedDifficulty
-    const matchesCountry = selectedCountry === 'all' || guide.destination?.name === selectedCountry
+    const matchesCountry = selectedCountry === 'all' || guide.destination?.country === selectedCountry
     return matchesSearch && matchesType && matchesDifficulty && matchesCountry
   })
 

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Photo from '../models/Photo';
 import { handleAsync } from '../utils/handleAsync';
 import { uploadBufferToCloudinary, uploadThumbnailToCloudinary, deleteFromCloudinary } from '../config/drive';
+import { emailService } from '../services/emailService';
 import multer from 'multer';
 import sharp from 'sharp';
 
@@ -195,6 +196,35 @@ export const submitPhoto = handleAsync(async (req: Request, res: Response) => {
       camera: typeof camera === 'string' ? JSON.parse(camera) : camera,
       status: 'pending'
     });
+
+    // Send email notification to admin
+    try {
+      const photoLocationString = parsedLocation.city && parsedLocation.country 
+        ? `${parsedLocation.city}, ${parsedLocation.country}`
+        : parsedLocation.country || 'Unknown';
+
+      await emailService.sendPhotoSubmissionNotificationToAdmin({
+        photoTitle: title,
+        photoDescription: description,
+        photographerName: parsedPhotographer.name,
+        photographerEmail: parsedPhotographer.email,
+        photoLocation: photoLocationString,
+        photoCategory: category,
+        photoTags: Array.isArray(tags) ? tags : processTagsString(tags),
+        photoThumbnailUrl: thumbnailUrl,
+        submissionDate: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }),
+        adminDashboardUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/admin/photos`
+      });
+      
+      console.log('📧 Photo submission notification sent to admin successfully');
+    } catch (emailError) {
+      console.error('❌ Failed to send photo submission notification to admin:', emailError);
+      // Don't fail the entire request if email fails
+    }
 
     res.status(201).json({
       success: true,
@@ -482,6 +512,39 @@ export const moderatePhoto = handleAsync(async (req: Request, res: Response) => 
       success: false,
       error: 'Photo not found'
     });
+  }
+
+  // Send email notification to photographer if photo is approved
+  if (normalizedStatus === 'approved') {
+    try {
+      const photoLocationString = photo.location.city && photo.location.country 
+        ? `${photo.location.city}, ${photo.location.country}`
+        : photo.location.country || 'Unknown';
+
+      await emailService.sendPhotoApprovalNotification({
+        photographerName: photo.photographer.name,
+        photographerEmail: photo.photographer.email,
+        photoTitle: photo.title,
+        photoDescription: photo.description || '',
+        photoLocation: photoLocationString,
+        photoCategory: photo.category,
+        photoThumbnailUrl: photo.thumbnailUrl || photo.imageUrl,
+        approvalDate: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }),
+        isFeatured: photo.isFeatured || false,
+        galleryUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/gallery`,
+        photoUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/gallery/${photo._id}`,
+        submitPhotoUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/submit-photo`
+      });
+      
+      console.log('📧 Photo approval notification sent to photographer successfully');
+    } catch (emailError) {
+      console.error('❌ Failed to send photo approval notification to photographer:', emailError);
+      // Don't fail the entire request if email fails
+    }
   }
 
   res.status(200).json({

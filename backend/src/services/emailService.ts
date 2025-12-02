@@ -929,6 +929,187 @@ If you received this email, your SMTP configuration is successful!
       return false;
     }
   }
+
+  // Photo submission notification to admin
+  async sendPhotoSubmissionNotificationToAdmin(photoData: {
+    photoTitle: string;
+    photoDescription: string;
+    photographerName: string;
+    photographerEmail: string;
+    photoLocation: string;
+    photoCategory: string;
+    photoTags: string[];
+    photoThumbnailUrl: string;
+    submissionDate: string;
+    adminDashboardUrl: string;
+  }): Promise<boolean> {
+    try {
+      console.log('📧 [PHOTO SUBMISSION] Sending photo submission notification to admin...');
+
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@bagpackstories.in';
+
+      const htmlContent = `
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8fafc;">
+          <div style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="margin: 0; font-size: 28px; font-weight: bold;">📸 New Photo Submission</h1>
+            <p style="margin: 10px 0 0; font-size: 16px; opacity: 0.9;">A new photo has been submitted for review</p>
+          </div>
+          
+          <div style="background: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <div style="margin-bottom: 25px; text-align: center;">
+              <img src="${photoData.photoThumbnailUrl}" alt="${photoData.photoTitle}" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h2 style="color: #2d3748; margin: 0 0 10px; font-size: 22px;">${photoData.photoTitle}</h2>
+              <p style="color: #4a5568; line-height: 1.6; margin: 0;">${photoData.photoDescription}</p>
+            </div>
+            
+            <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin: 25px 0;">
+              <h3 style="color: #2d3748; margin: 0 0 15px; font-size: 18px;">Photo Details</h3>
+              <p style="margin: 5px 0; color: #4a5568;"><strong>Photographer:</strong> ${photoData.photographerName} (${photoData.photographerEmail})</p>
+              <p style="margin: 5px 0; color: #4a5568;"><strong>Location:</strong> ${photoData.photoLocation}</p>
+              <p style="margin: 5px 0; color: #4a5568;"><strong>Category:</strong> ${photoData.photoCategory}</p>
+              <p style="margin: 5px 0; color: #4a5568;"><strong>Tags:</strong> ${photoData.photoTags.join(', ')}</p>
+              <p style="margin: 5px 0; color: #4a5568;"><strong>Submitted:</strong> ${photoData.submissionDate}</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${photoData.adminDashboardUrl}" style="background: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Review Photo in Admin Panel</a>
+            </div>
+            
+            <div style="margin-top: 25px; padding: 15px; background: #fef3c7; border-radius: 6px; border-left: 4px solid #f59e0b;">
+              <p style="margin: 0; color: #92400e; font-size: 14px;"><strong>Action Required:</strong> Please review and approve/reject this photo submission.</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const textContent = `New Photo Submission - BagPackStories\n\nA new photo has been submitted for review:\n\nTitle: ${photoData.photoTitle}\nDescription: ${photoData.photoDescription}\nPhotographer: ${photoData.photographerName} (${photoData.photographerEmail})\nLocation: ${photoData.photoLocation}\nCategory: ${photoData.photoCategory}\nTags: ${photoData.photoTags.join(', ')}\nSubmitted: ${photoData.submissionDate}\n\nPlease review this photo submission in the admin panel: ${photoData.adminDashboardUrl}`;
+
+      const emailData = {
+        sender: {
+          email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+          name: process.env.FROM_NAME || 'BagPackStories'
+        },
+        to: [{ email: adminEmail, name: 'Admin' }],
+        subject: `New Photo Submission: ${photoData.photoTitle} - BagPackStories`,
+        htmlContent,
+        textContent
+      };
+
+      const success = await this.sendEmail(emailData);
+      
+      if (success) {
+        console.log('✅ [PHOTO SUBMISSION] Photo submission notification sent successfully to admin');
+      } else {
+        console.error('❌ [PHOTO SUBMISSION] Failed to send photo submission notification to admin');
+      }
+      
+      return success;
+    } catch (error) {
+      console.error('❌ [PHOTO SUBMISSION] Error sending photo submission notification:', error);
+      return false;
+    }
+  }
+
+  // Photo approval notification to photographer
+  async sendPhotoApprovalNotification(photoData: {
+    photoTitle: string;
+    photoDescription: string;
+    photographerName: string;
+    photographerEmail: string;
+    photoLocation: string;
+    photoCategory: string;
+    approvalDate: string;
+    isFeatured: boolean;
+    photoUrl: string;
+    galleryUrl: string;
+    submitPhotoUrl: string;
+    photoThumbnailUrl: string;
+  }): Promise<boolean> {
+    try {
+      console.log('📧 [PHOTO APPROVAL] Sending photo approval notification to photographer...');
+
+      const featuredText = photoData.isFeatured 
+        ? '<p style="margin: 5px 0; color: #065f46;"><strong>Featured:</strong> ⭐ This photo has been featured!</p>'
+        : '';
+
+      const htmlContent = `
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8fafc;">
+          <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h1 style="margin: 0; font-size: 28px; font-weight: bold;">🎉 Photo Approved!</h1>
+            <p style="margin: 10px 0 0; font-size: 16px; opacity: 0.9;">Your photo has been published to our gallery</p>
+          </div>
+          
+          <div style="background: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <div style="text-align: center; margin-bottom: 25px;">
+              <p style="color: #4a5568; font-size: 18px; margin: 0;">Congratulations ${photoData.photographerName}!</p>
+            </div>
+            
+            <div style="margin-bottom: 25px; text-align: center;">
+              <img src="${photoData.photoThumbnailUrl}" alt="${photoData.photoTitle}" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <h2 style="color: #2d3748; margin: 0 0 10px; font-size: 22px; text-align: center;">${photoData.photoTitle}</h2>
+              <p style="color: #4a5568; line-height: 1.6; margin: 0; text-align: center;">${photoData.photoDescription}</p>
+            </div>
+            
+            <div style="background: #ecfdf5; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #10b981;">
+              <h3 style="color: #065f46; margin: 0 0 15px; font-size: 18px;">Photo Details</h3>
+              <p style="margin: 5px 0; color: #065f46;"><strong>Location:</strong> ${photoData.photoLocation}</p>
+              <p style="margin: 5px 0; color: #065f46;"><strong>Category:</strong> ${photoData.photoCategory}</p>
+              <p style="margin: 5px 0; color: #065f46;"><strong>Approved:</strong> ${photoData.approvalDate}</p>
+              ${featuredText}
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${photoData.photoUrl}" style="background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; margin-right: 10px;">View Your Photo</a>
+              <a href="${photoData.galleryUrl}" style="background: #6b7280; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Browse Gallery</a>
+            </div>
+            
+            <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 25px 0;">
+              <h4 style="color: #1e40af; margin: 0 0 10px; font-size: 16px;">Share Your Success!</h4>
+              <p style="color: #1e40af; margin: 0; font-size: 14px;">Your photo is now live in our gallery! Feel free to share it with your friends and fellow travel enthusiasts. Thank you for contributing to the BagPackStories community!</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 25px;">
+              <p style="color: #6b7280; font-size: 14px; margin: 0;">Have more amazing photos? <a href="${photoData.submitPhotoUrl}" style="color: #3b82f6;">Submit another photo</a></p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const featuredTextPlain = photoData.isFeatured ? 'Featured: ⭐ This photo has been featured!\n' : '';
+
+      const textContent = `Great news! Your photo has been approved - BagPackStories\n\nCongratulations ${photoData.photographerName}!\n\nYour photo "${photoData.photoTitle}" has been approved and published to our gallery.\n\nPhoto Details:\nLocation: ${photoData.photoLocation}\nCategory: ${photoData.photoCategory}\nApproved: ${photoData.approvalDate}\n${featuredTextPlain}\nView your photo: ${photoData.photoUrl}\nBrowse gallery: ${photoData.galleryUrl}\n\nThank you for contributing to the BagPackStories community! Have more amazing photos? Submit another: ${photoData.submitPhotoUrl}`;
+
+      const emailData = {
+        sender: {
+          email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+          name: process.env.FROM_NAME || 'BagPackStories'
+        },
+        to: [{ email: photoData.photographerEmail, name: photoData.photographerName }],
+        subject: `Great news! Your photo "${photoData.photoTitle}" has been approved - BagPackStories`,
+        htmlContent,
+        textContent
+      };
+
+      const success = await this.sendEmail(emailData);
+      
+      if (success) {
+        console.log('✅ [PHOTO APPROVAL] Photo approval notification sent successfully to photographer');
+      } else {
+        console.error('❌ [PHOTO APPROVAL] Failed to send photo approval notification to photographer');
+      }
+      
+      return success;
+    } catch (error) {
+      console.error('❌ [PHOTO APPROVAL] Error sending photo approval notification:', error);
+      return false;
+    }
+  }
 }
 
 export const emailService = new EmailService();

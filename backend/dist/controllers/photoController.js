@@ -7,6 +7,7 @@ exports.deletePhoto = exports.moderatePhoto = exports.getPendingPhotos = exports
 const Photo_1 = __importDefault(require("../models/Photo"));
 const handleAsync_1 = require("../utils/handleAsync");
 const drive_1 = require("../config/drive");
+const emailService_1 = require("../services/emailService");
 const multer_1 = __importDefault(require("multer"));
 const sharp_1 = __importDefault(require("sharp"));
 // Helper function to process tags string
@@ -161,6 +162,33 @@ exports.submitPhoto = (0, handleAsync_1.handleAsync)(async (req, res) => {
             camera: typeof camera === 'string' ? JSON.parse(camera) : camera,
             status: 'pending'
         });
+        // Send email notification to admin
+        try {
+            const photoLocationString = parsedLocation.city && parsedLocation.country
+                ? `${parsedLocation.city}, ${parsedLocation.country}`
+                : parsedLocation.country || 'Unknown';
+            await emailService_1.emailService.sendPhotoSubmissionNotificationToAdmin({
+                photoTitle: title,
+                photoDescription: description,
+                photographerName: parsedPhotographer.name,
+                photographerEmail: parsedPhotographer.email,
+                photoLocation: photoLocationString,
+                photoCategory: category,
+                photoTags: Array.isArray(tags) ? tags : processTagsString(tags),
+                photoThumbnailUrl: thumbnailUrl,
+                submissionDate: new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                adminDashboardUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/admin/photos`
+            });
+            console.log('📧 Photo submission notification sent to admin successfully');
+        }
+        catch (emailError) {
+            console.error('❌ Failed to send photo submission notification to admin:', emailError);
+            // Don't fail the entire request if email fails
+        }
         res.status(201).json({
             success: true,
             message: 'Photo submitted successfully and is pending review',
@@ -403,6 +431,37 @@ exports.moderatePhoto = (0, handleAsync_1.handleAsync)(async (req, res) => {
             success: false,
             error: 'Photo not found'
         });
+    }
+    // Send email notification to photographer if photo is approved
+    if (normalizedStatus === 'approved') {
+        try {
+            const photoLocationString = photo.location.city && photo.location.country
+                ? `${photo.location.city}, ${photo.location.country}`
+                : photo.location.country || 'Unknown';
+            await emailService_1.emailService.sendPhotoApprovalNotification({
+                photographerName: photo.photographer.name,
+                photographerEmail: photo.photographer.email,
+                photoTitle: photo.title,
+                photoDescription: photo.description || '',
+                photoLocation: photoLocationString,
+                photoCategory: photo.category,
+                photoThumbnailUrl: photo.thumbnailUrl || photo.imageUrl,
+                approvalDate: new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                isFeatured: photo.isFeatured || false,
+                galleryUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/gallery`,
+                photoUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/gallery/${photo._id}`,
+                submitPhotoUrl: `${process.env.FRONTEND_URL || 'http://localhost:3001'}/submit-photo`
+            });
+            console.log('📧 Photo approval notification sent to photographer successfully');
+        }
+        catch (emailError) {
+            console.error('❌ Failed to send photo approval notification to photographer:', emailError);
+            // Don't fail the entire request if email fails
+        }
     }
     res.status(200).json({
         success: true,
