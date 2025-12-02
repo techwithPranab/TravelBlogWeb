@@ -37,7 +37,16 @@ exports.getAllResources = (0, handleAsync_1.handleAsync)(async (req, res) => {
             total,
             pages: Math.ceil(total / Number(limit))
         },
-        data: resources
+        data: {
+            resources,
+            pagination: {
+                page: Number(page),
+                limit: Number(limit),
+                total,
+                pages: Math.ceil(total / Number(limit))
+            },
+            count: resources.length
+        }
     });
 });
 // @desc    Get featured resources

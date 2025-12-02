@@ -3,9 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCommentStats = exports.deleteComment = exports.getFlaggedComments = exports.moderateComment = exports.flagComment = exports.editComment = exports.dislikeComment = exports.likeComment = exports.getComment = exports.submitComment = exports.getComments = exports.validateComment = void 0;
+exports.getCommentStats = exports.getAllCommentsAdmin = exports.deleteComment = exports.getFlaggedComments = exports.moderateComment = exports.flagComment = exports.editComment = exports.dislikeComment = exports.likeComment = exports.getComment = exports.submitComment = exports.getComments = exports.validateComment = void 0;
 const Comment_1 = __importDefault(require("../models/Comment"));
 const express_validator_1 = require("express-validator");
+const profanityFilter_1 = require("../utils/profanityFilter");
 // Validation rules for comment submission
 exports.validateComment = [
     (0, express_validator_1.body)('resourceType').isIn(['blog', 'destination', 'guide', 'photo']).withMessage('Invalid resource type'),
@@ -90,6 +91,13 @@ const submitComment = async (req, res) => {
             });
         }
         const { resourceType, resourceId, author, content, parentId, attachments = [] } = req.body;
+        // Check for inappropriate content
+        if ((0, profanityFilter_1.containsProfanity)(content)) {
+            return res.status(400).json({
+                success: false,
+                error: (0, profanityFilter_1.getProfanityError)()
+            });
+        }
         // Validate parent comment if provided
         if (parentId) {
             const parentComment = await Comment_1.default.findById(parentId);
@@ -106,15 +114,23 @@ const submitComment = async (req, res) => {
                 });
             }
         }
+        // Use authenticated user info if available, otherwise use provided author info
+        const authenticatedUser = req.user;
+        const commentAuthor = authenticatedUser ? {
+            name: authenticatedUser.name,
+            email: authenticatedUser.email,
+            avatar: authenticatedUser.avatar || '/images/default-avatar.jpg',
+            website: authenticatedUser.website || author.website
+        } : {
+            name: author.name.trim(),
+            email: author.email.toLowerCase().trim(),
+            avatar: author.avatar || '/images/default-avatar.jpg',
+            website: author.website
+        };
         const comment = new Comment_1.default({
             resourceType,
             resourceId,
-            author: {
-                name: author.name.trim(),
-                email: author.email.toLowerCase().trim(),
-                avatar: author.avatar,
-                website: author.website
-            },
+            author: commentAuthor,
             content: content.trim(),
             parentId,
             attachments,
@@ -449,6 +465,92 @@ const deleteComment = async (req, res) => {
     }
 };
 exports.deleteComment = deleteComment;
+// Get all comments for admin (admin only)
+const getAllCommentsAdmin = async (req, res) => {
+    try {
+        console.log('🔍 getAllCommentsAdmin called with query:', req.query);
+        // Check total comments in database first
+        const totalCommentsInDB = await Comment_1.default.countDocuments();
+        console.log('📊 Total comments in database:', totalCommentsInDB);
+        const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc', status, resourceType, searchTerm } = req.query;
+        const options = {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            sortBy: sortBy,
+            sortOrder: sortOrder
+        };
+        // Build filter object
+        const filter = {};
+        if (status && status !== 'all') {
+            filter.status = status;
+        }
+        if (resourceType && resourceType !== 'all') {
+            filter.resourceType = resourceType;
+        }
+        if (searchTerm) {
+            filter.$or = [
+                { content: { $regex: searchTerm, $options: 'i' } },
+                { 'author.name': { $regex: searchTerm, $options: 'i' } },
+                { 'author.email': { $regex: searchTerm, $options: 'i' } }
+            ];
+        }
+        console.log('📊 Filter object:', filter);
+        console.log('⚙️ Options:', options);
+        // Get comments with pagination
+        const comments = await Comment_1.default.find(filter)
+            .sort({ [options.sortBy]: options.sortOrder === 'desc' ? -1 : 1 })
+            .limit(options.limit)
+            .skip((options.page - 1) * options.limit)
+            .populate('resourceId', 'title slug')
+            .lean();
+        // Get total count
+        const totalComments = await Comment_1.default.countDocuments(filter);
+        console.log('📝 Total comments found:', totalComments);
+        console.log('💬 Comments data:', comments.length, 'comments retrieved');
+        // Get stats
+        const stats = await Comment_1.default.aggregate([
+            {
+                $group: {
+                    _id: '$status',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+        console.log('📈 Stats data:', stats);
+        const statusStats = {
+            approved: 0,
+            pending: 0,
+            rejected: 0,
+            flagged: 0
+        };
+        stats.forEach(stat => {
+            if (stat._id && statusStats.hasOwnProperty(stat._id)) {
+                statusStats[stat._id] = stat.count;
+            }
+        });
+        res.json({
+            success: true,
+            data: {
+                comments,
+                pagination: {
+                    page: options.page,
+                    limit: options.limit,
+                    total: totalComments,
+                    pages: Math.ceil(totalComments / options.limit)
+                },
+                stats: statusStats
+            }
+        });
+    }
+    catch (error) {
+        console.error('Error fetching all comments for admin:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch comments'
+        });
+    }
+};
+exports.getAllCommentsAdmin = getAllCommentsAdmin;
 // Get comment statistics for a resource
 const getCommentStats = async (req, res) => {
     try {

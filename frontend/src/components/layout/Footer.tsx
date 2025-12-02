@@ -80,9 +80,9 @@ export function Footer() {
     <footer className="bg-gray-900 text-white">
       {/* Main Footer Content */}
       <div className="container-max section-padding">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-12">
           {/* Brand Section */}
-          <div>
+          <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
               <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
                 <MapPin className="w-6 h-6 text-white" />
@@ -94,32 +94,6 @@ export function Footer() {
               Discover amazing destinations, get practical travel tips, and find inspiration 
               for your next adventure. Join thousands of travelers exploring the world one story at a time.
             </p>
-
-            {/* Contact Info */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-primary-400" />
-                <span className="text-gray-300">
-                  {contactLoading ? 'Loading...' : (contactInfo?.email || 'hello@bagpackstories.in')}
-                </span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-primary-400" />
-                <span className="text-gray-300">
-                  {contactLoading ? 'Loading...' : (contactInfo?.phone || '+1 (555) 123-4567')}
-                </span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <MapPin className="w-5 h-5 text-primary-400" />
-                <span className="text-gray-300">
-                  {contactLoading ? 'Loading...' : (
-                    contactInfo?.address 
-                      ? `${contactInfo.address.city}, ${contactInfo.address.state}` 
-                      : 'San Francisco, CA'
-                  )}
-                </span>
-              </div>
-            </div>
 
             {/* Social Links */}
             <div className="flex space-x-4 mt-6">
@@ -139,7 +113,7 @@ export function Footer() {
           </div>
 
           {/* Links Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8">
             <div>
               <h3 className="font-semibold text-lg mb-4">Explore</h3>
               <ul className="space-y-3">
@@ -204,6 +178,24 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            <div className="min-w-0">
+              <h3 className="font-semibold text-lg mb-4">Contact</h3>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <Mail className="w-4 h-4 text-primary-400 flex-shrink-0" />
+                  <span className="text-gray-300 text-sm whitespace-nowrap">support@bagpackstories.in</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Phone className="w-4 h-4 text-primary-400 flex-shrink-0" />
+                  <span className="text-gray-300 text-sm whitespace-nowrap">+91 9836027578</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MapPin className="w-4 h-4 text-primary-400 flex-shrink-0" />
+                  <span className="text-gray-300 text-sm whitespace-nowrap">Barrackpore, West Bengal</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

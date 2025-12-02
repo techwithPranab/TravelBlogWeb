@@ -151,7 +151,10 @@ export default function BlogDetailsPage() {
         likes: post.likeCount || 0,
         isLiked: false, // This would need authentication to determine
         isBookmarked: false, // This would need authentication to determine
-        destination: post.destination
+        destination: post.destination && post.destination.country ? {
+          country: post.destination.country,
+          city: post.destination.city
+        } : undefined
       }
 
       return {

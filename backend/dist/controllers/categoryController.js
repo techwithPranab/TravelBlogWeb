@@ -10,11 +10,53 @@ const handleAsync_1 = require("../utils/handleAsync");
 // @route   GET /api/categories
 // @access  Public
 exports.getAllCategories = (0, handleAsync_1.handleAsync)(async (req, res) => {
-    const categories = await Category_1.default.find({ isActive: true }).sort({ name: 1 });
+    // Get categories with dynamic post counts
+    const categoriesWithPostCount = await Category_1.default.aggregate([
+        {
+            $match: { isActive: true }
+        },
+        {
+            $lookup: {
+                from: 'posts',
+                let: { categoryId: '$_id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $in: ['$$categoryId', '$categories'] },
+                                    { $eq: ['$status', 'published'] }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        $count: 'postCount'
+                    }
+                ],
+                as: 'postCountResult'
+            }
+        },
+        {
+            $addFields: {
+                postCount: {
+                    $ifNull: [{ $arrayElemAt: ['$postCountResult.postCount', 0] }, 0]
+                }
+            }
+        },
+        {
+            $project: {
+                postCountResult: 0
+            }
+        },
+        {
+            $sort: { name: 1 }
+        }
+    ]);
     res.status(200).json({
         success: true,
-        count: categories.length,
-        data: categories
+        count: categoriesWithPostCount.length,
+        data: categoriesWithPostCount
     });
 });
 // @desc    Get single category by slug

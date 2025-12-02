@@ -9,19 +9,22 @@ const Post_1 = __importDefault(require("../models/Post"));
 const Destination_1 = __importDefault(require("../models/Destination"));
 const Guide_1 = __importDefault(require("../models/Guide"));
 const Newsletter_1 = __importDefault(require("../models/Newsletter"));
+const Comment_1 = __importDefault(require("../models/Comment"));
 const SiteSettings_1 = __importDefault(require("../models/SiteSettings"));
 const EmailTemplate_1 = __importDefault(require("../models/EmailTemplate"));
 const emailService_1 = require("../services/emailService");
 // Admin Dashboard Stats
 const getDashboardStats = async (req, res) => {
     try {
-        const [totalUsers, totalPosts, totalDestinations, totalGuides, totalSubscribers, pendingPosts, recentUsers, recentPosts] = await Promise.all([
+        const [totalUsers, totalPosts, totalDestinations, totalGuides, totalSubscribers, pendingPosts, totalComments, pendingComments, recentUsers, recentPosts] = await Promise.all([
             User_1.default.countDocuments(),
             Post_1.default.countDocuments(),
             Destination_1.default.countDocuments(),
             Guide_1.default.countDocuments(),
             Newsletter_1.default.countDocuments(),
             Post_1.default.countDocuments({ status: 'draft' }),
+            Comment_1.default.countDocuments(),
+            Comment_1.default.countDocuments({ status: 'pending' }),
             User_1.default.find().sort({ createdAt: -1 }).limit(5).select('name email role createdAt'),
             Post_1.default.find().sort({ createdAt: -1 }).limit(5).populate('author', 'name').select('title author status createdAt')
         ]);
@@ -34,7 +37,9 @@ const getDashboardStats = async (req, res) => {
                     totalDestinations,
                     totalGuides,
                     totalSubscribers,
-                    pendingPosts
+                    pendingPosts,
+                    totalComments,
+                    pendingComments
                 },
                 recentActivity: {
                     recentUsers,

@@ -5,20 +5,13 @@ import Link from 'next/link'
 import { 
   Search, 
   HelpCircle, 
-  MessageCircle, 
   Mail, 
   Phone, 
-  Clock,
   ChevronDown,
   ChevronRight,
   Book,
-  Users,
-  Settings,
   MapPin,
-  CreditCard,
-  Shield,
-  Globe,
-  Headphones
+  Globe
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -45,103 +38,87 @@ export default function HelpCenterPage() {
 
   const categories: HelpCategory[] = [
     {
-      id: 'getting-started',
-      name: 'Getting Started',
+      id: 'blog',
+      name: 'Blog',
       icon: <Book className="w-6 h-6" />,
-      description: 'Learn the basics of using our platform',
-      articleCount: 12,
-      href: '/help/getting-started'
-    },
-    {
-      id: 'account',
-      name: 'Account & Profile',
-      icon: <Users className="w-6 h-6" />,
-      description: 'Manage your account settings and profile',
+      description: 'Learn how to read, comment, and interact with our travel blog posts',
       articleCount: 8,
-      href: '/help/account'
-    },
-    {
-      id: 'bookings',
-      name: 'Bookings & Payments',
-      icon: <CreditCard className="w-6 h-6" />,
-      description: 'Information about bookings and payment processing',
-      articleCount: 15,
-      href: '/help/bookings'
+      href: '/help/blog'
     },
     {
       id: 'destinations',
-      name: 'Destinations & Guides',
+      name: 'Destinations',
       icon: <MapPin className="w-6 h-6" />,
-      description: 'Find information about destinations and travel guides',
+      description: 'Find information about destinations and location details',
       articleCount: 25,
       href: '/help/destinations'
     },
     {
-      id: 'safety',
-      name: 'Safety & Security',
-      icon: <Shield className="w-6 h-6" />,
-      description: 'Travel safety tips and security information',
-      articleCount: 10,
-      href: '/help/safety'
+      id: 'gallery',
+      name: 'Photo Gallery',
+      icon: <Globe className="w-6 h-6" />,
+      description: 'Browse and explore our travel photography gallery',
+      articleCount: 12,
+      href: '/help/gallery'
     },
     {
-      id: 'technical',
-      name: 'Technical Support',
-      icon: <Settings className="w-6 h-6" />,
-      description: 'Technical issues and troubleshooting',
-      articleCount: 7,
-      href: '/help/technical'
+      id: 'guides',
+      name: 'Travel Guides',
+      icon: <Book className="w-6 h-6" />,
+      description: 'Access comprehensive travel guides and itineraries',
+      articleCount: 18,
+      href: '/help/guides'
     }
   ]
 
   const faqs: FAQ[] = [
     {
       id: '1',
-      question: 'How do I create an account?',
-      answer: 'To create an account, click the "Sign Up" button in the top right corner of any page. Fill in your details including name, email, and password. You\'ll receive a confirmation email to verify your account.',
-      category: 'getting-started'
+      question: 'How do I comment on blog posts?',
+      answer: 'You can leave comments at the bottom of each blog post. Simply scroll down to the comments section, enter your name, email, and your comment, then click "Post Comment".',
+      category: 'blog'
     },
     {
       id: '2',
-      question: 'How can I reset my password?',
-      answer: 'On the login page, click "Forgot Password" and enter your email address. We\'ll send you a link to reset your password. Follow the instructions in the email to create a new password.',
-      category: 'account'
+      question: 'How often are new blog posts published?',
+      answer: 'We publish new travel stories and blog posts regularly. Subscribe to our newsletter to get notified whenever we publish new content.',
+      category: 'blog'
     },
     {
       id: '3',
       question: 'Are the travel guides free?',
-      answer: 'Most of our travel guides are completely free. Some premium guides with detailed itineraries and exclusive content may require a small fee, which is clearly marked.',
-      category: 'destinations'
+      answer: 'Yes, all our travel guides are completely free! We share authentic experiences and practical tips from real travels to help fellow travelers.',
+      category: 'guides'
     },
     {
       id: '4',
-      question: 'How do I book accommodation through your platform?',
-      answer: 'Currently, we provide information and recommendations for accommodations, but bookings are made through our partner sites. We\'ll redirect you to trusted booking platforms where you can complete your reservation.',
-      category: 'bookings'
+      question: 'How do I find information about a specific destination?',
+      answer: 'You can browse destinations by using the search function or visiting our destinations page. Each destination includes detailed information, photos, and travel tips.',
+      category: 'destinations'
     },
     {
       id: '5',
-      question: 'Is it safe to travel to the destinations you recommend?',
-      answer: 'We regularly update our destination information with current safety conditions. Always check the latest travel advisories from your government and consider travel insurance for your trips.',
-      category: 'safety'
+      question: 'Can I download photos from the gallery?',
+      answer: 'Photos in our gallery are for viewing and inspiration purposes. If you\'d like to use any photos, please contact us directly for permission and high-resolution versions.',
+      category: 'gallery'
     },
     {
       id: '6',
-      question: 'Can I submit my own travel stories?',
-      answer: 'Yes! We welcome guest contributors. You can submit your travel stories through our contact form or by emailing us directly. Our editorial team will review and get back to you.',
-      category: 'getting-started'
+      question: 'How can I suggest a new destination or guide?',
+      answer: 'We love hearing from our community! You can suggest new destinations or request specific travel guides by contacting us through our contact form.',
+      category: 'destinations'
     },
     {
       id: '7',
-      question: 'Why isn\'t the website loading properly?',
-      answer: 'Try clearing your browser cache and cookies, or try using a different browser. If the problem persists, check your internet connection or contact our technical support team.',
-      category: 'technical'
+      question: 'Are the travel experiences authentic?',
+      answer: 'Absolutely! All our content is based on real travel experiences. We share genuine stories, both the good and challenging aspects of traveling.',
+      category: 'blog'
     },
     {
       id: '8',
-      question: 'How can I update my profile information?',
-      answer: 'Go to your account settings by clicking on your profile picture in the top right corner, then select "Profile Settings". You can update your personal information, preferences, and notification settings there.',
-      category: 'account'
+      question: 'How do I navigate the photo gallery?',
+      answer: 'Our photo gallery is organized by destinations and trips. You can browse by location or use the search feature to find specific places or experiences.',
+      category: 'gallery'
     }
   ]
 
@@ -206,24 +183,7 @@ export default function HelpCenterPage() {
             <p className="text-xl text-gray-600">Get immediate assistance</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-white rounded-lg p-6 shadow-lg text-center"
-            >
-              <MessageCircle className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Live Chat</h3>
-              <p className="text-gray-600 mb-4">
-                Chat with our support team in real-time for immediate assistance.
-              </p>
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                Start Chat
-              </button>
-            </motion.div>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -267,52 +227,7 @@ export default function HelpCenterPage() {
         </div>
       </section>
 
-      {/* Help Categories */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Browse by Category</h2>
-            <p className="text-xl text-gray-600">Find specific information about different topics</p>
-          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <Link 
-                  href={category.href}
-                  className="block bg-white border rounded-lg p-6 hover:shadow-lg transition-shadow group"
-                >
-                  <div className="flex items-center mb-4">
-                    <div className="text-blue-600 group-hover:text-blue-700 mr-3">
-                      {category.icon}
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600">
-                      {category.name}
-                    </h3>
-                  </div>
-                  <p className="text-gray-600 mb-3">{category.description}</p>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <span>{category.articleCount} articles</span>
-                    <ChevronRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* FAQ Section */}
       <section className="py-16 bg-gray-50">
@@ -395,54 +310,6 @@ export default function HelpCenterPage() {
               </div>
             )}
           </div>
-        </div>
-      </section>
-
-      {/* Contact Information */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white"
-          >
-            <Headphones className="w-16 h-16 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Still need help?</h2>
-            <p className="text-xl mb-8 text-blue-100">
-              Our support team is here to help you 24/7
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="text-center">
-                <Clock className="w-8 h-8 mx-auto mb-2" />
-                <h3 className="font-semibold mb-1">Response Time</h3>
-                <p className="text-blue-200">Usually within 2 hours</p>
-              </div>
-              
-              <div className="text-center">
-                <Globe className="w-8 h-8 mx-auto mb-2" />
-                <h3 className="font-semibold mb-1">Languages</h3>
-                <p className="text-blue-200">English, Spanish, French</p>
-              </div>
-              
-              <div className="text-center">
-                <Users className="w-8 h-8 mx-auto mb-2" />
-                <h3 className="font-semibold mb-1">Expert Team</h3>
-                <p className="text-blue-200">Travel specialists ready to help</p>
-              </div>
-            </div>
-            
-            <div className="mt-8">
-              <Link 
-                href="/contact"
-                className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-              >
-                Contact Support
-              </Link>
-            </div>
-          </motion.div>
         </div>
       </section>
     </div>

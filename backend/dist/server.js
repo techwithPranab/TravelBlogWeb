@@ -164,6 +164,48 @@ app.get('/api/public/stats', async (req, res) => {
         });
     }
 });
+// Public about page metrics endpoint
+app.get('/api/public/about-metrics', async (req, res) => {
+    try {
+        const Post = require('./models/Post').default;
+        const Destination = require('./models/Destination').default;
+        const Photo = require('./models/Photo').default;
+        const User = require('./models/User').default;
+        const [totalCountries, totalPhotos, totalMilesTraveled, totalTravelersInspired] = await Promise.all([
+            // Count distinct countries from published posts
+            Post.aggregate([
+                { $match: { status: 'published', 'destination.country': { $exists: true, $ne: null } } },
+                { $group: { _id: '$destination.country' } },
+                { $count: 'totalCountries' }
+            ]).then((result) => result[0]?.totalCountries || 0),
+            // Count total photos
+            Photo.countDocuments(),
+            // Sum all kmtravelled from published posts
+            Post.aggregate([
+                { $match: { status: 'published', kmtravelled: { $exists: true, $ne: null } } },
+                { $group: { _id: null, totalKm: { $sum: '$kmtravelled' } } }
+            ]).then((result) => result[0]?.totalKm || 0),
+            // Count newsletter subscribers as travelers inspired
+            require('./models/Newsletter').default.countDocuments()
+        ]);
+        res.json({
+            success: true,
+            data: {
+                countriesVisited: totalCountries,
+                photosTaken: totalPhotos,
+                kmTravelled: totalMilesTraveled,
+                travelersInspired: totalTravelersInspired
+            }
+        });
+    }
+    catch (error) {
+        console.error('About metrics error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch about page metrics'
+        });
+    }
+});
 // Public testimonials endpoint for home page
 app.get('/api/public/testimonials', async (req, res) => {
     try {

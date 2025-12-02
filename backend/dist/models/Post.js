@@ -216,6 +216,11 @@ const postSchema = new mongoose_1.Schema({
             }
         }
     },
+    kmtravelled: {
+        type: Number,
+        min: [0, 'Kilometers travelled cannot be negative'],
+        max: [999999, 'Kilometers travelled seems too high']
+    },
     // Approval workflow fields
     submittedAt: {
         type: Date

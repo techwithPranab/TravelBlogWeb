@@ -42,6 +42,7 @@ const getPosts = async (req, res) => {
         const skip = (page - 1) * limit;
         const posts = await Post_1.default.find(query)
             .populate('author', 'name avatar email')
+            .populate('categories', 'name slug')
             .sort(sort)
             .skip(skip)
             .limit(limit);
