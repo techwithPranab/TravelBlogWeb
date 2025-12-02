@@ -151,10 +151,10 @@ export default function NewsletterPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center mb-6">
               <Mail className="w-12 h-12 mr-3" />
-              <h1 className="text-4xl md:text-5xl font-bold">Travel Newsletter</h1>
+              <h1 className="text-2xl md:text-3xl font-bold">Travel Newsletter</h1>
             </div>
             
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
               Get the latest destination guides, travel tips, and exclusive deals delivered
               straight to your inbox. Join our community of travelers who never miss an adventure.
             </p>
@@ -181,7 +181,7 @@ export default function NewsletterPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Subscribe?</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Why Subscribe?</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Join our community of passionate travelers and get exclusive access to the best travel content.
             </p>
@@ -205,7 +205,7 @@ export default function NewsletterPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Choose Your Adventure</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Choose Your Adventure</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Select the newsletters that match your travel interests and schedule.
             </p>
@@ -248,7 +248,7 @@ export default function NewsletterPage() {
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <div className="text-center mb-8">
                 <Zap className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Start Your Journey</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Start Your Journey</h2>
                 <p className="text-gray-600">
                   Subscribe now and get a free travel planning checklist as a welcome gift!
                 </p>

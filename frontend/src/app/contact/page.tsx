@@ -90,10 +90,10 @@ export default function ContactPage() {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-2xl md:text-3xl font-bold mb-4">
             Get in Touch
           </h1>
-          <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
+          <p className="text-lg text-blue-100 max-w-3xl mx-auto">
             Have a question about our travel stories? Want to collaborate? We'd love to hear from you.
           </p>
         </div>
@@ -104,7 +104,7 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Send us a Message</h2>
 
             {submitStatus === 'success' && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
@@ -196,7 +196,7 @@ export default function ContactPage() {
           {/* Contact Information */}
           <div className="space-y-8">
             <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Contact Information</h2>
 
               <div className="space-y-4">
                 <div className="flex items-start space-x-4">
@@ -206,7 +206,7 @@ export default function ContactPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900">Email</h3>
+                    <h3 className="text-base font-medium text-gray-900">Email</h3>
                     <p className="text-gray-600">hello@bagpackstories.in</p>
                     <p className="text-gray-600">support@bagpackstories.in</p>
                   </div>
@@ -219,7 +219,7 @@ export default function ContactPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900">Phone</h3>
+                    <h3 className="text-base font-medium text-gray-900">Phone</h3>
                     <p className="text-gray-600">+1 (555) TRAVEL</p>
                     <p className="text-gray-600">Mon-Fri 9AM-6PM EST</p>
                   </div>
@@ -233,7 +233,7 @@ export default function ContactPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900">Address</h3>
+                    <h3 className="text-base font-medium text-gray-900">Address</h3>
                     <p className="text-gray-600">123 Travel Street<br />Adventure City, AC 12345</p>
                   </div>
                 </div>
@@ -242,21 +242,21 @@ export default function ContactPage() {
 
             {/* FAQ Section */}
             <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
 
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">How can I submit my travel photos?</h3>
+                  <h3 className="text-base font-medium text-gray-900 mb-2">How can I submit my travel photos?</h3>
                   <p className="text-gray-600">Visit our gallery page and use the photo submission form. We'll review your photos and feature the best ones on our site.</p>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Do you accept guest posts?</h3>
+                  <h3 className="text-base font-medium text-gray-900 mb-2">Do you accept guest posts?</h3>
                   <p className="text-gray-600">Yes! We love featuring travel stories from fellow adventurers. Send us your story idea and we'll get back to you.</p>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">How can I collaborate with BagPackStories?</h3>
+                  <h3 className="text-base font-medium text-gray-900 mb-2">How can I collaborate with BagPackStories?</h3>
                   <p className="text-gray-600">We're always looking for partnerships. Reach out with your collaboration idea and let's create something amazing together.</p>
                 </div>
               </div>

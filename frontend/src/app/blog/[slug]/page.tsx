@@ -490,11 +490,11 @@ export default function BlogDetailsPage() {
             )}
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 leading-tight">
             {post?.title || ''}
           </h1>
           
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+          <p className="text-lg text-gray-600 mb-8 leading-relaxed">
             {post?.excerpt || ''}
           </p>
           
@@ -594,7 +594,7 @@ export default function BlogDetailsPage() {
   {post?.images && post.images.length > 0 && (
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Gallery</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Gallery</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {post.images.map((imageUrl, index) => (
                 <button
@@ -646,7 +646,7 @@ export default function BlogDetailsPage() {
             </div>
           ) : (
             /* Fallback to traditional content */
-            <div className="prose prose-lg max-w-none mb-12">
+            <div className="prose prose-base max-w-none mb-12">
               <div dangerouslySetInnerHTML={{ __html: post?.content || '' }} />
             </div>
           )}
@@ -656,7 +656,7 @@ export default function BlogDetailsPage() {
             <div className="mb-12">
               <div className="flex items-center gap-2 mb-6">
                 <Youtube className="w-6 h-6 text-red-600" />
-                <h2 className="text-2xl font-bold text-gray-900">Related Videos</h2>
+                <h2 className="text-xl font-bold text-gray-900">Related Videos</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {post.youtubeVideos
@@ -690,8 +690,8 @@ export default function BlogDetailsPage() {
                 className="w-16 h-16 rounded-full"
               />
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">About {post?.author?.name || 'Unknown Author'}</h3>
-                <p className="text-gray-600">{post?.author?.bio || 'Travel enthusiast and writer'}</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">About {post?.author?.name || 'Unknown Author'}</h3>
+                <p className="text-base text-gray-600">{post?.author?.bio || 'Travel enthusiast and writer'}</p>
               </div>
             </div>
           </div>

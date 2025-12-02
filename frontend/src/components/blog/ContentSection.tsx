@@ -19,9 +19,9 @@ interface ContentSectionProps {
 
 export default function ContentSection({ section, onImageClick }: ContentSectionProps) {
   const renderTextOnlySection = () => (
-    <div className="prose prose-xl max-w-none mb-12">
+    <div className="prose prose-base max-w-none mb-12">
       {section.title && (
-        <h2 className="text-3xl font-bold text-gray-900 mb-6">{section.title}</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-6">{section.title}</h2>
       )}
       <div dangerouslySetInnerHTML={{ __html: section.content }} />
     </div>
@@ -30,7 +30,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
   const renderImageOnlySection = () => (
     <div className="mb-12">
       {section.title && (
-        <h2 className="text-3xl font-bold text-gray-900 mb-6">{section.title}</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-6">{section.title}</h2>
       )}
       {section.image && (
         <div className={`relative ${
@@ -108,9 +108,9 @@ export default function ContentSection({ section, onImageClick }: ContentSection
     )
 
     const textElement = (
-      <div className="prose prose-xl max-w-none">
+      <div className="prose prose-base max-w-none">
         {section.title && (
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">{section.title}</h2>
         )}
         <div dangerouslySetInnerHTML={{ __html: section.content }} />
       </div>
@@ -120,12 +120,12 @@ export default function ContentSection({ section, onImageClick }: ContentSection
       return (
         <div className="mb-12">
           {section.title && (
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">{section.title}</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-8 text-center">{section.title}</h2>
           )}
           <div className="mb-8">
             {imageElement}
           </div>
-          <div className="prose prose-xl max-w-none">
+          <div className="prose prose-base max-w-none">
             <div dangerouslySetInnerHTML={{ __html: section.content }} />
           </div>
         </div>
@@ -136,7 +136,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
       return (
         <div className="mb-12">
           {section.title && (
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">{section.title}</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-8">{section.title}</h2>
           )}
           <div className="mb-8">
             <div className="relative w-full h-[500px] md:h-[600px] rounded-lg overflow-hidden group cursor-pointer">
@@ -166,7 +166,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
               </button>
             </div>
           </div>
-          <div className="prose prose-xl max-w-none">
+          <div className="prose prose-base max-w-none">
             <div dangerouslySetInnerHTML={{ __html: section.content }} />
           </div>
         </div>
@@ -177,7 +177,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
     return (
       <div className="mb-12">
         {section.title && (
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">{section.title}</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-8">{section.title}</h2>
         )}
         <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${
           section.imagePosition === 'right' ? 'lg:grid-flow-col-dense' : ''
@@ -186,7 +186,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
             {imageElement}
           </div>
           <div className={section.imagePosition === 'right' ? 'lg:col-start-1' : ''}>
-            <div className="prose prose-xl max-w-none">
+            <div className="prose prose-base max-w-none">
               <div dangerouslySetInnerHTML={{ __html: section.content }} />
             </div>
           </div>

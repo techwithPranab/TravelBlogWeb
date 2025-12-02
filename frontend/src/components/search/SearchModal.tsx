@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Search, X, Filter, MapPin, Calendar, Tag } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
@@ -10,6 +11,7 @@ interface SearchModalProps {
 }
 
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  const router = useRouter()
   const [query, setQuery] = useState('')
   const [filters, setFilters] = useState({
     category: '',
@@ -23,8 +25,19 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Implement search logic
-    console.log('Searching for:', query, filters)
+    
+    if (!query.trim()) return
+    
+    // Build search URL with query parameters
+    const searchParams = new URLSearchParams()
+    searchParams.set('q', query.trim())
+    
+    if (filters.category) searchParams.set('category', filters.category)
+    if (filters.country) searchParams.set('country', filters.country)
+    if (filters.dateRange) searchParams.set('date', filters.dateRange)
+    
+    // Navigate to search page
+    router.push(`/search?${searchParams.toString()}`)
     onClose()
   }
 
@@ -188,7 +201,14 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
               {popularSearches.map((search, index) => (
                 <button
                   key={index}
-                  onClick={() => setQuery(search)}
+                  onClick={() => {
+                    setQuery(search)
+                    // Auto-submit the search
+                    const searchParams = new URLSearchParams()
+                    searchParams.set('q', search)
+                    router.push(`/search?${searchParams.toString()}`)
+                    onClose()
+                  }}
                   className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                   {search}

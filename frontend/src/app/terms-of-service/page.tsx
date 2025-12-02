@@ -24,10 +24,10 @@ export default function TermsOfServicePage() {
           
           <div className="flex items-center mb-4">
             <Scale className="w-8 h-8 mr-3" />
-            <h1 className="text-4xl md:text-5xl font-bold">Terms of Service</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">Terms of Service</h1>
           </div>
           
-          <p className="text-xl text-green-100 max-w-2xl">
+          <p className="text-lg text-green-100 max-w-2xl">
             Please read these terms carefully before using our travel blog platform.
           </p>
           
@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
         <div className="max-w-4xl mx-auto">
           {/* Quick Summary */}
           <div className="bg-green-50 rounded-lg p-6 mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <CheckCircle className="w-6 h-6 mr-2 text-green-600" />
               Quick Summary
             </h2>
@@ -69,9 +69,9 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Detailed Terms */}
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-base max-w-none">
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <FileText className="w-7 h-7 mr-3 text-green-600" />
                 Acceptance of Terms
               </h2>
@@ -89,7 +89,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Use License</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Use License</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -111,7 +111,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">User Accounts</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">User Accounts</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -127,7 +127,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">User Content</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">User Content</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -150,7 +150,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <AlertTriangle className="w-7 h-7 mr-3 text-yellow-600" />
                 Prohibited Uses
               </h2>
@@ -172,7 +172,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Intellectual Property</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Intellectual Property</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -185,7 +185,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Privacy Policy</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Privacy Policy</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -202,7 +202,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Shield className="w-7 h-7 mr-3 text-green-600" />
                 Disclaimer
               </h2>
@@ -220,7 +220,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Limitation of Liability</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Limitation of Liability</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -233,7 +233,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Termination</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Termination</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -249,7 +249,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Gavel className="w-7 h-7 mr-3 text-green-600" />
                 Governing Law
               </h2>
@@ -264,7 +264,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Changes to Terms</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Changes to Terms</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -276,7 +276,7 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Contact Information</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Contact Information</h2>
               
               <div className="bg-gray-50 rounded-lg p-6">
                 <p className="text-gray-700 mb-4">

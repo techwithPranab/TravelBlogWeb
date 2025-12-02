@@ -169,11 +169,11 @@ export default function GuideDetailsPage() {
                 </Link>
               </div>
               
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 leading-tight">
                 {guide.title}
               </h1>
               
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                 {guide.description}
               </p>
               
@@ -274,7 +274,7 @@ export default function GuideDetailsPage() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="bg-gray-50 rounded-lg p-6 mb-8 sticky top-8">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Guide Details</h3>
+              <h3 className="text-base font-bold text-gray-900 mb-4">Guide Details</h3>
               <div className="space-y-4">
                 <div>
                   <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
@@ -337,12 +337,12 @@ export default function GuideDetailsPage() {
           <div className="lg:col-span-3">
             {/* Guide Sections */}
             <section id="sections" className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8">Guide Overview</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-8">Guide Overview</h2>
               <div className="space-y-8">
                 {(guide.sections || []).map((section, index) => (
                   <div key={section.title} className="bg-white border rounded-lg p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">{section.title}</h3>
-                    <p className="text-gray-700 mb-4 leading-relaxed">{section.content}</p>
+                    <h3 className="text-lg font-bold text-gray-900 mb-4">{section.title}</h3>
+                    <p className="text-base text-gray-700 mb-4 leading-relaxed">{section.content}</p>
                     
                     {section.tips && (
                       <div className="bg-blue-50 rounded-lg p-4 mb-4">
@@ -385,7 +385,7 @@ export default function GuideDetailsPage() {
             {/* Itinerary */}
             {guide.itinerary && (
               <section id="itinerary" className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Day-by-Day Itinerary</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-8">Day-by-Day Itinerary</h2>
                 <div className="space-y-6">
                   {(guide.itinerary || []).map((day) => (
                     <div key={day.day} className="bg-white border rounded-lg p-6">
@@ -393,7 +393,7 @@ export default function GuideDetailsPage() {
                         <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
                           {day.day}
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900">{day.title}</h3>
+                        <h3 className="text-lg font-bold text-gray-900">{day.title}</h3>
                         <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
                           Budget: {day.budget}
                         </span>
@@ -444,7 +444,7 @@ export default function GuideDetailsPage() {
             {/* Packing List */}
             {guide.packingList && (
               <section id="packing" className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Packing List</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-8">Packing List</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {(guide.packingList || []).map((category) => (
                     <div key={category.category} className="bg-gray-50 rounded-lg p-6">

@@ -167,10 +167,10 @@ export default function GalleryClient() {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-2xl md:text-3xl font-bold mb-4">
             Travel Photo Gallery
           </h1>
-          <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
+          <p className="text-lg text-blue-100 max-w-3xl mx-auto">
             Discover amazing travel moments captured by adventurers around the world
           </p>
           <div className="mt-8 text-blue-100">
@@ -183,10 +183,10 @@ export default function GalleryClient() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
               Share Your Travel Moments
             </h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto">
               Have an amazing travel photo? Share it with our community and inspire fellow travelers around the world.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -215,9 +215,9 @@ export default function GalleryClient() {
       {/* Filters Section */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
             {/* Search */}
-            <div className="flex-1 max-w-md">
+            <div className="w-full lg:flex-1 lg:max-w-md">
               <input
                 type="text"
                 placeholder="Search photos, locations, or tags..."
@@ -228,19 +228,21 @@ export default function GalleryClient() {
             </div>
 
             {/* Filters */}
-            <div className="flex gap-4 items-center">
+            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center w-full lg:w-auto">
               {/* Country Filter */}
-              <CountryFilter
-                selectedCountry={selectedCountry}
-                onCountryChange={setSelectedCountry}
-                countries={allCountries}
-                placeholder="All Countries"
-              />
+              <div className="w-full sm:w-auto">
+                <CountryFilter
+                  selectedCountry={selectedCountry}
+                  onCountryChange={setSelectedCountry}
+                  countries={allCountries}
+                  placeholder="All Countries"
+                />
+              </div>
 
               <select
                 value={selectedTag}
                 onChange={(e) => setSelectedTag(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">All Tags</option>
                 {allTags.map(tag => (
@@ -251,7 +253,7 @@ export default function GalleryClient() {
               <select
                 value={selectedLocation}
                 onChange={(e) => setSelectedLocation(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">All Locations</option>
                 {allLocations.map(location => (
@@ -262,7 +264,7 @@ export default function GalleryClient() {
               {(searchTerm || selectedTag || selectedLocation || selectedCountry !== 'all') && (
                 <button
                   onClick={clearFilters}
-                  className="px-4 py-2 text-blue-600 hover:text-blue-800 font-medium"
+                  className="w-full sm:w-auto px-4 py-2 text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap"
                 >
                   Clear Filters
                 </button>
@@ -311,7 +313,7 @@ export default function GalleryClient() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
               {currentPhotos.map((photo) => (
                 <button
                   key={photo._id}
@@ -319,30 +321,30 @@ export default function GalleryClient() {
                   onClick={() => handlePhotoClick(photo)}
                   aria-label={`View ${photo.title} photo`}
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-200">
+                  <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                     <Image
                       src={photo.thumbnailUrl || photo.imageUrl}
                       alt={photo.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-200"
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 16vw"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200" />
                   </div>
-                  <div className="mt-3">
-                    <h3 className="font-medium text-gray-900 truncate">{photo.title}</h3>
-                    <p className="text-sm text-gray-600 truncate">{photo.location.city}, {photo.location.country}</p>
-                    <div className="flex flex-wrap gap-1 mt-1">
+                  <div className="mt-3 px-1">
+                    <h3 className="font-medium text-gray-900 text-sm md:text-base line-clamp-2 leading-tight">{photo.title}</h3>
+                    <p className="text-xs md:text-sm text-gray-600 mt-1 truncate">{photo.location.city}, {photo.location.country}</p>
+                    <div className="flex flex-wrap gap-1 mt-2">
                       {photo.tags.slice(0, 2).map(tag => (
                         <span
                           key={tag}
-                          className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full"
+                          className="inline-block px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full"
                         >
                           {tag}
                         </span>
                       ))}
                       {photo.tags.length > 2 && (
-                        <span className="text-xs text-gray-500">+{photo.tags.length - 2} more</span>
+                        <span className="text-xs text-gray-500">+{photo.tags.length - 2}</span>
                       )}
                     </div>
                   </div>
@@ -352,16 +354,8 @@ export default function GalleryClient() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 mt-12">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Previous
-                </button>
-
-                <div className="flex gap-1">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-2 mt-8 md:mt-12">
+                <div className="flex gap-1 order-2 sm:order-1">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     const pageNumber = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
                     if (pageNumber > totalPages) return null;
@@ -370,7 +364,7 @@ export default function GalleryClient() {
                       <button
                         key={pageNumber}
                         onClick={() => setCurrentPage(pageNumber)}
-                        className={`px-3 py-2 text-sm font-medium rounded-md ${
+                        className={`px-2 py-2 md:px-3 md:py-2 text-sm font-medium rounded-md ${
                           currentPage === pageNumber
                             ? 'bg-blue-600 text-white'
                             : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
@@ -381,14 +375,22 @@ export default function GalleryClient() {
                     );
                   })}
                 </div>
-
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
+                <div className="flex gap-2 order-1 sm:order-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             )}
           </>
@@ -410,60 +412,60 @@ export default function GalleryClient() {
 
       {/* Photo Modal */}
       {selectedPhoto && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="relative max-w-5xl max-h-[90vh] bg-white rounded-lg overflow-hidden shadow-2xl">
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-2 md:p-4">
+          <div className="relative w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] bg-white rounded-lg overflow-hidden shadow-2xl">
             <button
               onClick={() => setSelectedPhoto(null)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-75 transition-colors"
+              className="absolute top-2 right-2 md:top-4 md:right-4 z-10 w-8 h-8 md:w-10 md:h-10 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-75 transition-colors"
               aria-label="Close modal"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
-            <div className="relative w-full h-[60vh] bg-gray-100">
+            <div className="relative w-full h-[50vh] md:h-[60vh] bg-gray-100">
               <Image
                 src={selectedPhoto.imageUrl}
                 alt={selectedPhoto.title}
                 fill
                 className="object-contain"
-                sizes="(max-width: 1024px) 100vw, 1024px"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1024px"
                 priority
               />
             </div>
 
-            <div className="p-6 bg-white">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">{selectedPhoto.title}</h3>
-              <p className="text-gray-600 mb-4 leading-relaxed">{selectedPhoto.description}</p>
+            <div className="p-4 md:p-6 bg-white">
+              <h3 className="text-lg md:text-2xl font-bold text-gray-900 mb-2">{selectedPhoto.title}</h3>
+              <p className="text-sm md:text-base text-gray-600 mb-4 leading-relaxed">{selectedPhoto.description}</p>
 
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 md:gap-4 text-xs md:text-sm text-gray-500 mb-4">
                 <span className="flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  {selectedPhoto.location.city}, {selectedPhoto.location.country}
+                  <span className="truncate">{selectedPhoto.location.city}, {selectedPhoto.location.country}</span>
                 </span>
                 <span className="flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   {selectedPhoto.photographer?.name || 'Anonymous'}
                 </span>
                 <span className="flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   {new Date(selectedPhoto.createdAt).toLocaleDateString()}
                 </span>
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1 md:gap-2">
                 {selectedPhoto.tags.map(tag => (
                   <span
                     key={tag}
-                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                    className="px-2 md:px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs md:text-sm font-medium"
                   >
                     #{tag}
                   </span>

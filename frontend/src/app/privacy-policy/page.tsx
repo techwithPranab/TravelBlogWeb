@@ -24,10 +24,10 @@ export default function PrivacyPolicyPage() {
           
           <div className="flex items-center mb-4">
             <Shield className="w-8 h-8 mr-3" />
-            <h1 className="text-4xl md:text-5xl font-bold">Privacy Policy</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">Privacy Policy</h1>
           </div>
           
-          <p className="text-xl text-blue-100 max-w-2xl">
+          <p className="text-lg text-blue-100 max-w-2xl">
             Your privacy matters to us. Learn how we collect, use, and protect your personal information.
           </p>
           
@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
         <div className="max-w-4xl mx-auto">
           {/* Quick Overview */}
           <div className="bg-blue-50 rounded-lg p-6 mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <Eye className="w-6 h-6 mr-2 text-blue-600" />
               Quick Overview
             </h2>
@@ -69,16 +69,16 @@ export default function PrivacyPolicyPage() {
           </div>
 
           {/* Detailed Sections */}
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-base max-w-none">
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <UserCheck className="w-7 h-7 mr-3 text-blue-600" />
                 Information We Collect
               </h2>
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Personal Information</h3>
+                  <h3 className="text-base font-semibold text-gray-900 mb-3">Personal Information</h3>
                   <p className="text-gray-700 mb-4">
                     When you create an account, subscribe to our newsletter, or interact with our platform, we may collect:
                   </p>
@@ -91,7 +91,7 @@ export default function PrivacyPolicyPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Usage Information</h3>
+                  <h3 className="text-base font-semibold text-gray-900 mb-3">Usage Information</h3>
                   <p className="text-gray-700 mb-4">
                     We automatically collect certain information when you use our website:
                   </p>
@@ -106,7 +106,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Globe className="w-7 h-7 mr-3 text-blue-600" />
                 How We Use Your Information
               </h2>
@@ -126,7 +126,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Lock className="w-7 h-7 mr-3 text-blue-600" />
                 Information Sharing
               </h2>
@@ -143,7 +143,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Data Security</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Data Security</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -160,7 +160,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Your Rights</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Your Rights</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>You have the right to:</p>
@@ -179,7 +179,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Cookies</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Cookies</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -197,7 +197,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Children's Privacy</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Children's Privacy</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -209,7 +209,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Changes to This Policy</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Changes to This Policy</h2>
               
               <div className="space-y-4 text-gray-700">
                 <p>
@@ -220,7 +220,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
                 <Mail className="w-7 h-7 mr-3 text-blue-600" />
                 Contact Us
               </h2>

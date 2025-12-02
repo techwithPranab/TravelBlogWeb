@@ -258,7 +258,7 @@ export default function DestinationDetailsPage() {
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-7xl font-bold mb-4"
+              className="text-2xl md:text-3xl font-bold mb-4"
             >
               {destination.name}
             </motion.h1>
@@ -267,7 +267,7 @@ export default function DestinationDetailsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="flex items-center justify-center space-x-2 text-xl mb-6"
+              className="flex items-center justify-center space-x-2 text-lg mb-6"
             >
               <MapPin className="w-6 h-6" />
               <span>{destination.country}, {destination.continent}</span>
@@ -323,13 +323,13 @@ export default function DestinationDetailsPage() {
           <div className="lg:col-span-2">
             {/* Description */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">About {destination.name}</h2>
-              <p className="text-lg text-gray-700 leading-relaxed">{destination.description}</p>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">About {destination.name}</h2>
+              <p className="text-base text-gray-700 leading-relaxed">{destination.description}</p>
             </section>
 
             {/* How to Reach */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">How to Reach {destination.name}</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">How to Reach {destination.name}</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* By Air */}
                 <div className="bg-blue-50 rounded-lg p-6">
@@ -502,7 +502,7 @@ export default function DestinationDetailsPage() {
 
             {/* Highlights */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Highlights</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Highlights</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {destination.highlights.map((highlight) => (
                   <div key={highlight} className="flex items-start space-x-3">
@@ -515,15 +515,15 @@ export default function DestinationDetailsPage() {
 
             {/* Activities */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Things to Do</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Things to Do</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {destination.activities.map((activity) => (
                   <div key={`activity-${activity.name}`} className="bg-gray-50 rounded-lg p-6">
                     <div className="flex items-center space-x-3 mb-3">
                       <span className="text-2xl">{activity.icon}</span>
-                      <h3 className="text-xl font-semibold text-gray-900">{activity.name}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">{activity.name}</h3>
                     </div>
-                    <p className="text-gray-700">{activity.description}</p>
+                    <p className="text-base text-gray-700">{activity.description}</p>
                   </div>
                 ))}
               </div>
@@ -531,7 +531,7 @@ export default function DestinationDetailsPage() {
 
             {/* Travel Tips */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Travel Tips</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Travel Tips</h2>
               <div className="bg-blue-50 rounded-lg p-6">
                 <ul className="space-y-3">
                   {destination.travelTips.map((tip) => (
@@ -546,13 +546,13 @@ export default function DestinationDetailsPage() {
 
             {/* Accommodation */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Where to Stay</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Where to Stay</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {destination.accommodation?.map((accommodation, index) => (
                   <div key={`accommodation-${accommodation.name}-${index}`} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-1">{accommodation.name}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">{accommodation.name}</h3>
                         <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
                           accommodation.type === 'budget' ? 'bg-green-100 text-green-800' :
                           accommodation.type === 'mid-range' ? 'bg-blue-100 text-blue-800' :

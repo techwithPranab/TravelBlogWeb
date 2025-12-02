@@ -214,10 +214,10 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-2xl md:text-3xl font-bold mb-6">
               About My Journey
             </h1>
-            <p className="text-xl mb-8 text-purple-100">
+            <p className="text-lg mb-8 text-purple-100">
               Hi, I'm Pranab Paul - an IT professional sharing authentic travel stories from work trips, family vacations, and solo adventures around the world.
             </p>
           </motion.div>
@@ -239,7 +239,7 @@ export default function AboutPage() {
               >
                 <div className="bg-white rounded-2xl p-6 shadow-lg">
                   <stat.icon className="h-8 w-8 text-purple-600 mx-auto mb-4" />
-                  <div className="text-3xl font-bold text-gray-900 mb-2">
+                  <div className="text-xl font-bold text-gray-900 mb-2">
                     {loading ? (
                       <div className="bg-gray-200 animate-pulse rounded h-8 w-16 mx-auto"></div>
                     ) : (
@@ -265,7 +265,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">My Story</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">My Story</h2>
             </motion.div>
 
             <motion.div
@@ -273,28 +273,28 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="prose prose-lg max-w-none text-gray-600"
+              className="prose prose-base max-w-none text-gray-600"
             >
-              <p className="text-xl leading-relaxed mb-6">
+              <p className="text-lg leading-relaxed mb-6">
                 My journey began in 2011 when I, Pranab Paul, an IT professional with a passion for exploration, started documenting 
                 my travels across different countries. What began as capturing memories from work trips and personal vacations 
                 has evolved into a comprehensive travel resource visited by thousands of travelers every month.
               </p>
               
-              <p className="text-lg leading-relaxed mb-6">
+              <p className="text-base leading-relaxed mb-6">
                 As an IT professional, I have had the unique opportunity to visit various countries for work assignments, 
                 while also exploring destinations through family vacations and solo adventures. This diverse travel experience 
                 provides authentic insights into both business and leisure travel, making my content relatable to different 
                 types of travelers.
               </p>
               
-              <p className="text-lg leading-relaxed mb-6">
+              <p className="text-base leading-relaxed mb-6">
                 I believe that travel is one of life's greatest teachers. Every destination has its own story, culture, and lessons 
                 to offer. Through my detailed guides, authentic stories, and practical tips, I aim to inspire and empower others 
                 to explore the world with confidence and respect for local communities, whether traveling for work, with family, or solo.
               </p>
               
-              <p className="text-lg leading-relaxed">
+              <p className="text-base leading-relaxed">
                 Whether you're planning your first international trip, a family vacation, or you're a seasoned globetrotter looking 
                 for new inspiration, I'm here to help you create unforgettable memories and meaningful connections around the world.
               </p>
