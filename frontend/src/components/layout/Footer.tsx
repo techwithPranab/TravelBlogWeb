@@ -47,12 +47,14 @@ export function Footer() {
       { name: 'Destinations', href: '/destinations' },
       { name: 'Travel Guides', href: '/guides' },
       { name: 'Blogs', href: '/blog' },
+      { name: 'Photo Gallery', href: '/gallery' },
     ],
     resources: [
-      { name: 'Travel Resources', href: '/resources' },
-      { name: 'Photo Gallery', href: '/gallery' },
+      // { name: 'Travel Resources', href: '/resources' },
+      // { name: 'Photo Gallery', href: '/gallery' },
       // { name: 'Trip Planning', href: '/planning' },
-    ],
+      { name: '', href: '' }, // Keep empty item to maintain array type
+    ].filter(item => item.name !== ''), // Filter out empty items
     company: [
       { name: 'About', href: '/about' },
       { name: 'Contact', href: '/contact' },
@@ -63,7 +65,7 @@ export function Footer() {
       { name: 'Help Center', href: '/help' },
       // { name: 'Community', href: '/communities' },
       { name: 'Newsletter', href: '/newsletter' },
-      { name: 'Partner with Us', href: '/partner-with-us' },
+      // { name: 'Partner with Us', href: '/partner-with-us' },
     ],
   }
 
@@ -154,21 +156,23 @@ export function Footer() {
               </ul>
             </div>
 
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Resources</h3>
-              <ul className="space-y-3">
-                {footerLinks.resources.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-gray-300 hover:text-primary-400 transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {footerLinks.resources.filter(item => item.name !== '').length > 0 && (
+              <div>
+                <h3 className="font-semibold text-lg mb-4">Resources</h3>
+                <ul className="space-y-3">
+                  {footerLinks.resources.filter(item => item.name !== '').map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        className="text-gray-300 hover:text-primary-400 transition-colors"
+                      >
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div>
               <h3 className="font-semibold text-lg mb-4">Company</h3>

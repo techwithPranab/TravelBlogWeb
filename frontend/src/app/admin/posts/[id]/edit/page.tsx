@@ -55,6 +55,7 @@ export default function EditPostPage() {
         lng: 0
       }
     },
+    kmtravelled: 0,
     status: 'draft',
     isFeatured: false,
     seoTitle: '',
@@ -140,6 +141,7 @@ export default function EditPostPage() {
             lng: 0
           }
         },
+        kmtravelled: post.kmtravelled || 0,
         status: post.status || 'draft',
         isFeatured: post.isFeatured || false,
         seoTitle: post.seo?.title || '',
@@ -799,6 +801,24 @@ export default function EditPostPage() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     />
                   </div>
+                </div>
+
+                {/* Kilometers Travelled */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Kilometers Travelled (optional)
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.kmtravelled || ''}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      kmtravelled: parseFloat(e.target.value) || 0
+                    }))}
+                    placeholder="e.g., 500"
+                    min="0"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                  />
                 </div>
               </div>
 

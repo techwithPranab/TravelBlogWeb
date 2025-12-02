@@ -191,18 +191,19 @@ export function Header() {
                   )}
                 </div>
               ) : (
-                <div className="hidden sm:flex items-center space-x-2">
-                  <Link href="/login">
-                    <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
-                      Login
-                    </Button>
-                  </Link>
-                  <Link href="/signup">
-                    <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
-                      Sign Up
-                    </Button>
-                  </Link>
-                </div>
+                // <div className="hidden sm:flex items-center space-x-2">
+                //   <Link href="/login">
+                //     <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
+                //       Login
+                //     </Button>
+                //   </Link>
+                //   <Link href="/signup">
+                //     <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
+                //       Sign Up
+                //     </Button>
+                //   </Link>
+                // </div>
+                <div></div>
               )}
 
               {/* Mobile menu button - Always visible on mobile */}
@@ -268,24 +269,25 @@ export function Header() {
                       <span>{user?.name}</span>
                     </div>
                   ) : (
-                    <div className="flex flex-col space-y-2">
-                      <Link href="/login" onClick={() => {
-                        console.log('Login link clicked')
-                        setIsMenuOpen(false)
-                      }}>
-                        <Button variant="primary" className="w-full">
-                          Login
-                        </Button>
-                      </Link>
-                      <Link href="/signup" onClick={() => {
-                        console.log('Signup link clicked')
-                        setIsMenuOpen(false)
-                      }}>
-                        <Button variant="primary" className="w-full">
-                          Sign Up
-                        </Button>
-                      </Link>
-                    </div>
+                    // <div className="flex flex-col space-y-2">
+                    //   <Link href="/login" onClick={() => {
+                    //     console.log('Login link clicked')
+                    //     setIsMenuOpen(false)
+                    //   }}>
+                    //     <Button variant="primary" className="w-full">
+                    //       Login
+                    //     </Button>
+                    //   </Link>
+                    //   <Link href="/signup" onClick={() => {
+                    //     console.log('Signup link clicked')
+                    //     setIsMenuOpen(false)
+                    //   }}>
+                    //     <Button variant="primary" className="w-full">
+                    //       Sign Up
+                    //     </Button>
+                    //   </Link>
+                    // </div>
+                    <div></div>
                   )}
                 </div>
               </div>

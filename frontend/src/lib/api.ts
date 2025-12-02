@@ -38,6 +38,7 @@ export interface Post {
       lng: number
     }
   }
+  kmtravelled?: number
   featuredImage?: {
     url: string
     alt: string
@@ -857,6 +858,20 @@ export const publicApi = {
       text: string
       featured?: boolean
     }>>('/public/testimonials')
+  },
+
+  getAboutMetrics: async (): Promise<ApiResponse<{
+    countriesVisited: number
+    photosTaken: number
+    kmTravelled: number
+    travelersInspired: number
+  }>> => {
+    return apiRequest<{
+      countriesVisited: number
+      photosTaken: number
+      kmTravelled: number
+      travelersInspired: number
+    }>('/public/about-metrics')
   },
 
   getContact: async (): Promise<ApiResponse<{

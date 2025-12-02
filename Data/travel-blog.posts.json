@@ -1,12 +1,11 @@
-[
-{
+[{
   "_id": {
     "$oid": "68fdbb12dd08ede9e662a1c1"
   },
   "title": "Varanasi: The Eternal City of Light - A Spiritual Journey",
   "slug": "varanasi-eternal-city-of-light-spiritual-journey",
   "excerpt": "Discover the spiritual heart of India in Varanasi, where ancient traditions, sacred ghats, and divine ceremonies create an unforgettable pilgrimage experience along the holy Ganges.",
-  "content": "\n        <p>Varanasi, also known as Kashi and Banaras, is India's oldest continuously inhabited city and one of the world's most sacred pilgrimage sites. This ancient city on the western bank of the Ganges River is believed to be the abode of Lord Shiva and represents the spiritual heart of Hinduism.</p>\n        \n        <h2>The Sacred Ghats</h2>\n        <p>The city's 84 ghats create a living tapestry of spiritual activities, from dawn aarti ceremonies to evening Ganga Aarti that illuminate the night sky with thousands of oil lamps.</p>\n        ",
+  "content": "<p>Varanasi, also known as Kashi and Banaras, is India's oldest continuously inhabited city and one of the world's most sacred pilgrimage sites. This ancient city on the western bank of the Ganges River is believed to be the abode of Lord Shiva and represents the spiritual heart of Hinduism.</p><h2>The Sacred Ghats</h2><p>The city's 84 ghats create a living tapestry of spiritual activities, from dawn aarti ceremonies to evening Ganga Aarti that illuminate the night sky with thousands of oil lamps.</p>",
   "contentSections": [
     {
       "id": "section-1",
@@ -19,7 +18,10 @@
         "caption": "The mesmerizing Ganga Aarti ceremony at Dashashwamedh Ghat"
       },
       "imagePosition": "left",
-      "order": 1
+      "order": 1,
+      "_id": {
+        "$oid": "6926777900a777738d2f65a3"
+      }
     },
     {
       "id": "section-2",
@@ -32,14 +34,21 @@
         "caption": "The golden dome of Kashi Vishwanath Temple shines against the evening sky"
       },
       "imagePosition": "right",
-      "order": 2
+      "order": 2,
+      "_id": {
+        "$oid": "6926777900a777738d2f65a4"
+      }
     },
     {
       "id": "section-3",
       "type": "text",
       "title": "Dawn to Dusk: Varanasi's Spiritual Rhythms",
       "content": "<h3>Dawn Aarti Ceremony</h3><p>Wake before sunrise to witness the sacred dawn rituals. Priests perform ancient ceremonies with bells, conch shells, and incense, welcoming the new day with prayers and offerings to Mother Ganga. The sight of the sun rising over the ghats is truly divine.</p><h3>Ghat Walking Experience</h3><p>Walk along the ghats to experience different facets of spiritual life - from the burning ghats where cremations take place, symbolizing liberation from the cycle of rebirth, to the bathing ghats where pilgrims perform ritual ablutions.</p><h3>Evening Ganga Aarti</h3><p>The evening Ganga Aarti at Dashashwamedh Ghat is a spectacular ceremony involving multiple priests, fire lamps, incense, and synchronized movements that create a mesmerizing spiritual experience.</p>",
-      "order": 3
+      "imagePosition": "left",
+      "order": 3,
+      "_id": {
+        "$oid": "6926777900a777738d2f65a5"
+      }
     },
     {
       "id": "section-4",
@@ -52,14 +61,21 @@
         "caption": "Sunrise boat ride offers the most peaceful way to experience Varanasi's ghats"
       },
       "imagePosition": "center",
-      "order": 4
+      "order": 4,
+      "_id": {
+        "$oid": "6926777900a777738d2f65a6"
+      }
     },
     {
       "id": "section-5",
       "type": "text",
       "title": "Essential Temples and Sacred Sites",
       "content": "<h3>Sankat Mochan Hanuman Temple</h3><p>Dedicated to Lord Hanuman, this temple is believed to relieve devotees from troubles and obstacles. The temple resonates with continuous chanting and bhajans throughout the day.</p><h3>Durga Temple (Monkey Temple)</h3><p>Famous for its red spire and the many monkeys that inhabit the complex, this temple is dedicated to Goddess Durga and is particularly crowded during Navaratri.</p><h3>Tulsi Manas Temple</h3><p>Built at the place where Tulsidas wrote the Ramcharitmanas, this modern marble temple showcases beautiful carvings depicting scenes from the Ramayana.</p><h3>Bharat Mata Temple</h3><p>Unique in having a relief map of India carved in marble instead of traditional deity idols, representing the concept of Mother India.</p>",
-      "order": 5
+      "imagePosition": "left",
+      "order": 5,
+      "_id": {
+        "$oid": "6926777900a777738d2f65a7"
+      }
     },
     {
       "id": "section-6",
@@ -72,35 +88,49 @@
         "caption": "Varanasi's rich cultural heritage extends beyond spirituality to music, art, and cuisine"
       },
       "imagePosition": "left",
-      "order": 6
+      "order": 6,
+      "_id": {
+        "$oid": "6926777900a777738d2f65a8"
+      }
     },
     {
       "id": "section-7",
       "type": "text",
       "title": "Planning Your Varanasi Visit",
       "content": "<h3>Best Time to Visit</h3><p>October to March offers the most pleasant weather. Avoid the extreme summer heat (April-June) and heavy monsoons (July-September). Winter mornings can be foggy but create a mystical atmosphere.</p><h3>Where to Stay</h3><p>Choose from heritage hotels overlooking the ghats, budget guesthouses in the old city, or modern hotels in newer areas. Staying near the ghats offers the most authentic experience.</p><h3>Getting Around</h3><p>Walk through the narrow lanes of the old city, take cycle rickshaws for short distances, or use boats for ghat-hopping. The old city is best explored on foot.</p><h3>Duration</h3><p>Plan for at least 3-4 days to experience the city's spiritual rhythms properly. This allows time for both dawn and evening ceremonies, temple visits, and cultural exploration.</p>",
-      "order": 7
+      "imagePosition": "left",
+      "order": 7,
+      "_id": {
+        "$oid": "6926777900a777738d2f65a9"
+      }
     }
   ],
   "featuredImage": {
     "url": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800&h=400&fit=crop",
-    "alt": "Varanasi ghats at sunrise"
+    "alt": "Varanasi ghats at sunrise",
+    "caption": ""
   },
   "images": [],
   "youtubeVideos": [
     {
       "id": "video-1",
       "title": "Ganga Aarti Ceremony at Dashashwamedh Ghat",
-      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "url": "https://www.youtube.com/watch?v=QNdAdAfhHYE",
       "description": "Experience the mesmerizing evening Ganga Aarti ceremony at the famous Dashashwamedh Ghat in Varanasi",
-      "order": 0
+      "order": 0,
+      "_id": {
+        "$oid": "6926777900a777738d2f65aa"
+      }
     },
     {
       "id": "video-2",
       "title": "Sunrise Boat Ride on the Ganges",
       "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "description": "Take a peaceful sunrise boat ride along the sacred Ganges River and witness the ghats come alive",
-      "order": 1
+      "order": 1,
+      "_id": {
+        "$oid": "6926777900a777738d2f65ab"
+      }
     }
   ],
   "author": {
@@ -108,7 +138,7 @@
   },
   "categories": [
     {
-      "$oid": "68fdbb11dd08ede9e662a199"
+      "$oid": "6925026815c8664cc0f7590d"
     }
   ],
   "tags": [
@@ -127,11 +157,21 @@
   "isPremium": false,
   "isFeatured": true,
   "readTime": 8,
-  "viewCount": 0,
+  "viewCount": 10,
   "likeCount": 0,
   "commentCount": 0,
   "likes": [],
   "comments": [],
+  "publishedAt": {
+    "$date": "2025-11-30T02:07:53.738Z"
+  },
+  "createdAt": {
+    "$date": "2025-10-26T06:09:22.295Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-30T02:07:54.045Z"
+  },
+  "__v": 0,
   "destination": {
     "country": "India",
     "city": "Varanasi",
@@ -140,16 +180,7 @@
       "lng": 82.9739
     }
   },
-  "publishedAt": {
-    "$date": "2025-10-25T06:09:22.095Z"
-  },
-  "createdAt": {
-    "$date": "2025-10-26T06:09:22.295Z"
-  },
-  "updatedAt": {
-    "$date": "2025-10-26T06:09:22.295Z"
-  },
-  "__v": 0
+  "kmtravelled": 750
 },
 {
   "_id": {
@@ -158,7 +189,7 @@
   "title": "Ayodhya: Birthplace of Lord Rama - A Sacred Pilgrimage",
   "slug": "ayodhya-birthplace-lord-rama-sacred-pilgrimage",
   "excerpt": "Explore Ayodhya, the sacred birthplace of Lord Rama, where ancient legends come alive through magnificent temples, spiritual sites, and the newly constructed Ram Mandir complex.",
-  "content": "\n        <p>Ayodhya, located in Uttar Pradesh, is one of Hinduism's seven most sacred cities (Sapta Puri). This ancient city is revered as the birthplace of Lord Rama, the seventh avatar of Lord Vishnu, and the setting for the epic Ramayana. The city's name itself means 'not to be warred against,' signifying its sacred and invincible status.</p>\n        \n        <h2>Modern Renaissance</h2>\n        <p>Modern Ayodhya is undergoing a remarkable renaissance with magnificent temples and world-class infrastructure, making it more accessible for pilgrims while preserving its ancient spiritual essence.</p>\n        ",
+  "content": "<p>Ayodhya, located in Uttar Pradesh, is one of Hinduism's seven most sacred cities (Sapta Puri). This ancient city is revered as the birthplace of Lord Rama, the seventh avatar of Lord Vishnu, and the setting for the epic Ramayana. The city's name itself means 'not to be warred against,' signifying its sacred and invincible status.</p><h2>Modern Renaissance</h2><p>Modern Ayodhya is undergoing a remarkable renaissance with magnificent temples and world-class infrastructure, making it more accessible for pilgrims while preserving its ancient spiritual essence.</p>",
   "contentSections": [
     {
       "id": "section-1",
@@ -171,7 +202,10 @@
         "caption": "The magnificent Ram Mandir complex showcases traditional Hindu architecture"
       },
       "imagePosition": "center",
-      "order": 1
+      "order": 1,
+      "_id": {
+        "$oid": "692ba7030a6ee0acc937b0a6"
+      }
     },
     {
       "id": "section-2",
@@ -184,14 +218,21 @@
         "caption": "Hanuman Garhi temple offers panoramic views of Ayodhya"
       },
       "imagePosition": "left",
-      "order": 2
+      "order": 2,
+      "_id": {
+        "$oid": "692ba7030a6ee0acc937b0a7"
+      }
     },
     {
       "id": "section-3",
       "type": "text",
       "title": "Sacred Sites and Ancient Temples",
       "content": "<h3>Kanak Bhavan</h3><p>This beautiful temple is believed to be the place where Lord Rama and Sita lived as a royal couple. The temple showcases traditional North Indian architecture with ornate carvings, beautiful paintings, and a peaceful courtyard perfect for contemplation.</p><h3>Nageshwarnath Temple</h3><p>One of the 12 Jyotirlingas, this ancient temple houses a self-manifested lingam and is associated with the legend of Lord Shiva saving Ayodhya from destruction. The temple's architecture reflects the ancient Gupta period style.</p><h3>Treta Ke Thakur</h3><p>This temple marks the spot where Lord Rama performed the Ashwamedha Yagna. The temple complex includes beautiful gardens and hosts various cultural programs throughout the year.</p>",
-      "order": 3
+      "imagePosition": "left",
+      "order": 3,
+      "_id": {
+        "$oid": "692ba7030a6ee0acc937b0a8"
+      }
     },
     {
       "id": "section-4",
@@ -204,14 +245,21 @@
         "caption": "The sacred Sarayu River with its beautifully developed ghats"
       },
       "imagePosition": "right",
-      "order": 4
+      "order": 4,
+      "_id": {
+        "$oid": "692ba7030a6ee0acc937b0a9"
+      }
     },
     {
       "id": "section-5",
       "type": "text",
       "title": "Festivals and Spiritual Events",
       "content": "<h3>Ram Navami</h3><p>The celebration of Lord Rama's birthday is the most significant festival in Ayodhya. The entire city comes alive with processions, bhajans, and special prayers. The Ram Mandir hosts grand celebrations with elaborate decorations and cultural programs.</p><h3>Deepotsav</h3><p>During Diwali, Ayodhya celebrates Deepotsav, commemorating Lord Rama's return from exile. Millions of diyas (oil lamps) illuminate the city, creating a magical atmosphere. This celebration has gained international recognition and attracts visitors from around the world.</p><h3>Kartik Purnima</h3><p>This full moon day in the month of Kartik is considered highly auspicious for taking a holy dip in the Sarayu River and visiting temples.</p>",
-      "order": 5
+      "imagePosition": "left",
+      "order": 5,
+      "_id": {
+        "$oid": "692ba7030a6ee0acc937b0aa"
+      }
     },
     {
       "id": "section-6",
@@ -224,19 +272,27 @@
         "caption": "Ayodhya's cultural heritage extends to traditional crafts and spiritual practices"
       },
       "imagePosition": "center",
-      "order": 6
+      "order": 6,
+      "_id": {
+        "$oid": "692ba7030a6ee0acc937b0ab"
+      }
     },
     {
       "id": "section-7",
       "type": "text",
       "title": "Planning Your Ayodhya Pilgrimage",
       "content": "<h3>Best Time to Visit</h3><p>October to March offers pleasant weather for temple visits and outdoor activities. Avoid the hot summer months (April-June). Visit during Ram Navami or Deepotsav for special celebrations, but expect larger crowds.</p><h3>Getting There</h3><p>Ayodhya is well-connected by rail and road. The nearest airport is in Lucknow (130 km away). Regular trains connect Ayodhya to major Indian cities. Local transportation includes auto-rickshaws, cycle rickshaws, and buses.</p><h3>Accommodation</h3><p>Choose from dharamshalas (pilgrim rest houses), budget hotels, or newly built modern accommodations. Many options are available near the Ram Mandir complex and other major temples.</p><h3>Duration</h3><p>Plan for 2-3 days to visit all major temples and participate in spiritual activities. This allows time for unhurried darshan, participation in ceremonies, and exploration of the city's cultural heritage.</p>",
-      "order": 7
+      "imagePosition": "left",
+      "order": 7,
+      "_id": {
+        "$oid": "692ba7030a6ee0acc937b0ac"
+      }
     }
   ],
   "featuredImage": {
     "url": "https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=800&h=400&fit=crop",
-    "alt": "Ram Mandir Ayodhya"
+    "alt": "Ram Mandir Ayodhya",
+    "caption": ""
   },
   "images": [],
   "youtubeVideos": [
@@ -245,7 +301,10 @@
       "title": "Ram Mandir Ayodhya - A Divine Journey",
       "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "description": "Explore the magnificent Ram Mandir complex and its stunning architecture",
-      "order": 0
+      "order": 0,
+      "_id": {
+        "$oid": "692ba7030a6ee0acc937b0ad"
+      }
     }
   ],
   "author": {
@@ -253,7 +312,7 @@
   },
   "categories": [
     {
-      "$oid": "68fdbb11dd08ede9e662a199"
+      "$oid": "6925026815c8664cc0f7590d"
     }
   ],
   "tags": [
@@ -277,6 +336,16 @@
   "commentCount": 0,
   "likes": [],
   "comments": [],
+  "publishedAt": {
+    "$date": "2025-11-30T02:08:19.677Z"
+  },
+  "createdAt": {
+    "$date": "2025-10-26T06:09:22.295Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-30T02:08:19.955Z"
+  },
+  "__v": 0,
   "destination": {
     "country": "India",
     "city": "Ayodhya",
@@ -285,16 +354,7 @@
       "lng": 82.1998
     }
   },
-  "publishedAt": {
-    "$date": "2025-10-24T06:09:22.095Z"
-  },
-  "createdAt": {
-    "$date": "2025-10-26T06:09:22.295Z"
-  },
-  "updatedAt": {
-    "$date": "2025-10-26T06:09:22.295Z"
-  },
-  "__v": 0
+  "kmtravelled": 850
 },
 {
   "_id": {
@@ -303,7 +363,7 @@
   "title": "Prayagraj: The Sacred Confluence - Home of Kumbh Mela",
   "slug": "prayagraj-sacred-confluence-home-kumbh-mela",
   "excerpt": "Experience the spiritual magnificence of Prayagraj, where three holy rivers converge at Triveni Sangam and millions gather for the world's largest religious festival, Kumbh Mela.",
-  "content": "\n        <p>Prayagraj, formerly known as Allahabad, is home to the legendary Triveni Sangam - the sacred confluence of three holy rivers: the Ganges, Yamuna, and the mythical Saraswati. This convergence point is considered one of the holiest places in Hinduism and serves as the primary site for the Kumbh Mela, the world's largest religious gathering.</p>\n        \n        <h2>The Sacred Confluence</h2>\n        <p>The city's ancient name 'Prayag' means 'place of sacrifice,' referring to the legend of Lord Brahma performing a yagna (sacrifice) at this sacred spot where the rivers meet.</p>\n        ",
+  "content": "<p>Prayagraj, formerly known as Allahabad, is home to the legendary Triveni Sangam - the sacred confluence of three holy rivers: the Ganges, Yamuna, and the mythical Saraswati. This convergence point is considered one of the holiest places in Hinduism and serves as the primary site for the Kumbh Mela, the world's largest religious gathering.</p><h2>The Sacred Confluence</h2><p>The city's ancient name 'Prayag' means 'place of sacrifice,' referring to the legend of Lord Brahma performing a yagna (sacrifice) at this sacred spot where the rivers meet.</p>",
   "contentSections": [
     {
       "id": "section-1",
@@ -316,7 +376,10 @@
         "caption": "The sacred Triveni Sangam where three holy rivers meet"
       },
       "imagePosition": "center",
-      "order": 1
+      "order": 1,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b127"
+      }
     },
     {
       "id": "section-2",
@@ -329,14 +392,21 @@
         "caption": "The magnificent gathering of faith during Kumbh Mela"
       },
       "imagePosition": "left",
-      "order": 2
+      "order": 2,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b128"
+      }
     },
     {
       "id": "section-3",
       "type": "text",
       "title": "Sacred Temples and Historical Sites",
       "content": "<h3>Hanuman Mandir (Bade Hanuman)</h3><p>Famous for its underground sanctum where the deity lies in a reclining position, this temple is unique as the Hanuman idol appears to be sleeping. Legend says that as the Ganga water level rises, it touches the feet of the deity.</p><h3>Mankameshwar Temple</h3><p>One of the oldest Shiva temples in the city, believed to fulfill the wishes of devotees. The temple's ancient architecture and peaceful atmosphere make it a perfect place for meditation.</p><h3>Alopi Devi Temple</h3><p>Unique in that it doesn't house a traditional idol but instead has a wooden doli (palanquin) that is worshipped. This is one of the 51 Shakti Peethas mentioned in Hindu scriptures.</p><h3>Patalpuri Temple</h3><p>An underground temple complex with a series of caves and chambers, this ancient site is associated with sage Bharadwaj and offers a mystical spiritual experience.</p>",
-      "order": 3
+      "imagePosition": "left",
+      "order": 3,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b129"
+      }
     },
     {
       "id": "section-4",
@@ -349,14 +419,21 @@
         "caption": "The sacred Akshayavat, believed to be the immortal banyan tree"
       },
       "imagePosition": "right",
-      "order": 4
+      "order": 4,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b12a"
+      }
     },
     {
       "id": "section-5",
       "type": "text",
       "title": "Spiritual Practices and Rituals",
       "content": "<h3>Holy Bath at Sangam</h3><p>Taking a dip at the Triveni Sangam is the primary spiritual activity. The best times are during sunrise, sunset, and on auspicious dates like Makar Sankranti, Magh Purnima, and during Kumbh Mela.</p><h3>Pitra Paksha Rituals</h3><p>Prayagraj is especially significant during Pitra Paksha (fortnight for ancestors) when people perform shraddha rituals for their ancestors. The confluence is believed to be highly effective for these ceremonies.</p><h3>Saraswati Ghat Activities</h3><p>Regular aarti ceremonies, yoga sessions, and spiritual discourses take place at various ghats. The evening aarti at Saraswati Ghat is particularly beautiful.</p><h3>Akharas and Ashrams</h3><p>Visit various akharas (monastic orders) and ashrams that maintain the spiritual traditions year-round, not just during Kumbh Mela.</p>",
-      "order": 5
+      "imagePosition": "left",
+      "order": 5,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b12b"
+      }
     },
     {
       "id": "section-6",
@@ -369,19 +446,27 @@
         "caption": "The historic Allahabad Fort showcases the city's rich cultural heritage"
       },
       "imagePosition": "center",
-      "order": 6
+      "order": 6,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b12c"
+      }
     },
     {
       "id": "section-7",
       "type": "text",
       "title": "Planning Your Prayagraj Pilgrimage",
       "content": "<h3>Best Time to Visit</h3><p>October to March offers pleasant weather for outdoor activities and temple visits. Plan your visit during Kumbh Mela for the ultimate spiritual experience, but book accommodation well in advance. Makar Sankranti and Magh Mela (January-February) are also highly auspicious times.</p><h3>Getting There</h3><p>Prayagraj is well-connected by air, rail, and road. The city has its own airport with regular flights from major cities. Multiple trains connect Prayagraj to all major Indian cities. The city is also accessible by road from nearby cities like Varanasi and Lucknow.</p><h3>Accommodation</h3><p>Options range from budget dharamshalas and guesthouses to luxury hotels. During Kumbh Mela, special tent accommodations and camp sites are set up. Book early during festival seasons.</p><h3>Local Transportation</h3><p>Use cycle rickshaws, auto-rickshaws, or taxis for city travel. Boats are essential for reaching the exact confluence point at Triveni Sangam. Many sites are within walking distance of each other in the old city area.</p>",
-      "order": 7
+      "imagePosition": "left",
+      "order": 7,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b12d"
+      }
     }
   ],
   "featuredImage": {
     "url": "https://images.unsplash.com/photo-1587135941948-670b381f08ce?w=800&h=400&fit=crop",
-    "alt": "Triveni Sangam Prayagraj"
+    "alt": "Triveni Sangam Prayagraj",
+    "caption": ""
   },
   "images": [],
   "youtubeVideos": [
@@ -390,14 +475,20 @@
       "title": "Kumbh Mela - The Largest Gathering on Earth",
       "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "description": "Witness the spectacular Kumbh Mela at Prayagraj, where millions gather for spiritual purification",
-      "order": 0
+      "order": 0,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b12e"
+      }
     },
     {
       "id": "video-2",
       "title": "Triveni Sangam - The Sacred Confluence",
       "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "description": "Experience the divine confluence where three holy rivers meet at Prayagraj",
-      "order": 1
+      "order": 1,
+      "_id": {
+        "$oid": "692ba7170a6ee0acc937b12f"
+      }
     }
   ],
   "author": {
@@ -405,7 +496,7 @@
   },
   "categories": [
     {
-      "$oid": "68fdbb11dd08ede9e662a199"
+      "$oid": "6925026815c8664cc0f7590b"
     }
   ],
   "tags": [
@@ -425,11 +516,21 @@
   "isPremium": false,
   "isFeatured": true,
   "readTime": 9,
-  "viewCount": 0,
+  "viewCount": 3,
   "likeCount": 0,
   "commentCount": 0,
   "likes": [],
   "comments": [],
+  "publishedAt": {
+    "$date": "2025-11-30T02:08:32.887Z"
+  },
+  "createdAt": {
+    "$date": "2025-10-26T06:09:22.295Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-30T03:52:32.638Z"
+  },
+  "__v": 0,
   "destination": {
     "country": "India",
     "city": "Prayagraj",
@@ -438,14 +539,5 @@
       "lng": 81.8463
     }
   },
-  "publishedAt": {
-    "$date": "2025-10-26T06:09:22.095Z"
-  },
-  "createdAt": {
-    "$date": "2025-10-26T06:09:22.295Z"
-  },
-  "updatedAt": {
-    "$date": "2025-10-26T06:09:22.295Z"
-  },
-  "__v": 0
+  "kmtravelled": 920
 }]

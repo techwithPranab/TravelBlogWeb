@@ -47,6 +47,15 @@ export interface ContributorPost {
     slug: string
   }[]
   tags: string[]
+  destination?: {
+    country?: string
+    city?: string
+    coordinates?: {
+      lat: number
+      lng: number
+    }
+  }
+  kmtravelled?: number
   youtubeVideos?: Array<{
     id: string
     title: string
@@ -111,6 +120,7 @@ export interface CreatePostRequest {
       lng: number
     }
   }
+  kmtravelled?: number
   youtubeVideos?: Array<{
     id: string
     title: string

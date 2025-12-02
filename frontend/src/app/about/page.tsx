@@ -3,12 +3,43 @@
 import { MapPin, Camera, Globe, Heart, Users, Award } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Head from 'next/head'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { publicApi } from '@/lib/api'
 
 export default function AboutPage() {
+  // State for metrics
+  const [metrics, setMetrics] = useState({
+    countriesVisited: 42,
+    photosTaken: 10000,
+    kmTravelled: 250000,
+    travelersInspired: 50000
+  })
+  const [loading, setLoading] = useState(true)
+
+  // Fetch metrics from backend
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const response = await publicApi.getAboutMetrics()
+        if (response.success) {
+          setMetrics(response.data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch about metrics:', error)
+        // Keep default values if API fails
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMetrics()
+  }, [])
+
   // Generate SEO metadata for about page
   const generateSEOMetadata = () => {
-    const title = 'About Us - BagPackStories | Passionate Travelers Sharing Authentic Stories'
-    const description = 'Learn about BagPackStories\'s journey, our team of experienced travelers, and our mission to inspire authentic travel experiences around the world. Discover our story and values.'
+    const title = 'About Me - BagPackStories | IT Professional & Passionate Traveler'
+    const description = 'Learn about Pranab Paul\'s journey as an IT professional and passionate traveler, sharing authentic experiences from work trips, family vacations, and solo adventures around the world.'
     const keywords = [
       'about travel blog',
       'travel team',
@@ -39,7 +70,7 @@ export default function AboutPage() {
         "@type": "Organization",
         "name": "BagPackStories",
         "foundingDate": "2018",
-        "description": "A travel blog dedicated to sharing authentic travel experiences and inspiring adventures around the world.",
+        "description": "A personal travel blog by Pranab Paul, sharing authentic travel experiences from work trips, family vacations, and solo adventures around the world.",
         "sameAs": [
           "https://facebook.com/bagpackstories",
           "https://twitter.com/bagpackstories",
@@ -49,21 +80,16 @@ export default function AboutPage() {
       "mainEntity": {
         "@type": "Organization",
         "name": "BagPackStories",
-        "description": "Passionate travelers sharing authentic stories, practical guides, and inspiring adventures from around the world.",
+        "description": "Personal travel blog by Pranab Paul, an IT professional sharing authentic stories, practical guides, and inspiring adventures from around the world.",
         "founder": {
           "@type": "Person",
-          "name": "Sarah Johnson"
+          "name": "Pranab Paul"
         },
         "employee": [
           {
             "@type": "Person",
-            "name": "Sarah Johnson",
-            "jobTitle": "Founder & Travel Writer"
-          },
-          {
-            "@type": "Person",
-            "name": "Michael Chen",
-            "jobTitle": "Photography Director"
+            "name": "Pranab Paul",
+            "jobTitle": "Founder & IT Professional Travel Writer"
           },
           {
             "@type": "Person",
@@ -77,11 +103,21 @@ export default function AboutPage() {
     return JSON.stringify(structuredData)
   }
 
+  // Format numbers for display
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return `${(num / 1000000).toFixed(1)}M+`
+    } else if (num >= 1000) {
+      return `${(num / 1000).toFixed(0)}K+`
+    }
+    return num.toString()
+  }
+
   const stats = [
-    { icon: MapPin, label: 'Countries Visited', value: '42' },
-    { icon: Camera, label: 'Photos Taken', value: '10,000+' },
-    { icon: Globe, label: 'Miles Traveled', value: '250,000+' },
-    { icon: Users, label: 'Travelers Inspired', value: '50,000+' }
+    { icon: MapPin, label: 'Countries Visited', value: metrics.countriesVisited.toString() },
+    { icon: Camera, label: 'Photos Taken', value: formatNumber(metrics.photosTaken) },
+    { icon: Globe, label: 'KM Travelled', value: formatNumber(metrics.kmTravelled) },
+    { icon: Users, label: 'Travelers Inspired', value: formatNumber(metrics.travelersInspired) }
   ]
 
   const team = [
@@ -112,22 +148,22 @@ export default function AboutPage() {
     {
       icon: Heart,
       title: 'Authentic Experiences',
-      description: 'We believe in genuine, immersive travel experiences that connect you with local culture and communities.'
+      description: 'I believe in genuine, immersive travel experiences that connect you with local culture and communities.'
     },
     {
       icon: Globe,
       title: 'Sustainable Travel',
-      description: 'Promoting responsible tourism that preserves destinations for future generations while supporting local economies.'
+      description: 'I promote responsible tourism that preserves destinations for future generations while supporting local economies.'
     },
     {
       icon: Users,
       title: 'Community First',
-      description: 'Building a supportive community of travelers who share knowledge, experiences, and inspire each other.'
+      description: 'I focus on building a supportive community of travelers who share knowledge, experiences, and inspire each other.'
     },
     {
       icon: Award,
       title: 'Quality Content',
-      description: 'Providing thoroughly researched, practical, and inspiring content to help you plan amazing adventures.'
+      description: 'I provide thoroughly researched, practical, and inspiring content to help you plan amazing adventures.'
     }
   ]
 
@@ -179,10 +215,10 @@ export default function AboutPage() {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              About Our Journey
+              About My Journey
             </h1>
             <p className="text-xl mb-8 text-purple-100">
-              We're passionate travelers sharing authentic stories, practical guides, and inspiring adventures from around the world.
+              Hi, I'm Pranab Paul - an IT professional sharing authentic travel stories from work trips, family vacations, and solo adventures around the world.
             </p>
           </motion.div>
         </div>
@@ -203,7 +239,13 @@ export default function AboutPage() {
               >
                 <div className="bg-white rounded-2xl p-6 shadow-lg">
                   <stat.icon className="h-8 w-8 text-purple-600 mx-auto mb-4" />
-                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
+                  <div className="text-3xl font-bold text-gray-900 mb-2">
+                    {loading ? (
+                      <div className="bg-gray-200 animate-pulse rounded h-8 w-16 mx-auto"></div>
+                    ) : (
+                      stat.value
+                    )}
+                  </div>
                   <div className="text-gray-600">{stat.label}</div>
                 </div>
               </motion.div>
@@ -223,7 +265,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">My Story</h2>
             </motion.div>
 
             <motion.div
@@ -234,26 +276,27 @@ export default function AboutPage() {
               className="prose prose-lg max-w-none text-gray-600"
             >
               <p className="text-xl leading-relaxed mb-6">
-                Our journey began in 2018 when Sarah Johnson, a corporate lawyer turned travel writer, decided to leave her 9-to-5 
-                job to explore the world. What started as a personal blog documenting her solo adventures has grown into a 
-                comprehensive travel resource visited by thousands of travelers every month.
+                My journey began in 2011 when I, Pranab Paul, an IT professional with a passion for exploration, started documenting 
+                my travels across different countries. What began as capturing memories from work trips and personal vacations 
+                has evolved into a comprehensive travel resource visited by thousands of travelers every month.
               </p>
               
               <p className="text-lg leading-relaxed mb-6">
-                We believe that travel is one of life's greatest teachers. Every destination has its own story, culture, and lessons 
-                to offer. Through our detailed guides, authentic stories, and practical tips, we aim to inspire and empower others 
-                to explore the world with confidence and respect for local communities.
+                As an IT professional, I have had the unique opportunity to visit various countries for work assignments, 
+                while also exploring destinations through family vacations and solo adventures. This diverse travel experience 
+                provides authentic insights into both business and leisure travel, making my content relatable to different 
+                types of travelers.
               </p>
               
               <p className="text-lg leading-relaxed mb-6">
-                Our team of experienced travelers and local experts work together to create content that goes beyond the typical 
-                tourist attractions. We focus on authentic experiences, hidden gems, and sustainable travel practices that benefit 
-                both travelers and the destinations they visit.
+                I believe that travel is one of life's greatest teachers. Every destination has its own story, culture, and lessons 
+                to offer. Through my detailed guides, authentic stories, and practical tips, I aim to inspire and empower others 
+                to explore the world with confidence and respect for local communities, whether traveling for work, with family, or solo.
               </p>
               
               <p className="text-lg leading-relaxed">
-                Whether you're planning your first international trip or you're a seasoned globetrotter looking for new inspiration, 
-                we're here to help you create unforgettable memories and meaningful connections around the world.
+                Whether you're planning your first international trip, a family vacation, or you're a seasoned globetrotter looking 
+                for new inspiration, I'm here to help you create unforgettable memories and meaningful connections around the world.
               </p>
             </motion.div>
           </div>
@@ -270,9 +313,9 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Values</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">My Values</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              These core principles guide everything we do and help us create meaningful travel experiences.
+              These core principles guide my travels and help me create meaningful experiences to share with fellow travelers.
             </p>
           </motion.div>
 
@@ -295,8 +338,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-16">
+      {/* Team Section - Hidden */}
+      {/* <section className="py-16">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -321,7 +364,6 @@ export default function AboutPage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-white rounded-2xl shadow-lg overflow-hidden"
               >
-                {/* Member Image */}
                 <div className="h-64 bg-gray-200 flex items-center justify-center">
                   <div className="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center">
                     <span className="text-white text-2xl font-bold">
@@ -330,7 +372,6 @@ export default function AboutPage() {
                   </div>
                 </div>
 
-                {/* Member Info */}
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
                   <p className="text-purple-600 font-medium mb-3">{member.role}</p>
@@ -344,10 +385,10 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Call to Action */}
-      <section className="py-16 bg-gray-50">
+      {/* Call to Action - Hidden */}
+      {/* <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -361,16 +402,15 @@ export default function AboutPage() {
               Connect with fellow travelers, share your experiences, and get inspired for your next adventure.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                Subscribe to Newsletter
-              </button>
-              <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-purple-600 transition-colors">
-                Follow on Social
-              </button>
+              <Link href="/newsletter">
+                <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                  Subscribe to Newsletter
+                </button>
+              </Link>
             </div>
           </motion.div>
         </div>
-      </section>
+      </section> */}
     </div>
     </>
   )

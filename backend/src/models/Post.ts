@@ -57,6 +57,7 @@ export interface IPost extends Document {
       lng: number
     }
   }
+  kmtravelled?: number
   // Approval workflow fields
   submittedAt?: Date
   moderatedBy?: mongoose.Types.ObjectId
@@ -248,6 +249,11 @@ const postSchema = new Schema<IPost>({
         max: 180
       }
     }
+  },
+  kmtravelled: {
+    type: Number,
+    min: [0, 'Kilometers travelled cannot be negative'],
+    max: [999999, 'Kilometers travelled seems too high']
   },
   // Approval workflow fields
   submittedAt: {
