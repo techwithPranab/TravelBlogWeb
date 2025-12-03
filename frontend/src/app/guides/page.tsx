@@ -250,10 +250,6 @@ export default function GuidesPage() {
                         <Eye className="h-4 w-4" />
                         <span>{(guide.views || 0).toLocaleString()}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4" />
-                        <span>{(guide.rating || 0).toFixed(1)}</span>
-                      </div>
                     </div>
                     <span className="text-orange-600 font-medium">
                       {guide.budget ? guide.budget.range : 'N/A'}

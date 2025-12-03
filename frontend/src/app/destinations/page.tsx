@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { MapPin, Star, Clock, Camera, Search } from 'lucide-react'
+import { MapPin, Clock, Search } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Head from 'next/head'
@@ -281,17 +281,6 @@ export default function DestinationsPage() {
 
                 {/* Destination Content */}
                 <div className="p-6">
-                  {/* Rating */}
-                  {destination.rating !== undefined && destination.rating !== null && (
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span className="font-medium">{destination.rating}</span>
-                      </div>
-                      <span className="text-gray-500 text-sm">({destination.totalReviews || 0} reviews)</span>
-                    </div>
-                  )}
-
                   {/* Description */}
                   <p className="text-gray-600 mb-4 line-clamp-3">
                     {destination.description}
@@ -332,9 +321,6 @@ export default function DestinationsPage() {
                     >
                       Explore
                     </Link>
-                    <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                      <Camera className="h-4 w-4" />
-                    </button>
                   </div>
                 </div>
               </motion.div>

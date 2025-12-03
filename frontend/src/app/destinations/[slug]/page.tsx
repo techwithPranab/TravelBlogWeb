@@ -8,7 +8,6 @@ import {
   MapPin, 
   Calendar, 
   Thermometer, 
-  Star,
   ArrowLeft,
   Clock,
   Users,
@@ -276,19 +275,6 @@ export default function DestinationDetailsPage() {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex items-center justify-center space-x-6 mb-8"
-            >
-              <div className="flex items-center space-x-1">
-                <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                <span>{destination.rating}</span>
-                <span className="text-white/80">({(destination.totalReviews || 0).toLocaleString()} reviews)</span>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
               className="flex items-center justify-center space-x-4"
             >
@@ -505,9 +491,8 @@ export default function DestinationDetailsPage() {
               <h2 className="text-xl font-bold text-gray-900 mb-6">Highlights</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {destination.highlights.map((highlight) => (
-                  <div key={highlight} className="flex items-start space-x-3">
-                    <Star className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-1" />
-                    <span className="text-gray-700">{highlight}</span>
+                  <div key={highlight} className="flex items-start">
+                    <span className="text-gray-700">• {highlight}</span>
                   </div>
                 ))}
               </div>
@@ -563,12 +548,6 @@ export default function DestinationDetailsPage() {
                           {accommodation.type.charAt(0).toUpperCase() + accommodation.type.slice(1)}
                         </span>
                       </div>
-                      {accommodation.rating && (
-                        <div className="flex items-center space-x-1">
-                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          <span className="text-sm font-medium">{accommodation.rating}</span>
-                        </div>
-                      )}
                     </div>
                     
                     <p className="text-gray-700 mb-4 text-sm">{accommodation.description}</p>
