@@ -206,21 +206,42 @@ export default function AboutPage() {
 
       <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-20">
+      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-12">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <h1 className="text-2xl md:text-3xl font-bold mb-6">
-              About My Journey
-            </h1>
-            <p className="text-lg mb-8 text-purple-100">
-              Hi, I'm Pranab Paul - an IT professional sharing authentic travel stories from work trips, family vacations, and solo adventures around the world.
-            </p>
-          </motion.div>
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+            >
+              {/* Profile Image */}
+              <div className="flex justify-center lg:justify-start order-2 lg:order-1">
+                <div className="relative">
+                  <div className="w-80 h-80 rounded-2xl overflow-hidden shadow-2xl">
+                    <img
+                      src="https://res.cloudinary.com/due8vcyim/image/upload/v1761492968/IMG-20241012-WA0023_2_zkgdmo.jpg"
+                      alt="Pranab Paul - Travel Blogger"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  {/* <div className="absolute -bottom-4 -right-4 bg-white text-purple-600 px-4 py-2 rounded-lg shadow-lg">
+                    <span className="text-sm font-semibold">Pranab Paul</span>
+                  </div> */}
+                </div>
+              </div>
+
+              {/* Hero Content */}
+              <div className="text-center lg:text-left order-1 lg:order-2">
+                <h1 className="text-2xl md:text-3xl font-bold mb-6">
+                  About My Journey
+                </h1>
+                <p className="text-lg mb-8 text-purple-100">
+                  Hi, I'm Pranab Paul - an IT professional sharing authentic travel stories from work trips, family vacations, and solo adventures around the world.
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -276,26 +297,26 @@ export default function AboutPage() {
               className="prose prose-base max-w-none text-gray-600"
             >
               <p className="text-lg leading-relaxed mb-6">
-                My journey began in 2011 when I, Pranab Paul, an IT professional with a passion for exploration, started documenting 
-                my travels across different countries. What began as capturing memories from work trips and personal vacations 
+                My journey began in 2011 when I, Pranab Paul, an IT professional with a passion for exploration, started documenting
+                my travels across different countries. What began as capturing memories from work trips and personal vacations
                 has evolved into a comprehensive travel resource visited by thousands of travelers every month.
               </p>
-              
+
               <p className="text-base leading-relaxed mb-6">
-                As an IT professional, I have had the unique opportunity to visit various countries for work assignments, 
-                while also exploring destinations through family vacations and solo adventures. This diverse travel experience 
-                provides authentic insights into both business and leisure travel, making my content relatable to different 
+                As an IT professional, I have had the unique opportunity to visit various countries for work assignments,
+                while also exploring destinations through family vacations and solo adventures. This diverse travel experience
+                provides authentic insights into both business and leisure travel, making my content relatable to different
                 types of travelers.
               </p>
-              
+
               <p className="text-base leading-relaxed mb-6">
-                I believe that travel is one of life's greatest teachers. Every destination has its own story, culture, and lessons 
-                to offer. Through my detailed guides, authentic stories, and practical tips, I aim to inspire and empower others 
+                I believe that travel is one of life's greatest teachers. Every destination has its own story, culture, and lessons
+                to offer. Through my detailed guides, authentic stories, and practical tips, I aim to inspire and empower others
                 to explore the world with confidence and respect for local communities, whether traveling for work, with family, or solo.
               </p>
-              
+
               <p className="text-base leading-relaxed">
-                Whether you're planning your first international trip, a family vacation, or you're a seasoned globetrotter looking 
+                Whether you're planning your first international trip, a family vacation, or you're a seasoned globetrotter looking
                 for new inspiration, I'm here to help you create unforgettable memories and meaningful connections around the world.
               </p>
             </motion.div>

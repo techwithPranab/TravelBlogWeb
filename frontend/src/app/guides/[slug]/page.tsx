@@ -200,12 +200,6 @@ export default function GuideDetailsPage() {
                     </div>
                   )}
                 </div>
-                
-                <div className="flex items-center space-x-1">
-                  <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  <span className="font-medium">{guide.rating}</span>
-                  <span className="text-gray-600">({(guide.totalReviews || 0).toLocaleString()} reviews)</span>
-                </div>
               </div>
               
               <div className="flex items-center space-x-4">
@@ -219,18 +213,6 @@ export default function GuideDetailsPage() {
                 >
                   <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
                   <span>Like</span>
-                </button>
-                
-                <button
-                  onClick={() => setIsBookmarked(!isBookmarked)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                    isBookmarked 
-                      ? 'bg-blue-100 text-blue-600' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
-                  <span>Save</span>
                 </button>
                 
                 <button
@@ -315,21 +297,6 @@ export default function GuideDetailsPage() {
                   <div className="font-medium">{guide.bestTime}</div>
                 </div>
               </div>
-            </div>
-            
-            {/* Navigation */}
-            <div className="bg-white border rounded-lg p-4">
-              <h4 className="font-semibold text-gray-900 mb-3">Contents</h4>
-              <nav className="space-y-2">
-                <a href="#sections" className="block text-sm text-gray-600 hover:text-blue-600">Guide Sections</a>
-                {guide.itinerary && (
-                  <a href="#itinerary" className="block text-sm text-gray-600 hover:text-blue-600">Day-by-Day Itinerary</a>
-                )}
-                {guide.packingList && (
-                  <a href="#packing" className="block text-sm text-gray-600 hover:text-blue-600">Packing List</a>
-                )}
-                <a href="#resources" className="block text-sm text-gray-600 hover:text-blue-600">Useful Resources</a>
-              </nav>
             </div>
           </div>
 
