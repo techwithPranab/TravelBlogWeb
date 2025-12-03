@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import { useAuth } from '@/context/AuthContext'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { 
@@ -86,8 +86,6 @@ interface Comment {
     avatar: string
   }
   createdAt: string
-  likes: number
-  isLiked: boolean
   replies?: Comment[]
   isSubmitting?: boolean
 }
@@ -104,7 +102,6 @@ interface CommentSubmitResponse extends ApiResponse<Comment> {}
 
 export default function BlogDetailsPage() {
   const params = useParams()
-  const { user, isAuthenticated } = useAuth()
   const [post, setPost] = useState<BlogPost | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [newComment, setNewComment] = useState('')
@@ -191,8 +188,6 @@ export default function BlogDetailsPage() {
           avatar: comment.author?.avatar || '/images/default-avatar.jpg'
         },
         createdAt: comment.createdAt,
-        likes: comment.likes || 0,
-        isLiked: false, // This would need authentication to determine
         replies: comment.replies?.map((reply: any) => ({
           id: reply._id || reply.id,
           content: reply.content,
@@ -200,9 +195,7 @@ export default function BlogDetailsPage() {
             name: reply.author?.name || 'Anonymous',
             avatar: reply.author?.avatar || '/images/default-avatar.jpg'
           },
-          createdAt: reply.createdAt,
-          likes: reply.likes || 0,
-          isLiked: false
+          createdAt: reply.createdAt
         })) || []
       }))
 
@@ -222,31 +215,25 @@ export default function BlogDetailsPage() {
     }
   }
 
-  const submitComment = async (postId: string, content: string): Promise<CommentSubmitResponse> => {
+  const submitComment = async (postId: string, name: string, email: string, content: string): Promise<CommentSubmitResponse> => {
     try {
       // Check for profanity before submitting
       if (containsProfanity(content)) {
         throw new Error(getProfanityError())
       }
 
-      // Get user info from auth context
-      const authorName = isAuthenticated && user ? user.name : 'Anonymous User'
-      const authorEmail = isAuthenticated && user ? user.email : 'anonymous@example.com'
-      const authorAvatar = isAuthenticated && user?.avatar ? user.avatar : '/images/default-avatar.jpg'
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          ...(isAuthenticated ? { 'Authorization': `Bearer ${localStorage.getItem('token')}` } : {})
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           resourceType: 'blog',
           resourceId: postId,
           author: {
-            name: authorName,
-            email: authorEmail,
-            avatar: authorAvatar
+            name: name.trim(),
+            email: email.trim(),
+            avatar: '/images/default-avatar.jpg'
           },
           content: content.trim()
         })
@@ -268,12 +255,10 @@ export default function BlogDetailsPage() {
         id: data.data?.comment?._id || data.data?.commentId || Date.now().toString(),
         content: content.trim(),
         author: {
-          name: authorName,
-          avatar: authorAvatar
+          name: name.trim(),
+          avatar: '/images/default-avatar.jpg'
         },
-        createdAt: new Date().toISOString(),
-        likes: 0,
-        isLiked: false
+        createdAt: new Date().toISOString()
       }
 
       return {
@@ -384,12 +369,12 @@ export default function BlogDetailsPage() {
     }
   }
 
-  const handleCommentSubmit = async (content: string) => {
+  const handleCommentSubmit = async (name: string, email: string, content: string) => {
     if (!post?.id) {
       throw new Error('Unable to post comment. Please try again.')
     }
 
-    const response = await submitComment(post.id, content)
+    const response = await submitComment(post.id, name, email, content)
     
     if (response.success) {
       setComments([response.data, ...comments])

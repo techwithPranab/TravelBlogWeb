@@ -28,6 +28,40 @@ export default function CreateDestinationPage() {
   const [travelTips, setTravelTips] = useState<string[]>([])
   const [newTravelTip, setNewTravelTip] = useState('')
   
+  // Accommodation state
+  const [accommodation, setAccommodation] = useState<Array<{
+    type: string;
+    name: string;
+    description: string;
+    priceRange: string;
+    rating: number;
+    amenities: string[];
+    bookingUrl: string;
+  }>>([])
+  const [newAccommodation, setNewAccommodation] = useState({
+    type: 'budget',
+    name: '',
+    description: '',
+    priceRange: '',
+    rating: 0,
+    amenities: [] as string[],
+    bookingUrl: ''
+  })
+  const [newAmenity, setNewAmenity] = useState('')
+  
+  // Edit accommodation state
+  const [editingAccommodationIndex, setEditingAccommodationIndex] = useState<number | null>(null)
+  const [editAccommodation, setEditAccommodation] = useState({
+    type: 'budget',
+    name: '',
+    description: '',
+    priceRange: '',
+    rating: 0,
+    amenities: [] as string[],
+    bookingUrl: ''
+  })
+  const [editAmenity, setEditAmenity] = useState('')
+  
   // Image upload state
   const [uploadingImage, setUploadingImage] = useState(false)
   const featuredImageInputRef = useRef<HTMLInputElement>(null)
@@ -60,6 +94,15 @@ export default function CreateDestinationPage() {
     totalReviews: 0,
     highlights: [] as string[],
     activities: [] as Array<{ name: string; icon: string; description: string }>,
+    accommodation: [] as Array<{
+      type: string;
+      name: string;
+      description: string;
+      priceRange: string;
+      rating: number;
+      amenities: string[];
+      bookingUrl: string;
+    }>,
     transportation: [] as string[],
     localCuisine: [] as string[],
     travelTips: [] as string[],
@@ -174,6 +217,112 @@ export default function CreateDestinationPage() {
     setTravelTips(prev => prev.filter(tip => tip !== tipToRemove))
   }
 
+  // Accommodation handlers
+  const handleAddAccommodation = () => {
+    if (newAccommodation.name.trim() && newAccommodation.description.trim() && newAccommodation.priceRange.trim()) {
+      setAccommodation(prev => [...prev, { ...newAccommodation }])
+      setNewAccommodation({
+        type: 'budget',
+        name: '',
+        description: '',
+        priceRange: '',
+        rating: 0,
+        amenities: [],
+        bookingUrl: ''
+      })
+    }
+  }
+
+  const handleRemoveAccommodation = (index: number) => {
+    setAccommodation(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const handleAddAmenity = () => {
+    if (newAmenity.trim() && !newAccommodation.amenities.includes(newAmenity.trim())) {
+      setNewAccommodation(prev => ({
+        ...prev,
+        amenities: [...prev.amenities, newAmenity.trim()]
+      }))
+      setNewAmenity('')
+    }
+  }
+
+  const handleRemoveAmenity = (amenityToRemove: string) => {
+    setNewAccommodation(prev => ({
+      ...prev,
+      amenities: prev.amenities.filter(amenity => amenity !== amenityToRemove)
+    }))
+  }
+
+  const handleAccommodationChange = (field: string, value: string | number) => {
+    setNewAccommodation(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  // Edit accommodation handlers
+  const handleEditAccommodation = (index: number) => {
+    const acc = accommodation[index]
+    setEditingAccommodationIndex(index)
+    setEditAccommodation({
+      type: acc.type,
+      name: acc.name,
+      description: acc.description,
+      priceRange: acc.priceRange,
+      rating: acc.rating,
+      amenities: [...acc.amenities],
+      bookingUrl: acc.bookingUrl
+    })
+  }
+
+  const handleCancelEditAccommodation = () => {
+    setEditingAccommodationIndex(null)
+    setEditAccommodation({
+      type: 'budget',
+      name: '',
+      description: '',
+      priceRange: '',
+      rating: 0,
+      amenities: [],
+      bookingUrl: ''
+    })
+    setEditAmenity('')
+  }
+
+  const handleSaveEditAccommodation = () => {
+    if (editingAccommodationIndex !== null) {
+      setAccommodation(prev => prev.map((acc, index) => 
+        index === editingAccommodationIndex ? { ...editAccommodation } : acc
+      ))
+      handleCancelEditAccommodation()
+    }
+  }
+
+  const handleEditAccommodationChange = (field: string, value: string | number) => {
+    setEditAccommodation(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const handleAddEditAmenity = () => {
+    if (editAmenity.trim() && !editAccommodation.amenities.includes(editAmenity.trim())) {
+      setEditAccommodation(prev => ({
+        ...prev,
+        amenities: [...prev.amenities, editAmenity.trim()]
+      }))
+      setEditAmenity('')
+    }
+  }
+
+  const handleRemoveEditAmenity = (amenityToRemove: string) => {
+    setEditAccommodation(prev => ({
+      ...prev,
+      amenities: prev.amenities.filter(amenity => amenity !== amenityToRemove)
+    }))
+  }
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'featured' | 'gallery') => {
     const files = e.target.files
     if (!files) return
@@ -279,6 +428,7 @@ export default function CreateDestinationPage() {
         highlights,
         attractions,
         activities,
+        accommodation,
         localCuisine,
         travelTips
       }
@@ -784,6 +934,366 @@ export default function CreateDestinationPage() {
                       >
                         <X className="h-4 w-4" />
                       </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Accommodation */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Accommodation Options</h3>
+                
+                {/* Add New Accommodation Form */}
+                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                  <h4 className="text-md font-medium text-gray-800 mb-3">Add New Accommodation</h4>
+                  
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                        <select
+                          value={newAccommodation.type}
+                          onChange={(e) => handleAccommodationChange('type', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                        >
+                          <option value="budget">Budget</option>
+                          <option value="mid-range">Mid-range</option>
+                          <option value="luxury">Luxury</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input
+                          type="text"
+                          value={newAccommodation.name}
+                          onChange={(e) => handleAccommodationChange('name', e.target.value)}
+                          placeholder="Hotel/Guesthouse name..."
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                      <textarea
+                        value={newAccommodation.description}
+                        onChange={(e) => handleAccommodationChange('description', e.target.value)}
+                        placeholder="Brief description of the accommodation..."
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                        rows={2}
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
+                        <input
+                          type="text"
+                          value={newAccommodation.priceRange}
+                          onChange={(e) => handleAccommodationChange('priceRange', e.target.value)}
+                          placeholder="e.g., $50-100"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="5"
+                          step="0.1"
+                          value={newAccommodation.rating}
+                          onChange={(e) => handleAccommodationChange('rating', parseFloat(e.target.value) || 0)}
+                          placeholder="4.5"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Booking URL</label>
+                        <input
+                          type="url"
+                          value={newAccommodation.bookingUrl}
+                          onChange={(e) => handleAccommodationChange('bookingUrl', e.target.value)}
+                          placeholder="https://booking.com"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* Amenities */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Amenities</label>
+                      <div className="flex gap-2 mb-2">
+                        <input
+                          type="text"
+                          value={newAmenity}
+                          onChange={(e) => setNewAmenity(e.target.value)}
+                          placeholder="Add amenity..."
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              handleAddAmenity()
+                            }
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleAddAmenity}
+                          className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {newAccommodation.amenities.map((amenity, index) => (
+                          <div
+                            key={`amenity-${amenity}-${index}`}
+                            className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded text-xs"
+                          >
+                            <span>{amenity}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveAmenity(amenity)}
+                              className="text-green-600 hover:text-green-800"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <button
+                      type="button"
+                      onClick={handleAddAccommodation}
+                      className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                    >
+                      Add Accommodation
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Existing Accommodations */}
+                <div className="space-y-3">
+                  {accommodation.map((acc, index) => (
+                    <div key={`accommodation-${index}`}>
+                      {editingAccommodationIndex === index ? (
+                        /* Edit Form */
+                        <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                          <h4 className="text-md font-medium text-gray-800 mb-3">Edit Accommodation</h4>
+                          
+                          <div className="space-y-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                                <select
+                                  value={editAccommodation.type}
+                                  onChange={(e) => handleEditAccommodationChange('type', e.target.value)}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                                >
+                                  <option value="budget">Budget</option>
+                                  <option value="mid-range">Mid-range</option>
+                                  <option value="luxury">Luxury</option>
+                                </select>
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                <input
+                                  type="text"
+                                  value={editAccommodation.name}
+                                  onChange={(e) => handleEditAccommodationChange('name', e.target.value)}
+                                  placeholder="Hotel/Guesthouse name..."
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                                />
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                              <textarea
+                                value={editAccommodation.description}
+                                onChange={(e) => handleEditAccommodationChange('description', e.target.value)}
+                                placeholder="Brief description of the accommodation..."
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                                rows={2}
+                              />
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
+                                <input
+                                  type="text"
+                                  value={editAccommodation.priceRange}
+                                  onChange={(e) => handleEditAccommodationChange('priceRange', e.target.value)}
+                                  placeholder="e.g., $50-100"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                                />
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max="5"
+                                  step="0.1"
+                                  value={editAccommodation.rating}
+                                  onChange={(e) => handleEditAccommodationChange('rating', parseFloat(e.target.value) || 0)}
+                                  placeholder="4.5"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                                />
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Booking URL</label>
+                                <input
+                                  type="url"
+                                  value={editAccommodation.bookingUrl}
+                                  onChange={(e) => handleEditAccommodationChange('bookingUrl', e.target.value)}
+                                  placeholder="https://booking.com"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                                />
+                              </div>
+                            </div>
+                            
+                            {/* Amenities */}
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">Amenities</label>
+                              <div className="flex gap-2 mb-2">
+                                <input
+                                  type="text"
+                                  value={editAmenity}
+                                  onChange={(e) => setEditAmenity(e.target.value)}
+                                  placeholder="Add amenity..."
+                                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black text-sm"
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      e.preventDefault()
+                                      handleAddEditAmenity()
+                                    }
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={handleAddEditAmenity}
+                                  className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </button>
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {editAccommodation.amenities.map((amenity, amenityIndex) => (
+                                  <div
+                                    key={`edit-amenity-${amenity}-${amenityIndex}`}
+                                    className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded text-xs"
+                                  >
+                                    <span>{amenity}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRemoveEditAmenity(amenity)}
+                                      className="text-green-600 hover:text-green-800"
+                                    >
+                                      <X className="h-3 w-3" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={handleSaveEditAccommodation}
+                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                              >
+                                Save Changes
+                              </button>
+                              <button
+                                type="button"
+                                onClick={handleCancelEditAccommodation}
+                                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        /* Display Card */
+                        <div className="border border-gray-200 rounded-lg p-4 bg-white">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                  acc.type === 'budget' ? 'bg-green-100 text-green-800' :
+                                  acc.type === 'mid-range' ? 'bg-blue-100 text-blue-800' :
+                                  'bg-purple-100 text-purple-800'
+                                }`}>
+                                  {acc.type}
+                                </span>
+                                <h4 className="font-medium text-gray-900">{acc.name}</h4>
+                              </div>
+                              <p className="text-sm text-gray-600 mt-1">{acc.description}</p>
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => handleEditAccommodation(index)}
+                                className="text-blue-600 hover:text-blue-800"
+                                title="Edit accommodation"
+                              >
+                                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveAccommodation(index)}
+                                className="text-red-600 hover:text-red-800"
+                                title="Remove accommodation"
+                              >
+                                <X className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                            <span>💰 {acc.priceRange}</span>
+                            <span>⭐ {acc.rating}/5</span>
+                            {acc.bookingUrl && (
+                              <a 
+                                href={acc.bookingUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:text-blue-800"
+                              >
+                                🔗 Booking Link
+                              </a>
+                            )}
+                          </div>
+                          
+                          {acc.amenities.length > 0 && (
+                            <div className="mt-2">
+                              <div className="flex flex-wrap gap-1">
+                                {acc.amenities.map((amenity, amenityIndex) => (
+                                  <span
+                                    key={`${index}-amenity-${amenityIndex}`}
+                                    className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs"
+                                  >
+                                    {amenity}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

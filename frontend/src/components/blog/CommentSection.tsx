@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { MessageCircle, ThumbsUp, Reply, User, Calendar } from 'lucide-react'
-import { useAuth } from '@/context/AuthContext'
+import { MessageCircle, Calendar } from 'lucide-react'
 import { containsProfanity, getProfanityError } from '@/utils/profanityFilter'
 
 interface Comment {
@@ -13,8 +12,6 @@ interface Comment {
     avatar: string
   }
   createdAt: string
-  likes: number
-  isLiked: boolean
   replies?: Comment[]
 }
 
@@ -22,17 +19,35 @@ interface CommentSectionProps {
   resourceId: string
   resourceType: string
   comments: Comment[]
-  onCommentSubmit: (content: string) => Promise<void>
+  onCommentSubmit: (name: string, email: string, content: string) => Promise<void>
 }
 
 export default function CommentSection({ resourceId, resourceType, comments, onCommentSubmit }: CommentSectionProps) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [newComment, setNewComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { user, isAuthenticated } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!name.trim()) {
+      setError('Please enter your name')
+      return
+    }
+
+    if (!email.trim()) {
+      setError('Please enter your email')
+      return
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address')
+      return
+    }
     
     if (!newComment.trim()) {
       setError('Please enter a comment')
@@ -49,7 +64,9 @@ export default function CommentSection({ resourceId, resourceType, comments, onC
     setError(null)
 
     try {
-      await onCommentSubmit(newComment.trim())
+      await onCommentSubmit(name.trim(), email.trim(), newComment.trim())
+      setName('')
+      setEmail('')
       setNewComment('')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit comment')
@@ -80,65 +97,72 @@ export default function CommentSection({ resourceId, resourceType, comments, onC
 
       {/* Comment Form */}
       <form onSubmit={handleSubmit} className="mb-8 bg-gray-50 rounded-lg p-6">
-        <div className="flex items-start gap-4">
-          <div className="flex-shrink-0">
-            {isAuthenticated && user ? (
-              <img
-                src={user.avatar || '/images/default-avatar.jpg'}
-                alt={user.name}
-                className="w-10 h-10 rounded-full"
-              />
-            ) : (
-              <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-gray-600" />
-              </div>
-            )}
-          </div>
-          
-          <div className="flex-1">
-            <div className="mb-4">
-              <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
-                {isAuthenticated && user ? `Commenting as ${user.name}` : 'Comment as Anonymous User'}
+        <div className="space-y-4">
+          {/* Name and Email Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Name *
               </label>
-              <textarea
-                id="comment"
-                rows={4}
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Share your thoughts..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 disabled={isSubmitting}
+                required
               />
             </div>
-
-            {error && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                {error}
-              </div>
-            )}
-
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-gray-500">
-                {isAuthenticated ? (
-                  <>Signed in and ready to comment</>
-                ) : (
-                  <>
-                    Commenting as guest. 
-                    <button type="button" className="text-indigo-600 hover:underline ml-1">
-                      Sign in for a better experience
-                    </button>
-                  </>
-                )}
-              </p>
-              
-              <button
-                type="submit"
-                disabled={isSubmitting || !newComment.trim()}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {isSubmitting ? 'Posting...' : 'Post Comment'}
-              </button>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your email address"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                disabled={isSubmitting}
+                required
+              />
             </div>
+          </div>
+
+          {/* Comment Field */}
+          <div>
+            <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
+              Comment *
+            </label>
+            <textarea
+              id="comment"
+              rows={4}
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Share your thoughts..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+              disabled={isSubmitting}
+              required
+            />
+          </div>
+
+          {error && (
+            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+              {error}
+            </div>
+          )}
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={isSubmitting || !name.trim() || !email.trim() || !newComment.trim()}
+              className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {isSubmitting ? 'Posting...' : 'Post Comment'}
+            </button>
           </div>
         </div>
       </form>
@@ -170,18 +194,7 @@ export default function CommentSection({ resourceId, resourceType, comments, onC
                     </span>
                   </div>
                   
-                  <p className="text-gray-700 mb-4 whitespace-pre-wrap">{comment.content}</p>
-                  
-                  <div className="flex items-center gap-4 text-sm">
-                    <button className="flex items-center gap-1 text-gray-500 hover:text-indigo-600 transition-colors">
-                      <ThumbsUp className="w-4 h-4" />
-                      Like ({comment.likes})
-                    </button>
-                    <button className="flex items-center gap-1 text-gray-500 hover:text-indigo-600 transition-colors">
-                      <Reply className="w-4 h-4" />
-                      Reply
-                    </button>
-                  </div>
+                  <p className="text-gray-700 whitespace-pre-wrap">{comment.content}</p>
                 </div>
               </div>
             </div>
