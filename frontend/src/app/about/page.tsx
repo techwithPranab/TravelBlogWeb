@@ -206,14 +206,14 @@ export default function AboutPage() {
 
       <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-8">
+        <div className="container mx-auto px-2">
+          <div className="max-w-5xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+              className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center"
             >
               {/* Profile Image */}
               <div className="flex justify-center lg:justify-start order-2 lg:order-1">
@@ -246,8 +246,8 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-2">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <motion.div
@@ -276,17 +276,17 @@ export default function AboutPage() {
       </section>
 
       {/* Our Story Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
+      <section className="pt-8 pb-16">
+        <div className="container mx-auto px-2">
           <div className="max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-center mb-12"
+              className="text-center mb-6"
             >
-              <h2 className="text-xl font-bold text-gray-900 mb-6">My Story</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">My Story</h2>
             </motion.div>
 
             <motion.div
