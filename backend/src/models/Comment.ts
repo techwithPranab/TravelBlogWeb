@@ -38,7 +38,7 @@ export interface IComment extends Document {
     reportedAt: Date
     description?: string
   }>
-  status: 'pending' | 'approved' | 'rejected' | 'hidden'
+  status: 'pending' | 'approved' | 'rejected' | 'hidden' | 'flagged'
   moderationNotes?: string
   ipAddress?: string
   userAgent?: string
@@ -202,7 +202,7 @@ const commentSchema = new Schema<IComment>({
   }],
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected', 'hidden'],
+    enum: ['pending', 'approved', 'rejected', 'hidden', 'flagged'],
     default: 'approved' // Auto-approve by default, can be changed based on moderation policy
   },
   moderationNotes: {
@@ -238,6 +238,11 @@ commentSchema.virtual('score').get(function() {
 // Virtual for reply count
 commentSchema.virtual('replyCount').get(function() {
   return this.replies.length
+})
+
+// Virtual for flag count
+commentSchema.virtual('flagCount').get(function() {
+  return this.flagReasons.length
 })
 
 // Pre-save middleware to detect mentions

@@ -401,13 +401,25 @@ export const flagComment = async (req: Request, res: Response) => {
 export const moderateComment = async (req: Request, res: Response) => {
   try {
     const { commentId } = req.params
-    const { status, moderationNotes } = req.body
+    const { action, moderationNotes } = req.body
 
-    if (!['pending', 'approved', 'rejected', 'hidden'].includes(status)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid status. Must be pending, approved, rejected, or hidden'
-      })
+    // Map action to status
+    let status: string
+    switch (action) {
+      case 'approve':
+        status = 'approved'
+        break
+      case 'reject':
+        status = 'rejected'
+        break
+      case 'flag':
+        status = 'flagged'
+        break
+      default:
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid action. Must be approve, reject, or flag'
+        })
     }
 
     const comment = await Comment.findById(commentId)
@@ -578,7 +590,6 @@ export const getAllCommentsAdmin = async (req: Request, res: Response) => {
       .limit(options.limit)
       .skip((options.page - 1) * options.limit)
       .populate('resourceId', 'title slug')
-      .lean()
 
     // Get total count
     const totalComments = await Comment.countDocuments(filter)
@@ -604,8 +615,12 @@ export const getAllCommentsAdmin = async (req: Request, res: Response) => {
     }
 
     stats.forEach(stat => {
-      if (stat._id && statusStats.hasOwnProperty(stat._id)) {
-        statusStats[stat._id as keyof typeof statusStats] = stat.count
+      if (stat._id) {
+        if (stat._id === 'hidden') {
+          statusStats.flagged = stat.count
+        } else if (statusStats.hasOwnProperty(stat._id)) {
+          statusStats[stat._id as keyof typeof statusStats] = stat.count
+        }
       }
     })
 

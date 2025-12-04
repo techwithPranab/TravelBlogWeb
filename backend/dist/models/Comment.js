@@ -193,7 +193,7 @@ const commentSchema = new mongoose_1.Schema({
         }],
     status: {
         type: String,
-        enum: ['pending', 'approved', 'rejected', 'hidden'],
+        enum: ['pending', 'approved', 'rejected', 'hidden', 'flagged'],
         default: 'approved' // Auto-approve by default, can be changed based on moderation policy
     },
     moderationNotes: {
@@ -226,6 +226,10 @@ commentSchema.virtual('score').get(function () {
 // Virtual for reply count
 commentSchema.virtual('replyCount').get(function () {
     return this.replies.length;
+});
+// Virtual for flag count
+commentSchema.virtual('flagCount').get(function () {
+    return this.flagReasons.length;
 });
 // Pre-save middleware to detect mentions
 commentSchema.pre('save', function (next) {

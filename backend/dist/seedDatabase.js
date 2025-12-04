@@ -9,7 +9,11 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 // Import models
 const User_1 = __importDefault(require("./models/User"));
 const Category_1 = __importDefault(require("./models/Category"));
+const Destination_1 = __importDefault(require("./models/Destination"));
+const Post_1 = __importDefault(require("./models/Post"));
+const Guide_1 = __importDefault(require("./models/Guide"));
 const Resource_1 = __importDefault(require("./models/Resource"));
+const Comment_1 = __importDefault(require("./models/Comment"));
 dotenv_1.default.config();
 const connectDB = async () => {
     try {
@@ -1010,6 +1014,88 @@ const sampleDestinations = [
         seoDescription: 'Discover Varanasi\'s sacred ghats, ancient temples, and spiritual heritage. Complete guide to India\'s holiest city on the Ganges.'
     }
 ];
+const sampleComments = [
+    {
+        resourceType: 'blog',
+        resourceId: null, // Will be set to actual post ID
+        author: {
+            name: 'Sarah Johnson',
+            email: 'sarah.j@example.com',
+            avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face'
+        },
+        content: 'Amazing article! I\'ve been to Bali twice and your tips about the hidden beaches are spot on. The rice terraces are absolutely breathtaking.',
+        status: 'approved',
+        likes: 12,
+        dislikes: 0,
+        flagCount: 0,
+        ipAddress: '192.168.1.100',
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+    },
+    {
+        resourceType: 'blog',
+        resourceId: null, // Will be set to actual post ID
+        author: {
+            name: 'Mike Chen',
+            email: 'mike.chen@example.com',
+            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
+        },
+        content: 'Great photography! The sunset shots are incredible. Could you share which camera settings you used for these?',
+        status: 'approved',
+        likes: 8,
+        dislikes: 0,
+        flagCount: 0,
+        ipAddress: '192.168.1.101',
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    },
+    {
+        resourceType: 'guide',
+        resourceId: null, // Will be set to actual guide ID
+        author: {
+            name: 'Emma Wilson',
+            email: 'emma.w@example.com',
+            avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face'
+        },
+        content: 'This guide saved my trip! The budget breakdown was exactly what I needed. Thanks for the detailed restaurant recommendations.',
+        status: 'approved',
+        likes: 15,
+        dislikes: 0,
+        flagCount: 0,
+        ipAddress: '192.168.1.102',
+        userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15'
+    },
+    {
+        resourceType: 'destination',
+        resourceId: null, // Will be set to actual destination ID
+        author: {
+            name: 'David Rodriguez',
+            email: 'david.r@example.com',
+            avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
+        },
+        content: 'I disagree with some points about safety. While most places are safe, it\'s always good to be cautious with valuables.',
+        status: 'pending',
+        likes: 3,
+        dislikes: 1,
+        flagCount: 0,
+        ipAddress: '192.168.1.103',
+        userAgent: 'Mozilla/5.0 (Android 11; Mobile) AppleWebKit/537.36'
+    },
+    {
+        resourceType: 'guide',
+        resourceId: null, // Will be set to actual guide ID
+        author: {
+            name: 'Lisa Park',
+            email: 'lisa.p@example.com',
+            avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face'
+        },
+        content: 'Excellent guide! The itinerary planning section is particularly helpful. I\'ll definitely use this for my upcoming trip.',
+        status: 'approved',
+        likes: 9,
+        dislikes: 0,
+        flagCount: 0,
+        ipAddress: '192.168.1.104',
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15'
+    }
+];
 const seedDatabase = async () => {
     try {
         // Clear existing data
@@ -1073,11 +1159,45 @@ const seedDatabase = async () => {
             });
             resources.push(await resource.save());
         }
+        // Create sample comments
+        console.log('Creating sample comments...');
+        await Comment_1.default.deleteMany({}); // Clear existing comments
+        // Get some sample posts, guides, and destinations to attach comments to
+        const samplePosts = await Post_1.default.find().limit(2);
+        const sampleGuides = await Guide_1.default.find().limit(2);
+        const sampleDestinations = await Destination_1.default.find().limit(2);
+        const comments = [];
+        for (let i = 0; i < sampleComments.length; i++) {
+            const commentData = sampleComments[i];
+            let resourceId = null;
+            // Assign comments to different resource types
+            if (commentData.resourceType === 'blog' && samplePosts.length > 0) {
+                resourceId = samplePosts[i % samplePosts.length]._id.toString();
+            }
+            else if (commentData.resourceType === 'guide' && sampleGuides.length > 0) {
+                resourceId = sampleGuides[i % sampleGuides.length]._id.toString();
+            }
+            else if (commentData.resourceType === 'destination' && sampleDestinations.length > 0) {
+                resourceId = sampleDestinations[i % sampleDestinations.length]._id.toString();
+            }
+            else {
+                // Fallback: create a simple resource ID for demo purposes
+                resourceId = new mongoose_1.default.Types.ObjectId().toString();
+            }
+            if (resourceId) {
+                const comment = new Comment_1.default({
+                    ...commentData,
+                    resourceId
+                });
+                comments.push(await comment.save());
+            }
+        }
         console.log('Database seeded successfully!');
         console.log(`Created:`);
         //console.log(`- ${users.length} users`)
         console.log(`- ${categories.length} categories`);
         console.log(`- ${resources.length} resources`);
+        console.log(`- ${comments.length} comments`);
     }
     catch (error) {
         console.error('Error seeding database:', error);

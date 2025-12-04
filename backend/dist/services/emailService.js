@@ -38,7 +38,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emailService = void 0;
 const EmailTemplate_1 = __importDefault(require("../models/EmailTemplate"));
+const SiteSettings_1 = __importDefault(require("../models/SiteSettings"));
 const nodemailer = __importStar(require("nodemailer"));
+// Helper function to get email addresses from site settings
+async function getEmailsFromSiteSettings() {
+    try {
+        const siteSettings = await SiteSettings_1.default.findOne();
+        return {
+            supportEmail: siteSettings?.supportEmail || process.env.SUPPORT_EMAIL || 'support@bagpackstories.in',
+            contactEmail: siteSettings?.contactEmail || process.env.CONTACT_EMAIL || 'hello@bagpackstories.in',
+            fromEmail: siteSettings?.emailSettings?.fromEmail || process.env.FROM_EMAIL || 'noreply@bagpackstories.in'
+        };
+    }
+    catch (error) {
+        console.error('Error fetching site settings for emails:', error);
+        return {
+            supportEmail: process.env.SUPPORT_EMAIL || 'support@bagpackstories.in',
+            contactEmail: process.env.CONTACT_EMAIL || 'hello@bagpackstories.in',
+            fromEmail: process.env.FROM_EMAIL || 'noreply@bagpackstories.in'
+        };
+    }
+}
 class EmailService {
     constructor() {
         // Check if username/password are configured for SMTP
@@ -478,7 +498,7 @@ Manage preferences: {{managePreferencesUrl}}
                 postUrl: `${process.env.FRONTEND_URL}/blog/${post.slug}`,
                 shareUrl: `${process.env.FRONTEND_URL}/blog/${post.slug}?share=true`,
                 viewCount: (post.viewCount || 0).toString(),
-                supportEmail: process.env.SUPPORT_EMAIL || process.env.ADMIN_EMAIL || 'support@bagpackstories.in'
+                supportEmail: (await getEmailsFromSiteSettings()).supportEmail
             };
             console.log('📧 [POST APPROVAL] Variables prepared:', {
                 postTitle: variables.postTitle,

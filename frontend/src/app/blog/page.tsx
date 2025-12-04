@@ -5,6 +5,7 @@ import { Search, Calendar, User, Clock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Head from 'next/head'
+import { useSearchParams } from 'next/navigation'
 import { postsApi, categoriesApi, type Post, type Category } from '@/lib/api'
 import { CountryFilter } from '@/components/common/CountryFilter'
 
@@ -16,6 +17,7 @@ export default function BlogPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const searchParams = useSearchParams()
 
   // Generate SEO metadata for blog page
   const generateSEOMetadata = () => {
@@ -83,6 +85,12 @@ export default function BlogPage() {
 
   // Fetch data on component mount
   useEffect(() => {
+    // Read category from URL parameters
+    const categoryParam = searchParams.get('category')
+    if (categoryParam) {
+      setSelectedCategory(categoryParam)
+    }
+
     const fetchData = async () => {
       try {
         setLoading(true)

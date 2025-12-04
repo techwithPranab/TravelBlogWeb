@@ -80,7 +80,7 @@ const siteSettingsSchema = new mongoose_1.Schema({
         sunday: { type: String, default: 'Closed' }
     },
     supportSettings: {
-        email: { type: String, default: 'support@bagpackstories.in' },
+        email: { type: String, default: process.env.SUPPORT_EMAIL || 'support@yourdomain.com' },
         responseTime: { type: String, default: 'Within 24 hours' }
     },
     socialLinks: {

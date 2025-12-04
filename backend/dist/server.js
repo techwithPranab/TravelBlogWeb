@@ -265,8 +265,8 @@ app.get('/api/public/contact', async (req, res) => {
                 siteName: 'BagPackStories',
                 siteDescription: 'Discover amazing travel destinations and guides',
                 siteUrl: 'https://yourdomain.com',
-                contactEmail: 'hello@bagpackstories.in',
-                supportEmail: 'support@bagpackstories.in',
+                contactEmail: process.env.CONTACT_EMAIL || 'hello@yourdomain.com',
+                supportEmail: process.env.SUPPORT_EMAIL || 'support@yourdomain.com',
                 contactPhone: '+1 (555) 123-4567',
                 contactAddress: {
                     street: '123 Travel Street',
@@ -285,7 +285,7 @@ app.get('/api/public/contact', async (req, res) => {
                     sunday: 'Closed'
                 },
                 supportSettings: {
-                    email: 'support@bagpackstories.in',
+                    email: process.env.SUPPORT_EMAIL || 'support@yourdomain.com',
                     responseTime: 'Within 24 hours'
                 },
                 socialLinks: {
@@ -324,7 +324,7 @@ app.get('/api/public/contact', async (req, res) => {
                 sunday: 'Closed'
             },
             support: settings.supportSettings || {
-                email: 'support@bagpackstories.in',
+                email: process.env.SUPPORT_EMAIL || 'support@yourdomain.com',
                 responseTime: 'Within 24 hours'
             }
         };

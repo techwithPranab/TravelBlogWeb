@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Eye, EyeOff, LogIn, Shield } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
+import { API_BASE_URL } from '@/lib/api'
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
@@ -19,7 +20,7 @@ export default function AdminLoginPage() {
     setError('')
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

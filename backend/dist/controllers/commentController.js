@@ -358,12 +358,24 @@ exports.flagComment = flagComment;
 const moderateComment = async (req, res) => {
     try {
         const { commentId } = req.params;
-        const { status, moderationNotes } = req.body;
-        if (!['pending', 'approved', 'rejected', 'hidden'].includes(status)) {
-            return res.status(400).json({
-                success: false,
-                error: 'Invalid status. Must be pending, approved, rejected, or hidden'
-            });
+        const { action, moderationNotes } = req.body;
+        // Map action to status
+        let status;
+        switch (action) {
+            case 'approve':
+                status = 'approved';
+                break;
+            case 'reject':
+                status = 'rejected';
+                break;
+            case 'flag':
+                status = 'flagged';
+                break;
+            default:
+                return res.status(400).json({
+                    success: false,
+                    error: 'Invalid action. Must be approve, reject, or flag'
+                });
         }
         const comment = await Comment_1.default.findById(commentId);
         if (!comment) {
@@ -501,8 +513,7 @@ const getAllCommentsAdmin = async (req, res) => {
             .sort({ [options.sortBy]: options.sortOrder === 'desc' ? -1 : 1 })
             .limit(options.limit)
             .skip((options.page - 1) * options.limit)
-            .populate('resourceId', 'title slug')
-            .lean();
+            .populate('resourceId', 'title slug');
         // Get total count
         const totalComments = await Comment_1.default.countDocuments(filter);
         console.log('📝 Total comments found:', totalComments);
@@ -524,8 +535,13 @@ const getAllCommentsAdmin = async (req, res) => {
             flagged: 0
         };
         stats.forEach(stat => {
-            if (stat._id && statusStats.hasOwnProperty(stat._id)) {
-                statusStats[stat._id] = stat.count;
+            if (stat._id) {
+                if (stat._id === 'hidden') {
+                    statusStats.flagged = stat.count;
+                }
+                else if (statusStats.hasOwnProperty(stat._id)) {
+                    statusStats[stat._id] = stat.count;
+                }
             }
         });
         res.json({

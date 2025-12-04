@@ -84,25 +84,28 @@ export default function AdminCommentsPage() {
   const fetchComments = async () => {
     try {
       setLoading(true)
-      console.log('🔄 Fetching comments with params:', {
+      const params: any = {
         page: pagination.page,
         limit: pagination.limit,
-        searchTerm: searchTerm || undefined,
-        status: statusFilter !== 'all' ? statusFilter : undefined,
-        resourceType: resourceTypeFilter !== 'all' ? resourceTypeFilter : undefined,
         sortBy,
         sortOrder
-      })
+      }
       
-      const response = await adminApi.getAllComments({
-        page: pagination.page,
-        limit: pagination.limit,
-        searchTerm: searchTerm || undefined,
-        status: statusFilter !== 'all' ? statusFilter : undefined,
-        resourceType: resourceTypeFilter !== 'all' ? resourceTypeFilter : undefined,
-        sortBy,
-        sortOrder
-      })
+      if (searchTerm && searchTerm.trim()) {
+        params.searchTerm = searchTerm.trim()
+      }
+      
+      if (statusFilter !== 'all') {
+        params.status = statusFilter
+      }
+      
+      if (resourceTypeFilter !== 'all') {
+        params.resourceType = resourceTypeFilter
+      }
+      
+      console.log('🔄 Fetching comments with params:', params)
+      
+      const response = await adminApi.getAllComments(params)
 
       console.log('📨 API Response:', response)
 
