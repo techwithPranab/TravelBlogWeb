@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { publicApi } from '@/lib/api';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,39 @@ export default function ContactPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [contactInfo, setContactInfo] = useState<{
+    email: string;
+    phone: string;
+    address?: {
+      street: string;
+      city: string;
+      state: string;
+      zipCode: string;
+      country: string;
+    };
+    support: {
+      email: string;
+      responseTime: string;
+    };
+  } | null>(null);
+  const [contactLoading, setContactLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const response = await publicApi.getContact();
+        if (response.success) {
+          setContactInfo(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch contact info:', error);
+      } finally {
+        setContactLoading(false);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -71,7 +105,7 @@ export default function ContactPage() {
                 "@type": "ContactPoint",
                 "telephone": "+1-555-TRAVEL",
                 "contactType": "customer service",
-                "email": "hello@bagpackstories.in",
+                "email": contactInfo?.email || "hello@bagpackstories.in",
                 "availableLanguage": "English"
               }
             },
@@ -207,8 +241,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-base font-medium text-gray-900">Email</h3>
-                    <p className="text-gray-600">hello@bagpackstories.in</p>
-                    <p className="text-gray-600">support@bagpackstories.in</p>
+                    <p className="text-gray-600">{contactLoading ? 'Loading...' : (contactInfo?.email || 'hello@bagpackstories.in')}</p>
+                    {/* <p className="text-gray-600">{contactLoading ? 'Loading...' : (contactInfo?.support?.email || 'support@bagpackstories.in')}</p> */}
                   </div>
                 </div>
 
@@ -220,8 +254,12 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-base font-medium text-gray-900">Phone</h3>
-                    <p className="text-gray-600">+1 (555) TRAVEL</p>
-                    <p className="text-gray-600">Mon-Fri 9AM-6PM EST</p>
+                    <p className="text-gray-600">
+                      {contactLoading ? 'Loading...' : (contactInfo?.phone || '+1 (555) TRAVEL')}
+                    </p>
+                    {contactInfo?.support?.responseTime && (
+                      <p className="text-gray-600">{contactInfo.support.responseTime}</p>
+                    )}
                   </div>
                 </div>
 
@@ -234,7 +272,17 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-base font-medium text-gray-900">Address</h3>
-                    <p className="text-gray-600">123 Travel Street<br />Adventure City, AC 12345</p>
+                    <p className="text-gray-600">
+                      {contactLoading ? 'Loading...' : contactInfo?.address ? (
+                        <>
+                          {contactInfo.address.street}<br />
+                          {contactInfo.address.city}, {contactInfo.address.state} {contactInfo.address.zipCode}
+                          {contactInfo.address.country && `, ${contactInfo.address.country}`}
+                        </>
+                      ) : (
+                        <>123 Travel Street<br />Adventure City, AC 12345</>
+                      )}
+                    </p>
                   </div>
                 </div>
               </div>

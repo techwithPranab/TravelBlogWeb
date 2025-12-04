@@ -1,18 +1,58 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { ArrowLeft, Scale, FileText, Shield, AlertTriangle, CheckCircle, Gavel } from 'lucide-react'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Terms of Service | BagPackStories',
-  description: 'Read our terms of service to understand your rights and responsibilities when using BagPackStories platform.',
-  keywords: 'terms of service, user agreement, legal terms, conditions, website rules',
-}
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import Head from 'next/head'
+import { ArrowLeft, Scale, FileText, Shield, AlertTriangle, CheckCircle, Gavel } from 'lucide-react'
+import { publicApi } from '@/lib/api'
 
 export default function TermsOfServicePage() {
+  const [contactInfo, setContactInfo] = useState<{
+    email: string;
+    phone: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      zipCode: string;
+      country: string;
+    };
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const response = await publicApi.getContact();
+        if (response.success) {
+          setContactInfo(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch contact info:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-16">
+    <>
+      <Head>
+        <title>Terms of Service | BagPackStories</title>
+        <meta
+          name="description"
+          content="Read our terms of service to understand your rights and responsibilities when using BagPackStories platform."
+        />
+        <meta
+          name="keywords"
+          content="terms of service, user agreement, legal terms, conditions, website rules"
+        />
+      </Head>
+      <div className="min-h-screen bg-white">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-16">
         <div className="container mx-auto px-4">
           <Link 
             href="/" 
@@ -283,9 +323,9 @@ export default function TermsOfServicePage() {
                   If you have any questions about these Terms of Service, please contact us:
                 </p>
                 <div className="space-y-2 text-gray-700">
-                  <p><strong>Email:</strong> legal@bagpackstories.in</p>
-                  <p><strong>Address:</strong> BagPackStories Legal Team, 123 Travel Street, Adventure City, AC 12345</p>
-                  <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                  <p><strong>Email:</strong> {loading ? 'Loading...' : (contactInfo?.email || 'legal@bagpackstories.in')}</p>
+                  <p><strong>Address:</strong> {loading ? 'Loading...' : `${contactInfo?.address?.street || 'BagPackStories Legal Team'}, ${contactInfo?.address?.city || 'Adventure City'}, ${contactInfo?.address?.state || 'AC'} ${contactInfo?.address?.zipCode || '12345'}`}</p>
+                  <p><strong>Phone:</strong> {loading ? 'Loading...' : (contactInfo?.phone || '+1 (555) 123-4567')}</p>
                 </div>
               </div>
             </section>
@@ -293,5 +333,6 @@ export default function TermsOfServicePage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

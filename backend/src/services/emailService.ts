@@ -2,6 +2,7 @@ import { IPost } from '../models/Post';
 import { IUser } from '../models/User';
 import { INewsletter } from '../models/Newsletter';
 import EmailTemplate, { IEmailTemplate } from '../models/EmailTemplate';
+import SiteSettings from '../models/SiteSettings';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
 
@@ -47,6 +48,29 @@ interface BrevoEmailRequest {
   subject: string;
   htmlContent: string;
   textContent?: string;
+}
+
+// Helper function to get email addresses from site settings
+async function getEmailsFromSiteSettings(): Promise<{
+  supportEmail: string;
+  contactEmail: string;
+  fromEmail: string;
+}> {
+  try {
+    const siteSettings = await SiteSettings.findOne();
+    return {
+      supportEmail: siteSettings?.supportEmail || process.env.SUPPORT_EMAIL || 'support@bagpackstories.in',
+      contactEmail: siteSettings?.contactEmail || process.env.CONTACT_EMAIL || 'hello@bagpackstories.in',
+      fromEmail: siteSettings?.emailSettings?.fromEmail || process.env.FROM_EMAIL || 'noreply@bagpackstories.in'
+    };
+  } catch (error) {
+    console.error('Error fetching site settings for emails:', error);
+    return {
+      supportEmail: process.env.SUPPORT_EMAIL || 'support@bagpackstories.in',
+      contactEmail: process.env.CONTACT_EMAIL || 'hello@bagpackstories.in',
+      fromEmail: process.env.FROM_EMAIL || 'noreply@bagpackstories.in'
+    };
+  }
 }
 
 interface SMTPConfig {
@@ -525,7 +549,7 @@ Manage preferences: {{managePreferencesUrl}}
         postUrl: `${process.env.FRONTEND_URL}/blog/${post.slug}`,
         shareUrl: `${process.env.FRONTEND_URL}/blog/${post.slug}?share=true`,
         viewCount: (post.viewCount || 0).toString(),
-        supportEmail: process.env.SUPPORT_EMAIL || process.env.ADMIN_EMAIL || 'support@bagpackstories.in'
+        supportEmail: (await getEmailsFromSiteSettings()).supportEmail
       };
 
       console.log('📧 [POST APPROVAL] Variables prepared:', {

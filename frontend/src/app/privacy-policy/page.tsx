@@ -1,16 +1,57 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { ArrowLeft, Shield, Eye, Lock, UserCheck, Globe, Mail } from 'lucide-react'
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy | BagPackStories',
-  description: 'Learn how BagPackStories collects, uses, and protects your personal information. Our commitment to your privacy and data security.',
-  keywords: 'privacy policy, data protection, personal information, GDPR, CCPA, data security',
-}
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Head from 'next/head';
+import { ArrowLeft, Shield, Eye, Lock, UserCheck, Globe, Mail } from 'lucide-react';
+import { publicApi } from '@/lib/api';
 
 export default function PrivacyPolicyPage() {
+  const [contactInfo, setContactInfo] = useState<{
+    email: string;
+    phone: string;
+    address?: {
+      street: string;
+      city: string;
+      state: string;
+      zipCode: string;
+      country: string;
+    };
+    supportEmail?: string;
+  } | null>(null);
+  const [contactLoading, setContactLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const response = await publicApi.getContact();
+        if (response.success) {
+          setContactInfo(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch contact info:', error);
+      } finally {
+        setContactLoading(false);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <Head>
+        <title>Privacy Policy | BagPackStories</title>
+        <meta
+          name="description"
+          content="Learn how BagPackStories collects, uses, and protects your personal information. Our commitment to your privacy and data security."
+        />
+        <meta
+          name="keywords"
+          content="privacy policy, data protection, personal information, GDPR, CCPA, data security"
+        />
+      </Head>
+      <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
         <div className="container mx-auto px-4">
@@ -173,7 +214,14 @@ export default function PrivacyPolicyPage() {
                   <li>Withdraw consent at any time</li>
                 </ul>
                 <p>
-                  To exercise these rights, please contact us at privacy@bagpackstories.in
+                  To exercise these rights, please contact us at{' '}
+                  {contactLoading ? (
+                    <span className="text-gray-500">Loading...</span>
+                  ) : (
+                    <span className="text-blue-600 font-medium">
+                      {contactInfo?.supportEmail || contactInfo?.email || 'privacy@bagpackstories.in'}
+                    </span>
+                  )}
                 </p>
               </div>
             </section>
@@ -230,9 +278,34 @@ export default function PrivacyPolicyPage() {
                   If you have questions about this privacy policy or our data practices, please contact us:
                 </p>
                 <div className="space-y-2 text-gray-700">
-                  <p><strong>Email:</strong> privacy@bagpackstories.in</p>
-                  <p><strong>Address:</strong> BagPackStories Privacy Team, 123 Travel Street, Adventure City, AC 12345</p>
-                  <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                  <p>
+                    <strong>Email:</strong>{' '}
+                    {contactLoading ? (
+                      <span className="text-gray-500">Loading...</span>
+                    ) : (
+                      <span>{contactInfo?.supportEmail || contactInfo?.email || 'privacy@bagpackstories.in'}</span>
+                    )}
+                  </p>
+                  <p>
+                    <strong>Address:</strong>{' '}
+                    {contactLoading ? (
+                      <span className="text-gray-500">Loading...</span>
+                    ) : contactInfo?.address ? (
+                      <span>
+                        {contactInfo.address.street}, {contactInfo.address.city}, {contactInfo.address.state} {contactInfo.address.zipCode}, {contactInfo.address.country}
+                      </span>
+                    ) : (
+                      <span>BagPackStories Privacy Team, 123 Travel Street, Adventure City, AC 12345</span>
+                    )}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong>{' '}
+                    {contactLoading ? (
+                      <span className="text-gray-500">Loading...</span>
+                    ) : (
+                      <span>{contactInfo?.phone || '+1 (555) 123-4567'}</span>
+                    )}
+                  </p>
                 </div>
               </div>
             </section>
@@ -240,5 +313,6 @@ export default function PrivacyPolicyPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

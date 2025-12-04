@@ -91,7 +91,7 @@ export default function EmailTemplatesPage() {
   const handleSendTestEmail = async (templateKey: string) => {
     setSendingTestEmail(true)
     try {
-      const testEmail = prompt('Enter test email address:') || 'admin@bagpackstories.in'
+      const testEmail = prompt('Enter test email address:') || 'test@example.com'
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
       const response = await fetch(`${apiUrl}/admin/test-email`, {
         method: 'POST',

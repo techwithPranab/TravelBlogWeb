@@ -522,7 +522,7 @@ Unsubscribe: {{unsubscribeUrl}}`
                       value={settings.contactEmail || ''}
                       onChange={(e) => updateSettings('contactEmail', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="hello@bagpackstories.in"
+                      placeholder="contact@yourdomain.com"
                     />
                   </div>
                 </div>
@@ -715,7 +715,7 @@ Unsubscribe: {{unsubscribeUrl}}`
                       value={settings.supportSettings?.email || ''}
                       onChange={(e) => updateSettings('supportSettings.email', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="support@bagpackstories.in"
+                      placeholder="support@yourdomain.com"
                     />
                   </div>
                   <div>
