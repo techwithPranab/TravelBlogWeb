@@ -814,7 +814,7 @@ export const adminApi = {
     })
   },
 
-  moderateComment: async (commentId: string, action: 'approve' | 'reject' | 'flag'): Promise<ApiResponse<{ message: string }>> => {
+  moderateComment: async (commentId: string, action: 'approve' | 'reject' | 'flag' | 'unflag'): Promise<ApiResponse<{ message: string }>> => {
     return authenticatedApiRequest(`/comments/${commentId}/moderate`, {
       method: 'PATCH',
       body: JSON.stringify({ action })

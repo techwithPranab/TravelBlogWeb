@@ -415,10 +415,13 @@ export const moderateComment = async (req: Request, res: Response) => {
       case 'flag':
         status = 'flagged'
         break
+      case 'unflag':
+        status = 'approved' // Unflagging sets status back to approved
+        break
       default:
         return res.status(400).json({
           success: false,
-          error: 'Invalid action. Must be approve, reject, or flag'
+          error: 'Invalid action. Must be approve, reject, flag, or unflag'
         })
     }
 

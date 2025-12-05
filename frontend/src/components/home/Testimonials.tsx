@@ -30,36 +30,7 @@ export function Testimonials() {
       } catch (error) {
         console.error('Error fetching testimonials:', error)
         setError('Failed to load testimonials')
-        // Set fallback testimonials if API fails
-        setTestimonials([
-          {
-            id: '1',
-            name: 'Sarah Johnson',
-            role: 'Travel Enthusiast',
-            avatar: '/avatars/sarah.jpg',
-            rating: 5,
-            text: 'This travel blog has completely transformed how I plan my trips. The detailed guides and stunning photography inspire me to explore new destinations I never would have considered before.',
-            featured: true
-          },
-          {
-            id: '2',
-            name: 'Michael Chen',
-            role: 'Digital Nomad',
-            avatar: '/avatars/michael.jpg',
-            rating: 5,
-            text: 'As someone who travels for work, I rely on authentic travel experiences. The stories here are genuine, practical, and beautifully written. It\'s become my go-to resource for travel inspiration.',
-            featured: true
-          },
-          {
-            id: '3',
-            name: 'Emma Rodriguez',
-            role: 'Adventure Seeker',
-            avatar: '/avatars/emma.jpg',
-            rating: 5,
-            text: 'The quality of content and photography is exceptional. Every post makes me want to pack my bags immediately. The travel tips have saved me countless hours of planning.',
-            featured: true
-          }
-        ])
+        setTestimonials([])
       } finally {
         setIsLoading(false)
       }
@@ -67,6 +38,11 @@ export function Testimonials() {
 
     fetchTestimonials()
   }, [])
+
+  // Don't render anything if there are no testimonials
+  if (!isLoading && testimonials.length === 0) {
+    return null
+  }
 
   if (isLoading) {
     return (
@@ -148,14 +124,14 @@ export function Testimonials() {
             </div>
 
             {/* Rating */}
-            <div className="flex justify-center gap-1 mb-4">
+            {/* <div className="flex justify-center gap-1 mb-4">
               {[...Array(testimonial.rating)].map((_, i) => (
                 <Star
                   key={`star-${testimonial.id}-${i}`}
                   className="h-5 w-5 text-yellow-400 fill-current"
                 />
               ))}
-            </div>
+            </div> */}
 
             {/* Testimonial Text */}
             <blockquote className="text-gray-600 dark:text-gray-300 text-center mb-6 italic">
@@ -174,9 +150,9 @@ export function Testimonials() {
                 <h4 className="font-semibold text-gray-900 dark:text-white">
                   {testimonial.name}
                 </h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                {/* <p className="text-sm text-gray-500 dark:text-gray-400">
                   {testimonial.role}
-                </p>
+                </p> */}
               </div>
             </div>
           </motion.div>

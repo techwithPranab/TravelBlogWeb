@@ -209,37 +209,24 @@ app.get('/api/public/about-metrics', async (req, res) => {
 // Public testimonials endpoint for home page
 app.get('/api/public/testimonials', async (req, res) => {
     try {
-        // For now, return curated testimonials
-        // In a real application, this could fetch from a testimonials collection
-        const testimonials = [
-            {
-                id: '1',
-                name: 'Sarah Johnson',
-                role: 'Adventure Traveler',
-                avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-                rating: 5,
-                text: 'BagPackStories has been my go-to resource for planning amazing adventures. The detailed guides and real traveler experiences are invaluable.',
+        const Comment = require('./models/Comment').default;
+        // Get 3 random flagged comments
+        const flaggedComments = await Comment.aggregate([
+            { $match: { status: 'flagged' } },
+            { $sample: { size: 3 } }
+        ]);
+        // Transform comments into testimonial format
+        const testimonials = flaggedComments.map((comment, index) => {
+            return {
+                id: comment._id,
+                name: comment.author.name,
+                role: 'Community Member',
+                avatar: comment.author.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.author.name)}&background=random`,
+                rating: 5, // Default rating for testimonials
+                text: comment.content.length > 200 ? comment.content.substring(0, 200) + '...' : comment.content,
                 featured: true
-            },
-            {
-                id: '2',
-                name: 'Mike Chen',
-                role: 'Photography Enthusiast',
-                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-                rating: 5,
-                text: 'The photography tips and destination guides have helped me capture stunning travel photos. Highly recommend for any travel photographer.',
-                featured: true
-            },
-            {
-                id: '3',
-                name: 'Emma Rodriguez',
-                role: 'Solo Female Traveler',
-                avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-                rating: 5,
-                text: 'As a solo female traveler, I appreciate the safety tips and community support. BagPackStories makes solo travel feel safe and exciting.',
-                featured: true
-            }
-        ];
+            };
+        });
         res.status(200).json({
             success: true,
             data: testimonials

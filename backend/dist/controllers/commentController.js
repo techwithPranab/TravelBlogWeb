@@ -371,10 +371,13 @@ const moderateComment = async (req, res) => {
             case 'flag':
                 status = 'flagged';
                 break;
+            case 'unflag':
+                status = 'approved'; // Unflagging sets status back to approved
+                break;
             default:
                 return res.status(400).json({
                     success: false,
-                    error: 'Invalid action. Must be approve, reject, or flag'
+                    error: 'Invalid action. Must be approve, reject, flag, or unflag'
                 });
         }
         const comment = await Comment_1.default.findById(commentId);

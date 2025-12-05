@@ -9,6 +9,7 @@ import {
   Check, 
   X, 
   Flag, 
+  FlagOff,
   Eye,
   Calendar,
   User,
@@ -128,7 +129,7 @@ export default function AdminCommentsPage() {
 
   useEffect(() => {
     fetchComments()
-  }, [pagination.page, statusFilter, resourceTypeFilter, sortBy, sortOrder])
+  }, [pagination.page, pagination.limit, statusFilter, resourceTypeFilter, sortBy, sortOrder])
 
   const handleSearch = () => {
     setPagination(prev => ({ ...prev, page: 1 }))
@@ -150,14 +151,21 @@ export default function AdminCommentsPage() {
     }
   }
 
-  const handleModerateComment = async (commentId: string, action: 'approve' | 'reject' | 'flag') => {
+  const handleModerateComment = async (commentId: string, action: 'approve' | 'reject' | 'flag' | 'unflag') => {
     try {
       const response = await adminApi.moderateComment(commentId, action)
       if (response.success) {
         // Update the comment status locally
         setComments(prev => prev.map(comment => 
           comment._id === commentId 
-            ? { ...comment, status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'flagged' }
+            ? { 
+                ...comment, 
+                status: action === 'approve' || action === 'unflag' 
+                  ? 'approved' 
+                  : action === 'reject' 
+                  ? 'rejected' 
+                  : 'flagged' 
+              }
             : comment
         ))
         // Refresh to get updated stats
@@ -409,7 +417,33 @@ export default function AdminCommentsPage() {
                           </button>
                         </>
                       )}
-                      {comment.status !== 'flagged' && (
+                      {comment.status === 'approved' && (
+                        <button
+                          onClick={() => handleModerateComment(comment._id, 'reject')}
+                          className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                          title="Reject"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                      {comment.status === 'rejected' && (
+                        <button
+                          onClick={() => handleModerateComment(comment._id, 'approve')}
+                          className="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors"
+                          title="Approve"
+                        >
+                          <Check className="w-4 h-4" />
+                        </button>
+                      )}
+                      {comment.status === 'flagged' ? (
+                        <button
+                          onClick={() => handleModerateComment(comment._id, 'unflag')}
+                          className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                          title="Remove Flag"
+                        >
+                          <FlagOff className="w-4 h-4" />
+                        </button>
+                      ) : (
                         <button
                           onClick={() => handleModerateComment(comment._id, 'flag')}
                           className="p-2 text-orange-600 hover:bg-orange-100 rounded-lg transition-colors"
@@ -433,12 +467,37 @@ export default function AdminCommentsPage() {
           )}
 
           {/* Pagination */}
-          {pagination.pages > 1 && (
-            <div className="border-t border-gray-200 p-6">
-              <div className="flex items-center justify-between">
+          <div className="border-t border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
                 <div className="text-sm text-gray-700">
                   Showing {((pagination.page - 1) * pagination.limit) + 1} to {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} results
                 </div>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="limit-select" className="text-sm text-gray-700">Show:</label>
+                  <select
+                    id="limit-select"
+                    value={pagination.limit}
+                    onChange={(e) => {
+                      const newLimit = parseInt(e.target.value)
+                      setPagination(prev => ({ 
+                        ...prev, 
+                        limit: newLimit, 
+                        page: 1 // Reset to first page when changing limit
+                      }))
+                    }}
+                    className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                  </select>
+                  <span className="text-sm text-gray-700">per page</span>
+                </div>
+              </div>
+              
+              {pagination.pages > 1 && (
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
@@ -447,9 +506,37 @@ export default function AdminCommentsPage() {
                   >
                     Previous
                   </button>
-                  <span className="px-3 py-2 text-sm text-gray-700">
-                    Page {pagination.page} of {pagination.pages}
-                  </span>
+                  
+                  {/* Page Numbers */}
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.min(5, pagination.pages) }, (_, i) => {
+                      let pageNum
+                      if (pagination.pages <= 5) {
+                        pageNum = i + 1
+                      } else if (pagination.page <= 3) {
+                        pageNum = i + 1
+                      } else if (pagination.page >= pagination.pages - 2) {
+                        pageNum = pagination.pages - 4 + i
+                      } else {
+                        pageNum = pagination.page - 2 + i
+                      }
+                      
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setPagination(prev => ({ ...prev, page: pageNum }))}
+                          className={`px-3 py-2 border rounded-lg text-sm ${
+                            pagination.page === pageNum
+                              ? 'bg-blue-600 text-white border-blue-600'
+                              : 'border-gray-300 hover:bg-gray-50'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  
                   <button
                     onClick={() => setPagination(prev => ({ ...prev, page: Math.min(pagination.pages, prev.page + 1) }))}
                     disabled={pagination.page === pagination.pages}
@@ -458,9 +545,9 @@ export default function AdminCommentsPage() {
                     Next
                   </button>
                 </div>
-              </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
 
