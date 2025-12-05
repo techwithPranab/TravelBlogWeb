@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   ComposableMap,
@@ -9,7 +9,8 @@ import {
   Marker,
   ZoomableGroup
 } from 'react-simple-maps'
-import { MapPin, Camera, Calendar, ExternalLink, X } from 'lucide-react'
+import { MapPin, Camera, Calendar, ExternalLink, X, ZoomIn, ZoomOut } from 'lucide-react'
+import { publicApi } from '@/lib/api'
 
 // World map topology data URL
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
@@ -24,71 +25,98 @@ interface TravelLocation {
   visitDate: string
   highlights: string[]
   blogPost?: string
+  posts?: Array<{
+    id: string
+    title: string
+    slug: string
+    excerpt: string
+    featuredImage?: {
+      url: string
+      alt: string
+      caption?: string
+    }
+    publishedAt: string
+    viewCount: number
+  }>
+  totalPosts?: number
+  totalViews?: number
 }
 
-// Sample travel locations data
-const travelLocations: TravelLocation[] = [
-  {
-    id: '1',
-    name: 'Tokyo',
-    country: 'Japan',
-    coordinates: [139.6917, 35.6895],
-    description: 'Amazing blend of traditional and modern culture, incredible food scene.',
-    photos: ['/images/destinations/tokyo-1.jpg', '/images/destinations/tokyo-2.jpg'],
-    visitDate: 'March 2024',
-    highlights: ['Shibuya Crossing', 'Tsukiji Fish Market', 'Sensoji Temple', 'Tokyo Skytree'],
-    blogPost: '/blog/tokyo-travel-guide'
-  },
-  {
-    id: '2',
-    name: 'Paris',
-    country: 'France',
-    coordinates: [2.3522, 48.8566],
-    description: 'City of lights with incredible architecture, art, and cuisine.',
-    photos: ['/images/destinations/paris-1.jpg'],
-    visitDate: 'June 2023',
-    highlights: ['Eiffel Tower', 'Louvre Museum', 'Notre-Dame', 'Champs-Élysées'],
-    blogPost: '/blog/paris-photography-guide'
-  },
-  {
-    id: '3',
-    name: 'Bali',
-    country: 'Indonesia',
-    coordinates: [115.0920, -8.4095],
-    description: 'Tropical paradise with beautiful beaches, temples, and rice terraces.',
-    photos: ['/images/destinations/bali-1.jpg'],
-    visitDate: 'September 2023',
-    highlights: ['Uluwatu Temple', 'Rice Terraces', 'Ubud Monkey Forest', 'Kuta Beach']
-  },
-  {
-    id: '4',
-    name: 'New York',
-    country: 'USA',
-    coordinates: [-74.0060, 40.7128],
-    description: 'The city that never sleeps, iconic skyline and endless entertainment.',
-    photos: ['/images/destinations/nyc-1.jpg'],
-    visitDate: 'October 2023',
-    highlights: ['Central Park', 'Statue of Liberty', 'Times Square', 'Brooklyn Bridge']
-  },
-  {
-    id: '5',
-    name: 'Iceland',
-    country: 'Iceland',
-    coordinates: [-19.0208, 64.9631],
-    description: 'Land of fire and ice with stunning waterfalls and northern lights.',
-    photos: ['/images/destinations/iceland-1.jpg'],
-    visitDate: 'February 2024',
-    highlights: ['Blue Lagoon', 'Gullfoss Waterfall', 'Northern Lights', 'Geysir']
-  }
-]
-
 export function InteractiveTravelMap() {
+  const [travelLocations, setTravelLocations] = useState<TravelLocation[]>([])
   const [selectedLocation, setSelectedLocation] = useState<TravelLocation | null>(null)
   const [hoveredLocation, setHoveredLocation] = useState<string | null>(null)
+  const [zoom, setZoom] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const mapRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const fetchTravelLocations = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const response = await publicApi.getTravelLocations()
+        setTravelLocations(response.data)
+      } catch (error) {
+        console.error('Error fetching travel locations:', error)
+        setError('Failed to load travel locations')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTravelLocations()
+  }, [])
+
+  const handleZoomIn = () => {
+    setZoom(prevZoom => Math.min(prevZoom * 1.5, 8)) // Max zoom of 8x
+  }
+
+  const handleZoomOut = () => {
+    setZoom(prevZoom => Math.max(prevZoom / 1.5, 0.5)) // Min zoom of 0.5x
+  }
 
   const closeModal = () => {
     setSelectedLocation(null)
+  }
+
+  // Don't render the map if there are no locations
+  if (!loading && travelLocations.length === 0 && !error) {
+    return null
+  }
+
+  if (loading) {
+    return (
+      <div className="animate-fade-up">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Interactive Travel Map
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Loading travel destinations...
+          </p>
+        </div>
+        <div className="relative rounded-lg overflow-hidden shadow-lg bg-gradient-to-b from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 h-64 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="animate-fade-up">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Interactive Travel Map
+          </h2>
+          <p className="text-lg text-red-500 dark:text-red-400">
+            {error}
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -104,6 +132,24 @@ export function InteractiveTravelMap() {
 
       {/* Map Container */}
       <div ref={mapRef} className="relative rounded-lg overflow-hidden shadow-lg bg-gradient-to-b from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20">
+        {/* Zoom Controls */}
+        <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+          <button
+            onClick={handleZoomIn}
+            className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-2 shadow-lg transition-colors"
+            title="Zoom In"
+          >
+            <ZoomIn className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+          </button>
+          <button
+            onClick={handleZoomOut}
+            className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-2 shadow-lg transition-colors"
+            title="Zoom Out"
+          >
+            <ZoomOut className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+          </button>
+        </div>
+
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{
@@ -114,7 +160,7 @@ export function InteractiveTravelMap() {
           height={300}
           style={{ width: '100%', height: '100%' }}
         >
-          <ZoomableGroup zoom={1} center={[0, 20]}>
+          <ZoomableGroup zoom={zoom} center={[0, 20]} onMoveEnd={({ zoom: newZoom }) => setZoom(newZoom)}>
             <Geographies geography={geoUrl}>
               {({ geographies }: { geographies: any[] }) =>
                 geographies.map((geo: any) => (
@@ -224,8 +270,13 @@ export function InteractiveTravelMap() {
               </div>
               <div className="flex items-center space-x-1">
                 <Camera className="w-4 h-4" />
-                <span>{location.photos.length} photos</span>
+                <span>{location.photos?.length || 0} photos</span>
               </div>
+              {location.totalPosts && (
+                <div className="flex items-center space-x-1">
+                  <span className="text-blue-600 font-medium">{location.totalPosts} posts</span>
+                </div>
+              )}
             </div>
           </motion.div>
         ))}
@@ -267,19 +318,68 @@ export function InteractiveTravelMap() {
               </div>
 
               {/* Photos */}
-              <div className="mb-6">
-                <div className="grid grid-cols-2 gap-4">
-                  {selectedLocation.photos.map((photo) => (
-                    <div
-                      key={photo}
-                      className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
-                    >
-                      <Camera className="w-8 h-8 text-gray-400" />
-                      <span className="ml-2 text-sm text-gray-500">Photo</span>
-                    </div>
-                  ))}
+              {selectedLocation.photos && selectedLocation.photos.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                    Photos
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {selectedLocation.photos.slice(0, 4).map((photo, index) => (
+                      <div
+                        key={photo || index}
+                        className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden"
+                      >
+                        {photo ? (
+                          <img
+                            src={photo}
+                            alt={`${selectedLocation.name} photo ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <>
+                            <Camera className="w-8 h-8 text-gray-400" />
+                            <span className="ml-2 text-sm text-gray-500">Photo</span>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Blog Posts */}
+              {selectedLocation.posts && selectedLocation.posts.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                    Related Blog Posts ({selectedLocation.totalPosts})
+                  </h3>
+                  <div className="space-y-3">
+                    {selectedLocation.posts.slice(0, 3).map((post) => (
+                      <a
+                        key={post.id}
+                        href={`/blog/${post.slug}`}
+                        className="block p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                      >
+                        <h4 className="font-medium text-gray-900 dark:text-white mb-1">
+                          {post.title}
+                        </h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                          {post.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between mt-2 text-xs text-gray-500 dark:text-gray-400">
+                          <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
+                          <span>{post.viewCount} views</span>
+                        </div>
+                      </a>
+                    ))}
+                    {selectedLocation.posts.length > 3 && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                        And {selectedLocation.posts.length - 3} more posts...
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Description */}
               <div className="mb-6">
@@ -309,26 +409,39 @@ export function InteractiveTravelMap() {
                 </div>
               </div>
 
-              {/* Visit Date */}
-              <div className="mb-6">
+              {/* Visit Date and Stats */}
+              <div className="mb-6 space-y-2">
                 <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                   <Calendar className="w-4 h-4" />
-                  <span>Visited in {selectedLocation.visitDate}</span>
+                  <span>Latest visit: {selectedLocation.visitDate}</span>
                 </div>
+                {selectedLocation.totalViews && (
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Total views: {selectedLocation.totalViews.toLocaleString()}
+                  </div>
+                )}
               </div>
 
-              {/* Blog Post Link */}
-              {selectedLocation.blogPost && (
-                <div>
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                {selectedLocation.blogPost && (
                   <a
                     href={selectedLocation.blogPost}
-                    className="inline-flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                    className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    <span>Read Full Story</span>
+                    <span>Read Story</span>
                     <ExternalLink className="w-4 h-4" />
                   </a>
-                </div>
-              )}
+                )}
+                {selectedLocation.posts && selectedLocation.posts.length > 1 && (
+                  <a
+                    href={`/blog?location=${encodeURIComponent(selectedLocation.name)}`}
+                    className="inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <span>View All Posts</span>
+                  </a>
+                )}
+              </div>
             </div>
           </motion.div>
         </motion.div>

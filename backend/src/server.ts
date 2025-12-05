@@ -200,6 +200,88 @@ app.get('/api/public/about-metrics', async (req, res) => {
   }
 })
 
+// Public travel locations endpoint for interactive map
+app.get('/api/public/travel-locations', async (req, res) => {
+  try {
+    const Post = require('./models/Post').default
+
+    // Get distinct travel locations from published blog posts
+    const posts = await Post.find({
+      status: 'published',
+      'destination.coordinates.lat': { $exists: true, $ne: null },
+      'destination.coordinates.lng': { $exists: true, $ne: null },
+      'destination.country': { $exists: true, $ne: null }
+    }).select('title slug excerpt featuredImage publishedAt viewCount destination')
+
+    // Group posts by location in JavaScript
+    const locationMap = new Map()
+
+    posts.forEach((post: any) => {
+      const country = post.destination.country
+      const city = post.destination.city
+      const lat = post.destination.coordinates.lat
+      const lng = post.destination.coordinates.lng
+      
+      const locationKey = `${country}-${city || 'main'}-${lat}-${lng}`
+      
+      if (!locationMap.has(locationKey)) {
+        locationMap.set(locationKey, {
+          id: locationKey,
+          name: city || country,
+          country: country,
+          city: city,
+          coordinates: [lng, lat],
+          posts: [],
+          totalViews: 0,
+          latestPost: null
+        })
+      }
+
+      const location = locationMap.get(locationKey)
+      location.posts.push({
+        id: post._id.toString(),
+        title: post.title,
+        slug: post.slug,
+        excerpt: post.excerpt,
+        featuredImage: post.featuredImage,
+        publishedAt: post.publishedAt,
+        viewCount: post.viewCount || 0
+      })
+      
+      location.totalViews += post.viewCount || 0
+      
+      if (!location.latestPost || new Date(post.publishedAt) > new Date(location.latestPost)) {
+        location.latestPost = post.publishedAt
+      }
+    })
+
+    // Convert map to array and add computed fields
+    const travelLocations = Array.from(locationMap.values()).map((location: any) => ({
+      ...location,
+      totalPosts: location.posts.length,
+      description: `Explored through ${location.posts.length} blog post${location.posts.length > 1 ? 's' : ''} with ${location.totalViews.toLocaleString()} total views.`,
+      photos: location.posts.map((post: any) => post.featuredImage?.url).filter(Boolean),
+      visitDate: location.latestPost ? new Date(location.latestPost).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : 'Unknown',
+      highlights: location.posts.slice(0, 4).map((post: any) => post.title),
+      blogPost: location.posts.length === 1 ? `/blog/${location.posts[0].slug}` : undefined
+    }))
+
+    // Sort by total views and posts
+    travelLocations.sort((a: any, b: any) => b.totalViews - a.totalViews || b.totalPosts - a.totalPosts)
+
+    res.json({
+      success: true,
+      data: travelLocations
+    })
+  } catch (error) {
+    console.error('Travel locations error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch travel locations'
+    })
+  }
+})
+
 // Public testimonials endpoint for home page
 app.get('/api/public/testimonials', async (req, res) => {
   try {

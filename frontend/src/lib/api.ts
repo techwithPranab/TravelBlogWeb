@@ -874,6 +874,60 @@ export const publicApi = {
     }>('/public/about-metrics')
   },
 
+  getTravelLocations: async (): Promise<ApiResponse<Array<{
+    id: string
+    name: string
+    country: string
+    coordinates: [number, number]
+    description: string
+    photos: string[]
+    visitDate: string
+    highlights: string[]
+    blogPost?: string
+    posts: Array<{
+      id: string
+      title: string
+      slug: string
+      excerpt: string
+      featuredImage?: {
+        url: string
+        alt: string
+        caption?: string
+      }
+      publishedAt: string
+      viewCount: number
+    }>
+    totalPosts: number
+    totalViews: number
+  }>>> => {
+    return apiRequest<Array<{
+      id: string
+      name: string
+      country: string
+      coordinates: [number, number]
+      description: string
+      photos: string[]
+      visitDate: string
+      highlights: string[]
+      blogPost?: string
+      posts: Array<{
+        id: string
+        title: string
+        slug: string
+        excerpt: string
+        featuredImage?: {
+          url: string
+          alt: string
+          caption?: string
+        }
+        publishedAt: string
+        viewCount: number
+      }>
+      totalPosts: number
+      totalViews: number
+    }>>('/public/travel-locations')
+  },
+
   getContact: async (): Promise<ApiResponse<{
     email: string
     phone: string
