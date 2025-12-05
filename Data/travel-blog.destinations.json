@@ -8,12 +8,12 @@
   "country": "India",
   "continent": "Asia",
   "featuredImage": {
-    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459558/BagPackStories/destinations/BagPackStories/destinations/1761459558469-srivatsan-balaji-T5s48osIQTU-unsplash.jpg",
+    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459558/TravelBlog/destinations/TravelBlog/destinations/1761459558469-srivatsan-balaji-T5s48osIQTU-unsplash.jpg",
     "alt": "srivatsan-balaji-T5s48osIQTU-unsplash.jpeg"
   },
   "gallery": [
     {
-      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459569/BagPackStories/destinations/BagPackStories/destinations/1761459568867-jannes-jacobs-NfsB3jPVlcM-unsplash.jpg",
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1761459569/TravelBlog/destinations/TravelBlog/destinations/1761459568867-jannes-jacobs-NfsB3jPVlcM-unsplash.jpg",
       "alt": "jannes-jacobs-NfsB3jPVlcM-unsplash.jpeg",
       "_id": {
         "$oid": "68fdbd73794bb2703e235176"
@@ -98,7 +98,12 @@
       "description": "Clean and simple guesthouse with river views, perfect for budget travelers",
       "priceRange": "₹800-1,200",
       "rating": 4.1,
-      "amenities": ["WiFi", "Hot Water", "Breakfast", "Laundry"],
+      "amenities": [
+        "WiFi",
+        "Hot Water",
+        "Breakfast",
+        "Laundry"
+      ],
       "bookingUrl": "https://booking.com"
     },
     {
@@ -107,7 +112,11 @@
       "description": "Traditional home with local family, authentic experience on a budget",
       "priceRange": "₹600-900",
       "rating": 4.3,
-      "amenities": ["Home-cooked Meals", "Cultural Experience", "Local Guide"],
+      "amenities": [
+        "Home-cooked Meals",
+        "Cultural Experience",
+        "Local Guide"
+      ],
       "bookingUrl": "https://airbnb.com"
     },
     {
@@ -116,7 +125,13 @@
       "description": "Comfortable hotel with modern amenities and great location near ghats",
       "priceRange": "₹2,500-4,000",
       "rating": 4.5,
-      "amenities": ["AC", "WiFi", "Restaurant", "Room Service", "Parking"],
+      "amenities": [
+        "AC",
+        "WiFi",
+        "Restaurant",
+        "Room Service",
+        "Parking"
+      ],
       "bookingUrl": "https://booking.com"
     },
     {
@@ -125,7 +140,13 @@
       "description": "Luxury riverside resort with spa, fine dining, and impeccable service",
       "priceRange": "₹15,000-25,000",
       "rating": 4.8,
-      "amenities": ["Spa", "Fine Dining", "Pool", "Concierge", "Airport Transfer"],
+      "amenities": [
+        "Spa",
+        "Fine Dining",
+        "Pool",
+        "Concierge",
+        "Airport Transfer"
+      ],
       "bookingUrl": "https://tajhotels.com"
     }
   ],
@@ -218,7 +239,7 @@
   ],
   "isPopular": true,
   "isFeatured": true,
-  "isActive": true,
+  "isActive": false,
   "status": "published",
   "seoTitle": "Varanasi Travel Guide: Sacred Ghats & Ancient Temples",
   "seoDescription": "Discover Varanasi's sacred ghats, ancient temples, and spiritual heritage. Complete guide to India's holiest city on the Ganges.",
@@ -226,7 +247,7 @@
     "$date": "2025-10-26T06:12:02.525Z"
   },
   "updatedAt": {
-    "$date": "2025-10-26T06:19:31.567Z"
+    "$date": "2025-12-05T08:05:15.922Z"
   },
   "__v": 0
 },
@@ -336,8 +357,13 @@
       "name": "Ram Darbar Guest House",
       "description": "Simple and clean accommodation near Ram Mandir with basic amenities",
       "priceRange": "₹700-1,100",
-      "rating": 4.0,
-      "amenities": ["WiFi", "Hot Water", "Breakfast", "Temple View"],
+      "rating": 4,
+      "amenities": [
+        "WiFi",
+        "Hot Water",
+        "Breakfast",
+        "Temple View"
+      ],
       "bookingUrl": "https://booking.com"
     },
     {
@@ -346,7 +372,11 @@
       "description": "Traditional home stay with local family, authentic cultural experience",
       "priceRange": "₹500-800",
       "rating": 4.2,
-      "amenities": ["Home-cooked Meals", "Cultural Immersion", "Local Guide"],
+      "amenities": [
+        "Home-cooked Meals",
+        "Cultural Immersion",
+        "Local Guide"
+      ],
       "bookingUrl": "https://airbnb.com"
     },
     {
@@ -355,7 +385,13 @@
       "description": "Comfortable hotel with modern facilities and proximity to temples",
       "priceRange": "₹2,200-3,500",
       "rating": 4.4,
-      "amenities": ["AC", "WiFi", "Restaurant", "Parking", "Room Service"],
+      "amenities": [
+        "AC",
+        "WiFi",
+        "Restaurant",
+        "Parking",
+        "Room Service"
+      ],
       "bookingUrl": "https://booking.com"
     },
     {
@@ -364,7 +400,13 @@
       "description": "Luxury resort with spa, fine dining, and traditional architecture",
       "priceRange": "₹12,000-20,000",
       "rating": 4.7,
-      "amenities": ["Spa", "Fine Dining", "Pool", "Cultural Shows", "Airport Transfer"],
+      "amenities": [
+        "Spa",
+        "Fine Dining",
+        "Pool",
+        "Cultural Shows",
+        "Airport Transfer"
+      ],
       "bookingUrl": "https://hotels.com"
     }
   ],
@@ -459,7 +501,7 @@
   ],
   "isPopular": true,
   "isFeatured": true,
-  "isActive": true,
+  "isActive": false,
   "status": "published",
   "seoTitle": "Ayodhya Travel Guide: Ram Mandir & Sacred Temples",
   "seoDescription": "Explore Ayodhya, birthplace of Lord Rama. Complete guide to Ram Mandir, sacred temples, and spiritual heritage of this holy city.",
@@ -467,7 +509,7 @@
     "$date": "2025-10-26T06:25:00.000Z"
   },
   "updatedAt": {
-    "$date": "2025-10-26T06:25:00.000Z"
+    "$date": "2025-12-05T08:05:11.366Z"
   },
   "__v": 0
 },
@@ -579,7 +621,12 @@
       "description": "Budget lodge with views of the Triveni Sangam, clean and basic facilities",
       "priceRange": "₹600-1,000",
       "rating": 3.9,
-      "amenities": ["WiFi", "Hot Water", "Breakfast", "Sangam View"],
+      "amenities": [
+        "WiFi",
+        "Hot Water",
+        "Breakfast",
+        "Sangam View"
+      ],
       "bookingUrl": "https://booking.com"
     },
     {
@@ -588,7 +635,11 @@
       "description": "Simple guesthouse near the ghats, perfect for pilgrims on a budget",
       "priceRange": "₹500-800",
       "rating": 4.1,
-      "amenities": ["Shared Bathroom", "Basic Amenities", "Local Food"],
+      "amenities": [
+        "Shared Bathroom",
+        "Basic Amenities",
+        "Local Food"
+      ],
       "bookingUrl": "https://airbnb.com"
     },
     {
@@ -597,7 +648,13 @@
       "description": "Comfortable hotel with modern amenities and convenient location",
       "priceRange": "₹2,000-3,200",
       "rating": 4.3,
-      "amenities": ["AC", "WiFi", "Restaurant", "Parking", "Room Service"],
+      "amenities": [
+        "AC",
+        "WiFi",
+        "Restaurant",
+        "Parking",
+        "Room Service"
+      ],
       "bookingUrl": "https://booking.com"
     },
     {
@@ -606,7 +663,13 @@
       "description": "Luxury hotel with river views, spa, and premium dining experience",
       "priceRange": "₹10,000-18,000",
       "rating": 4.6,
-      "amenities": ["Spa", "Fine Dining", "Pool", "River View", "Concierge"],
+      "amenities": [
+        "Spa",
+        "Fine Dining",
+        "Pool",
+        "River View",
+        "Concierge"
+      ],
       "bookingUrl": "https://tajhotels.com"
     }
   ],
@@ -703,7 +766,7 @@
   ],
   "isPopular": true,
   "isFeatured": true,
-  "isActive": true,
+  "isActive": false,
   "status": "published",
   "seoTitle": "Prayagraj Travel Guide: Triveni Sangam & Kumbh Mela",
   "seoDescription": "Discover Prayagraj's sacred Triveni Sangam, historic forts, and the magnificent Kumbh Mela. Complete guide to India's holy confluence city.",
@@ -711,7 +774,7 @@
     "$date": "2025-10-26T06:30:00.000Z"
   },
   "updatedAt": {
-    "$date": "2025-10-26T06:30:00.000Z"
+    "$date": "2025-12-05T08:05:10.114Z"
   },
   "__v": 0
 },
@@ -830,7 +893,11 @@
       "description": "Traditional village homes with basic facilities and authentic local experience",
       "priceRange": "₹800-1,500",
       "rating": 4.2,
-      "amenities": ["Home-cooked Meals", "Traditional Heating", "Cultural Immersion"],
+      "amenities": [
+        "Home-cooked Meals",
+        "Traditional Heating",
+        "Cultural Immersion"
+      ],
       "bookingUrl": "https://airbnb.com"
     },
     {
@@ -838,8 +905,13 @@
       "name": "Mountain View Guest House",
       "description": "Simple guesthouses with mountain views and basic amenities",
       "priceRange": "₹1,000-1,800",
-      "rating": 4.0,
-      "amenities": ["WiFi", "Hot Water", "Breakfast", "Mountain View"],
+      "rating": 4,
+      "amenities": [
+        "WiFi",
+        "Hot Water",
+        "Breakfast",
+        "Mountain View"
+      ],
       "bookingUrl": "https://booking.com"
     },
     {
@@ -848,7 +920,13 @@
       "description": "Comfortable hotel in Kaza with modern amenities and great service",
       "priceRange": "₹3,000-5,000",
       "rating": 4.4,
-      "amenities": ["AC", "WiFi", "Restaurant", "Room Service", "Parking"],
+      "amenities": [
+        "AC",
+        "WiFi",
+        "Restaurant",
+        "Room Service",
+        "Parking"
+      ],
       "bookingUrl": "https://booking.com"
     },
     {
@@ -857,7 +935,12 @@
       "description": "Luxury tented camp near Chandratal Lake with premium facilities",
       "priceRange": "₹8,000-15,000",
       "rating": 4.7,
-      "amenities": ["Luxury Tents", "Fine Dining", "Hot Showers", "Guided Treks"],
+      "amenities": [
+        "Luxury Tents",
+        "Fine Dining",
+        "Hot Showers",
+        "Guided Treks"
+      ],
       "bookingUrl": "https://thechandratal.com"
     }
   ],
@@ -952,7 +1035,7 @@
   ],
   "isPopular": true,
   "isFeatured": true,
-  "isActive": true,
+  "isActive": false,
   "status": "published",
   "seoTitle": "Lahul Spiti Valley Travel Guide: High-Altitude Adventure",
   "seoDescription": "Explore Lahul Spiti Valley's stunning landscapes, ancient monasteries, and pristine lakes. Complete guide to India's remote Himalayan paradise.",
@@ -960,7 +1043,7 @@
     "$date": "2025-10-26T06:35:00.000Z"
   },
   "updatedAt": {
-    "$date": "2025-10-26T06:35:00.000Z"
+    "$date": "2025-12-05T08:05:09.288Z"
   },
   "__v": 0
 },
@@ -1052,7 +1135,7 @@
       "icon": "🚴‍♂️",
       "description": "Ride professional mountain bike trails and downhill courses",
       "_id": {
-        "$oit": "68fdbbb21cc5835ae389b9c4"
+        "$oid": "6924fc23172f48ca56eab3bc"
       }
     },
     {
@@ -1079,26 +1162,50 @@
       "description": "Budget-friendly hostel with shared and private rooms, great for solo travelers",
       "priceRange": "$60-120",
       "rating": 4.1,
-      "amenities": ["WiFi", "Kitchen Access", "Community Lounge", "Laundry"],
-      "bookingUrl": "https://booking.com"
+      "amenities": [
+        "WiFi",
+        "Kitchen Access",
+        "Community Lounge",
+        "Laundry"
+      ],
+      "bookingUrl": "https://booking.com",
+      "_id": {
+        "$oid": "69307c0fbdad1c1b3da7a138"
+      }
     },
     {
       "type": "budget",
       "name": "Motel 6-Mammoth Lakes, CA",
       "description": "Great location at 3372 Main Street, Mammoth Lakes, CA 93546, United States. Clean, comfortable rooms with basic amenities and convenient access to town and trails",
       "priceRange": "$70-130",
-      "rating": 4.0,
-      "amenities": ["WiFi", "Free Parking", "Pet Friendly", "24-Hour Front Desk"],
-      "bookingUrl": "https://motel6.com"
+      "rating": 4,
+      "amenities": [
+        "WiFi",
+        "Free Parking",
+        "Pet Friendly",
+        "24-Hour Front Desk"
+      ],
+      "bookingUrl": "https://motel6.com",
+      "_id": {
+        "$oid": "69307bfabdad1c1b3da7a12a"
+      }
     },
     {
       "type": "budget",
       "name": "Sierra Nevada Resort",
       "description": "Affordable lodge with cozy cabins and mountain views",
       "priceRange": "$80-150",
-      "rating": 4.0,
-      "amenities": ["WiFi", "Mountain View", "Fireplace", "Kitchenette"],
-      "bookingUrl": "https://airbnb.com"
+      "rating": 4,
+      "amenities": [
+        "WiFi",
+        "Mountain View",
+        "Fireplace",
+        "Kitchenette"
+      ],
+      "bookingUrl": "https://airbnb.com",
+      "_id": {
+        "$oid": "69307bfabdad1c1b3da7a12b"
+      }
     },
     {
       "type": "mid-range",
@@ -1106,8 +1213,17 @@
       "description": "Comfortable hotel at the base of Mammoth Mountain with ski access",
       "priceRange": "$150-250",
       "rating": 4.5,
-      "amenities": ["AC", "WiFi", "Restaurant", "Hot Tub", "Ski Storage"],
-      "bookingUrl": "https://booking.com"
+      "amenities": [
+        "AC",
+        "WiFi",
+        "Restaurant",
+        "Hot Tub",
+        "Ski Storage"
+      ],
+      "bookingUrl": "https://booking.com",
+      "_id": {
+        "$oid": "69307bfabdad1c1b3da7a12c"
+      }
     },
     {
       "type": "luxury",
@@ -1115,8 +1231,17 @@
       "description": "Luxury resort with world-class amenities, spas, and fine dining",
       "priceRange": "$300-500",
       "rating": 4.8,
-      "amenities": ["Spa", "Fine Dining", "Pool", "Concierge", "Premium Suites"],
-      "bookingUrl": "https://thevillagealmammoth.com"
+      "amenities": [
+        "Spa",
+        "Fine Dining",
+        "Pool",
+        "Concierge",
+        "Premium Suites"
+      ],
+      "bookingUrl": "https://thevillagealmammoth.com",
+      "_id": {
+        "$oid": "69307bfabdad1c1b3da7a12d"
+      }
     }
   ],
   "transportation": [
@@ -1199,8 +1324,8 @@
     "$date": "2025-11-22T00:00:00.000Z"
   },
   "updatedAt": {
-    "$date": "2025-11-22T00:00:00.000Z"
+    "$date": "2025-12-05T08:05:08.352Z"
   },
-  "__v": 0
-}
-]
+  "__v": 0,
+  "relatedPosts": []
+}]

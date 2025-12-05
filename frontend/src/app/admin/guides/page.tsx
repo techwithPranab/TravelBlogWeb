@@ -35,6 +35,7 @@ interface Guide {
   }
   isPublished: boolean
   isFeatured: boolean
+  isActive: boolean
   views: number
   likes: number
   createdAt: string

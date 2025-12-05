@@ -30,7 +30,7 @@
   "rating": 4.7,
   "totalReviews": 42,
   "publishedAt": "2025-10-25T07:00:17.181Z",
-  "lastUpdated": "2025-10-25T07:00:17.183Z",
+  "lastUpdated": "2025-12-05T08:04:37.152Z",
   "isPremium": false,
   "downloadCount": 89,
   "sections": [
@@ -43,10 +43,10 @@
         "Consider arriving by train for a more authentic experience",
         "Auto-rickshaws and cycle-rickshaws are common for local transport"
       ],
+      "images": [],
       "_id": {
         "$oid": "68c273819861ff85f061adf1"
-      },
-      "images": []
+      }
     },
     {
       "title": "Transportation in Varanasi",
@@ -57,10 +57,10 @@
         "Use app-based cabs for longer distances",
         "Negotiate prices beforehand for rickshaws"
       ],
+      "images": [],
       "_id": {
         "$oid": "68c273819861ff85f061adf2"
-      },
-      "images": []
+      }
     }
   ],
   "itinerary": [
@@ -240,14 +240,14 @@
     }
   ],
   "slug": "5day-varanasi-spiritual-journey-ghats-temples-culture",
-  "isPublished": true,
-  "views": 456,
+  "isPublished": false,
+  "views": 472,
   "additionalImages": [],
   "createdAt": {
     "$date": "2025-10-25T07:00:17.199Z"
   },
   "updatedAt": {
-    "$date": "2025-10-25T07:00:17.298Z"
+    "$date": "2025-12-05T08:04:37.250Z"
   },
   "__v": 0
 }]

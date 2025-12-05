@@ -36,6 +36,7 @@ export interface IGuide extends Document {
   publishedAt: string
   lastUpdated: string
   isPremium: boolean
+  isActive: boolean
   downloadCount: number
   sections: Array<{
     title: string
@@ -302,6 +303,10 @@ const guideSchema = new Schema<IGuide>({
     trim: true
   },
   isPublished: {
+    type: Boolean,
+    default: true
+  },
+  isActive: {
     type: Boolean,
     default: true
   },

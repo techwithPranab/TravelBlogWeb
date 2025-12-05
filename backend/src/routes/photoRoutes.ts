@@ -12,6 +12,7 @@ import {
   getPendingPhotos,
   moderatePhoto,
   deletePhoto,
+  updatePhotoStatus,
   upload
 } from '../controllers/photoController';
 import { protect, restrictTo } from '../middleware/auth';
@@ -32,6 +33,7 @@ router.put('/:id/download', downloadPhoto);
 router.get('/admin/all', protect, restrictTo('admin'), getAllPhotosAdmin);
 router.get('/admin/pending', protect, restrictTo('admin'), getPendingPhotos);
 router.put('/admin/:id/moderate', protect, restrictTo('admin'), moderatePhoto);
+router.put('/admin/:id/status', protect, restrictTo('admin'), updatePhotoStatus);
 router.delete('/admin/:id', protect, restrictTo('admin'), deletePhoto);
 
 export default router;

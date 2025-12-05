@@ -32,7 +32,7 @@ export interface IPhoto extends Document {
       focalLength?: string;
     };
   };
-  status: 'pending' | 'approved' | 'rejected';
+  status: 'pending' | 'approved' | 'rejected' | 'inactive';
   moderationNotes?: string;
   moderatedBy?: mongoose.Types.ObjectId;
   moderatedAt?: Date;
@@ -127,7 +127,7 @@ const PhotoSchema: Schema = new Schema({
   status: { 
     type: String, 
     required: true,
-    enum: ['pending', 'approved', 'rejected'],
+    enum: ['pending', 'approved', 'rejected', 'inactive'],
     default: 'pending'
   },
   moderationNotes: { 

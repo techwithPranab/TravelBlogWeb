@@ -1564,6 +1564,43 @@ export default function EditDestinationPage() {
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
                 <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label htmlFor="isActive" className="block text-sm font-medium text-gray-900">
+                        Active Status
+                      </label>
+                      <p className="text-sm text-gray-500">Make destination visible on the website</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, isActive: !prev.isActive }))}
+                      className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                        formData.isActive ? 'bg-green-600' : 'bg-gray-200'
+                      }`}
+                    >
+                      <span className="sr-only">Toggle active status</span>
+                      <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${
+                          formData.isActive ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="isFeatured"
+                      name="isFeatured"
+                      checked={formData.isFeatured}
+                      onChange={handleInputChange}
+                      className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="isFeatured" className="ml-2 block text-sm text-gray-900">
+                      Mark as Featured Destination
+                    </label>
+                  </div>
+                  
                   <div className="flex items-center">
                     <input
                       type="checkbox"
@@ -1580,7 +1617,7 @@ export default function EditDestinationPage() {
                   
                   <div>
                     <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
-                      Status
+                      Publication Status
                     </label>
                     <select
                       id="status"

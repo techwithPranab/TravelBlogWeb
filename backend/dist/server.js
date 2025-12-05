@@ -179,7 +179,7 @@ app.get('/api/public/about-metrics', async (req, res) => {
                 { $count: 'totalCountries' }
             ]).then((result) => result[0]?.totalCountries || 0),
             // Count total photos
-            Photo.countDocuments(),
+            Photo.countDocuments({ status: 'approved' }),
             // Sum all kmtravelled from published posts
             Post.aggregate([
                 { $match: { status: 'published', kmtravelled: { $exists: true, $ne: null } } },

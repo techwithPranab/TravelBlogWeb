@@ -49,6 +49,7 @@ interface GuideData {
   publishedAt: string
   lastUpdated: string
   isPremium: boolean
+  isActive: boolean
   downloadCount: number
   sections: Array<{
     title: string
@@ -129,6 +130,7 @@ export default function EditGuidePage() {
     publishedAt: '',
     lastUpdated: '',
     isPremium: false,
+    isActive: true,
     downloadCount: 0,
     sections: [],
     itinerary: [],
@@ -212,6 +214,7 @@ export default function EditGuidePage() {
           publishedAt: guide.publishedAt || '',
           lastUpdated: guide.lastUpdated || '',
           isPremium: guide.isPremium || false,
+          isActive: guide.isActive !== undefined ? guide.isActive : true,
           downloadCount: guide.downloadCount || 0,
           sections: guide.sections || [],
           itinerary: guide.itinerary || [],
@@ -241,7 +244,10 @@ export default function EditGuidePage() {
   }, [guideId])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
+    const { name, value, type } = e.target
+    const checked = (e.target as HTMLInputElement).checked
+    
+    const inputValue = type === 'checkbox' ? checked : value
     
     if (name.includes('.')) {
       const [parent, child] = name.split('.')
@@ -249,13 +255,13 @@ export default function EditGuidePage() {
         ...prev,
         [parent]: {
           ...(prev as any)[parent],
-          [child]: value
+          [child]: inputValue
         }
       }))
     } else {
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        [name]: inputValue
       }))
     }
   }
@@ -1710,6 +1716,67 @@ export default function EditGuidePage() {
                       </button>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Settings */}
+              <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label htmlFor="isActive" className="block text-sm font-medium text-gray-900">
+                        Active Status
+                      </label>
+                      <p className="text-sm text-gray-500">Make guide visible on the website</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, isActive: !prev.isActive }))}
+                      className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                        formData.isActive ? 'bg-green-600' : 'bg-gray-200'
+                      }`}
+                    >
+                      <span className="sr-only">Toggle active status</span>
+                      <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${
+                          formData.isActive ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="isPremium"
+                      name="isPremium"
+                      checked={formData.isPremium}
+                      onChange={handleInputChange}
+                      className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="isPremium" className="ml-2 block text-sm text-gray-900">
+                      Mark as Premium Guide
+                    </label>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="isPublished" className="block text-sm font-medium text-gray-700 mb-2">
+                      Publication Status
+                    </label>
+                    <select
+                      id="isPublished"
+                      value={formData.isPublished ? 'published' : 'draft'}
+                      onChange={(e) => setFormData(prev => ({ ...prev, isPublished: e.target.value === 'published' }))}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                    >
+                      <option value="published">Published</option>
+                      <option value="draft">Draft</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>

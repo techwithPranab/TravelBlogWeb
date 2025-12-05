@@ -282,18 +282,18 @@ export default function EditPostPage() {
     toast.success('Image removed successfully')
   }
 
-  const handleSubmit = async (e: React.FormEvent, status: 'draft' | 'published') => {
+  const handleSubmit = async (e: React.FormEvent, status?: 'draft' | 'published') => {
     e.preventDefault()
     setLoading(true)
 
     try {
       const postData: any = {
         ...formData,
-        status,
+        status: status || formData.status, // Use provided status or formData.status
         tags,
         contentSections,
         youtubeVideos,
-        publishedAt: status === 'published' ? new Date().toISOString() : (formData.publishedAt && formData.publishedAt.trim() ? new Date(formData.publishedAt).toISOString() : undefined)
+        publishedAt: (status === 'published' || (formData.status === 'published' && !status)) ? new Date().toISOString() : (formData.publishedAt && formData.publishedAt.trim() ? new Date(formData.publishedAt).toISOString() : undefined)
       }
 
       // Remove undefined fields
@@ -427,6 +427,14 @@ export default function EditPostPage() {
               >
                 <Save className="h-4 w-4" />
                 Save Draft
+              </button>
+              <button
+                onClick={(e) => handleSubmit(e)}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+              >
+                <Save className="h-4 w-4" />
+                Update
               </button>
               <button
                 onClick={(e) => handleSubmit(e, 'published')}

@@ -25,6 +25,7 @@ interface Destination {
   difficulty: string
   isPopular: boolean
   isFeatured: boolean
+  isActive: boolean
   createdAt: string
 }
 
@@ -77,6 +78,26 @@ export default function AdminDestinationsPage() {
   const handleSearch = () => {
     setCurrentPage(1)
     fetchDestinations()
+  }
+
+  const handleToggleStatus = async (destinationId: string, currentStatus: boolean) => {
+    try {
+      setUpdating(destinationId)
+      const response = await adminApi.updateDestination(destinationId, { isActive: !currentStatus }) as any
+      
+      if (response.success) {
+        setDestinations(destinations.map(dest => 
+          dest._id === destinationId 
+            ? { ...dest, isActive: !currentStatus }
+            : dest
+        ))
+      }
+    } catch (err) {
+      console.error('Status update error:', err)
+      alert('Failed to update destination status')
+    } finally {
+      setUpdating(null)
+    }
   }
 
   const handleDelete = async (destinationId: string) => {
@@ -155,77 +176,131 @@ export default function AdminDestinationsPage() {
         </div>
       )}
 
-      {/* Destinations Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {destinations.map((destination, index) => (
-          <motion.div
-            key={destination._id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
-          >
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{destination.name}</h3>
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                    <MapPin className="h-4 w-4" />
-                    <span>{destination.country}</span>
-                    <span>•</span>
-                    <span>{destination.region}</span>
-                  </div>
-                  <p className="text-sm text-gray-600 line-clamp-3">{destination.description}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 mb-4">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(destination.difficulty)}`}>
-                  {destination.difficulty}
-                </span>
-                {destination.isFeatured && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                    Featured
-                  </span>
-                )}
-                {destination.isPopular && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    Popular
-                  </span>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{new Date(destination.createdAt).toLocaleDateString()}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Globe className="h-4 w-4" />
-                  <span>{destination.slug}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-2">
-                <button
-                  onClick={() => router.push(`/admin/destinations/${destination._id}/edit`)}
-                  className="text-blue-600 hover:text-blue-900 p-2 rounded hover:bg-blue-50 transition-colors"
-                  title="Edit"
+      {/* Destinations Table */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Destination
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Location
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Difficulty
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Tags
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Created
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {destinations.map((destination) => (
+                <motion.tr
+                  key={destination._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="hover:bg-gray-50"
                 >
-                  <Edit className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => handleDelete(destination._id)}
-                  disabled={updating === destination._id}
-                  className="text-red-600 hover:text-red-900 p-2 rounded hover:bg-red-50 transition-colors disabled:opacity-50"
-                  title="Delete"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex flex-col">
+                      <div className="text-sm font-medium text-gray-900">{destination.name}</div>
+                      <div className="text-sm text-gray-500 max-w-xs truncate">{destination.description}</div>
+                      <div className="text-xs text-gray-400 mt-1">/{destination.slug}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center text-sm text-gray-500">
+                      <MapPin className="h-4 w-4 mr-1" />
+                      <span>{destination.country}</span>
+                      {destination.region && (
+                        <>
+                          <span className="mx-1">•</span>
+                          <span>{destination.region}</span>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(destination.difficulty)}`}>
+                      {destination.difficulty}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex flex-wrap gap-1">
+                      {destination.isFeatured && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                          Featured
+                        </span>
+                      )}
+                      {destination.isPopular && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          Popular
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => handleToggleStatus(destination._id, destination.isActive)}
+                      disabled={updating === destination._id}
+                      className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 ${
+                        destination.isActive ? 'bg-green-600' : 'bg-gray-200'
+                      }`}
+                    >
+                      <span className="sr-only">Toggle status</span>
+                      <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${
+                          destination.isActive ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                    <span className={`ml-2 text-sm ${destination.isActive ? 'text-green-600' : 'text-gray-500'}`}>
+                      {destination.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div className="flex items-center">
+                      <Calendar className="h-4 w-4 mr-1" />
+                      {new Date(destination.createdAt).toLocaleDateString()}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => router.push(`/admin/destinations/${destination._id}/edit`)}
+                        className="text-blue-600 hover:text-blue-900 p-2 rounded hover:bg-blue-50 transition-colors"
+                        title="Edit"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(destination._id)}
+                        disabled={updating === destination._id}
+                        className="text-red-600 hover:text-red-900 p-2 rounded hover:bg-red-50 transition-colors disabled:opacity-50"
+                        title="Delete"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Pagination */}
