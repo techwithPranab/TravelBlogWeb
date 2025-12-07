@@ -250,4 +250,470 @@
     "$date": "2025-12-05T08:04:37.250Z"
   },
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "693fa3b9d8e2c4f5a6b78920"
+  },
+  "id": "mammoth-lakes-2day-eastern-sierra-adventure",
+  "slug": "mammoth-lakes-2day-eastern-sierra-adventure",
+  "title": "Epic 2-Day Mammoth Lakes Adventure: From Los Angeles Through Eastern Sierra's Hidden Gems",
+  "description": "Experience the ultimate Eastern Sierra road trip with this comprehensive 2-day itinerary covering desert canyons, alpine lakes, mountain gondolas, and spectacular landscapes from Los Angeles to Mammoth Lakes and back.",
+  "type": "itinerary",
+  "destination": {
+    "name": "Mammoth Lakes, California",
+    "country": "United States",
+    "slug": "mammoth-lakes-california"
+  },
+  "author": {
+    "name": "Pranab Paul",
+    "avatar": "https://res.cloudinary.com/due8vcyim/image/upload/v1761492968/IMG-20241012-WA0023_2_zkgdmo.jpg",
+    "bio": "Adventure traveler and photographer specializing in California's outdoor destinations and road trip adventures."
+  },
+  "featuredImage": {
+    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1764972364/BagPackStories/posts/BagPackStories/posts/1764972363817-WhatsApp%20Image%202025-12-05%20at%2014.05.50.jpg",
+    "alt": "Epic Road Trip to Mammoth Lakes through Eastern Sierra"
+  },
+  "duration": "2 days",
+  "difficulty": "Moderate",
+  "budget": {
+    "range": "$400-600",
+    "details": "Total budget for 2 days including accommodation, meals, gas, gondola tickets, and activities (excluding car rental)"
+  },
+  "bestTime": "Late spring through early fall (May-October) for best road conditions and access to high-elevation areas",
+  "rating": 4.9,
+  "totalReviews": 0,
+  "publishedAt": "2025-12-06T09:00:00.000Z",
+  "lastUpdated": "2025-12-06T09:00:00.000Z",
+  "isPremium": false,
+  "downloadCount": 0,
+  "totalDistance": "~600 miles roundtrip",
+  "startingPoint": "Los Angeles/Irvine Area",
+  "isPublished": true,
+  "sections": [
+    {
+      "title": "Getting Started from Los Angeles",
+      "content": "Begin your Eastern Sierra adventure with an early departure from the LA area. The journey to Mammoth Lakes covers approximately 300 miles through diverse landscapes.",
+      "tips": [
+        "Start early (6 AM) to avoid LA traffic and arrive at stops with optimal lighting",
+        "Rent a reliable SUV or car with good ground clearance",
+        "Download offline maps as cell service can be spotty in remote areas",
+        "Pack layers - temperatures vary dramatically with elevation changes",
+        "Keep tire chains in winter months (November-April)",
+        "Fill up gas tank and bring extra water and snacks"
+      ],
+      "images": [],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78921"
+      }
+    },
+    {
+      "title": "Transportation and Route Planning",
+      "content": "The recommended route takes you through the Inland Empire, into the Mojave Desert, then north through the Eastern Sierra. Each segment offers unique landscapes and photo opportunities.",
+      "tips": [
+        "Route: LA/Irvine → Red Rock Canyon → Alabama Hills → Bishop → Hot Creek → Mono Lake → June Lake → Mammoth Lakes",
+        "Allow 10-12 hours total travel time with sightseeing stops on Day 1",
+        "Return journey on Day 2 takes approximately 5-6 hours with fewer stops",
+        "Check road conditions, especially for high-elevation areas in winter",
+        "Gas stations become sparse after Mojave - fuel up regularly"
+      ],
+      "images": [],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78922"
+      }
+    },
+    {
+      "title": "What to Pack",
+      "content": "Eastern Sierra adventures require preparation for diverse climates and activities.",
+      "tips": [
+        "Layered clothing (temperatures range from desert heat to alpine cold)",
+        "Sturdy hiking boots for rock scrambling and trail walking",
+        "Camera with extra batteries (cold weather drains batteries faster)",
+        "Sunscreen and sunglasses (high altitude UV exposure)",
+        "Plenty of water and snacks",
+        "First aid kit and emergency supplies",
+        "Headlamp or flashlight",
+        "Warm jacket and gloves (even in summer at high elevations)"
+      ],
+      "images": [],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78923"
+      }
+    }
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Los Angeles to Mammoth Lakes: Desert to Alpine Journey",
+      "activities": [
+        "6:00 AM - Depart Los Angeles/Irvine area",
+        "8:30 AM - Red Rock Canyon State Park (30-45 min exploration)",
+        "11:00 AM - Alabama Hills Recreation Area (1 hour photography and rock climbing)",
+        "1:00 PM - Bishop lunch break and resupply",
+        "2:30 PM - Hot Creek Geological Site (45 min exploration)",
+        "4:00 PM - Mono Lake and Tufa Towers (1 hour)",
+        "5:30 PM - June Lake scenic stop (30 min)",
+        "7:00 PM - Arrive and check-in at Mammoth Lakes"
+      ],
+      "meals": [
+        "Breakfast: Pack from home or grab coffee en route",
+        "Lunch: Plenty of options in Bishop (local diners or fast food)",
+        "Dinner: Hotel room meal or local Mammoth Lakes restaurant"
+      ],
+      "accommodation": "Motel 6 Mammoth Lakes or similar budget-friendly option",
+      "budget": "$300-400 (gas, meals, accommodation)",
+      "highlights": [
+        "Dramatic red rock formations at Red Rock Canyon",
+        "Movie-famous Alabama Hills with Mount Whitney views",
+        "Geothermal wonders at Hot Creek",
+        "Ancient tufa towers at Mono Lake",
+        "Alpine transition at June Lake"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78924"
+      }
+    },
+    {
+      "day": 2,
+      "title": "Mammoth Mountain Adventures and Journey Home",
+      "activities": [
+        "8:00 AM - Hotel checkout and breakfast",
+        "9:00 AM - Mammoth Mountain Gondola ride to summit (11,053 ft)",
+        "10:30 AM - Explore summit viewpoints and visitor center",
+        "12:00 PM - Twin Lakes visit (one frozen, one liquid)",
+        "1:00 PM - Attempt Lake Mary visit (weather dependent)",
+        "2:00 PM - Convict Lake in crystal clear weather",
+        "3:30 PM - Begin drive to Bishop for lunch",
+        "4:30 PM - Lunch in Bishop",
+        "5:30 PM - Scenic drive back to LA",
+        "8:00 PM - Sunset photography during Alabama Hills passage",
+        "10:30 PM - Arrive back in Los Angeles area"
+      ],
+      "meals": [
+        "Breakfast: Hotel continental breakfast or local café",
+        "Lunch: Plenty of options in Bishop (local diners or fast food)",
+        "Snacks: Pack for the long drive home"
+      ],
+      "accommodation": "Return home",
+      "budget": "$300-400 (gondola tickets, meals, gas)",
+      "highlights": [
+        "Panoramic 360-degree views from Mammoth Mountain summit",
+        "Unique frozen vs. liquid lake phenomenon at Twin Lakes",
+        "Crystal-clear reflections at Convict Lake",
+        "Spectacular sunset during the drive home",
+        "Reverse perspective of Day 1 landscapes"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78925"
+      }
+    }
+  ],
+  "keyDestinations": [
+    {
+      "name": "Red Rock Canyon State Park",
+      "description": "Stunning geological wonder with colorful rock formations showcasing millions of years of earth's history",
+      "duration": "30-45 minutes",
+      "activities": [
+        "Photography",
+        "Short hiking trails",
+        "Geological exploration"
+      ],
+      "bestTime": "Morning for optimal lighting",
+      "tips": [
+        "Bring water",
+        "Watch for wildlife",
+        "Stay on designated trails"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78926"
+      }
+    },
+    {
+      "name": "Alabama Hills Recreation Area",
+      "description": "Movie-famous landscape of rounded granite boulders with Sierra Nevada backdrop, including Mount Whitney views",
+      "duration": "1-2 hours",
+      "activities": [
+        "Rock climbing",
+        "Photography",
+        "Natural arch hunting",
+        "Movie location spotting"
+      ],
+      "bestTime": "Morning to early afternoon",
+      "tips": [
+        "Bring sturdy shoes",
+        "Perfect for Instagram photos",
+        "Look for natural climbing routes"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78927"
+      }
+    },
+    {
+      "name": "Bishop",
+      "description": "Charming mountain town serving as gateway to Sierra Nevada, perfect for resupplying and meals",
+      "duration": "1 hour",
+      "activities": [
+        "Dining",
+        "Shopping",
+        "Fuel stop",
+        "Local exploration"
+      ],
+      "bestTime": "Lunch time",
+      "tips": [
+        "Stock up on supplies",
+        "Try local restaurants",
+        "Fill up gas tank",
+        "Use clean restrooms"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78928"
+      }
+    },
+    {
+      "name": "Hot Creek Geological Site",
+      "description": "Natural hot springs caused by geothermal activity from Long Valley Caldera with steaming pools",
+      "duration": "45 minutes",
+      "activities": [
+        "Geological observation",
+        "Photography",
+        "Educational trail walking"
+      ],
+      "bestTime": "Afternoon",
+      "tips": [
+        "No swimming allowed",
+        "Stay on designated paths",
+        "Bring camera for steam effects"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b78929"
+      }
+    },
+    {
+      "name": "Mono Lake",
+      "description": "Ancient saline lake over one million years old, famous for otherworldly limestone tufa towers",
+      "duration": "1-1.5 hours",
+      "activities": [
+        "Tufa tower exploration",
+        "Bird watching",
+        "Photography",
+        "Visitor center"
+      ],
+      "bestTime": "Late afternoon for best lighting",
+      "tips": [
+        "Visit South Tufa area",
+        "Bring telephoto lens",
+        "Check visitor center for info",
+        "Respect wildlife"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b7892a"
+      }
+    },
+    {
+      "name": "June Lake",
+      "description": "Pristine alpine lake in glacially-carved canyon with perfect mountain reflections",
+      "duration": "30 minutes",
+      "activities": [
+        "Lake photography",
+        "Short nature walk",
+        "Mountain viewing"
+      ],
+      "bestTime": "Late afternoon",
+      "tips": [
+        "Check for fall colors (September-October)",
+        "Dress warmly",
+        "Great for reflection photos"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b7892b"
+      }
+    },
+    {
+      "name": "Mammoth Mountain Gondola",
+      "description": "Scenic 25-minute chairlift ride from 7,953 ft to 11,053 ft summit with 360-degree views",
+      "duration": "2-3 hours total",
+      "activities": [
+        "Gondola ride",
+        "Summit exploration",
+        "Visitor center",
+        "Photography"
+      ],
+      "bestTime": "Morning for clear views",
+      "tips": [
+        "Buy tickets in advance",
+        "Dress warmly for summit",
+        "Allow time at top",
+        "Check weather conditions"
+      ],
+      "cost": "$35-45 adult round-trip ticket",
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b7892c"
+      }
+    },
+    {
+      "name": "Twin Lakes",
+      "description": "Two adjacent alpine lakes in glacially carved basin, famous for unique frozen/liquid phenomenon",
+      "duration": "45 minutes",
+      "activities": [
+        "Lake photography",
+        "Nature walking",
+        "Geological observation"
+      ],
+      "bestTime": "Morning to early afternoon",
+      "tips": [
+        "Unique winter contrast",
+        "Great for unique photos",
+        "Check ice safety",
+        "Bring layers"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b7892d"
+      }
+    },
+    {
+      "name": "Lake Mary",
+      "description": "Popular alpine lake in Mammoth Lakes Basin (access weather dependent)",
+      "duration": "30-45 minutes if accessible",
+      "activities": [
+        "Lake viewing",
+        "Photography",
+        "Short hiking"
+      ],
+      "bestTime": "Morning to afternoon",
+      "tips": [
+        "Check road conditions",
+        "May be inaccessible in winter",
+        "Have backup plans"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b7892e"
+      }
+    },
+    {
+      "name": "Convict Lake",
+      "description": "Stunning alpine lake surrounded by dramatic granite cliffs, perfect for crystal-clear reflections",
+      "duration": "1 hour",
+      "activities": [
+        "Shoreline trail walking",
+        "Photography",
+        "Mountain viewing",
+        "Peaceful contemplation"
+      ],
+      "bestTime": "Sunny, clear conditions (avoid windy days)",
+      "tips": [
+        "Walk the shoreline trail",
+        "Perfect for reflection photos",
+        "Named after escaped convicts",
+        "Bring wide-angle lens"
+      ],
+      "_id": {
+        "$oid": "693fa3b9d8e2c4f5a6b7892f"
+      }
+    }
+  ],
+  "budgetBreakdown": {
+    "transportation": {
+      "gas": "$120-150",
+      "carRental": "$80-120/day (if needed)",
+      "notes": "Prices vary by season and vehicle type"
+    },
+    "accommodation": {
+      "motel6Mammoth": "$80-120/night",
+      "alternatives": "Budget hotels $60-100, luxury resorts $200-400",
+      "notes": "Book early during peak season and holidays"
+    },
+    "activities": {
+      "mammothGondola": "$50-300 per person(based on Skying and other activities)",
+      "parkingFees": "$40 at some locations",
+      "notes": "Most natural sites are free to access"
+    },
+    "meals": {
+      "day1Lunch": "$30-40 for group",
+      "day2Lunch": "$25-35 for group",
+      "snacksSupplies": "$20-30",
+      "notes": "Prices for 2-3 people sharing meals"
+    }
+  },
+  "seasonalConsiderations": {
+    "spring": {
+      "months": "April-May",
+      "conditions": "Some high elevation roads may still have snow, wildflowers blooming",
+      "tips": [
+        "Check road conditions",
+        "Bring layers",
+        "Perfect for photography"
+      ]
+    },
+    "summer": {
+      "months": "June-August",
+      "conditions": "Best access to all areas, warmest weather, peak tourist season",
+      "tips": [
+        "Book accommodation early",
+        "Start very early to avoid crowds",
+        "Bring sun protection"
+      ]
+    },
+    "fall": {
+      "months": "September-October",
+      "conditions": "Spectacular aspen colors, cooler temperatures, fewer crowds",
+      "tips": [
+        "Peak fall colors late September",
+        "Weather can change quickly",
+        "Perfect for photography"
+      ]
+    },
+    "winter": {
+      "months": "November-March",
+      "conditions": "Snow at high elevations, some road closures possible, unique frozen lake phenomena",
+      "tips": [
+        "Carry tire chains",
+        "Check road conditions",
+        "Dress very warmly",
+        "Some areas may be inaccessible"
+      ]
+    }
+  },
+  "safetyTips": [
+    "Check weather and road conditions before departure",
+    "Inform someone of your travel plans and expected return",
+    "Carry emergency supplies including water, snacks, and warm clothing",
+    "Download offline maps for areas with poor cell coverage",
+    "Be aware of altitude effects - stay hydrated",
+    "Respect wildlife and maintain safe distances",
+    "Follow Leave No Trace principles",
+    "In winter, carry tire chains and know how to use them"
+  ],
+  "photographyTips": [
+    "Golden hour lighting at Red Rock Canyon and Alabama Hills",
+    "Bring polarizing filter for lake reflections",
+    "Wide-angle lens essential for landscape shots",
+    "Telephoto lens useful for wildlife and distant mountain peaks",
+    "Extra batteries (cold weather drains them quickly)",
+    "Tripod for sunset/sunrise shots and long exposures",
+    "Protect gear from dust in desert areas"
+  ],
+  "tags": [
+    "road-trip",
+    "mammoth-lakes",
+    "eastern-sierra",
+    "california",
+    "adventure",
+    "photography",
+    "alpine-lakes",
+    "desert-landscapes",
+    "mountain-gondola",
+    "outdoor-adventure",
+    "scenic-drive",
+    "weekend-trip"
+  ],
+  "__v": 2,
+  "additionalImages": [],
+  "isActive": true,
+  "packingList": [],
+  "relatedGuides": [],
+  "resources": [],
+  "updatedAt": {
+    "$date": "2025-12-07T00:22:14.734Z"
+  },
+  "views": 2
 }]
