@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Search, Calendar, User, Clock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -9,7 +9,8 @@ import { useSearchParams } from 'next/navigation'
 import { postsApi, categoriesApi, type Post, type Category } from '@/lib/api'
 import { CountryFilter } from '@/components/common/CountryFilter'
 
-export default function BlogPage() {
+// Separate component that uses useSearchParams
+function BlogPageContent() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedCountry, setSelectedCountry] = useState('all')
@@ -115,7 +116,7 @@ export default function BlogPage() {
     }
 
     fetchData()
-  }, [])
+  }, [searchParams])
 
   // Filter posts based on search and category
   const filteredPosts = posts.filter(post => {
@@ -215,7 +216,6 @@ export default function BlogPage() {
       </Head>
 
       <div className="min-h-screen bg-white">
-      {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="container mx-auto px-4">
           <motion.div
@@ -384,5 +384,26 @@ export default function BlogPage() {
       </section>
     </div>
     </>
+  )
+}
+
+// Fallback component for suspense
+function BlogPageFallback() {
+  return (
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading blog posts...</p>
+      </div>
+    </div>
+  )
+}
+
+// Main export with Suspense wrapper
+export default function BlogPageWrapper() {
+  return (
+    <Suspense fallback={<BlogPageFallback />}>
+      <BlogPageContent />
+    </Suspense>
   )
 }

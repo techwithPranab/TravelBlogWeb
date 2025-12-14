@@ -27,5 +27,8 @@
     "framer-motion"
   ],
   "author": "TechWithPranab",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "next": "^14.2.35"
+  }
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -17,7 +17,8 @@ interface UnifiedSearchResults {
   total: number
 }
 
-export default function SearchPage() {
+// Separate component that uses useSearchParams
+function SearchPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [query, setQuery] = useState('')
@@ -456,5 +457,26 @@ export default function SearchPage() {
         ) : null}
       </div>
     </div>
+  )
+}
+
+// Fallback component for suspense
+function SearchPageFallback() {
+  return (
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600 dark:text-gray-400">Searching...</p>
+      </div>
+    </div>
+  )
+}
+
+// Main export with Suspense wrapper
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<SearchPageFallback />}>
+      <SearchPageContent />
+    </Suspense>
   )
 }
