@@ -723,7 +723,7 @@
   "isPremium": false,
   "isFeatured": true,
   "readTime": 12,
-  "viewCount": 30,
+  "viewCount": 54,
   "likeCount": 0,
   "commentCount": 0,
   "likes": [],
@@ -735,7 +735,7 @@
     "$date": "2024-12-05T19:30:00.000Z"
   },
   "updatedAt": {
-    "$date": "2025-12-06T23:47:38.563Z"
+    "$date": "2025-12-18T01:00:28.474Z"
   },
   "__v": 0,
   "destination": {
@@ -935,7 +935,7 @@
   "isPremium": false,
   "isFeatured": true,
   "readTime": 11,
-  "viewCount": 1,
+  "viewCount": 7,
   "likeCount": 0,
   "commentCount": 0,
   "likes": [],
@@ -947,7 +947,7 @@
     "$date": "2024-12-06T08:00:00.000Z"
   },
   "updatedAt": {
-    "$date": "2025-12-06T23:47:03.708Z"
+    "$date": "2025-12-20T06:35:39.951Z"
   },
   "__v": 0,
   "destination": {
@@ -959,4 +959,382 @@
     }
   },
   "kmtravelled": 300
+},
+{
+  "_id": {
+    "$oid": "694fa1b7d8e2c4f5a6b78950"
+  },
+  "title": "Newport Beach Christmas Boat Parade: A Magical Evening Cruise Through Holiday Lights",
+  "slug": "newport-beach-christmas-boat-parade-cruise-2025",
+  "excerpt": "Experience the magic of the Newport Beach Christmas Boat Parade on a 75-minute evening cruise, featuring spectacular holiday light displays, festive decorations, and the enchanting atmosphere of one of Southern California's most beloved holiday traditions.",
+  "content": "<p>When the holiday season arrives in Southern California, few experiences capture the festive spirit quite like the Newport Beach Christmas Boat Parade. On December 25th, 2025, we embarked on a magical 75-minute cruise departing from Davey's Locker Whale Watching at 6:30 PM, witnessing one of the most spectacular holiday light displays in the country. The combination of illuminated boats, decorated waterfront homes, and the sparkling waters of Newport Harbor created an unforgettable Christmas evening.</p><h2>A Holiday Tradition Since 1908</h2><p>The Newport Beach Christmas Boat Parade is one of the oldest and most prestigious holiday boat parades in the United States, attracting over a million spectators each year. This cherished tradition transforms the harbor into a floating wonderland of lights, music, and holiday cheer.</p>",
+  "contentSections": [
+    {
+      "id": "section-1",
+      "type": "image-text",
+      "title": "Boarding at Davey's Locker: Starting the Holiday Adventure",
+      "content": "<p>Our Christmas cruise adventure began at Davey's Locker Whale Watching &amp; Sportfishing, located at 400 Main Street in Balboa Village, Newport Beach. We have arrived  around 6:15 PM and checked in for our 6:30 PM departure, giving us time to explore the charming Balboa Village area. The excitement was palpable as fellow passengers gathered on the dock, cameras ready and holiday spirits high.</p><p>Davey's Locker has been a Newport Beach institution since 1971, and their Christmas cruise offerings provide the perfect vantage point to experience the boat parade. The boarding process was smooth and well-organized, with friendly staff helping passengers onto the spacious vessel. As the sun set over the Pacific Ocean, the harbor began to transform into a twinkling wonderland, and we knew we were in for something special.</p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1766859329/BagPackStories/posts/BagPackStories/posts/1766859328528-WhatsApp%20Image%202025-12-27%20at%2010.07.05.jpg",
+        "alt": "Cruise for Light Show",
+        "caption": ""
+      },
+      "imagePosition": "left",
+      "order": 0,
+      "_id": {
+        "$oid": "694fa1b7d8e2c4f5a6b78951"
+      }
+    },
+    {
+      "id": "section-2",
+      "type": "image-text",
+      "title": "Setting Sail: The Cruise Begins",
+      "content": "<p>As our vessel departed the dock at 6:30 PM sharp, the cool December evening air was filled with anticipation. The 75-minute cruise would take us through the most spectacular sections of Newport Harbor, showcasing both the famous boat parade participants and the elaborately decorated waterfront homes that line the harbor's edge.</p><p>Our cruise boat was equipped with both indoor heated cabins and outdoor viewing decks, allowing passengers to choose their comfort level while enjoying the spectacular views. I found myself alternating between the cozy warmth inside and the crisp outdoor air, where the holiday lights seemed even more brilliant against the dark winter sky. The captain provided entertaining commentary about the history of the parade, notable homes, and interesting facts about Newport Beach's maritime culture.</p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1766859669/BagPackStories/posts/BagPackStories/posts/1766859669316-IMG_20251225_183155%7E2%20copy.jpg",
+        "alt": "IMG_20251225_183155~2 copy.jpeg",
+        "caption": ""
+      },
+      "imagePosition": "right",
+      "order": 1,
+      "_id": {
+        "$oid": "694fa1b7d8e2c4f5a6b78952"
+      }
+    },
+    {
+      "id": "section-4",
+      "type": "text",
+      "title": "Waterfront Homes: A Million-Dollar Light Show",
+      "content": "<h3>Bayside Mansions Dressed for the Holidays</h3><p>While the boats were spectacular, the waterfront homes of Newport Beach provided an equally impressive display. These multi-million-dollar estates go all-out for the holiday season, competing informally for the most elaborate decorations. We saw homes adorned with hundreds of thousands of lights, massive inflatable decorations, and professional-grade light shows synchronized to music.</p><h3>Balboa Island Christmas Charm</h3><p>As we cruised past Balboa Island, we were treated to a more intimate holiday display. The charming cottages and beach homes on the island featured classic Christmas decorations - wreaths on doors, lights draped over rooflines, and tasteful displays that complemented the island's quaint character. The contrast between the grand estates and these cozy island homes added depth to the evening's visual feast.</p>",
+      "imagePosition": "left",
+      "order": 2,
+      "_id": {
+        "$oid": "694fa1b7d8e2c4f5a6b78954"
+      }
+    },
+    {
+      "id": "section-5",
+      "type": "image-text",
+      "title": "Harbor Atmosphere: Holiday Spirit on the Water",
+      "content": "<p>The atmosphere aboard our cruise was festive and warm, despite the cool December evening. Families with children, couples on romantic outings, and groups of friends all gathered to share in the holiday magic. Many passengers brought hot chocolate or festive beverages, and the sound of Christmas carols mixed with excited conversations created a joyful ambiance.</p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1766860654/BagPackStories/posts/BagPackStories/posts/1766860654128-IMG20251225185006.jpg",
+        "alt": "IMG20251225185006.jpeg",
+        "caption": ""
+      },
+      "imagePosition": "left",
+      "order": 3,
+      "_id": {
+        "$oid": "694fa1b7d8e2c4f5a6b78955"
+      }
+    },
+    {
+      "id": "section-6",
+      "type": "image-text",
+      "title": "Photography Tips: Capturing the Holiday Magic",
+      "content": "<p><br></p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1766860822/BagPackStories/posts/BagPackStories/posts/1766860822129-WhatsApp%20Image%202025-12-27%20at%2010.11.04.jpg",
+        "alt": "WhatsApp Image 2025-12-27 at 10.11.04.jpeg",
+        "caption": ""
+      },
+      "imagePosition": "center",
+      "order": 4,
+      "_id": {
+        "$oid": "694fa1b7d8e2c4f5a6b78956"
+      }
+    },
+    {
+      "id": "section-7",
+      "type": "text",
+      "title": "The Route: Exploring Newport Harbor's Best Views",
+      "content": "<h3>Upper Bay Splendor</h3><p>Our 75-minute cruise took us through the Upper Bay area, where some of the most elaborate home decorations can be found. This section features large estates with expansive waterfrontage, allowing for impressive light displays. We saw everything from classic white light elegance to vibrant multicolored extravaganzas.</p><h3>Lower Bay Charm</h3><p>The Lower Bay section offered a different perspective, with more intimate views of Balboa Island and the charming communities that surround it. The narrow channels here brought us close enough to see the intricate details of both boat and home decorations, creating an up-close-and-personal experience with the holiday displays.</p><h3>Main Channel Grand Finale</h3><p>As we approached the end of our cruise, we traveled through the main channel where the largest yachts parade. This section is like the grand finale of a fireworks show - the most impressive boats saved their best displays for this stretch, creating a spectacular conclusion to our evening cruise. The concentration of lights from both boats and homes in this area was absolutely breathtaking.</p>",
+      "imagePosition": "left",
+      "order": 5,
+      "_id": {
+        "$oid": "694fa1b7d8e2c4f5a6b78957"
+      }
+    },
+    {
+      "id": "section-9",
+      "type": "text",
+      "title": "Planning Your Newport Beach Christmas Cruise Experience",
+      "content": "<h3>Best Time to Visit</h3><p>The Newport Beach Christmas Boat Parade typically runs for five consecutive nights in mid-December, usually the week before Christmas. Evening cruises are most popular, departing between 5:30 PM and 7:00 PM. Christmas Day cruises, like the one we took, offer a unique way to celebrate the holiday. Book well in advance as cruises sell out quickly - tickets often go on sale in October.</p><p><br></p><h3>Booking:</h3><p>Visit <a href=\"https://christmasparadeboats.com/\" rel=\"noopener noreferrer\" target=\"_blank\">https://christmasparadeboats.com/</a> for online booking</p><p><br></p><h3>What to Bring</h3><p>December evenings in Newport Beach can be chilly, especially on the water. Dress in warm layers including a windproof jacket. Bring a blanket if you plan to spend time on the outdoor deck. Don't forget your camera with extra batteries (cold drains them quickly), and consider bringing hot chocolate or coffee in a thermos. Binoculars can enhance the experience, allowing you to see distant decorations in detail.</p><h3>Cruise Options</h3><p>Several companies offer Christmas cruise options in Newport Beach, ranging from budget-friendly group cruises to private yacht charters. Davey's Locker offers excellent value with their large vessels, multiple viewing areas, and knowledgeable crew. For a more intimate experience, consider smaller boat operators or even kayak tours (for the adventurous!). Dinner cruises are also available for those wanting a complete evening package.</p><h3>Getting There and Parking</h3><p>Davey's Locker is located at 400 Main Street, Balboa Village, Newport Beach, CA 92661. Parking can be challenging during the parade season. Arrive at least 30 minutes early to find parking - there are several paid lots in the area. Consider using rideshare services to avoid parking hassles. The Balboa Island Ferry is also a fun way to arrive, connecting Balboa Island to Balboa Peninsula.</p><h3>Additional Tips</h3><p>Bring motion sickness medication if you're sensitive - the harbor is generally calm, but it's better to be prepared. The best viewing spots fill up quickly, so don't hesitate to claim your spot early. Respect other passengers' viewing space and be mindful when moving around the boat. Download a marine radio app to listen to the music broadcast by parade boats. Finally, embrace the holiday spirit - participate in caroling, chat with fellow passengers, and let yourself be swept up in the magic of the evening.</p>",
+      "imagePosition": "left",
+      "order": 6,
+      "_id": {
+        "$oid": "694fa1b7d8e2c4f5a6b78959"
+      }
+    },
+    {
+      "id": "section-10",
+      "type": "text",
+      "title": "Beyond the Cruise: Exploring Newport Beach at Christmas",
+      "content": "<h3>Balboa Village Holiday Atmosphere</h3><p>Before or after your cruise, explore Balboa Village's charming streets decorated for the holidays. Visit the historic Balboa Pavilion (built in 1906), browse unique shops, and enjoy waterfront dining. The village maintains a nostalgic, small-town feel that's especially magical during the holiday season.</p><h3>Fashion Island Holiday Celebrations</h3><p>Newport Beach's upscale outdoor shopping center, Fashion Island, goes all out for Christmas with a massive tree, nightly snowfall shows (yes, in Southern California!), and special holiday events. It's a perfect complement to your boat parade experience.</p><h3>Beachfront Walks</h3><p>The Newport Beach coastline is beautiful year-round. A sunset walk on the beach before your cruise or a morning stroll the next day provides a peaceful counterpoint to the festive excitement of the boat parade. The crisp winter air and smaller crowds make it an ideal time to enjoy this famous beach.</p><h3>Newport Landing Restaurant Row</h3><p>The restaurants along Newport Harbor offer excellent dining options with many featuring outdoor patios where you can watch the boat parade from land. Making a full evening of it with dinner and a cruise creates an unforgettable holiday experience. Reservations are essential during the parade season.</p>",
+      "imagePosition": "left",
+      "order": 7,
+      "_id": {
+        "$oid": "694fa1b7d8e2c4f5a6b78960"
+      }
+    }
+  ],
+  "featuredImage": {
+    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1766860953/BagPackStories/posts/BagPackStories/posts/1766860952749-WhatsApp%20Image%202025-12-27%20at%2010.07.05.jpg",
+    "alt": "Newport Beach Christmas Boat Parade: A Magical Evening Cruise Through Holiday Lights",
+    "caption": ""
+  },
+  "images": [],
+  "youtubeVideos": [],
+  "author": {
+    "$oid": "6924fc72172f48ca56eab4b9"
+  },
+  "categories": [
+    {
+      "$oid": "69310f459cd5dce7931dc9ff"
+    }
+  ],
+  "tags": [
+    "newport-beach",
+    "christmas",
+    "boat-parade",
+    "holiday-lights",
+    "southern-california",
+    "christmas-cruise",
+    "daveys-locker",
+    "balboa-village",
+    "holiday-traditions",
+    "california-christmas",
+    "harbor-cruise",
+    "family-activities"
+  ],
+  "status": "published",
+  "isPremium": false,
+  "isFeatured": true,
+  "readTime": 10,
+  "viewCount": 3,
+  "likeCount": 0,
+  "commentCount": 0,
+  "likes": [],
+  "comments": [],
+  "publishedAt": {
+    "$date": "2025-12-27T18:42:35.897Z"
+  },
+  "createdAt": {
+    "$date": "2025-12-27T08:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-04T21:16:43.653Z"
+  },
+  "__v": 0,
+  "destination": {
+    "country": "United States",
+    "city": "Newport Beach",
+    "coordinates": {
+      "lat": 33.6189,
+      "lng": -117.9289
+    }
+  },
+  "kmtravelled": 0
+},
+{
+  "_id": {
+    "$oid": "694fb3d9f0a4e6b8c9d90172"
+  },
+  "title": "A Perfect Family Day in Huntington Beach: From Irvine to Sunset",
+  "slug": "family-day-huntington-beach-irvine-to-sunset",
+  "excerpt": "Join us on a wonderful family day trip from Irvine to Huntington Beach, where we explored the iconic pier, enjoyed the beautiful coastline, cycled along the beachfront, savored delicious cafe lunch, and witnessed a breathtaking Pacific Ocean sunset. A perfect Southern California beach day with my wife and daughter.",
+  "content": "<p>Sometimes the best adventures are the ones closest to home. Living in Irvine, we're blessed to be just a short drive from some of Southern California's most beautiful beaches. On a sunny weekend, my wife, daughter, and I decided to spend a perfect day at Huntington Beach - affectionately known as Surf City USA. What unfolded was a magical family day filled with ocean breezes, sandy toes, bike rides, delicious food, and one of the most spectacular sunsets we've ever witnessed.</p><h3>Close to Home, Yet Worlds Away</h3><p>The 30-minute drive from our Irvine home to Huntington Beach never gets old, especially when you catch your first glimpse of the Pacific Ocean as you approach the coast. Our destination promised a day of classic California beach experiences, and we couldn't wait to dive in.</p>",
+  "contentSections": [
+    {
+      "id": "section-1",
+      "type": "image-text",
+      "title": "The Journey Begins: From Irvine to the Coast",
+      "content": "<p>We left our home in Irvine around 9 AM on a beautiful Saturday morning, the kind of day that makes you grateful to live in Southern California. My daughter was buzzing with excitement in the back seat, asking every few minutes if we were there yet. The drive down Jamboree Road toward the coast took us through familiar neighborhoods until we merged onto Pacific Coast Highway, and suddenly the ocean appeared before us - a vast expanse of blue stretching to the horizon.</p><p>As we approached Huntington Beach, my wife pointed out the famous Huntington Beach Pier jutting into the ocean, its iconic structure visible from miles away. We found parking at one of the beach lots near the pier (arriving before 10 AM definitely helped us snag a good spot), and the moment we stepped out of the car, that unmistakable ocean air filled our lungs. My daughter immediately kicked off her shoes, eager to feel the sand between her toes.</p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767513773/BagPackStories/posts/BagPackStories/posts/1767513772446-IMG20231225142316.jpg",
+        "alt": "Huntington Beach view ",
+        "caption": "Huntington Beach view "
+      },
+      "imagePosition": "left",
+      "order": 0,
+      "_id": {
+        "$oid": "694fb3d9f0a4e6b8c9d90173"
+      }
+    },
+    {
+      "id": "section-2",
+      "type": "image-text",
+      "title": "Walking the Iconic Huntington Beach Pier",
+      "content": "<p>Our first stop was the legendary Huntington Beach Pier, stretching 1,850 feet into the Pacific Ocean. As we walked from the sandy beach onto the concrete pier, my daughter ran ahead, peering over the railings at the surfers below catching waves. The pier was bustling with life - fishermen with their lines cast into the deep water, tourists taking photos, and locals casually strolling with their morning coffee.</p><p>We made our way to the end of the pier, where the view was absolutely spectacular. Looking back toward the shore, we could see the entire Huntington Beach coastline stretching north and south, the beach dotted with colorful umbrellas, surfers, and volleyball players. Looking out to sea, the Pacific Ocean sparkled under the morning sun, seemingly endless.</p><p>The sound of waves crashing against the pier pilings below created a rhythmic soundtrack to our morning. We spent nearly 45 minutes on the pier, just soaking in the atmosphere and watching the surfers demonstrate their skills on the consistent Huntington Beach waves.</p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767513910/BagPackStories/posts/BagPackStories/posts/1767513910153-IMG20251228150635.jpg",
+        "alt": "IMG20251228150635.jpg",
+        "caption": ""
+      },
+      "imagePosition": "right",
+      "order": 1,
+      "_id": {
+        "$oid": "694fb3d9f0a4e6b8c9d90174"
+      }
+    },
+    {
+      "id": "section-3",
+      "type": "image-text",
+      "title": "Beach Time: Sun, Sand, and Surf",
+      "content": "<p>After exploring the pier, we headed down to the beach itself. My daughter immediately wanted to get closer to the water, so we walked across the warm sand toward the shoreline. The beach was beautifully maintained - wide, clean, and inviting. The temperature was perfect - warm but not hot, with a refreshing ocean breeze keeping things comfortable. We could hear the calls of seagulls overhead and the constant, soothing rhythm of waves rolling onto the shore.</p><p><br></p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767514301/BagPackStories/posts/BagPackStories/posts/1767514300916-IMG20231225133445.jpg",
+        "alt": "IMG20231225133445.jpg",
+        "caption": ""
+      },
+      "imagePosition": "center",
+      "order": 2,
+      "_id": {
+        "$oid": "694fb3d9f0a4e6b8c9d90175"
+      }
+    },
+    {
+      "id": "section-4",
+      "type": "image-text",
+      "title": "Cycling Along the Coast: A Family Adventure",
+      "content": "<p>Around 1:00 PM, we decided to try something we'd been wanting to do for a while - rent bikes and explore the famous Huntington Beach bike path. We walked over to one of the many bike rental shops near the pier and rented two  beach cruisers: one adult cycle and one smaller cycle for our daughter. </p><p>The Huntington Beach bike path is absolutely fantastic. It runs parallel to the beach, offering stunning ocean views the entire way. We pedaled north toward Bolsa Chica State Beach, with my daughter riding between my wife and me. The path is wide, well-maintained, and mostly flat - perfect for casual family cycling. The ocean sparkled to our right, while interesting beach homes and the occasional surf shop lined the left side of the path.</p><p><br></p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767514911/BagPackStories/posts/BagPackStories/posts/1767514911240-cruiser.jpg",
+        "alt": "cruiser.jpg",
+        "caption": ""
+      },
+      "imagePosition": "left",
+      "order": 3,
+      "_id": {
+        "$oid": "694fb3d9f0a4e6b8c9d90176"
+      }
+    },
+    {
+      "id": "section_1767549922655_r39uwb2vm",
+      "type": "text",
+      "title": "Lunch at a Beachside Cafe: Refueling with Ocean Views",
+      "content": "<p>By the time we returned our Cycles, we were all hungry and ready for lunch. We have ordered our all time favorite dish Chicken Tenders and French Fries along with Cappuccino </p><p><br></p><p>What made the lunch even more special was the atmosphere. We could hear the ocean in the distance, feel the sea breeze, and watch the parade of beachgoers walking by. It was the kind of meal where conversation flows easily, everyone's happy, and you're in no rush to leave. We lingered over lunch for nearly an hour and a half, savoring both the food and the moment.</p>",
+      "imagePosition": "left",
+      "order": 4,
+      "_id": {
+        "$oid": "695aaf2c082636f77e0f8443"
+      }
+    },
+    {
+      "id": "section-6",
+      "type": "text",
+      "title": "Afternoon Beach Relaxation and Exploration",
+      "content": "<h3>Post-Lunch Beach Return</h3><p>After our satisfying lunch, we weren't quite ready to leave this beach paradise. We walked back to the beach, this time exploring a different section south of the pier. The afternoon had brought out even more beachgoers, and the scene was wonderfully vibrant - surfers in wetsuits waxing their boards, families setting up for afternoon beach sessions, and beach volleyball games in full swing.</p><h3><br></h3>",
+      "imagePosition": "left",
+      "order": 5,
+      "_id": {
+        "$oid": "694fb3d9f0a4e6b8c9d90178"
+      }
+    },
+    {
+      "id": "section-7",
+      "type": "image-text",
+      "title": "The Grand Finale: A Spectacular Huntington Beach Sunset",
+      "content": "<p>As late afternoon transitioned into early evening, we noticed other beachgoers beginning to position themselves for the sunset. </p><p>Around 5:45 PM, the magic began. The sun, which had been bright overhead all day, began its slow journey toward the horizon. The sky started transforming - first subtle oranges and pinks, then deeper and more vibrant hues. My wife had her camera ready, and we took turns capturing photos while also making sure to simply experience the moment with our own eyes.</p><p>As the sun touched the ocean's edge, the entire sky exploded in color. Brilliant oranges, deep purples, soft pinks, and golden yellows painted the sky in layers. The clouds caught the light, creating dramatic patterns across the heavens. The ocean reflected these colors, shimmering like liquid gold and copper. Silhouettes of surfers catching their final waves of the day added to the picturesque scene.</p><p><br></p>",
+      "image": {
+        "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767550038/BagPackStories/posts/BagPackStories/posts/1767550037609-IMG20251228164340.jpg",
+        "alt": "Sunset at Huntington Beach",
+        "caption": "Sunset at Huntington Beach"
+      },
+      "imagePosition": "center",
+      "order": 6,
+      "_id": {
+        "$oid": "694fb3d9f0a4e6b8c9d90179"
+      }
+    },
+    {
+      "id": "section-8",
+      "type": "text",
+      "title": "Evening Stroll and Heading Home",
+      "content": "<h3>Reflecting on a Perfect Day</h3><p>As we walked back to our car, we talked about our favorite moments of the day. My daughter missing riding Cycles along the beach, or the sunset. My wife loved the peaceful lunch and the Cycle ride. For me, it was the collective experience - spending an entire day with my two favorite people, enjoying the simple pleasures of beach, sun, food, and nature.</p><h3><br></h3>",
+      "imagePosition": "left",
+      "order": 7,
+      "_id": {
+        "$oid": "694fb3d9f0a4e6b8c9d90180"
+      }
+    },
+    {
+      "id": "section-9",
+      "type": "text",
+      "title": "Tips for Your Own Huntington Beach Family Day Trip",
+      "content": "<h3>Best Time to Visit</h3><p>Based on our experience, arriving between 10:30-11:00 AM is ideal. You'll beat the worst of the parking rush, have plenty of time to enjoy the beach, and still be there for the sunset. Summer weekends are busiest, but the beach is wonderful year-round. Spring and fall offer perfect weather with fewer crowds.</p><h3>What to Bring</h3><p>Sunscreen is absolutely essential - reapply throughout the day. Bring a beach umbrella or sun shade, beach towels, and a blanket. A small cooler with snacks and drinks saves money and keeps everyone hydrated. Don't forget sand toys for kids, a change of clothes, and a bag for wet items. A waterproof phone case is great for beach photos and videos.</p><h3>Parking and Getting Around</h3><p>Beach parking lots fill up quickly on weekends. Arrive early or consider parking in the neighborhoods slightly away from the pier (check parking signs carefully). Paid lots range from $15-25 for the day. Alternatively, Pacific City has parking and is a short walk to the beach. Bike rentals are affordable ($10-20 per bike for a few hours) and a fantastic way to explore the coastline.</p><h3>Dining Options</h3><p>The Main Street area near the pier has numerous cafes, restaurants, and quick-service spots. For a sit-down meal with ocean views, make reservations if possible, especially for weekend lunch or dinner. There are also many casual options perfect for families with kids. Don't miss trying fresh fish tacos - they're a Southern California beach staple.</p><h3>Family-Friendly Activities</h3><p>Beyond swimming and beach play, consider: pier walking (free and offers great views), tide pool exploring (best at low tide), bike path cycling (rentals available everywhere), surfing lessons (many schools cater to kids and beginners), and beach volleyball (courts are open to public). The Huntington Beach Pier has a small tackle shop and snack bar at the end.</p><h3>Safety Considerations</h3><p>Always swim near lifeguard stations, which are well-staffed during daylight hours. Be aware of rip currents and watch for warning flags. The ocean can be unpredictable, so keep young children within arm's reach in the water. Bring a first aid kit with basic supplies. Stay hydrated and take breaks in the shade to avoid heat exhaustion.</p>",
+      "imagePosition": "left",
+      "order": 8,
+      "_id": {
+        "$oid": "694fb3d9f0a4e6b8c9d90181"
+      }
+    }
+  ],
+  "featuredImage": {
+    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767550600/BagPackStories/posts/BagPackStories/posts/1767550600231-IMG20231225142316.jpg",
+    "alt": "A Perfect Family Day in Huntington Beach: From Irvine to Sunset",
+    "caption": ""
+  },
+  "images": [
+    "https://res.cloudinary.com/due8vcyim/image/upload/v1767550607/BagPackStories/posts/BagPackStories/posts/1767550606747-IMG20231225113937.jpg",
+    "https://res.cloudinary.com/due8vcyim/image/upload/v1767550615/BagPackStories/posts/BagPackStories/posts/1767550614895-IMG20231225121610.jpg",
+    "https://res.cloudinary.com/due8vcyim/image/upload/v1767550622/BagPackStories/posts/BagPackStories/posts/1767550621792-IMG20231225124356.jpg",
+    "https://res.cloudinary.com/due8vcyim/image/upload/v1767550642/BagPackStories/posts/BagPackStories/posts/1767550641893-IMG20231225124622.jpg",
+    "https://res.cloudinary.com/due8vcyim/image/upload/v1767550647/BagPackStories/posts/BagPackStories/posts/1767550646986-IMG20231225132724.jpg",
+    "https://res.cloudinary.com/due8vcyim/image/upload/v1767550657/BagPackStories/posts/BagPackStories/posts/1767550657368-IMG20251228144900.jpg",
+    "https://res.cloudinary.com/due8vcyim/image/upload/v1767550713/BagPackStories/posts/BagPackStories/posts/1767550712856-IMG20251228163638.jpg",
+    "https://res.cloudinary.com/due8vcyim/image/upload/v1767550721/BagPackStories/posts/BagPackStories/posts/1767550720948-IMG20251228163908.jpg"
+  ],
+  "youtubeVideos": [],
+  "author": {
+    "$oid": "6924fc72172f48ca56eab4b9"
+  },
+  "categories": [
+    {
+      "$oid": "69310f459cd5dce7931dc9f8"
+    }
+  ],
+  "tags": [
+    "huntington-beach",
+    "california",
+    "family-travel",
+    "beach-day",
+    "irvine",
+    "day-trip",
+    "surf-city-usa",
+    "southern-california",
+    "family-activities",
+    "beach-cycling",
+    "sunset",
+    "pier",
+    "orange-county"
+  ],
+  "status": "published",
+  "isPremium": false,
+  "isFeatured": true,
+  "readTime": 12,
+  "viewCount": 22,
+  "likeCount": 0,
+  "commentCount": 0,
+  "likes": [],
+  "comments": [],
+  "publishedAt": {
+    "$date": "2026-01-04T18:19:24.950Z"
+  },
+  "createdAt": {
+    "$date": "2025-12-29T08:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T14:56:28.534Z"
+  },
+  "__v": 0,
+  "destination": {
+    "country": "United States",
+    "city": "Huntington Beach",
+    "coordinates": {
+      "lat": 33.6595,
+      "lng": -118.0002
+    }
+  },
+  "kmtravelled": 24
 }]

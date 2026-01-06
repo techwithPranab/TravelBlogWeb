@@ -1057,29 +1057,43 @@
   "country": "USA",
   "continent": "North America",
   "featuredImage": {
-    "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-    "alt": "Mammoth Lake California Sierra Nevada"
+    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1765064907/BagPackStories/destinations/BagPackStories/destinations/1765064906976-WhatsApp%20Image%202025-12-05%20at%2014.05.50.jpg",
+    "alt": "WhatsApp Image 2025-12-05 at 14.05.50.jpeg"
   },
   "gallery": [
     {
-      "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-      "alt": "Mammoth Lake Panoramic View",
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1765064920/BagPackStories/destinations/BagPackStories/destinations/1765064920049-WhatsApp%20Image%202025-12-06%20at%2015.02.13.jpg",
+      "alt": "WhatsApp Image 2025-12-06 at 15.02.13.jpeg",
       "_id": {
-        "$oid": "68fdbd73794bb2703e235190"
+        "$oid": "6934c1a070f8fa375ce01598"
       }
     },
     {
-      "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",
-      "alt": "Mammoth Mountain Ski Resort",
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1765064936/BagPackStories/destinations/BagPackStories/destinations/1765064936226-WhatsApp%20Image%202025-12-06%20at%2015.10.13%20%283%29.jpg",
+      "alt": "WhatsApp Image 2025-12-06 at 15.10.13 (3).jpeg",
       "_id": {
-        "$oid": "68fdbd73794bb2703e235191"
+        "$oid": "6934c1a070f8fa375ce01599"
       }
     },
     {
-      "url": "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&h=600&fit=crop",
-      "alt": "Mammoth Lakes Trail Hiking",
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1765064970/BagPackStories/destinations/BagPackStories/destinations/1765064969719-WhatsApp%20Image%202025-11-28%20at%2021.39.36.jpg",
+      "alt": "WhatsApp Image 2025-11-28 at 21.39.36.jpeg",
       "_id": {
-        "$oid": "68fdbd73794bb2703e235192"
+        "$oid": "6934c1a070f8fa375ce0159a"
+      }
+    },
+    {
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1765064979/BagPackStories/destinations/BagPackStories/destinations/1765064978793-WhatsApp%20Image%202025-12-05%20at%2013.29.45.jpg",
+      "alt": "WhatsApp Image 2025-12-05 at 13.29.45.jpeg",
+      "_id": {
+        "$oid": "6934c1a070f8fa375ce0159b"
+      }
+    },
+    {
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1765064993/BagPackStories/destinations/BagPackStories/destinations/1765064993378-WhatsApp%20Image%202025-12-05%20at%2013.36.46.jpg",
+      "alt": "WhatsApp Image 2025-12-05 at 13.36.46.jpeg",
+      "_id": {
+        "$oid": "6934c1a070f8fa375ce0159c"
       }
     }
   ],
@@ -1103,7 +1117,9 @@
     "High Sierra Wilderness",
     "Scenic Mountain Trails",
     "The Village at Mammoth",
-    "Ancient Bristlecone Pine Forest"
+    "Ancient Bristlecone Pine Forest",
+    "Mono Lake",
+    "Scenic Gondola Ride"
   ],
   "activities": [
     {
@@ -1324,8 +1340,326 @@
     "$date": "2025-11-22T00:00:00.000Z"
   },
   "updatedAt": {
-    "$date": "2025-12-05T08:05:08.352Z"
+    "$date": "2025-12-06T23:52:00.988Z"
   },
   "__v": 0,
   "relatedPosts": []
+},
+{
+  "_id": {
+    "$oid": "694fb2c8e9f3d5a7b8c89061"
+  },
+  "name": "Huntington Beach, California",
+  "slug": "huntington-beach-california",
+  "description": "Huntington Beach, known as 'Surf City USA,' is a vibrant coastal city in Orange County, California, famous for its consistent surf, beautiful sandy beaches stretching nearly 10 miles, and the iconic Huntington Beach Pier. This quintessential Southern California beach town offers the perfect blend of laid-back beach culture, year-round perfect weather, world-class surfing, scenic bike paths, waterfront dining, and family-friendly activities. Whether you're watching professional surfers ride the waves, cycling along the beach path, or enjoying spectacular Pacific Ocean sunsets, Huntington Beach delivers the ultimate California beach experience.",
+  "country": "United States",
+  "continent": "North America",
+  "featuredImage": {
+    "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767069249/BagPackStories/destinations/BagPackStories/destinations/1767069249137-IMG20251228150635.jpg",
+    "alt": "IMG20251228150635.jpg"
+  },
+  "gallery": [
+    {
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767069378/BagPackStories/destinations/BagPackStories/destinations/1767069377502-IMG20231225113651.jpg",
+      "alt": "IMG20231225113651.jpg",
+      "_id": {
+        "$oid": "6953572b6bf1a1055e9d5d48"
+      }
+    },
+    {
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767069404/BagPackStories/destinations/BagPackStories/destinations/1767069404342-IMG20231225133445.jpg",
+      "alt": "IMG20231225133445.jpg",
+      "_id": {
+        "$oid": "6953572b6bf1a1055e9d5d49"
+      }
+    },
+    {
+      "url": "https://res.cloudinary.com/due8vcyim/image/upload/v1767069421/BagPackStories/destinations/BagPackStories/destinations/1767069420840-IMG20231225114004.jpg",
+      "alt": "IMG20231225114004.jpg",
+      "_id": {
+        "$oid": "6953572b6bf1a1055e9d5d4a"
+      }
+    }
+  ],
+  "coordinates": {
+    "lat": 33.6595,
+    "lng": -118.0002
+  },
+  "bestTimeToVisit": "June to September (summer season for warmest weather), though year-round is pleasant",
+  "averageTemperature": {
+    "summer": "22-27°C (72-80°F)",
+    "winter": "10-20°C (50-68°F)"
+  },
+  "currency": "USD (US Dollar)",
+  "language": "English",
+  "timezone": "UTC-8 (Pacific Time Zone, UTC-7 during DST)",
+  "rating": 4.7,
+  "totalReviews": 5892,
+  "highlights": [
+    "Huntington Beach Pier",
+    "Surf City USA - World-class surfing",
+    "10-mile stretch of sandy beaches",
+    "Pacific Coast Highway scenic drive",
+    "Bolsa Chica Ecological Reserve",
+    "US Open of Surfing",
+    "Beachside bike path"
+  ],
+  "activities": [
+    {
+      "name": "Surfing",
+      "icon": "🏄",
+      "description": "Ride world-famous waves at Surf City USA with consistent surf year-round",
+      "_id": {
+        "$oid": "694fb2c8e9f3d5a7b8c89065"
+      }
+    },
+    {
+      "name": "Beach Cycling",
+      "icon": "🚴",
+      "description": "Cruise along the scenic beachside bike path stretching for miles",
+      "_id": {
+        "$oid": "694fb2c8e9f3d5a7b8c89066"
+      }
+    },
+    {
+      "name": "Pier Walking",
+      "icon": "🌊",
+      "description": "Stroll the iconic 1,850-foot Huntington Beach Pier",
+      "_id": {
+        "$oid": "694fb2c8e9f3d5a7b8c89067"
+      }
+    },
+    {
+      "name": "Beach Volleyball",
+      "icon": "🏐",
+      "description": "Play volleyball on the birthplace of beach volleyball culture",
+      "_id": {
+        "$oid": "694fb2c8e9f3d5a7b8c89068"
+      }
+    },
+    {
+      "name": "Wildlife Watching",
+      "icon": "🦅",
+      "description": "Observe coastal birds and marine life at Bolsa Chica Wetlands",
+      "_id": {
+        "$oid": "694fb2c8e9f3d5a7b8c89069"
+      }
+    },
+    {
+      "name": "Shopping",
+      "icon": "🛍️",
+      "description": "Browse surf shops, boutiques, and Pacific City shopping center",
+      "_id": {
+        "$oid": "694fb2c8e9f3d5a7b8c8906a"
+      }
+    },
+    {
+      "name": "Sunset Viewing",
+      "icon": "🌅",
+      "description": "Watch spectacular Pacific Ocean sunsets from the beach or pier",
+      "_id": {
+        "$oid": "694fb2c8e9f3d5a7b8c8906b"
+      }
+    }
+  ],
+  "accommodation": [
+    {
+      "type": "budget",
+      "name": "Sun 'n Sands Motel",
+      "description": "Classic beachfront motel with basic amenities and easy beach access",
+      "priceRange": "$80-120",
+      "rating": 3.9,
+      "amenities": [
+        "WiFi",
+        "Parking",
+        "Beach Access",
+        "Pool"
+      ],
+      "bookingUrl": "https://booking.com",
+      "_id": {
+        "$oid": "695355316bf1a1055e9d5d2c"
+      }
+    },
+    {
+      "type": "budget",
+      "name": "Huntington Surf Inn",
+      "description": "Budget-friendly hotel near the pier with surf-themed decor",
+      "priceRange": "$95-140",
+      "rating": 4,
+      "amenities": [
+        "WiFi",
+        "Continental Breakfast",
+        "Parking",
+        "Bike Rentals"
+      ],
+      "bookingUrl": "https://booking.com",
+      "_id": {
+        "$oid": "695355316bf1a1055e9d5d2d"
+      }
+    },
+    {
+      "type": "mid-range",
+      "name": "Kimpton Shorebreak Resort",
+      "description": "Stylish boutique hotel steps from the beach with modern beach vibe",
+      "priceRange": "$250-400",
+      "rating": 4.5,
+      "amenities": [
+        "Pool",
+        "Restaurant & Bar",
+        "Fitness Center",
+        "Pet-Friendly",
+        "Beach Cruiser Bikes"
+      ],
+      "bookingUrl": "https://booking.com",
+      "_id": {
+        "$oid": "695355316bf1a1055e9d5d2e"
+      }
+    },
+    {
+      "type": "mid-range",
+      "name": "Paséa Hotel & Spa",
+      "description": "Oceanfront resort with rooftop lounge and coastal California charm",
+      "priceRange": "$300-500",
+      "rating": 4.6,
+      "amenities": [
+        "Spa",
+        "Multiple Restaurants",
+        "Pool",
+        "Ocean Views",
+        "Valet Parking"
+      ],
+      "bookingUrl": "https://booking.com",
+      "_id": {
+        "$oid": "695355316bf1a1055e9d5d2f"
+      }
+    },
+    {
+      "type": "luxury",
+      "name": "The Waterfront Beach Resort",
+      "description": "Upscale beachfront resort with stunning ocean views and premium amenities",
+      "priceRange": "$400-700",
+      "rating": 4.7,
+      "amenities": [
+        "Beachfront Pool",
+        "Multiple Dining Options",
+        "Spa Services",
+        "Cabanas",
+        "Fire Pits",
+        "Valet Parking"
+      ],
+      "bookingUrl": "https://waterfrontresorts.com",
+      "_id": {
+        "$oid": "695355316bf1a1055e9d5d30"
+      }
+    },
+    {
+      "type": "luxury",
+      "name": "Hyatt Regency Huntington Beach Resort",
+      "description": "Luxury resort with andalusian-inspired architecture and world-class amenities",
+      "priceRange": "$500-900",
+      "rating": 4.8,
+      "amenities": [
+        "Multiple Pools & Slides",
+        "Full-Service Spa",
+        "Championship Golf",
+        "Fine Dining",
+        "Private Beach Access",
+        "Kids Activities"
+      ],
+      "bookingUrl": "https://hyatt.com",
+      "_id": {
+        "$oid": "695355316bf1a1055e9d5d31"
+      }
+    }
+  ],
+  "transportation": [
+    "Personal vehicle",
+    "Bike rentals",
+    "Uber/Lyft",
+    "OCTA buses",
+    "Beach cruiser bikes",
+    "Walking",
+    "Electric scooter rentals"
+  ],
+  "howToReach": {
+    "byAir": {
+      "nearestAirport": "John Wayne Airport (SNA)",
+      "distanceFromCity": "15 miles",
+      "travelTime": "20-30 minutes",
+      "domesticFlights": "Major US cities: SF, Seattle, Portland, Phoenix, Denver",
+      "internationalFlights": "Limited international, use LAX for international flights",
+      "transportToCity": "Rental cars, Uber/Lyft, shuttle services",
+      "estimatedCost": "$30-50 (rideshare), $40-60 (rental car per day)"
+    },
+    "byRail": {
+      "nearestStation": "Amtrak Santa Ana or Fullerton stations",
+      "majorTrains": "Pacific Surfliner (LA-San Diego route)",
+      "connections": "Los Angeles, Anaheim, San Juan Capistrano, San Diego",
+      "travelTime": "LA: 1.5 hours, San Diego: 2 hours",
+      "transportToCity": "OCTA bus, Uber/Lyft to beach from station",
+      "estimatedCost": "$20-40 (depending on origin)",
+      "booking": "Amtrak website/app"
+    },
+    "byRoad": {
+      "majorHighways": "I-405, CA-1 (Pacific Coast Highway), I-5",
+      "distances": [
+        {
+          "label": "Distance from Los Angeles",
+          "value": "40 miles"
+        },
+        {
+          "label": "Distance from Irvine",
+          "value": "12 miles"
+        },
+        {
+          "label": "Distance from San Diego",
+          "value": "90 miles"
+        },
+        {
+          "label": "Distance from Anaheim",
+          "value": "15 miles"
+        }
+      ],
+      "travelTime": "LA: 45-75 min, Irvine: 15-20 min, San Diego: 1.5-2 hours",
+      "busServices": "OCTA public buses from Orange County areas",
+      "privateCar": "Scenic PCH drive recommended, paid beach parking",
+      "estimatedCost": "Gas: $5-15 (from nearby cities), Parking: $15-25/day"
+    }
+  },
+  "localCuisine": [
+    "Fish Tacos",
+    "Clam Chowder",
+    "Fresh Seafood",
+    "California-style Pizza",
+    "Acai Bowls",
+    "Burgers",
+    "Mexican Food",
+    "Craft Beer"
+  ],
+  "travelTips": [
+    "Arrive early for beach parking, especially on weekends and summer",
+    "Bring sunscreen - the California sun is strong even on cloudy days",
+    "Rent bikes to explore the entire beachfront path",
+    "Check surf conditions online before visiting if you plan to surf",
+    "Watch for jellyfish warnings during certain seasons",
+    "The pier area has free WiFi and public restrooms",
+    "Visit Bolsa Chica Wetlands in early morning for best wildlife viewing",
+    "Street parking is limited - use paid beach lots or Pacific City parking",
+    "Dress in layers - it can be cool by the ocean even in summer",
+    "Book restaurants in advance on weekends and during surf competitions"
+  ],
+  "relatedPosts": [],
+  "isPopular": true,
+  "isFeatured": true,
+  "isActive": true,
+  "status": "published",
+  "seoTitle": "Huntington Beach Surf City USA | California Coast",
+  "seoDescription": "Discover Huntington Beach, California's premier surf destination. Complete guide to beaches, surfing, dining, and coastal activities in Surf City USA.",
+  "createdAt": {
+    "$date": "2025-12-29T08:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-30T04:38:03.470Z"
+  },
+  "__v": 0
 }]
