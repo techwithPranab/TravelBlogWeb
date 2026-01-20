@@ -1,0 +1,121 @@
+{
+  "_id": {
+    "$oid": "68fdbb12dd08ede9e662a1c3"
+  },
+  "title": "Rose Garden in San Jose: A Colorful Family Escape in California",
+  "slug": "rose-garden-san-jose-california-family-visit-april-2025",
+  "excerpt": "Experience the breathtaking beauty of the Rose Garden in San Jose, California, during a perfect family outing in April 2025, featuring vibrant colors and diverse rose varieties.",
+  "content": "<p>On our return from San Francisco in April 2025, my wife and daughter and I made a memorable stop at the Rose Garden in San Jose, California. Arriving around noon, we spent about three hours immersed in this floral paradise that showcased an incredible variety of roses in full bloom.</p><h2>A Garden of Colors and Scents</h2><p>The Rose Garden was absolutely stunning with its vast collection of roses displaying every imaginable color - from deep crimson reds and sunny yellows to delicate pinks and pristine whites. The air was filled with the sweet fragrance of thousands of blooming roses, creating a sensory experience that captivated all three of us.</p>",
+  "contentSections": [
+    {
+      "id": "section-1",
+      "type": "image-text",
+      "title": "Arrival and First Impressions",
+      "content": "<p>After our morning in San Francisco, we arrived at the Rose Garden around 12 PM. The timing was perfect as the afternoon sun illuminated the garden beautifully, making the colors even more vibrant. My daughter was immediately enchanted by the sea of colorful blooms, and my wife and I were equally mesmerized by the sheer variety and beauty of the roses on display.</p><p>The garden's layout was thoughtfully designed, with winding paths that led us through different sections, each featuring different types and colors of roses. It was the perfect setting for a relaxed family afternoon.</p>",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+        "alt": "Rose Garden entrance in San Jose",
+        "caption": "The welcoming entrance to the Rose Garden in San Jose"
+      },
+      "imagePosition": "left",
+      "order": 1,
+      "_id": {
+        "$oid": "6926777900a777738d2f65b1"
+      }
+    },
+    {
+      "id": "section-2",
+      "type": "image-text",
+      "title": "Diverse Rose Varieties",
+      "content": "<p>What impressed me most was the incredible diversity of rose varieties. From classic hybrid teas with their elegant long stems to bushy floribundas that created colorful hedges, and miniature roses that added delicate touches to the landscape. Each variety had its own unique characteristics - some with multiple petals creating lush, full blooms, others with simpler forms that highlighted their natural beauty.</p><p>We spent time reading the informational plaques that identified different species and their origins. It was fascinating to learn about the history and cultivation of these beautiful flowers.</p>",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=800&h=600&fit=crop",
+        "alt": "Various rose varieties in bloom",
+        "caption": "The Rose Garden showcases an impressive collection of rose varieties"
+      },
+      "imagePosition": "right",
+      "order": 2,
+      "_id": {
+        "$oid": "6926777900a777738d2f65b2"
+      }
+    },
+    {
+      "id": "section-3",
+      "type": "text",
+      "title": "Family Time in the Garden",
+      "content": "<p>The three hours we spent at the Rose Garden flew by as we wandered through the paths, taking photographs and simply enjoying the peaceful atmosphere. My daughter loved posing with different colored roses, and we took many family photos amidst the blooms. The garden provided the perfect backdrop for quality time together, away from the hustle of city life.</p><p>The well-maintained grounds and comfortable walking paths made it easy for us to explore at our own pace. We found quiet benches where we could sit and appreciate the beauty around us, and the gentle breeze carried the sweet scent of roses throughout the garden.</p>",
+      "imagePosition": "left",
+      "order": 3,
+      "_id": {
+        "$oid": "6926777900a777738d2f65b3"
+      }
+    },
+    {
+      "id": "section-4",
+      "type": "image-text",
+      "title": "Perfect Timing and Weather",
+      "content": "<p>Visiting in April was ideal timing for the Rose Garden. The roses were in their peak blooming season, and the weather was pleasantly warm without being too hot. The afternoon sun created beautiful lighting for photographs and enhanced the vibrant colors of the flowers. Our timing after returning from San Francisco worked out perfectly, giving us a relaxing way to end our day.</p><p>The garden's location in San Jose made it a convenient stop between major destinations, and the peaceful atmosphere provided a wonderful contrast to the busier urban experiences we'd had earlier.</p>",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&h=600&fit=crop",
+        "alt": "Family enjoying the Rose Garden",
+        "caption": "A perfect family outing in the beautiful Rose Garden"
+      },
+      "imagePosition": "center",
+      "order": 4,
+      "_id": {
+        "$oid": "6926777900a777738d2f65b4"
+      }
+    }
+  ],
+  "featuredImage": {
+    "url": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=400&fit=crop",
+    "alt": "Rose Garden in San Jose California",
+    "caption": "The stunning Rose Garden in San Jose showcasing vibrant rose blooms"
+  },
+  "images": [],
+  "youtubeVideos": [],
+  "author": {
+    "$oid": "68fdbb0fdd08ede9e662a188"
+  },
+  "categories": [],
+  "tags": [
+    "san-jose",
+    "california",
+    "rose-garden",
+    "family-trip",
+    "flowers",
+    "gardens",
+    "april-2025",
+    "day-trip",
+    "nature",
+    "photography"
+  ],
+  "status": "draft",
+  "isPremium": false,
+  "isFeatured": false,
+  "readTime": 5,
+  "viewCount": 0,
+  "likeCount": 0,
+  "commentCount": 0,
+  "likes": [],
+  "comments": [],
+  "publishedAt": {
+    "$date": "2025-12-10T10:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2025-12-10T09:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-10T09:00:00.000Z"
+  },
+  "__v": 0,
+  "destination": {
+    "country": "United States",
+    "city": "San Jose",
+    "coordinates": {
+      "lat": 37.3382,
+      "lng": -121.8863
+    }
+  },
+  "kmtravelled": 0
+}

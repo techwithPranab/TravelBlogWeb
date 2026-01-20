@@ -356,8 +356,27 @@ export default function EditPostPage() {
             {formData.excerpt}
           </p>
 
-          {/* Content Sections */}
-          {contentSections && contentSections.length > 0 ? (
+          {/* Main Content - Always show if exists */}
+          {formData.content && (
+            <div className="mb-12">
+              <div 
+                className="prose prose-lg max-w-none text-gray-800
+                  prose-headings:text-gray-900 prose-headings:font-bold
+                  prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
+                  prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+                  prose-strong:text-gray-900 prose-strong:font-semibold
+                  prose-ul:list-disc prose-ul:ml-6 prose-ul:mb-4
+                  prose-ol:list-decimal prose-ol:ml-6 prose-ol:mb-4
+                  prose-li:text-gray-700 prose-li:mb-2
+                  prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic
+                  prose-img:rounded-lg prose-img:shadow-md"
+                dangerouslySetInnerHTML={{ __html: formData.content }} 
+              />
+            </div>
+          )}
+
+          {/* Content Sections - Show after main content if exists */}
+          {contentSections && contentSections.length > 0 && (
             <div className="mb-12">
               {contentSections.map((section) => (
                 <ContentSection
@@ -381,11 +400,6 @@ export default function EditPostPage() {
                   }}
                 />
               ))}
-            </div>
-          ) : (
-            /* Fallback to traditional content */
-            <div className="prose prose-xl max-w-none mb-12 text-black">
-              <div dangerouslySetInnerHTML={{ __html: formData.content }} />
             </div>
           )}
         </div>

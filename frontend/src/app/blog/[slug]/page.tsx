@@ -613,8 +613,27 @@ export default function BlogDetailsPage() {
       {/* Content */}
       <div className="container mx-auto px-4 pb-16">
         <div className="max-w-7xl mx-auto">
-          {/* Content Sections */}
-          {post?.contentSections && post.contentSections.length > 0 ? (
+          {/* Main Content - Always show if exists */}
+          {post?.content && (
+            <div className="mb-12">
+              <div 
+                className="prose prose-lg max-w-none text-gray-800 
+                  prose-headings:text-gray-900 prose-headings:font-bold
+                  prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
+                  prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+                  prose-strong:text-gray-900 prose-strong:font-semibold
+                  prose-ul:list-disc prose-ul:ml-6 prose-ul:mb-4
+                  prose-ol:list-decimal prose-ol:ml-6 prose-ol:mb-4
+                  prose-li:text-gray-700 prose-li:mb-2
+                  prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic
+                  prose-img:rounded-lg prose-img:shadow-md"
+                dangerouslySetInnerHTML={{ __html: post.content }} 
+              />
+            </div>
+          )}
+
+          {/* Content Sections - Show after main content if exists */}
+          {post?.contentSections && post.contentSections.length > 0 && (
             <div className="mb-12">
               {post?.contentSections?.map((section) => (
                 <ContentSection
@@ -628,11 +647,6 @@ export default function BlogDetailsPage() {
                   }}
                 />
               ))}
-            </div>
-          ) : (
-            /* Fallback to traditional content */
-            <div className="prose prose-base max-w-none mb-12">
-              <div dangerouslySetInnerHTML={{ __html: post?.content || '' }} />
             </div>
           )}
 
