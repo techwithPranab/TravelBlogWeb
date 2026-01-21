@@ -5,9 +5,21 @@ import { uploadBufferToCloudinary } from '../config/drive'
 import multer from 'multer'
 import sharp from 'sharp'
 
-// Configure multer for memory storage
+// Configure multer for memory storage with increased file size limit
 const storage = multer.memoryStorage()
-export const upload = multer({ storage })
+export const upload = multer({ 
+  storage,
+  limits: { 
+    fileSize: 50 * 1024 * 1024 // 50MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true)
+    } else {
+      cb(new Error('Only image files are allowed'))
+    }
+  }
+})
 
 // @desc    Get all guides
 // @route   GET /api/guides

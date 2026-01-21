@@ -36,6 +36,24 @@ import {
 } from '../controllers/adminController'
 import { requireAdmin } from '../middleware/adminAuth'
 import { uploadGuideImage, upload } from '../controllers/guideController'
+import { uploadPostImage } from '../controllers/postController'
+import multer from 'multer'
+
+// Configure multer for post image uploads with increased limit
+const postStorage = multer.memoryStorage()
+const postUpload = multer({
+  storage: postStorage,
+  limits: { 
+    fileSize: 50 * 1024 * 1024 // 50MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true)
+    } else {
+      cb(new Error('Only image files are allowed'))
+    }
+  }
+})
 
 const router = express.Router()
 
@@ -55,6 +73,7 @@ router.delete('/users/:id', deleteUser)
 router.get('/posts', getAllPostsAdmin)
 router.get('/posts/pending', getPendingPosts)
 router.post('/posts', createPost)
+router.post('/posts/upload-image', postUpload.single('image'), uploadPostImage)
 router.get('/posts/:id', getPost)
 router.put('/posts/:id', updatePost)
 router.put('/posts/:id/status', updatePostStatus)
