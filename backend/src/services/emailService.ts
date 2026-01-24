@@ -1134,6 +1134,372 @@ If you received this email, your SMTP configuration is successful!
       return false;
     }
   }
+
+  /**
+   * Send an email with attachments
+   */
+  public async sendEmailWithAttachment(
+    to: string,
+    subject: string,
+    htmlContent: string,
+    attachments: Array<{ filename: string; content: Buffer }>
+  ): Promise<boolean> {
+    try {
+      console.log('📧 [EMAIL SERVICE] Sending email with attachment...')
+
+      if (!this.transporter) {
+        console.error('❌ [EMAIL SERVICE] SMTP transporter is not configured')
+        return false
+      }
+
+      const { fromEmail, supportEmail } = await getEmailsFromSiteSettings()
+
+      const mailOptions = {
+        from: {
+          name: process.env.FROM_NAME || 'BagPackStories',
+          address: fromEmail
+        },
+        to,
+        subject,
+        html: htmlContent,
+        attachments
+      }
+
+      const result = await this.transporter.sendMail(mailOptions as any)
+      console.log('✅ [EMAIL SERVICE] Email with attachment sent', { messageId: (result as any)?.messageId })
+      return true
+    } catch (error) {
+      console.error('❌ [EMAIL SERVICE] Error sending email with attachment:', error)
+      return false
+    }
+  }
+
+  /**
+   * Generate HTML template for itinerary email
+   */
+  private generateItineraryHTMLTemplate(itinerary: any): string {
+    const currencySymbol = itinerary.currencySymbol || '$'
+    const startDate = itinerary.startDate ? new Date(itinerary.startDate).toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }) : 'Not specified'
+    const endDate = itinerary.endDate ? new Date(itinerary.endDate).toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }) : 'Not specified'
+
+    // Generate day plans HTML
+    let dayPlansHTML = ''
+    if (itinerary.dayPlans && itinerary.dayPlans.length > 0) {
+      dayPlansHTML = itinerary.dayPlans.map((day: any) => {
+        const dayDate = day.date ? new Date(day.date).toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          month: 'long', 
+          day: 'numeric' 
+        }) : ''
+
+        const generateActivityHTML = (activities: any[], period: string) => {
+          if (!activities || activities.length === 0) return ''
+          return `
+            <div style="margin-bottom: 15px;">
+              <h4 style="color: #495057; font-size: 14px; font-weight: 600; margin: 10px 0 8px 0; text-transform: uppercase;">${period}</h4>
+              ${activities.map((activity: any) => `
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #007bff;">
+                  <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div style="flex: 1;">
+                      <div style="font-weight: 600; color: #212529; margin-bottom: 4px;">${activity.time || ''} - ${activity.title}</div>
+                      ${activity.location ? `<div style="color: #6c757d; font-size: 13px; margin-bottom: 4px;">📍 ${activity.location}</div>` : ''}
+                      <div style="color: #495057; font-size: 13px;">${activity.description}</div>
+                      ${activity.duration ? `<div style="color: #6c757d; font-size: 12px; margin-top: 4px;">⏱️ Duration: ${activity.duration}</div>` : ''}
+                    </div>
+                    ${activity.estimatedCost > 0 ? `<div style="background: #e7f3ff; color: #0056b3; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; white-space: nowrap; margin-left: 10px;">${currencySymbol}${activity.estimatedCost.toFixed(2)}</div>` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `
+        }
+
+        return `
+          <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <div style="border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 15px;">
+              <h3 style="color: #007bff; margin: 0; font-size: 18px;">Day ${day.day}${dayDate ? ` - ${dayDate}` : ''}</h3>
+            </div>
+            ${generateActivityHTML(day.morning, '🌅 Morning')}
+            ${generateActivityHTML(day.afternoon, '☀️ Afternoon')}
+            ${generateActivityHTML(day.evening, '🌆 Evening')}
+            ${day.notes ? `<div style="background: #fff3cd; border-left: 3px solid #ffc107; padding: 12px; margin-top: 15px; border-radius: 4px;"><strong>📝 Notes:</strong> ${day.notes}</div>` : ''}
+            <div style="text-align: right; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+              <strong style="color: #28a745; font-size: 16px;">Day Total: ${currencySymbol}${(day.totalEstimatedCost || 0).toFixed(2)}</strong>
+            </div>
+          </div>
+        `
+      }).join('')
+    }
+
+    // Generate accommodation suggestions HTML
+    let accommodationHTML = ''
+    if (itinerary.accommodationSuggestions && itinerary.accommodationSuggestions.length > 0) {
+      accommodationHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🏨 Accommodation Suggestions</h3>
+          ${itinerary.accommodationSuggestions.map((acc: any) => `
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 12px;">
+              <h4 style="color: #212529; margin: 0 0 8px 0; font-size: 16px;">${acc.name}</h4>
+              <div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;">
+                <strong>Type:</strong> ${acc.type} | <strong>Price Range:</strong> ${acc.priceRange}
+              </div>
+              ${acc.location?.address ? `<div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;">📍 ${acc.location.address}${acc.location.area ? `, ${acc.location.area}` : ''}</div>` : ''}
+              ${acc.amenities && acc.amenities.length > 0 ? `<div style="margin: 8px 0;"><strong style="font-size: 13px;">Amenities:</strong> <span style="font-size: 13px;">${acc.amenities.join(', ')}</span></div>` : ''}
+              ${acc.whyRecommended ? `<div style="background: #e7f3ff; padding: 10px; border-radius: 4px; margin-top: 8px; font-size: 13px;">💡 ${acc.whyRecommended}</div>` : ''}
+              ${acc.bookingTip ? `<div style="color: #856404; background: #fff3cd; padding: 8px; border-radius: 4px; margin-top: 6px; font-size: 12px;">💬 ${acc.bookingTip}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `
+    }
+
+    // Generate restaurant recommendations HTML
+    let restaurantHTML = ''
+    if (itinerary.restaurantRecommendations && itinerary.restaurantRecommendations.length > 0) {
+      restaurantHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🍽️ Restaurant Recommendations</h3>
+          ${itinerary.restaurantRecommendations.map((rest: any) => `
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 12px;">
+              <h4 style="color: #212529; margin: 0 0 8px 0; font-size: 16px;">${rest.name}${rest.localFavorite ? ' ⭐' : ''}</h4>
+              <div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;">
+                <strong>Cuisine:</strong> ${rest.cuisine} | <strong>Price Range:</strong> ${rest.priceRange}
+              </div>
+              ${rest.mealType && rest.mealType.length > 0 ? `<div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;"><strong>Meal Type:</strong> ${rest.mealType.join(', ')}</div>` : ''}
+              ${rest.location?.address ? `<div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;">📍 ${rest.location.address}${rest.location.area ? `, ${rest.location.area}` : ''}</div>` : ''}
+              ${rest.mustTryDish ? `<div style="background: #d4edda; padding: 8px; border-radius: 4px; margin-top: 8px; font-size: 13px;">🌟 Must Try: ${rest.mustTryDish}</div>` : ''}
+              ${rest.reservationNeeded ? `<div style="color: #721c24; background: #f8d7da; padding: 6px; border-radius: 4px; margin-top: 6px; font-size: 12px;">⚠️ Reservation recommended</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `
+    }
+
+    // Generate transportation tips HTML
+    let transportationHTML = ''
+    if (itinerary.transportationTips && itinerary.transportationTips.length > 0) {
+      transportationHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🚗 Transportation Tips</h3>
+          ${itinerary.transportationTips.map((tip: any) => `
+            <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px; border-left: 3px solid #17a2b8;">
+              <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                  <strong style="color: #212529; font-size: 14px;">${tip.type}</strong>
+                  <div style="color: #495057; font-size: 13px; margin-top: 4px;">${tip.description}</div>
+                </div>
+                ${tip.estimatedCost > 0 ? `<div style="background: #e7f3ff; color: #0056b3; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; white-space: nowrap; margin-left: 10px;">${currencySymbol}${tip.estimatedCost.toFixed(2)}</div>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `
+    }
+
+    // Generate budget breakdown HTML
+    let budgetHTML = ''
+    if (itinerary.budgetBreakdown || itinerary.totalEstimatedCost > 0) {
+      budgetHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">💰 Budget Breakdown</h3>
+          ${itinerary.budgetBreakdown ? `
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
+              ${itinerary.budgetBreakdown.totalFlightCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>✈️ Flights</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalFlightCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalAccommodationCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🏨 Accommodation</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalAccommodationCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalFoodCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🍽️ Food & Dining</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalFoodCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalSightseeingCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🎫 Sightseeing & Activities</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalSightseeingCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalLocalTransportCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🚌 Local Transport</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalLocalTransportCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalShoppingCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🛍️ Shopping</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalShoppingCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalMiscellaneousCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>💼 Miscellaneous</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalMiscellaneousCost.toFixed(2)}</strong></div>` : ''}
+              <div style="display: flex; justify-content: space-between; padding: 12px 0; margin-top: 10px; background: #e7f3ff; padding: 12px; border-radius: 4px;"><span style="font-size: 16px; font-weight: 600;">Total Estimated Cost</span><strong style="font-size: 18px; color: #28a745;">${currencySymbol}${itinerary.totalEstimatedCost.toFixed(2)}</strong></div>
+            </div>
+          ` : `
+            <div style="background: #e7f3ff; padding: 15px; border-radius: 6px; text-align: center;">
+              <strong style="font-size: 18px; color: #28a745;">Total Estimated Cost: ${currencySymbol}${itinerary.totalEstimatedCost.toFixed(2)}</strong>
+            </div>
+          `}
+        </div>
+      `
+    }
+
+    // Generate general tips HTML
+    let tipsHTML = ''
+    if (itinerary.generalTips && itinerary.generalTips.length > 0) {
+      tipsHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">💡 General Tips</h3>
+          <ul style="margin: 0; padding-left: 20px;">
+            ${itinerary.generalTips.map((tip: string) => `<li style="color: #495057; font-size: 14px; margin-bottom: 8px;">${tip}</li>`).join('')}
+          </ul>
+        </div>
+      `
+    }
+
+    // Generate packing list HTML
+    let packingHTML = ''
+    if (itinerary.packingList && itinerary.packingList.length > 0) {
+      packingHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🎒 Packing List</h3>
+          <ul style="margin: 0; padding-left: 20px;">
+            ${itinerary.packingList.map((item: string) => `<li style="color: #495057; font-size: 14px; margin-bottom: 8px;">${item}</li>`).join('')}
+          </ul>
+        </div>
+      `
+    }
+
+    // Main HTML template
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Travel Itinerary</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+  <div style="max-width: 800px; margin: 0 auto; background-color: #ffffff;">
+    <!-- Header -->
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: #ffffff;">
+      <h1 style="margin: 0 0 10px 0; font-size: 28px; font-weight: bold;">✈️ Your Travel Itinerary</h1>
+      <h2 style="margin: 0; font-size: 20px; font-weight: 300;">${itinerary.title || 'Your Amazing Journey'}</h2>
+    </div>
+
+    <!-- Content -->
+    <div style="padding: 30px; background-color: #f8f9fa;">
+      <!-- Trip Overview -->
+      <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">📋 Trip Overview</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">FROM</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.source || 'Not specified'}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">TO</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.destinations ? itinerary.destinations.join(', ') : itinerary.destination || 'Not specified'}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">START DATE</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${startDate}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">END DATE</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${endDate}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">DURATION</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.duration} days</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">TRAVELERS</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.totalPeople || (itinerary.adults + itinerary.children)} (${itinerary.adults || 0} adults, ${itinerary.children || 0} children)</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">ROOMS</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.numberOfRooms || 1} room${(itinerary.numberOfRooms || 1) > 1 ? 's' : ''}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">DIET TYPE</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px; text-transform: capitalize;">${itinerary.dietType || 'Not specified'}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">TRAVEL MODE</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px; text-transform: capitalize;">${itinerary.travelMode || 'Not specified'}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">BUDGET</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px; text-transform: capitalize;">${itinerary.budget || 'Not specified'}</div>
+          </div>
+        </div>
+        ${itinerary.interests && itinerary.interests.length > 0 ? `
+          <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 6px;">INTERESTS</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              ${itinerary.interests.map((interest: string) => `<span style="background: #e7f3ff; color: #0056b3; padding: 4px 12px; border-radius: 12px; font-size: 13px;">${interest}</span>`).join('')}
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Day Plans -->
+      ${dayPlansHTML}
+
+      <!-- Accommodation -->
+      ${accommodationHTML}
+
+      <!-- Restaurants -->
+      ${restaurantHTML}
+
+      <!-- Transportation -->
+      ${transportationHTML}
+
+      <!-- Budget Breakdown -->
+      ${budgetHTML}
+
+      <!-- General Tips -->
+      ${tipsHTML}
+
+      <!-- Packing List -->
+      ${packingHTML}
+    </div>
+
+    <!-- Footer -->
+    <div style="background: #343a40; color: #ffffff; padding: 20px; text-align: center;">
+      <p style="margin: 0 0 10px 0; font-size: 14px;">Generated by <strong>BagPackStories</strong></p>
+      <p style="margin: 0; font-size: 12px; color: #adb5bd;">Your AI-powered travel planning companion</p>
+    </div>
+  </div>
+</body>
+</html>
+    `
+  }
+
+  /**
+   * Send itinerary email with HTML template
+   */
+  public async sendItineraryEmail(to: string, itinerary: any): Promise<boolean> {
+    try {
+      console.log('📧 [EMAIL SERVICE] Sending itinerary email...')
+
+      if (!this.transporter) {
+        console.error('❌ [EMAIL SERVICE] SMTP transporter is not configured')
+        return false
+      }
+
+      const { fromEmail } = await getEmailsFromSiteSettings()
+
+      const subject = `Your Travel Itinerary: ${itinerary.title || 'Your Amazing Journey'}`
+      const htmlContent = this.generateItineraryHTMLTemplate(itinerary)
+
+      const mailOptions = {
+        from: {
+          name: process.env.FROM_NAME || 'BagPackStories',
+          address: fromEmail
+        },
+        to,
+        subject,
+        html: htmlContent
+      }
+
+      const result = await this.transporter.sendMail(mailOptions as any)
+      console.log('✅ [EMAIL SERVICE] Itinerary email sent', { messageId: (result as any)?.messageId })
+      return true
+    } catch (error) {
+      console.error('❌ [EMAIL SERVICE] Error sending itinerary email:', error)
+      return false
+    }
+  }
 }
 
 export const emailService = new EmailService();

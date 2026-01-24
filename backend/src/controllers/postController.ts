@@ -7,10 +7,7 @@ import Destination from '@/models/Destination'
 import Guide from '@/models/Guide'
 import Photo from '@/models/Photo'
 import { emailService } from '@/services/emailService'
-
-interface AuthenticatedRequest extends Request {
-  user?: IUser
-}
+import { AuthenticatedRequest } from '../types/express'
 
 // @desc    Get all posts
 // @route   GET /api/posts

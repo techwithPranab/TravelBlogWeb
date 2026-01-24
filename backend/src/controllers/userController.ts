@@ -1,9 +1,6 @@
 import { Request, Response } from 'express'
 import User, { IUser } from '@/models/User'
-
-interface AuthenticatedRequest extends Request {
-  user?: IUser
-}
+import { AuthenticatedRequest } from '../types/express'
 
 // @desc    Get all users
 // @route   GET /api/v1/users

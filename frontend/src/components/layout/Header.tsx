@@ -59,6 +59,11 @@ export function Header() {
     { name: 'Gallery', href: '/gallery' },
   ]
 
+  // Add Itinerary to navigation only for authenticated users
+  const userNavigation = isAuthenticated
+    ? [...navigation, { name: 'Itinerary', href: '/itinerary/dashboard' }]
+    : navigation
+
   const themeOptions = [
     { value: 'light', label: 'Light', icon: Sun },
     { value: 'dark', label: 'Dark', icon: Moon },
@@ -91,7 +96,7 @@ export function Header() {
             {/* Desktop Navigation */}
             <div className="hidden lg:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                {navigation.map((item) => (
+                {userNavigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
@@ -172,14 +177,6 @@ export function Header() {
                         <Settings className="w-4 h-4 md:w-5 md:h-5 mr-3" />
                         Profile
                       </Link>
-                      <Link
-                        href="/dashboard"
-                        className="flex items-center px-4 py-3 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        <BookOpen className="w-4 h-4 md:w-5 md:h-5 mr-3" />
-                        Dashboard
-                      </Link>
                       <button
                         onClick={handleLogout}
                         className="flex items-center w-full px-4 py-3 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -191,19 +188,13 @@ export function Header() {
                   )}
                 </div>
               ) : (
-                // <div className="hidden sm:flex items-center space-x-2">
-                //   <Link href="/login">
-                //     <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
-                //       Login
-                //     </Button>
-                //   </Link>
-                //   <Link href="/signup">
-                //     <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
-                //       Sign Up
-                //     </Button>
-                //   </Link>
-                // </div>
-                <div></div>
+                <div className="hidden sm:flex items-center space-x-2">
+                  <Link href="/login">
+                    <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
+                      Login
+                    </Button>
+                  </Link>
+                </div>
               )}
 
               {/* Mobile menu button - Always visible on mobile */}
@@ -269,32 +260,23 @@ export function Header() {
                       <span>{user?.name}</span>
                     </div>
                   ) : (
-                    // <div className="flex flex-col space-y-2">
-                    //   <Link href="/login" onClick={() => {
-                    //     console.log('Login link clicked')
-                    //     setIsMenuOpen(false)
-                    //   }}>
-                    //     <Button variant="primary" className="w-full">
-                    //       Login
-                    //     </Button>
-                    //   </Link>
-                    //   <Link href="/signup" onClick={() => {
-                    //     console.log('Signup link clicked')
-                    //     setIsMenuOpen(false)
-                    //   }}>
-                    //     <Button variant="primary" className="w-full">
-                    //       Sign Up
-                    //     </Button>
-                    //   </Link>
-                    // </div>
-                    <div></div>
+                    <div className="flex flex-col space-y-2">
+                      <Link href="/login" onClick={() => {
+                        console.log('Login link clicked')
+                        setIsMenuOpen(false)
+                      }}>
+                        <Button variant="primary" className="w-full">
+                          Login
+                        </Button>
+                      </Link>
+                    </div>
                   )}
                 </div>
               </div>
 
               {/* Navigation Links */}
               <div className="space-y-2">
-                {navigation.map((item) => (
+                {userNavigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}

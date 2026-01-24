@@ -140,6 +140,16 @@ const siteSettingsSchema = new mongoose_1.Schema({
         },
         analyticsCode: String
     },
+    featureToggles: {
+        aiItineraryEnabled: {
+            type: Boolean,
+            default: false
+        },
+        aiItineraryAnnouncementEnabled: {
+            type: Boolean,
+            default: true
+        }
+    },
     theme: {
         primaryColor: {
             type: String,

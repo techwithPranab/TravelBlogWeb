@@ -69,6 +69,9 @@ const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
 const readerRoutes_1 = __importDefault(require("./routes/readerRoutes"));
 const contributorRoutes_1 = __importDefault(require("./routes/contributorRoutes"));
 const partnerRoutes_1 = __importDefault(require("./routes/partnerRoutes"));
+const itineraryRoutes_1 = __importDefault(require("./routes/itineraryRoutes"));
+const subscriptionRoutes_1 = __importDefault(require("./routes/subscriptionRoutes"));
+const siteSettingsRoutes_1 = __importDefault(require("./routes/siteSettingsRoutes"));
 // Connect to database
 (0, database_1.connectDB)();
 // Create Express app
@@ -119,8 +122,8 @@ app.use((0, cors_1.default)({
 }));
 app.use((0, compression_1.default)());
 app.use((0, morgan_1.default)('combined'));
-app.use(express_1.default.json({ limit: '10mb' }));
-app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express_1.default.json({ limit: '50mb' }));
+app.use(express_1.default.urlencoded({ extended: true, limit: '50mb' }));
 // Data sanitization
 app.use((0, express_mongo_sanitize_1.default)());
 app.use((0, hpp_1.default)());
@@ -484,6 +487,9 @@ app.use(`${API_VERSION}/admin`, adminRoutes_1.default);
 app.use(`${API_VERSION}/contributor`, contributorRoutes_1.default);
 app.use(`${API_VERSION}/reader`, readerRoutes_1.default);
 app.use(`${API_VERSION}/partners`, partnerRoutes_1.default);
+app.use(`${API_VERSION}/itineraries`, itineraryRoutes_1.default);
+app.use(`${API_VERSION}/subscriptions`, subscriptionRoutes_1.default);
+app.use(`${API_VERSION}/site-settings`, siteSettingsRoutes_1.default);
 // 404 handler
 app.use(notFound_1.default);
 // Error handler

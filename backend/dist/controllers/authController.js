@@ -7,6 +7,7 @@ exports.verifyEmail = exports.resetPassword = exports.forgotPassword = exports.u
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const crypto_1 = __importDefault(require("crypto"));
 const User_1 = __importDefault(require("../models/User"));
+const Subscription_1 = __importDefault(require("../models/Subscription"));
 // Generate JWT Token
 const signToken = (id) => {
     const secret = process.env.JWT_SECRET;
@@ -58,6 +59,14 @@ const register = async (req, res) => {
             password,
             role: role || 'reader', // Default to reader if no role provided
         });
+        // Create free subscription for new user
+        try {
+            await Subscription_1.default.createFreeSubscription(user._id);
+        }
+        catch (subscriptionError) {
+            console.error('Failed to create subscription for new user:', subscriptionError);
+            // Don't fail registration if subscription creation fails
+        }
         sendTokenResponse(user, 201, res);
     }
     catch (error) {

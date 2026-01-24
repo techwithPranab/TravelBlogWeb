@@ -4,10 +4,7 @@ import { handleAsync } from '../utils/handleAsync'
 import { uploadBufferToCloudinary } from '../config/drive'
 import sharp from 'sharp'
 import { emailService } from '../services/emailService'
-
-interface AuthenticatedRequest extends Request {
-  user?: any
-}
+import { AuthenticatedRequest } from '../types/express'
 
 // Helper function to generate slug from title
 const generateSlug = (title: string): string => {

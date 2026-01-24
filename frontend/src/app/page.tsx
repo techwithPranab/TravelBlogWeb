@@ -1,3 +1,5 @@
+'use client'
+
 import { HeroSection } from '@/components/home/HeroSection'
 import { MetricsSection } from '@/components/home/MetricsSection'
 import { FeaturedStories } from '@/components/home/FeaturedStories'
@@ -6,9 +8,44 @@ import { Categories } from '@/components/home/Categories'
 import { Newsletter } from '@/components/home/Newsletter'
 import { InteractiveTravelMap } from '@/components/home/InteractiveTravelMap'
 import { Testimonials } from '@/components/home/Testimonials'
+import { AIItinerarySection } from '@/components/home/AIItinerarySection'
+import { AIItineraryAnnouncement } from '@/components/home/AIItineraryAnnouncement'
+import { API_BASE_URL } from '@/lib/api'
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
+
+interface SiteSettings {
+  featureToggles?: {
+    aiItineraryEnabled?: boolean
+    aiItineraryAnnouncementEnabled?: boolean
+  }
+}
 
 export default function HomePage() {
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null)
+  const [settingsLoading, setSettingsLoading] = useState(true)
+
+  // Fetch site settings
+  useEffect(() => {
+    const fetchSiteSettings = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/site-settings`)
+        console.log('Site settings response:', response);
+        if (response.ok) {
+          const data = await response.json()
+          console.log('Site settings data:', data);
+          setSiteSettings(data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch site settings:', error)
+      } finally {
+        setSettingsLoading(false)
+      }
+    }
+
+    fetchSiteSettings()
+  }, [])
+
   // Generate SEO metadata for homepage
   const generateSEOMetadata = () => {
     const title = 'BagPackStories - Discover Amazing Destinations & Travel Stories'
@@ -110,6 +147,15 @@ export default function HomePage() {
         {/* Metrics Section */}
         {/* <MetricsSection /> */}
 
+        {/* AI Powered Itinerary Section */}
+        {!settingsLoading && (
+          siteSettings?.featureToggles?.aiItineraryEnabled ? (
+            <AIItinerarySection />
+          ) : siteSettings?.featureToggles?.aiItineraryAnnouncementEnabled ? (
+            <AIItineraryAnnouncement />
+          ) : null
+        )}
+
         {/* Featured Stories */}
         <section className="section-padding bg-gray-50 dark:bg-gray-800">
           <div className="container-max w-full">
@@ -145,6 +191,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        
+        
         {/* Newsletter Signup */}
         {/* <section className="section-padding hero-gradient">
           <div className="container-max w-full">

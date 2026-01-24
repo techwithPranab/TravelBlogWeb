@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import User from '../models/User'
-
-export interface AuthenticatedRequest extends Request {
-  user?: any
-}
+import { AuthenticatedRequest } from '../types/express'
 
 export const requireAdmin = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {

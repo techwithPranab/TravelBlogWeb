@@ -9,9 +9,22 @@ const handleAsync_1 = require("../utils/handleAsync");
 const drive_1 = require("../config/drive");
 const multer_1 = __importDefault(require("multer"));
 const sharp_1 = __importDefault(require("sharp"));
-// Configure multer for memory storage
+// Configure multer for memory storage with increased file size limit
 const storage = multer_1.default.memoryStorage();
-exports.upload = (0, multer_1.default)({ storage });
+exports.upload = (0, multer_1.default)({
+    storage,
+    limits: {
+        fileSize: 50 * 1024 * 1024 // 50MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error('Only image files are allowed'));
+        }
+    }
+});
 // @desc    Get all guides
 // @route   GET /api/guides
 // @access  Public

@@ -7,6 +7,24 @@ const express_1 = __importDefault(require("express"));
 const adminController_1 = require("../controllers/adminController");
 const adminAuth_1 = require("../middleware/adminAuth");
 const guideController_1 = require("../controllers/guideController");
+const postController_1 = require("../controllers/postController");
+const multer_1 = __importDefault(require("multer"));
+// Configure multer for post image uploads with increased limit
+const postStorage = multer_1.default.memoryStorage();
+const postUpload = (0, multer_1.default)({
+    storage: postStorage,
+    limits: {
+        fileSize: 50 * 1024 * 1024 // 50MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error('Only image files are allowed'));
+        }
+    }
+});
 const router = express_1.default.Router();
 // All routes require admin authentication
 router.use(adminAuth_1.requireAdmin);
@@ -21,6 +39,7 @@ router.delete('/users/:id', adminController_1.deleteUser);
 router.get('/posts', adminController_1.getAllPostsAdmin);
 router.get('/posts/pending', adminController_1.getPendingPosts);
 router.post('/posts', adminController_1.createPost);
+router.post('/posts/upload-image', postUpload.single('image'), postController_1.uploadPostImage);
 router.get('/posts/:id', adminController_1.getPost);
 router.put('/posts/:id', adminController_1.updatePost);
 router.put('/posts/:id/status', adminController_1.updatePostStatus);

@@ -114,7 +114,7 @@ const PhotoSchema = new mongoose_1.Schema({
     status: {
         type: String,
         required: true,
-        enum: ['pending', 'approved', 'rejected'],
+        enum: ['pending', 'approved', 'rejected', 'inactive'],
         default: 'pending'
     },
     moderationNotes: {

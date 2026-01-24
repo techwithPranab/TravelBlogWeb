@@ -261,6 +261,10 @@ const guideSchema = new mongoose_1.Schema({
         type: Boolean,
         default: true
     },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     views: {
         type: Number,
         default: 0
