@@ -752,12 +752,12 @@ ${includeWeather ? `- Current season and weather patterns for ${primaryDestinati
 ✈️ **Travel Logistics (${params.travelMode} mode):**
 ${params.travelMode === 'air' ? `
 - Flight options from ${params.source} to ${primaryDestination}${params.destinations.length > 1 ? ` and between destinations (${params.destinations.slice(1).join(', ')})` : ''}
-- INCLUDE ESTIMATED FLIGHT/TRAVEL COSTS from ${params.source} to ${primaryDestination} in the budget breakdown
+- INCLUDE REALISTIC FLIGHT COSTS from ${params.source} to ${primaryDestination} in the budget breakdown (typically 3000-6000 for economy domestic flights, 15000-30000 for domestic business class)
 - Airport transfer recommendations and costs
 - Proximity of activities to airports
 ` : params.travelMode === 'rail' ? `
 - Train routes and connections from ${params.source}
-- INCLUDE ESTIMATED TRAIN COSTS from ${params.source} to ${primaryDestination} in the budget breakdown
+- INCLUDE REALISTIC TRAIN COSTS from ${params.source} to ${primaryDestination} in the budget breakdown (typically 500-1500 for regional trains, 1500-2500 for high-speed/long-distance trains)
 - Railway station locations and transfers
 - Scenic rail journey recommendations
 - Rail pass options and savings
@@ -771,7 +771,7 @@ ${params.travelMode === 'air' ? `
 - Car rental recommendations
 ` : params.travelMode === 'bus' ? `
 - Bus routes and companies
-- INCLUDE ESTIMATED BUS COSTS from ${params.source} to ${primaryDestination} in the budget breakdown
+- INCLUDE REALISTIC BUS COSTS from ${params.source} to ${primaryDestination} in the budget breakdown (typically 10-100 for long-distance buses)
 - Comfort and facilities considerations
 - Scenic stops and rest areas
 - Cost comparison with other modes
@@ -843,7 +843,7 @@ REQUIRED JSON STRUCTURE (with ${sourceLocation} currency):
           "time": "Varies based on departure",
           "title": "Travel from ${params.source} to ${primaryDestination}",
           "description": "CRITICAL: Include detailed ${params.travelMode} travel information from ${params.source} to ${primaryDestination}. Include departure time, arrival time, journey duration, and any transit information.",
-          "estimatedCost": 24000,
+          "estimatedCost": ${params.travelMode === 'air' ? '300' : params.travelMode === 'rail' ? '80' : params.travelMode === 'bus' ? '25' : params.travelMode === 'car' ? '150' : '200'},
           "duration": "Estimated travel time",
           "location": "${params.source} to ${primaryDestination}",
           "insiderTip": "Best booking options and time-saving tips for this route",
@@ -951,27 +951,27 @@ REQUIRED JSON STRUCTURE (with ${sourceLocation} currency):
   "dailyCostBreakdown": [
     {
       "day": 1,
-      "flightCost": 24000,
-      "accommodationCost": 12000,
-      "foodCost": 1500,
-      "sightseeingCost": 800,
-      "localTransportCost": 500,
-      "shoppingCost": 300,
-      "miscellaneousCost": 400,
-      "totalDayCost": 39500
+      "flightCost": ${params.travelMode === 'air' ? '300' : params.travelMode === 'rail' ? '80' : params.travelMode === 'bus' ? '25' : params.travelMode === 'car' ? '150' : '200'},
+      "accommodationCost": 120,
+      "foodCost": 45,
+      "sightseeingCost": 25,
+      "localTransportCost": 15,
+      "shoppingCost": 20,
+      "miscellaneousCost": 10,
+      "totalDayCost": 535
     },
     // ... repeat for each day until ${params.duration}
   ],
   "budgetBreakdown": {
-    "totalFlightCost": 48000,
-    "totalAccommodationCost": 84000,
-    "totalFoodCost": 10500,
-    "totalSightseeingCost": 5600,
-    "totalLocalTransportCost": 3500,
-    "totalShoppingCost": 2100,
-    "totalMiscellaneousCost": 2800
+    "totalFlightCost": ${params.travelMode === 'air' ? '600' : params.travelMode === 'rail' ? '160' : params.travelMode === 'bus' ? '50' : params.travelMode === 'car' ? '300' : '400'},
+    "totalAccommodationCost": 840,
+    "totalFoodCost": 315,
+    "totalSightseeingCost": 175,
+    "totalLocalTransportCost": 105,
+    "totalShoppingCost": 140,
+    "totalMiscellaneousCost": 70
   },
-  "totalEstimatedCost": 156500
+  "totalEstimatedCost": 2385
 }
 
 CRITICAL INSTRUCTIONS:
@@ -981,19 +981,19 @@ CRITICAL INSTRUCTIONS:
 4. **ALL COSTS MUST BE IN ${sourceLocation}'S LOCAL CURRENCY** - Not destination currency! Identify the currency of ${sourceLocation} and use it consistently
 5. Use proper currency symbols ($ for USA, € for Europe, ¥ for Japan, £ for UK, ₹ for India, etc.)
 6. Include SPECIFIC FULL ADDRESSES with coordinates for all accommodations and restaurants
-7. **DAILY COST BREAKDOWN**: For each day (1 to ${params.duration}), provide NUMERIC VALUES ONLY (no calculations, no text, no explanations):
-   - flightCost: ${params.travelMode} cost (Day 1: from ${params.source} to ${primaryDestination}, Last day: return journey, other days: 0 or inter-city travel if multiple destinations)
-   - accommodationCost: Hotel cost for that night (based on ${totalPeople} people in ${numberOfRooms} room${numberOfRooms > 1 ? 's' : ''})
-   - foodCost: Total food for ${totalPeople} people (breakfast, lunch, dinner, snacks)
+7. **DAILY COST BREAKDOWN**: For each day (1 to ${params.duration}), provide REALISTIC NUMERIC VALUES ONLY based on ${params.travelMode} travel:
+   - flightCost: ${params.travelMode} cost (Day 1: from ${params.source} to ${primaryDestination} - ${params.travelMode === 'air' ? '150-400 economy, 400-1200 business' : params.travelMode === 'rail' ? '20-150 regional, 50-400 high-speed' : params.travelMode === 'bus' ? '10-80 long-distance' : params.travelMode === 'car' ? '50-200 rental + fuel' : 'varies by mode'}, Last day: return journey, other days: 0 or inter-city travel)
+   - accommodationCost: Hotel/hostel cost for that night (${params.budget} budget, ${numberOfRooms} room${numberOfRooms > 1 ? 's' : ''} for ${totalPeople} people)
+   - foodCost: Total food for ${totalPeople} people (breakfast, lunch, dinner, snacks - ${params.budget} budget)
    - sightseeingCost: Entry fees, tickets, guided tours for that day
    - localTransportCost: Taxis, metro, local buses within destination city
    - shoppingCost: Estimated shopping/souvenirs for that day
    - miscellaneousCost: Tips, emergency fund, other expenses
    - totalDayCost: Sum of all above costs for that day
-8. **BUDGET BREAKDOWN SUMMARY**: Calculate totals across ALL days - NUMERIC VALUES ONLY:
-   - totalFlightCost: Sum of all flightCost from dailyCostBreakdown (roundtrip ${params.travelMode})
-   - totalAccommodationCost: Sum of all accommodationCost from dailyCostBreakdown (${params.duration} nights)
-   - totalFoodCost: Sum of all foodCost from dailyCostBreakdown
+8. **BUDGET BREAKDOWN SUMMARY**: Calculate REALISTIC totals across ALL days based on ${params.travelMode} travel and ${params.budget} budget - NUMERIC VALUES ONLY:
+   - totalFlightCost: Sum of all flightCost from dailyCostBreakdown (roundtrip ${params.travelMode} - ${params.travelMode === 'air' ? '300-800 economy, 800-2400 business' : params.travelMode === 'rail' ? '40-300 regional, 100-800 high-speed' : params.travelMode === 'bus' ? '20-160 long-distance' : params.travelMode === 'car' ? '100-400 rental + fuel' : 'varies by mode'})
+   - totalAccommodationCost: Sum of all accommodationCost from dailyCostBreakdown (${params.duration} nights, ${params.budget} budget)
+   - totalFoodCost: Sum of all foodCost from dailyCostBreakdown (${totalPeople} people, ${params.budget} budget)
    - totalSightseeingCost: Sum of all sightseeingCost from dailyCostBreakdown
    - totalLocalTransportCost: Sum of all localTransportCost from dailyCostBreakdown
    - totalShoppingCost: Sum of all shoppingCost from dailyCostBreakdown
