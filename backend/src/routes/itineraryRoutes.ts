@@ -4,6 +4,7 @@ import {
   getUserItineraries,
   getItineraryById,
   updateItinerary,
+  updateItineraryFormData,
   deleteItinerary,
   regenerateItinerary,
   getSharedItinerary,
@@ -30,6 +31,9 @@ router.get('/', getUserItineraries)
 
 // Get single itinerary
 router.get('/:id', getItineraryById)
+
+// Update itinerary form data (excluding source and destinations)
+router.put('/:id/form-data', updateItineraryFormData)
 
 // Update itinerary
 router.put('/:id', updateItinerary)

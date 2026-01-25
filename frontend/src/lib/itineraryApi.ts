@@ -96,6 +96,27 @@ export const updateItinerary = async (
 }
 
 /**
+ * Update itinerary form data (excluding source and destinations)
+ */
+export const updateItineraryFormData = async (
+  id: string,
+  updates: Partial<ItineraryFormData>
+): Promise<ItineraryResponse & { meta?: { editCount: number; maxEdits: number; editsRemaining: number } }> => {
+  try {
+    const response = await api.put<ItineraryResponse & { meta?: { editCount: number; maxEdits: number; editsRemaining: number } }>(
+      `/itineraries/${id}/form-data`,
+      updates
+    )
+    return response.data
+  } catch (error: any) {
+    if (error.response?.data) {
+      return error.response.data
+    }
+    throw new Error(error.response?.data?.message || 'Failed to update itinerary form data')
+  }
+}
+
+/**
  * Delete itinerary
  */
 export const deleteItinerary = async (id: string): Promise<{ success: boolean }> => {

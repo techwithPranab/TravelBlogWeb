@@ -128,6 +128,8 @@ export interface IItinerary extends Document {
   // User modifications
   isEdited: boolean
   lastEditedAt?: Date
+  editCount: number // Track number of times itinerary has been edited
+  maxEdits: number // Maximum allowed edits (default 3)
   
   // Analytics
   viewCount: number
@@ -290,21 +292,25 @@ const ItinerarySchema = new Schema<IItinerary>(
     },
     accommodationSuggestions: {
       type: [{
-        name: String,
-        type: String,
-        priceRange: String,
+        name: { type: String },
+        type: { type: String },
+        priceRange: { type: String },
         location: {
-          address: String,
-          area: String,
-          coordinates: {
-            lat: Number,
-            lng: Number
+          type: {
+            address: { type: String },
+            area: { type: String },
+            coordinates: {
+              type: {
+                lat: { type: Number },
+                lng: { type: Number }
+              }
+            }
           }
         },
-        amenities: [String],
-        proximityToAttractions: String,
-        bookingTip: String,
-        whyRecommended: String
+        amenities: { type: [String] },
+        proximityToAttractions: { type: String },
+        bookingTip: { type: String },
+        whyRecommended: { type: String }
       }],
       default: []
     },
@@ -314,21 +320,25 @@ const ItinerarySchema = new Schema<IItinerary>(
     },
     restaurantRecommendations: {
       type: [{
-        name: String,
-        cuisine: String,
-        priceRange: String,
-        mealType: [String],
+        name: { type: String },
+        cuisine: { type: String },
+        priceRange: { type: String },
+        mealType: { type: [String] },
         location: {
-          address: String,
-          area: String,
-          coordinates: {
-            lat: Number,
-            lng: Number
+          type: {
+            address: { type: String },
+            area: { type: String },
+            coordinates: {
+              type: {
+                lat: { type: Number },
+                lng: { type: Number }
+              }
+            }
           }
         },
-        mustTryDish: String,
-        reservationNeeded: Boolean,
-        localFavorite: Boolean
+        mustTryDish: { type: String },
+        reservationNeeded: { type: Boolean },
+        localFavorite: { type: Boolean }
       }],
       default: []
     },
@@ -403,6 +413,16 @@ const ItinerarySchema = new Schema<IItinerary>(
     },
     lastEditedAt: {
       type: Date
+    },
+    editCount: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    maxEdits: {
+      type: Number,
+      default: 10,
+      min: 0
     },
     viewCount: {
       type: Number,

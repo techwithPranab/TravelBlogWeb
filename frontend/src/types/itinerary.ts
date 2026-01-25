@@ -136,6 +136,9 @@ export interface Itinerary {
   travelStyle: TravelStyle
   numberOfRooms?: number // Number of rooms for accommodation cost calculation
   dietType?: 'veg' | 'non-veg' | 'both' // Dietary preference for restaurant recommendations
+  includeAccommodationReference?: boolean // User preference to include accommodation reference
+  includeRestaurantReference?: boolean // User preference to include restaurant reference
+  includeWeatherReference?: boolean // User preference to include weather reference
 
   dayPlans: DayPlan[]
   accommodationSuggestions: AccommodationSuggestion[]
@@ -174,6 +177,8 @@ export interface Itinerary {
 
   isEdited: boolean
   lastEditedAt?: string
+  editCount: number // Number of times itinerary has been edited
+  maxEdits: number // Maximum allowed edits (default 3)
   
   viewCount: number
   shareCount: number
@@ -183,6 +188,7 @@ export interface Itinerary {
 }
 
 export interface ItineraryFormData {
+  title?: string // Trip title (optional during creation, can be auto-generated)
   source: string // Origin city/location
   destinations: string[] // Array of destination cities/locations (1-5)
   travelMode: TravelMode // Preferred travel mode

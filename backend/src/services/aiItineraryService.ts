@@ -132,6 +132,9 @@ Provide detailed, practical, and personalized travel itineraries in JSON format.
         hasAccommodations: !!generatedItinerary.accommodationSuggestions,
         accommodationsType: typeof generatedItinerary.accommodationSuggestions,
         accommodationsIsArray: Array.isArray(generatedItinerary.accommodationSuggestions),
+        accommodationsLength: Array.isArray(generatedItinerary.accommodationSuggestions) ? generatedItinerary.accommodationSuggestions.length : 'N/A',
+        accommodationsSample: Array.isArray(generatedItinerary.accommodationSuggestions) && generatedItinerary.accommodationSuggestions.length > 0 
+          ? JSON.stringify(generatedItinerary.accommodationSuggestions[0]).substring(0, 200) : 'No accommodations',
         hasTransportation: !!generatedItinerary.transportationTips,
         transportationType: typeof generatedItinerary.transportationTips,
         transportationIsArray: Array.isArray(generatedItinerary.transportationTips)
@@ -520,8 +523,23 @@ Provide detailed, practical, and personalized travel itineraries in JSON format.
         }))
         
         if (accommodations.length > 0) {
-          await Accommodation.insertMany(accommodations)
-          accommodationCount = accommodations.length
+          // Use upsert operations to handle duplicates gracefully
+          const bulkOps = accommodations.map((acc: any) => ({
+            updateOne: {
+              filter: {
+                name: acc.name,
+                'location.address': acc.location.address,
+                destinationName: acc.destinationName
+              },
+              update: { $set: acc },
+              upsert: true
+            }
+          }))
+          
+          if (bulkOps.length > 0) {
+            await Accommodation.bulkWrite(bulkOps)
+            accommodationCount = accommodations.length
+          }
         }
       }
       
@@ -551,8 +569,23 @@ Provide detailed, practical, and personalized travel itineraries in JSON format.
         }))
         
         if (restaurants.length > 0) {
-          await Restaurant.insertMany(restaurants)
-          restaurantCount = restaurants.length
+          // Use upsert operations to handle duplicates gracefully
+          const bulkOps = restaurants.map((rest: any) => ({
+            updateOne: {
+              filter: {
+                name: rest.name,
+                'location.address': rest.location.address,
+                destinationName: rest.destinationName
+              },
+              update: { $set: rest },
+              upsert: true
+            }
+          }))
+          
+          if (bulkOps.length > 0) {
+            await Restaurant.bulkWrite(bulkOps)
+            restaurantCount = restaurants.length
+          }
         }
       }
       
@@ -661,6 +694,15 @@ Provide detailed, practical, and personalized travel itineraries in JSON format.
     const includeAccommodation = params.includeAccommodationReference !== false
     const includeRestaurant = params.includeRestaurantReference !== false
     const includeWeather = params.includeWeatherReference !== false
+
+    console.log('🔧 AI Service - Preference flags:', {
+      includeAccommodationReference: params.includeAccommodationReference,
+      includeAccommodation: includeAccommodation,
+      includeRestaurantReference: params.includeRestaurantReference,
+      includeRestaurant: includeRestaurant,
+      includeWeatherReference: params.includeWeatherReference,
+      includeWeather: includeWeather
+    })
 
     return `Create a comprehensive ${params.duration}-day travel itinerary from ${params.source} to ${destinationText}.
 
@@ -1182,6 +1224,11 @@ Make this itinerary BETTER than free ChatGPT by including:
         whyRecommended: acc.whyRecommended || ''
       }
     })
+
+    console.log('🏨 Processed accommodations count:', processedAccommodations.length)
+    if (processedAccommodations.length > 0) {
+      console.log('🏨 First processed accommodation:', JSON.stringify(processedAccommodations[0]).substring(0, 300))
+    }
 
     // Process transportation tips and parse costs
     const rawTransportation = parseJsonOrArray(response.transportationTips)

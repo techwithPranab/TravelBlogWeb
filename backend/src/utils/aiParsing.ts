@@ -39,16 +39,42 @@ export const deepParseIfString = (data: any): any => {
       return JSON.parse(replaced)
     } catch (e) {}
 
-    // 5) Last resort: attempt JSON5 on the conservative replacement
+    // 6) Last resort: attempt to execute JavaScript code (for cases where AI returns code)
     try {
-      const replaced = s.replace(/'([^'\\]*(?:\\.[^'\\]*)*)'/g, (_m: string, g1: string) => `"${g1.replace(/"/g, '\\"')}"`)
-        .replace(/([,\{\[]\s*)([A-Za-z0-9_\- ]+)\s*:/g, '$1"$2":')
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const JSON5 = require('json5')
-      return JSON5.parse(replaced)
-    } catch (e) {}
-
-    return undefined
+      const vm = require('vm')
+      // Try with parentheses first
+      let evaluated = vm.runInNewContext('(' + s + ')', {}, { timeout: 1000 })
+      if (evaluated !== undefined) {
+        // Convert the evaluated object to JSON and back to ensure it's properly serialized
+        try {
+          const jsonString = JSON.stringify(evaluated)
+          return JSON.parse(jsonString)
+        } catch (e) {
+          // If serialization fails, return the evaluated object as-is
+          return evaluated
+        }
+      }
+    } catch (e) {
+      // Try without parentheses
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const vm = require('vm')
+        const evaluated = vm.runInNewContext(s, {}, { timeout: 1000 })
+        if (evaluated !== undefined) {
+          // Convert the evaluated object to JSON and back to ensure it's properly serialized
+          try {
+            const jsonString = JSON.stringify(evaluated)
+            return JSON.parse(jsonString)
+          } catch (e) {
+            // If serialization fails, return the evaluated object as-is
+            return evaluated
+          }
+        }
+      } catch (e2) {
+        // ignore
+      }
+    }
   }
 
   // If it's a string, try to parse it into an object/array/value
