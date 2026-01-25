@@ -1338,44 +1338,53 @@ If you received this email, your SMTP configuration is successful!
       weatherHTML = `
         <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
           <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🌤️ Weather Forecast</h3>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
             ${itinerary.weatherForecast.map((weather: any) => {
-              const weatherDate = weather.date ? new Date(weather.date).toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric' 
-              }) : 'Unknown'
+              // Use forecastSummary data structure from database
+              const summary = weather.forecastSummary
+              if (!summary) return ''
+              
+              const locationName = weather.location || 'Unknown Location'
+              const dateRange = weather.dateRange
+              const dateText = dateRange ? 
+                `${new Date(dateRange.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(dateRange.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` : 
+                'Trip Duration'
               
               // Weather icon mapping (simplified)
               const getWeatherIcon = (icon: string) => {
-                if (icon.includes('01')) return '☀️' // Clear
-                if (icon.includes('02')) return '⛅' // Few clouds
-                if (icon.includes('03') || icon.includes('04')) return '☁️' // Cloudy
-                if (icon.includes('09') || icon.includes('10')) return '🌧️' // Rain
-                if (icon.includes('11')) return '⛈️' // Thunderstorm
-                if (icon.includes('13')) return '❄️' // Snow
-                if (icon.includes('50')) return '🌫️' // Mist
+                if (icon && icon.includes('01')) return '☀️' // Clear
+                if (icon && icon.includes('02')) return '⛅' // Few clouds
+                if (icon && (icon.includes('03') || icon.includes('04'))) return '☁️' // Cloudy
+                if (icon && (icon.includes('09') || icon.includes('10'))) return '🌧️' // Rain
+                if (icon && icon.includes('11')) return '⛈️' // Thunderstorm
+                if (icon && icon.includes('13')) return '❄️' // Snow
+                if (icon && icon.includes('50')) return '🌫️' // Mist
                 return '🌤️' // Default
               }
               
               return `
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; text-align: center;">
-                  <div style="font-size: 24px; margin-bottom: 8px;">${getWeatherIcon(weather.icon || '')}</div>
-                  <div style="font-weight: 600; color: #212529; margin-bottom: 4px;">${weatherDate}</div>
-                  <div style="color: #6c757d; font-size: 13px; margin-bottom: 8px;">${weather.conditions || 'Unknown'}</div>
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="color: #dc3545; font-weight: 600;">${weather.temperature?.min || 0}°${weather.temperature?.unit || 'C'}</span>
-                    <span style="color: #28a745; font-weight: 600;">${weather.temperature?.max || 0}°${weather.temperature?.unit || 'C'}</span>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
+                  <div style="text-align: center; margin-bottom: 12px;">
+                    <div style="font-size: 28px; margin-bottom: 8px;">${getWeatherIcon(summary.icon)}</div>
+                    <div style="font-weight: 600; color: #212529; font-size: 16px; margin-bottom: 4px;">${locationName}</div>
+                    <div style="color: #6c757d; font-size: 12px;">${dateText}</div>
                   </div>
-                  ${weather.description ? `<div style="color: #495057; font-size: 12px; margin-bottom: 8px;">${weather.description}</div>` : ''}
-                  ${weather.precipitation > 0 ? `<div style="color: #17a2b8; font-size: 12px; margin-bottom: 4px;">💧 ${weather.precipitation}% chance of rain</div>` : ''}
-                  ${weather.humidity ? `<div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">💨 Humidity: ${weather.humidity}%</div>` : ''}
-                  ${weather.windSpeed ? `<div style="color: #6c757d; font-size: 12px; margin-bottom: 8px;">🌬️ Wind: ${weather.windSpeed} km/h</div>` : ''}
-                  ${weather.uvIndex > 0 ? `<div style="color: #ffc107; font-size: 12px; margin-bottom: 8px;">☀️ UV Index: ${weather.uvIndex}</div>` : ''}
-                  ${weather.recommendations && weather.recommendations.length > 0 ? `
-                    <div style="background: #e7f3ff; padding: 8px; border-radius: 4px; margin-top: 8px;">
-                      <div style="font-size: 11px; color: #0056b3; font-weight: 600; margin-bottom: 4px;">Tips:</div>
-                      ${weather.recommendations.slice(0, 2).map((rec: string) => `<div style="font-size: 11px; color: #0056b3;">• ${rec}</div>`).join('')}
+                  
+                  <div style="text-align: center; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span style="color: #dc3545; font-weight: 600; font-size: 14px;">${summary.minTemp || 0}°${summary.unit || 'C'}</span>
+                      <span style="color: #28a745; font-weight: 600; font-size: 14px;">${summary.maxTemp || 0}°${summary.unit || 'C'}</span>
+                    </div>
+                    <div style="color: #6c757d; font-size: 13px; margin-bottom: 8px;">Avg: ${summary.avgMin || 0}° - ${summary.avgMax || 0}°${summary.unit || 'C'}</div>
+                    <div style="color: #495057; font-size: 13px; margin-bottom: 8px; text-transform: capitalize;">${summary.conditions || 'Unknown'}</div>
+                  </div>
+                  
+                  ${summary.avgPrecipitation > 0 ? `<div style="color: #17a2b8; font-size: 12px; margin-bottom: 8px; text-align: center;">💧 ${summary.avgPrecipitation}% avg precipitation</div>` : ''}
+                  
+                  ${summary.recommendations && summary.recommendations.length > 0 ? `
+                    <div style="background: #e7f3ff; padding: 10px; border-radius: 4px; margin-top: 12px;">
+                      <div style="font-size: 12px; color: #0056b3; font-weight: 600; margin-bottom: 6px;">Weather Tips:</div>
+                      ${summary.recommendations.slice(0, 3).map((rec: string) => `<div style="font-size: 11px; color: #0056b3; margin-bottom: 2px;">• ${rec}</div>`).join('')}
                     </div>
                   ` : ''}
                 </div>

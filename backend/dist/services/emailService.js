@@ -1192,6 +1192,73 @@ If you received this email, your SMTP configuration is successful!
         </div>
       `;
         }
+        // Generate weather forecast HTML
+        let weatherHTML = '';
+        if (itinerary.weatherForecast && Array.isArray(itinerary.weatherForecast) && itinerary.weatherForecast.length > 0) {
+            weatherHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🌤️ Weather Forecast</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            ${itinerary.weatherForecast.map((weather) => {
+                // Use forecastSummary data structure from database
+                const summary = weather.forecastSummary;
+                if (!summary)
+                    return '';
+                const locationName = weather.location || 'Unknown Location';
+                const dateRange = weather.dateRange;
+                const dateText = dateRange ?
+                    `${new Date(dateRange.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(dateRange.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` :
+                    'Trip Duration';
+                // Weather icon mapping (simplified)
+                const getWeatherIcon = (icon) => {
+                    if (icon && icon.includes('01'))
+                        return '☀️'; // Clear
+                    if (icon && icon.includes('02'))
+                        return '⛅'; // Few clouds
+                    if (icon && (icon.includes('03') || icon.includes('04')))
+                        return '☁️'; // Cloudy
+                    if (icon && (icon.includes('09') || icon.includes('10')))
+                        return '🌧️'; // Rain
+                    if (icon && icon.includes('11'))
+                        return '⛈️'; // Thunderstorm
+                    if (icon && icon.includes('13'))
+                        return '❄️'; // Snow
+                    if (icon && icon.includes('50'))
+                        return '🌫️'; // Mist
+                    return '🌤️'; // Default
+                };
+                return `
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
+                  <div style="text-align: center; margin-bottom: 12px;">
+                    <div style="font-size: 28px; margin-bottom: 8px;">${getWeatherIcon(summary.icon)}</div>
+                    <div style="font-weight: 600; color: #212529; font-size: 16px; margin-bottom: 4px;">${locationName}</div>
+                    <div style="color: #6c757d; font-size: 12px;">${dateText}</div>
+                  </div>
+                  
+                  <div style="text-align: center; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span style="color: #dc3545; font-weight: 600; font-size: 14px;">${summary.minTemp || 0}°${summary.unit || 'C'}</span>
+                      <span style="color: #28a745; font-weight: 600; font-size: 14px;">${summary.maxTemp || 0}°${summary.unit || 'C'}</span>
+                    </div>
+                    <div style="color: #6c757d; font-size: 13px; margin-bottom: 8px;">Avg: ${summary.avgMin || 0}° - ${summary.avgMax || 0}°${summary.unit || 'C'}</div>
+                    <div style="color: #495057; font-size: 13px; margin-bottom: 8px; text-transform: capitalize;">${summary.conditions || 'Unknown'}</div>
+                  </div>
+                  
+                  ${summary.avgPrecipitation > 0 ? `<div style="color: #17a2b8; font-size: 12px; margin-bottom: 8px; text-align: center;">💧 ${summary.avgPrecipitation}% avg precipitation</div>` : ''}
+                  
+                  ${summary.recommendations && summary.recommendations.length > 0 ? `
+                    <div style="background: #e7f3ff; padding: 10px; border-radius: 4px; margin-top: 12px;">
+                      <div style="font-size: 12px; color: #0056b3; font-weight: 600; margin-bottom: 6px;">Weather Tips:</div>
+                      ${summary.recommendations.slice(0, 3).map((rec) => `<div style="font-size: 11px; color: #0056b3; margin-bottom: 2px;">• ${rec}</div>`).join('')}
+                    </div>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+        }
         // Generate general tips HTML
         let tipsHTML = '';
         if (itinerary.generalTips && itinerary.generalTips.length > 0) {
@@ -1289,6 +1356,9 @@ If you received this email, your SMTP configuration is successful!
           </div>
         ` : ''}
       </div>
+
+      <!-- Weather Forecast -->
+      ${weatherHTML}
 
       <!-- Day Plans -->
       ${dayPlansHTML}

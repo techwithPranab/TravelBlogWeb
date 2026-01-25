@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSharedItinerary = exports.emailItinerary = exports.downloadItineraryPDF = exports.regenerateDay = exports.regenerateItinerary = exports.deleteItinerary = exports.updateItinerary = exports.getItineraryById = exports.getUserItineraries = exports.generateItinerary = void 0;
+exports.getSharedItinerary = exports.emailItinerary = exports.downloadItineraryPDF = exports.regenerateDay = exports.regenerateItinerary = exports.deleteItinerary = exports.updateItinerary = exports.updateItineraryFormData = exports.getItineraryById = exports.getUserItineraries = exports.generateItinerary = void 0;
 const Itinerary_1 = __importDefault(require("../models/Itinerary"));
 const Subscription_1 = __importDefault(require("../models/Subscription"));
 const aiItineraryService_1 = __importDefault(require("../services/aiItineraryService"));
@@ -247,17 +247,18 @@ const generateItinerary = async (req, res) => {
             const parsedPackingList = (0, aiParsing_1.deepParseIfString)(generatedContent.packingList);
             const parsedBudgetBreakdown = (0, aiParsing_1.deepParseIfString)(generatedContent.budgetBreakdown);
             const parsedDailyCostBreakdown = (0, aiParsing_1.deepParseIfString)(generatedContent.dailyCostBreakdown);
+            const parsedAccommodationSuggestions = (0, aiParsing_1.deepParseIfString)(generatedContent.accommodationSuggestions);
             // Use the already sanitized data from AI service directly
             itinerary.dayPlans = Array.isArray(parsedDayPlans) ? parsedDayPlans : [];
-            // Ensure plain objects by double-serializing to remove any VM-evaluated remnants
-            itinerary.accommodationSuggestions = Array.isArray(generatedContent.accommodationSuggestions)
-                ? JSON.parse(JSON.stringify(generatedContent.accommodationSuggestions))
+            // Assign parsed data directly without double JSON serialization to avoid data loss
+            itinerary.accommodationSuggestions = Array.isArray(parsedAccommodationSuggestions)
+                ? parsedAccommodationSuggestions
                 : [];
             itinerary.transportationTips = Array.isArray(generatedContent.transportationTips)
-                ? JSON.parse(JSON.stringify(generatedContent.transportationTips))
+                ? generatedContent.transportationTips
                 : [];
             itinerary.restaurantRecommendations = Array.isArray(generatedContent.restaurantRecommendations)
-                ? JSON.parse(JSON.stringify(generatedContent.restaurantRecommendations))
+                ? generatedContent.restaurantRecommendations
                 : [];
             itinerary.generalTips = toStringArray(parsedGeneralTips);
             itinerary.packingList = toStringArray(parsedPackingList);
@@ -302,12 +303,23 @@ const generateItinerary = async (req, res) => {
                     const amenities = Array.isArray(acc?.amenities)
                         ? acc.amenities.map((a) => String(a).trim())
                         : (acc?.amenities ? String(acc.amenities).split(/[,;|\n]+/).map((s) => s.trim()).filter(Boolean) : []);
+                    // Preserve the full location object structure
+                    let location = acc?.location;
+                    if (typeof location === 'string') {
+                        location = { address: location };
+                    }
+                    else if (!location || typeof location !== 'object') {
+                        location = { address: acc?.address || '' };
+                    }
                     return {
                         name: acc?.name || `Accommodation ${idx + 1}`,
                         type: acc?.type || 'Hotel',
                         priceRange: acc?.priceRange || acc?.price || '',
-                        location: acc?.location || acc?.address || '',
-                        amenities
+                        location,
+                        amenities,
+                        proximityToAttractions: acc?.proximityToAttractions || '',
+                        bookingTip: acc?.bookingTip || '',
+                        whyRecommended: acc?.whyRecommended || ''
                     };
                 });
                 // Transportation: deep-parse strings to objects/arrays
@@ -385,12 +397,23 @@ const generateItinerary = async (req, res) => {
                             const amenities = Array.isArray(acc?.amenities)
                                 ? acc.amenities.map((a) => String(a).trim())
                                 : (acc?.amenities ? String(acc.amenities).split(/[,;|\n]+/).map((s) => s.trim()).filter(Boolean) : []);
+                            // Preserve the full location object structure
+                            let location = acc?.location;
+                            if (typeof location === 'string') {
+                                location = { address: location };
+                            }
+                            else if (!location || typeof location !== 'object') {
+                                location = { address: acc?.address || '' };
+                            }
                             return {
                                 name: acc?.name || `Accommodation ${idx + 1}`,
                                 type: acc?.type || 'Hotel',
                                 priceRange: acc?.priceRange || acc?.price || '',
-                                location: acc?.location || acc?.address || '',
-                                amenities
+                                location,
+                                amenities,
+                                proximityToAttractions: acc?.proximityToAttractions || '',
+                                bookingTip: acc?.bookingTip || '',
+                                whyRecommended: acc?.whyRecommended || ''
                             };
                         });
                         // Normalize transportation tips (deep-parse strings when possible)
@@ -555,6 +578,100 @@ const getItineraryById = async (req, res) => {
 };
 exports.getItineraryById = getItineraryById;
 /**
+ * Update itinerary form data (excluding source and destinations)
+ * PUT /api/itineraries/:id/form-data
+ */
+const updateItineraryFormData = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user._id;
+        const updates = req.body;
+        const itinerary = await Itinerary_1.default.findOne({ _id: id, userId });
+        if (!itinerary) {
+            return res.status(404).json({
+                success: false,
+                message: 'Itinerary not found'
+            });
+        }
+        // Check if edit limit has been reached
+        if (itinerary.editCount >= itinerary.maxEdits) {
+            return res.status(403).json({
+                success: false,
+                message: `Maximum edit limit (${itinerary.maxEdits}) reached for this itinerary`,
+                data: {
+                    editCount: itinerary.editCount,
+                    maxEdits: itinerary.maxEdits
+                }
+            });
+        }
+        // Allow updating form data fields EXCEPT source and destinations
+        const allowedUpdates = [
+            'title',
+            'travelMode',
+            'adults',
+            'children',
+            'numberOfRooms',
+            'dietType',
+            'duration',
+            'startDate',
+            'endDate',
+            'budget',
+            'interests',
+            'travelStyle',
+            'includeAccommodationReference',
+            'includeRestaurantReference',
+            'includeWeatherReference'
+        ];
+        // Validate and apply updates
+        Object.keys(updates).forEach(key => {
+            if (allowedUpdates.includes(key)) {
+                // Special validation for certain fields
+                if (key === 'adults' && (updates[key] < 1 || updates[key] > 20)) {
+                    return;
+                }
+                if (key === 'children' && (updates[key] < 0 || updates[key] > 10)) {
+                    return;
+                }
+                if (key === 'duration' && (updates[key] < 1 || updates[key] > 30)) {
+                    return;
+                }
+                if (key === 'numberOfRooms' && (updates[key] < 1 || updates[key] > 10)) {
+                    return;
+                }
+                if (key === 'interests' && (!Array.isArray(updates[key]) || updates[key].length === 0)) {
+                    return;
+                }
+                itinerary[key] = updates[key];
+            }
+        });
+        // Increment edit count
+        itinerary.editCount += 1;
+        itinerary.isEdited = true;
+        itinerary.lastEditedAt = new Date();
+        itinerary.status = 'edited';
+        await itinerary.save();
+        res.json({
+            success: true,
+            message: 'Itinerary form data updated successfully',
+            data: itinerary,
+            meta: {
+                editCount: itinerary.editCount,
+                maxEdits: itinerary.maxEdits,
+                editsRemaining: itinerary.maxEdits - itinerary.editCount
+            }
+        });
+    }
+    catch (error) {
+        console.error('Update itinerary form data error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update itinerary form data',
+            error: error.message
+        });
+    }
+};
+exports.updateItineraryFormData = updateItineraryFormData;
+/**
  * Update itinerary
  * PUT /api/itineraries/:id
  */
@@ -647,15 +764,15 @@ const regenerateItinerary = async (req, res) => {
             });
         }
         // Check subscription limits for regeneration
+        // Note: We allow regeneration of existing itineraries without counting towards the limit
+        // since this is updating existing content, not creating new content
         const subscription = await Subscription_1.default.findOne({ userId });
-        if (!subscription || !subscription.canCreateItinerary()) {
+        if (!subscription) {
             return res.status(403).json({
                 success: false,
-                message: 'Subscription limit reached. Cannot regenerate itinerary.',
+                message: 'No active subscription found.',
                 data: {
-                    subscriptionType: subscription?.subscriptionType || 'free',
-                    itinerariesUsed: subscription?.itinerariesUsed || 0,
-                    itinerariesLimit: subscription?.itinerariesLimit || 5
+                    subscriptionType: 'none'
                 }
             });
         }
@@ -667,7 +784,9 @@ const regenerateItinerary = async (req, res) => {
         console.log('[ITINERARY] Regenerate - Preference flags from stored itinerary:', {
             includeAccommodationReference: itinerary.includeAccommodationReference,
             includeRestaurantReference: itinerary.includeRestaurantReference,
-            includeWeatherReference: itinerary.includeWeatherReference
+            includeWeatherReference: itinerary.includeWeatherReference,
+            accommodationRefType: typeof itinerary.includeAccommodationReference,
+            accommodationRefValue: itinerary.includeAccommodationReference
         });
         try {
             const generatedContent = await aiItineraryService_1.default.generateItinerary({
@@ -681,29 +800,83 @@ const regenerateItinerary = async (req, res) => {
                 adults: itinerary.adults,
                 children: itinerary.children,
                 totalPeople: itinerary.totalPeople,
-                includeAccommodationReference: itinerary.includeAccommodationReference,
-                includeRestaurantReference: itinerary.includeRestaurantReference,
-                includeWeatherReference: itinerary.includeWeatherReference
+                includeAccommodationReference: itinerary.includeAccommodationReference !== false,
+                includeRestaurantReference: itinerary.includeRestaurantReference !== false,
+                includeWeatherReference: itinerary.includeWeatherReference !== false
             }, userId, itineraryId);
             // Update itinerary with generated content
             // The AI service already returns properly formatted data after sanitization
-            // We only need deep parsing for dayPlans, generalTips, and packingList
+            // We need deep parsing for dayPlans, generalTips, packingList, and accommodationSuggestions
             const parsedDayPlans = (0, aiParsing_1.deepParseIfString)(generatedContent.dayPlans);
             const parsedGeneralTips = (0, aiParsing_1.deepParseIfString)(generatedContent.generalTips);
             const parsedPackingList = (0, aiParsing_1.deepParseIfString)(generatedContent.packingList);
             const parsedBudgetBreakdown = (0, aiParsing_1.deepParseIfString)(generatedContent.budgetBreakdown);
             const parsedDailyCostBreakdown = (0, aiParsing_1.deepParseIfString)(generatedContent.dailyCostBreakdown);
+            const parsedAccommodationSuggestions = (0, aiParsing_1.deepParseIfString)(generatedContent.accommodationSuggestions);
+            console.log('🔍 [DEBUG] parsedAccommodationSuggestions - type:', typeof parsedAccommodationSuggestions, 'isArray:', Array.isArray(parsedAccommodationSuggestions), 'length:', Array.isArray(parsedAccommodationSuggestions) ? parsedAccommodationSuggestions.length : 'N/A');
+            if (Array.isArray(parsedAccommodationSuggestions) && parsedAccommodationSuggestions.length > 0) {
+                console.log('🔍 [DEBUG] First parsed item FULL:', JSON.stringify(parsedAccommodationSuggestions[0], null, 2));
+                console.log('🔍 [DEBUG] Item keys:', Object.keys(parsedAccommodationSuggestions[0]));
+                console.log('🔍 [DEBUG] Location structure:', parsedAccommodationSuggestions[0].location);
+            }
             // Use the already sanitized data from AI service directly
             itinerary.dayPlans = Array.isArray(parsedDayPlans) ? parsedDayPlans : [];
-            // Ensure plain objects by double-serializing to remove any VM-evaluated remnants
-            itinerary.accommodationSuggestions = Array.isArray(generatedContent.accommodationSuggestions)
-                ? JSON.parse(JSON.stringify(generatedContent.accommodationSuggestions))
-                : [];
+            // Ensure plain objects and proper structure for Mongoose
+            try {
+                if (Array.isArray(parsedAccommodationSuggestions) && parsedAccommodationSuggestions.length > 0) {
+                    // Manually construct objects to match Mongoose schema exactly
+                    const cleanAccommodations = parsedAccommodationSuggestions.map((acc) => ({
+                        name: String(acc.name || ''),
+                        type: String(acc.type || ''),
+                        priceRange: String(acc.priceRange || ''),
+                        location: {
+                            address: String(acc.location?.address || ''),
+                            area: acc.location?.area ? String(acc.location.area) : undefined,
+                            coordinates: acc.location?.coordinates ? {
+                                lat: Number(acc.location.coordinates.lat) || 0,
+                                lng: Number(acc.location.coordinates.lng) || 0
+                            } : undefined
+                        },
+                        amenities: Array.isArray(acc.amenities) ? acc.amenities.map((a) => String(a)) : [],
+                        proximityToAttractions: acc.proximityToAttractions ? String(acc.proximityToAttractions) : undefined,
+                        bookingTip: acc.bookingTip ? String(acc.bookingTip) : undefined,
+                        whyRecommended: acc.whyRecommended ? String(acc.whyRecommended) : undefined
+                    }));
+                    console.log('🔍 [DEBUG] Clean accommodations:', JSON.stringify(cleanAccommodations[0], null, 2));
+                    console.log('🔍 [DEBUG] Clean accommodations array length:', cleanAccommodations.length);
+                    // Try different assignment methods
+                    console.log('🔍 [DEBUG] Before assignment - current length:', itinerary.accommodationSuggestions?.length || 0);
+                    // Method 1: Direct assignment
+                    itinerary.accommodationSuggestions = cleanAccommodations;
+                    console.log('🔍 [DEBUG] After direct assignment - length:', itinerary.accommodationSuggestions.length);
+                    // If that failed, try using set()
+                    if (itinerary.accommodationSuggestions.length === 0) {
+                        console.log('⚠️ [DEBUG] Direct assignment failed, trying set() method');
+                        itinerary.set('accommodationSuggestions', cleanAccommodations);
+                        console.log('🔍 [DEBUG] After set() method - length:', itinerary.accommodationSuggestions.length);
+                    }
+                    // Force Mongoose to recognize the change
+                    itinerary.markModified('accommodationSuggestions');
+                    console.log('✅ [DEBUG] Marked as modified, final length:', itinerary.accommodationSuggestions.length);
+                }
+                else {
+                    itinerary.accommodationSuggestions = [];
+                }
+            }
+            catch (assignError) {
+                console.error('❌ [DEBUG] Error assigning accommodations:', assignError.message);
+                console.error('❌ [DEBUG] Stack:', assignError.stack);
+                itinerary.accommodationSuggestions = [];
+            }
+            console.log('🔍 [DEBUG] After assignment - accommodations type:', typeof itinerary.accommodationSuggestions, 'isArray:', Array.isArray(itinerary.accommodationSuggestions), 'length:', itinerary.accommodationSuggestions?.length || 0);
+            if (itinerary.accommodationSuggestions?.length > 0) {
+                console.log('🔍 [DEBUG] First item type:', typeof itinerary.accommodationSuggestions[0], 'value:', JSON.stringify(itinerary.accommodationSuggestions[0]).substring(0, 200));
+            }
             itinerary.transportationTips = Array.isArray(generatedContent.transportationTips)
-                ? JSON.parse(JSON.stringify(generatedContent.transportationTips))
+                ? generatedContent.transportationTips
                 : [];
             itinerary.restaurantRecommendations = Array.isArray(generatedContent.restaurantRecommendations)
-                ? JSON.parse(JSON.stringify(generatedContent.restaurantRecommendations))
+                ? generatedContent.restaurantRecommendations
                 : [];
             itinerary.generalTips = toStringArray(parsedGeneralTips);
             itinerary.packingList = toStringArray(parsedPackingList);
@@ -732,182 +905,30 @@ const regenerateItinerary = async (req, res) => {
                 console.log('⚠️ [CONTROLLER] No weather forecast in generated content (regenerate)');
             }
             itinerary.status = 'completed';
-            // Pre-sanitize: convert any stringified JSON in known arrays to proper objects to prevent save failures
-            try {
-                // Accommodations
-                itinerary.accommodationSuggestions = (itinerary.accommodationSuggestions || []).map((acc, idx) => {
-                    if (typeof acc === 'string') {
-                        const parsed = (0, aiParsing_1.deepParseIfString)(acc);
-                        if (Array.isArray(parsed) && parsed.length > 0)
-                            acc = parsed[0];
-                        else if (parsed && typeof parsed === 'object')
-                            acc = parsed;
-                        else
-                            acc = { name: String(acc) };
-                    }
-                    const amenities = Array.isArray(acc?.amenities)
-                        ? acc.amenities.map((a) => String(a).trim())
-                        : (acc?.amenities ? String(acc.amenities).split(/[,;|\n]+/).map((s) => s.trim()).filter(Boolean) : []);
-                    return {
-                        name: acc?.name || `Accommodation ${idx + 1}`,
-                        type: acc?.type || 'Hotel',
-                        priceRange: acc?.priceRange || acc?.price || '',
-                        location: acc?.location || acc?.address || '',
-                        amenities
-                    };
-                });
-                // Transportation: deep-parse strings to objects/arrays
-                itinerary.transportationTips = (itinerary.transportationTips || [])
-                    .flatMap((t) => {
-                    if (typeof t === 'string') {
-                        const parsed = (0, aiParsing_1.deepParseIfString)(t);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            return parsed.map((p) => ({
-                                type: p?.type || p?.mode || 'general',
-                                description: p?.description || p?.details || String(p),
-                                estimatedCost: Number(p?.estimatedCost) || 0,
-                                insiderTip: p?.insiderTip || p?.insider || p?.tip || '',
-                                bookingInfo: p?.bookingInfo || p?.booking || ''
-                            }));
-                        }
-                        if (parsed && typeof parsed === 'object') {
-                            return [{
-                                    type: parsed?.type || parsed?.mode || 'general',
-                                    description: parsed?.description || String(parsed),
-                                    estimatedCost: Number(parsed?.estimatedCost) || 0,
-                                    insiderTip: parsed?.insiderTip || parsed?.insider || parsed?.tip || '',
-                                    bookingInfo: parsed?.bookingInfo || parsed?.booking || ''
-                                }];
-                        }
-                        return [{ type: 'general', description: String(t), estimatedCost: 0, insiderTip: '', bookingInfo: '' }];
-                    }
-                    if (t && typeof t === 'object') {
-                        return [{ type: t?.type || t?.mode || 'general', description: t?.description || String(t), estimatedCost: Number(t?.estimatedCost) || 0, insiderTip: t?.insiderTip || t?.insider || t?.tip || '', bookingInfo: t?.bookingInfo || t?.booking || '' }];
-                    }
-                    return [];
-                });
-                // Restaurants: deep-parse stringified values
-                itinerary.restaurantRecommendations = (itinerary.restaurantRecommendations || [])
-                    .flatMap((r) => {
-                    if (typeof r === 'string') {
-                        const parsed = (0, aiParsing_1.deepParseIfString)(r);
-                        if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'object')
-                            return parsed;
-                        if (parsed && typeof parsed === 'object')
-                            return [parsed];
-                        return [{ name: String(r), cuisine: 'Various', priceRange: '' }];
-                    }
-                    if (r && typeof r === 'object')
-                        return [r];
-                    return [];
-                });
-                console.log('⚙️ [SANITIZE] Pre-save sanitization complete: accommodations:', itinerary.accommodationSuggestions.length, 'transportationTips:', itinerary.transportationTips.length, 'restaurants:', itinerary.restaurantRecommendations.length);
-            }
-            catch (preSanErr) {
-                console.warn('⚠️ [SANITIZE] Pre-save sanitization failed:', preSanErr);
+            // Debug logging for accommodation suggestions
+            console.log('⚙️ [REGENERATE] Accommodations - type:', typeof itinerary.accommodationSuggestions, 'isArray:', Array.isArray(itinerary.accommodationSuggestions), 'length:', itinerary.accommodationSuggestions?.length || 0);
+            if (itinerary.accommodationSuggestions?.length > 0) {
+                console.log('⚙️ [REGENERATE] First accommodation type:', typeof itinerary.accommodationSuggestions[0]);
+                console.log('⚙️ [REGENERATE] First accommodation sample:', JSON.stringify(itinerary.accommodationSuggestions[0]).substring(0, 300));
             }
             try {
                 await itinerary.save();
             }
             catch (saveErr) {
                 console.error('Error saving itinerary after AI regeneration:', saveErr);
-                // Log a truncated sample of the generated content to help debugging
-                try {
-                    console.error('Generated content (truncated):', JSON.stringify(generatedContent).substring(0, 2000));
-                }
-                catch (e) { /* ignore */ }
-                // Attempt best-effort sanitization for known problematic fields
-                if (saveErr.name === 'ValidationError' || /Cast to/.test(saveErr.message)) {
-                    try {
-                        itinerary.accommodationSuggestions = (itinerary.accommodationSuggestions || []).map((acc, idx) => {
-                            if (typeof acc === 'string') {
-                                const parsed = (0, aiParsing_1.deepParseIfString)(acc);
-                                if (Array.isArray(parsed) && parsed.length > 0)
-                                    acc = parsed[0];
-                                else
-                                    acc = { name: String(acc) };
-                            }
-                            const amenities = Array.isArray(acc?.amenities)
-                                ? acc.amenities.map((a) => String(a).trim())
-                                : (acc?.amenities ? String(acc.amenities).split(/[,;|\n]+/).map((s) => s.trim()).filter(Boolean) : []);
-                            return {
-                                name: acc?.name || `Accommodation ${idx + 1}`,
-                                type: acc?.type || 'Hotel',
-                                priceRange: acc?.priceRange || acc?.price || '',
-                                location: acc?.location || acc?.address || '',
-                                amenities
-                            };
-                        });
-                        // Normalize transportation tips (deep-parse strings when possible)
-                        itinerary.transportationTips = (itinerary.transportationTips || [])
-                            .flatMap((t) => {
-                            if (typeof t === 'string') {
-                                const parsed = (0, aiParsing_1.deepParseIfString)(t);
-                                if (Array.isArray(parsed) && parsed.length > 0) {
-                                    return parsed.map((p) => ({
-                                        type: p?.type || p?.mode || 'general',
-                                        description: p?.description || p?.details || String(p),
-                                        estimatedCost: Number(p?.estimatedCost) || 0,
-                                        insiderTip: p?.insiderTip || p?.insider || p?.tip || '',
-                                        bookingInfo: p?.bookingInfo || p?.booking || ''
-                                    }));
-                                }
-                                if (parsed && typeof parsed === 'object') {
-                                    return [{
-                                            type: parsed?.type || parsed?.mode || 'general',
-                                            description: parsed?.description || String(parsed),
-                                            estimatedCost: Number(parsed?.estimatedCost) || 0,
-                                            insiderTip: parsed?.insiderTip || parsed?.insider || parsed?.tip || '',
-                                            bookingInfo: parsed?.bookingInfo || parsed?.booking || ''
-                                        }];
-                                }
-                                return [{ type: 'general', description: String(t), estimatedCost: 0, insiderTip: '', bookingInfo: '' }];
-                            }
-                            if (t && typeof t === 'object') {
-                                return [{ type: t?.type || t?.mode || 'general', description: t?.description || String(t), estimatedCost: Number(t?.estimatedCost) || 0, insiderTip: t?.insiderTip || t?.insider || t?.tip || '', bookingInfo: t?.bookingInfo || t?.booking || '' }];
-                            }
-                            return [];
-                        });
-                        // Normalize restaurants (deep-parse stringified objects/arrays)
-                        itinerary.restaurantRecommendations = (itinerary.restaurantRecommendations || [])
-                            .flatMap((r) => {
-                            if (typeof r === 'string') {
-                                const parsed = (0, aiParsing_1.deepParseIfString)(r);
-                                if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'object')
-                                    return parsed;
-                                if (parsed && typeof parsed === 'object')
-                                    return [parsed];
-                                return [{ name: String(r), cuisine: 'Various', priceRange: '' }];
-                            }
-                            if (r && typeof r === 'object')
-                                return [r];
-                            return [];
-                        });
-                        console.log('⚙️ [SANITIZE] After sanitization - accommodations:', itinerary.accommodationSuggestions.length, 'transportationTips:', itinerary.transportationTips.length, 'restaurants:', itinerary.restaurantRecommendations.length);
-                        await itinerary.save();
-                    }
-                    catch (err2) {
-                        console.error('Failed to save itinerary after sanitization:', err2);
-                        itinerary.status = 'failed';
-                        await itinerary.save().catch(() => { });
-                        return res.status(500).json({ success: false, message: 'Failed to save itinerary after sanitization', error: err2.message });
-                    }
-                }
-                else {
-                    itinerary.status = 'failed';
-                    await itinerary.save().catch(() => { });
-                    return res.status(500).json({ success: false, message: 'Failed to save itinerary', error: saveErr.message });
-                }
+                itinerary.status = 'failed';
+                await itinerary.save().catch(() => { });
+                return res.status(500).json({ success: false, message: 'Failed to save itinerary', error: saveErr.message });
             }
-            // Increment subscription usage
-            await subscription.incrementUsage();
+            // Don't increment subscription usage for regeneration of existing itineraries
+            console.log('📤 [REGENERATE] Final response - accommodations:', itinerary.accommodationSuggestions?.length || 0);
             res.status(201).json({
                 success: true,
                 message: 'Itinerary regenerated successfully',
                 data: itinerary,
                 subscription: {
-                    itinerariesUsed: subscription.itinerariesUsed + 1,
-                    itinerariesRemaining: subscription.getRemainingItineraries() - 1
+                    itinerariesUsed: subscription.itinerariesUsed,
+                    itinerariesRemaining: subscription.getRemainingItineraries()
                 }
             });
         }

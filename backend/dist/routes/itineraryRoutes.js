@@ -18,6 +18,8 @@ router.post('/', (0, rateLimiter_1.itineraryRateLimit)(), itineraryController_1.
 router.get('/', itineraryController_1.getUserItineraries);
 // Get single itinerary
 router.get('/:id', itineraryController_1.getItineraryById);
+// Update itinerary form data (excluding source and destinations)
+router.put('/:id/form-data', itineraryController_1.updateItineraryFormData);
 // Update itinerary
 router.put('/:id', itineraryController_1.updateItinerary);
 // Delete itinerary

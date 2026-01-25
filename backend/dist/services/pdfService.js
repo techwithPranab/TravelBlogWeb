@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const pdfkit_1 = __importDefault(require("pdfkit"));
+const PDFDocument = require('pdfkit');
 class PDFService {
     /**
      * Generate PDF for itinerary
@@ -11,7 +8,7 @@ class PDFService {
     async generateItineraryPDF(itinerary) {
         return new Promise((resolve, reject) => {
             try {
-                const doc = new pdfkit_1.default({
+                const doc = new PDFDocument({
                     size: 'A4',
                     margins: { top: 50, bottom: 50, left: 50, right: 50 }
                 });

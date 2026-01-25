@@ -183,21 +183,25 @@ const ItinerarySchema = new mongoose_1.Schema({
     },
     accommodationSuggestions: {
         type: [{
-                name: String,
-                type: String,
-                priceRange: String,
+                name: { type: String },
+                type: { type: String },
+                priceRange: { type: String },
                 location: {
-                    address: String,
-                    area: String,
-                    coordinates: {
-                        lat: Number,
-                        lng: Number
+                    type: {
+                        address: { type: String },
+                        area: { type: String },
+                        coordinates: {
+                            type: {
+                                lat: { type: Number },
+                                lng: { type: Number }
+                            }
+                        }
                     }
                 },
-                amenities: [String],
-                proximityToAttractions: String,
-                bookingTip: String,
-                whyRecommended: String
+                amenities: { type: [String] },
+                proximityToAttractions: { type: String },
+                bookingTip: { type: String },
+                whyRecommended: { type: String }
             }],
         default: []
     },
@@ -207,21 +211,25 @@ const ItinerarySchema = new mongoose_1.Schema({
     },
     restaurantRecommendations: {
         type: [{
-                name: String,
-                cuisine: String,
-                priceRange: String,
-                mealType: [String],
+                name: { type: String },
+                cuisine: { type: String },
+                priceRange: { type: String },
+                mealType: { type: [String] },
                 location: {
-                    address: String,
-                    area: String,
-                    coordinates: {
-                        lat: Number,
-                        lng: Number
+                    type: {
+                        address: { type: String },
+                        area: { type: String },
+                        coordinates: {
+                            type: {
+                                lat: { type: Number },
+                                lng: { type: Number }
+                            }
+                        }
                     }
                 },
-                mustTryDish: String,
-                reservationNeeded: Boolean,
-                localFavorite: Boolean
+                mustTryDish: { type: String },
+                reservationNeeded: { type: Boolean },
+                localFavorite: { type: Boolean }
             }],
         default: []
     },
@@ -296,6 +304,16 @@ const ItinerarySchema = new mongoose_1.Schema({
     },
     lastEditedAt: {
         type: Date
+    },
+    editCount: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    maxEdits: {
+        type: Number,
+        default: 10,
+        min: 0
     },
     viewCount: {
         type: Number,

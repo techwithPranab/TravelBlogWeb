@@ -9,6 +9,7 @@ const Accommodation_1 = __importDefault(require("../models/Accommodation"));
 const Restaurant_1 = __importDefault(require("../models/Restaurant"));
 const Place_1 = __importDefault(require("../models/Place"));
 const weatherService_1 = __importDefault(require("./weatherService"));
+const destinationPricing_1 = require("../config/destinationPricing");
 class AIItineraryService {
     constructor() {
         const apiKey = process.env.OPENAI_API_KEY;
@@ -80,6 +81,9 @@ Provide detailed, practical, and personalized travel itineraries in JSON format.
                 hasAccommodations: !!generatedItinerary.accommodationSuggestions,
                 accommodationsType: typeof generatedItinerary.accommodationSuggestions,
                 accommodationsIsArray: Array.isArray(generatedItinerary.accommodationSuggestions),
+                accommodationsLength: Array.isArray(generatedItinerary.accommodationSuggestions) ? generatedItinerary.accommodationSuggestions.length : 'N/A',
+                accommodationsSample: Array.isArray(generatedItinerary.accommodationSuggestions) && generatedItinerary.accommodationSuggestions.length > 0
+                    ? JSON.stringify(generatedItinerary.accommodationSuggestions[0]).substring(0, 200) : 'No accommodations',
                 hasTransportation: !!generatedItinerary.transportationTips,
                 transportationType: typeof generatedItinerary.transportationTips,
                 transportationIsArray: Array.isArray(generatedItinerary.transportationTips)
@@ -429,8 +433,22 @@ Provide detailed, practical, and personalized travel itineraries in JSON format.
                     isManuallyAdded: false
                 }));
                 if (accommodations.length > 0) {
-                    await Accommodation_1.default.insertMany(accommodations);
-                    accommodationCount = accommodations.length;
+                    // Use upsert operations to handle duplicates gracefully
+                    const bulkOps = accommodations.map((acc) => ({
+                        updateOne: {
+                            filter: {
+                                name: acc.name,
+                                'location.address': acc.location.address,
+                                destinationName: acc.destinationName
+                            },
+                            update: { $set: acc },
+                            upsert: true
+                        }
+                    }));
+                    if (bulkOps.length > 0) {
+                        await Accommodation_1.default.bulkWrite(bulkOps);
+                        accommodationCount = accommodations.length;
+                    }
                 }
             }
             // Extract and save restaurants
@@ -458,8 +476,22 @@ Provide detailed, practical, and personalized travel itineraries in JSON format.
                     isManuallyAdded: false
                 }));
                 if (restaurants.length > 0) {
-                    await Restaurant_1.default.insertMany(restaurants);
-                    restaurantCount = restaurants.length;
+                    // Use upsert operations to handle duplicates gracefully
+                    const bulkOps = restaurants.map((rest) => ({
+                        updateOne: {
+                            filter: {
+                                name: rest.name,
+                                'location.address': rest.location.address,
+                                destinationName: rest.destinationName
+                            },
+                            update: { $set: rest },
+                            upsert: true
+                        }
+                    }));
+                    if (bulkOps.length > 0) {
+                        await Restaurant_1.default.bulkWrite(bulkOps);
+                        restaurantCount = restaurants.length;
+                    }
                 }
             }
             // Extract and save places from day plans
@@ -558,7 +590,35 @@ Provide detailed, practical, and personalized travel itineraries in JSON format.
         const includeAccommodation = params.includeAccommodationReference !== false;
         const includeRestaurant = params.includeRestaurantReference !== false;
         const includeWeather = params.includeWeatherReference !== false;
-        return `Create a comprehensive ${params.duration}-day travel itinerary from ${params.source} to ${destinationText}.
+        console.log('🔧 AI Service - Preference flags:', {
+            includeAccommodationReference: params.includeAccommodationReference,
+            includeAccommodation: includeAccommodation,
+            includeRestaurantReference: params.includeRestaurantReference,
+            includeRestaurant: includeRestaurant,
+            includeWeatherReference: params.includeWeatherReference,
+            includeWeather: includeWeather
+        });
+        // Generate pricing guidance for the destination
+        const pricingGuidance = (0, destinationPricing_1.formatPricingGuidance)(primaryDestination, params.budget, numberOfRooms, totalPeople);
+        // Generate unique trip name based on location sequence
+        const generateTripName = (source, destinations) => {
+            const allLocations = [source, ...destinations, source]; // source -> destinations -> source
+            const locationNames = allLocations.map(loc => {
+                // Clean location names (remove common suffixes, keep main city/country)
+                return loc.split(',')[0].trim().split(' ').slice(0, 2).join(' ');
+            });
+            if (destinations.length === 1) {
+                return `${locationNames[0]} to ${locationNames[1]} Adventure`;
+            }
+            else {
+                const midPoints = locationNames.slice(1, -1).join(' → ');
+                return `${locationNames[0]} → ${midPoints} → ${locationNames[0]} Journey`;
+            }
+        };
+        const tripName = generateTripName(params.source, params.destinations);
+        return `Create a comprehensive ${params.duration}-day travel itinerary named "${tripName}" from ${params.source} to ${destinationText}.
+
+TRIP NAME: "${tripName}"
 
 TRAVELER PROFILE:
 - Origin: ${params.source}
@@ -573,6 +633,8 @@ TRAVELER PROFILE:
 - Travel Mode: ${params.travelMode} (${travelModeDetails[params.travelMode]})
 - Travel Period: ${travelMonth} ${travelYear}
 
+${pricingGuidance}
+
 ${children > 0 ? `
 IMPORTANT: FAMILY-FRIENDLY CONSIDERATIONS (${children} children in group):
 - Prioritize child-safe and age-appropriate activities
@@ -585,12 +647,12 @@ IMPORTANT: FAMILY-FRIENDLY CONSIDERATIONS (${children} children in group):
 - Include emergency contacts and nearby medical facilities
 ` : ''}
 
-CRITICAL: ALL COSTS MUST BE IN THE LOCAL CURRENCY OF ${sourceLocation} (TRAVELER'S HOME CURRENCY)
-- Identify the official currency of ${sourceLocation} (e.g., USD for USA, EUR for France, JPY for Japan, INR for India, GBP for UK, etc.)
-- Express ALL monetary amounts in this source currency with the proper currency symbol/code
-- For price ranges, use source currency format (e.g., "$500-1000" for USA, "€50-80" for France)
-- Include currency symbol in every cost field: estimatedCost, priceRange, totalEstimatedCost, budgetBreakdown
-- Convert destination costs to source currency for consistency
+CRITICAL: ALL COSTS MUST BE IN INR (Indian Rupees) - TRAVELER'S HOME CURRENCY
+- ALL monetary amounts MUST be in INR (₹) regardless of destination
+- Use the pricing guidelines above as reference for realistic costs
+- For price ranges, use INR format (e.g., "₹5000-10000")
+- Include ₹ symbol in "currencySymbol" field, but NOT in numeric cost fields
+- Convert destination costs to INR for consistency
 ${totalPeople > 1 ? `- ALL COSTS should reflect the total for ${totalPeople} people, not per person` : ''}
 
 ADVANCED PLANNING REQUIREMENTS:
@@ -606,12 +668,12 @@ ${includeWeather ? `- Current season and weather patterns for ${primaryDestinati
 ✈️ **Travel Logistics (${params.travelMode} mode):**
 ${params.travelMode === 'air' ? `
 - Flight options from ${params.source} to ${primaryDestination}${params.destinations.length > 1 ? ` and between destinations (${params.destinations.slice(1).join(', ')})` : ''}
-- INCLUDE ESTIMATED FLIGHT/TRAVEL COSTS from ${params.source} to ${primaryDestination} in the budget breakdown
+- INCLUDE REALISTIC FLIGHT COSTS from ${params.source} to ${primaryDestination} in the budget breakdown (typically 3000-6000 for economy domestic flights, 15000-30000 for domestic business class)
 - Airport transfer recommendations and costs
 - Proximity of activities to airports
 ` : params.travelMode === 'rail' ? `
 - Train routes and connections from ${params.source}
-- INCLUDE ESTIMATED TRAIN COSTS from ${params.source} to ${primaryDestination} in the budget breakdown
+- INCLUDE REALISTIC TRAIN COSTS from ${params.source} to ${primaryDestination} in the budget breakdown (typically 500-1500 for regional trains, 1500-2500 for high-speed/long-distance trains)
 - Railway station locations and transfers
 - Scenic rail journey recommendations
 - Rail pass options and savings
@@ -625,7 +687,7 @@ ${params.travelMode === 'air' ? `
 - Car rental recommendations
 ` : params.travelMode === 'bus' ? `
 - Bus routes and companies
-- INCLUDE ESTIMATED BUS COSTS from ${params.source} to ${primaryDestination} in the budget breakdown
+- INCLUDE REALISTIC BUS COSTS from ${params.source} to ${primaryDestination} in the budget breakdown (typically 10-100 for long-distance buses)
 - Comfort and facilities considerations
 - Scenic stops and rest areas
 - Cost comparison with other modes
@@ -670,25 +732,27 @@ ${params.travelMode === 'air' ? `
 - Healthcare facilities nearby
 
 💱 **CURRENCY INSTRUCTIONS (CRITICAL):**
-- Identify the local currency of ${primaryDestination}
-- Use proper currency symbols: $ (USD), € (EUR), £ (GBP), ¥ (JPY/CNY), ₹ (INR), etc.
-- ALL estimatedCost values MUST be NUMERIC ONLY (e.g., 150, 2500.50) - NO currency symbols, NO commas, NO text
-- Currency symbol goes in "currencySymbol" field at the top level
+- ALL costs MUST be in INR (₹) - Indian Rupees
+- Use the pricing guidelines provided above for realistic cost estimates
+- ALL estimatedCost values MUST be NUMERIC ONLY (e.g., 5000, 12500.50) - NO currency symbols, NO commas, NO text
+- Currency symbol (₹) goes in "currencySymbol" field at the top level
 - Do NOT include currency symbols in any cost fields (estimatedCost, totalEstimatedCost, etc.)
 
 ⚠️ **CRITICAL FORMATTING RULES:**
-1. "estimatedCost": NUMERIC value ONLY (e.g., 150, 2500, 50.5) - NO "₹24,000" or "$150"
+1. "estimatedCost": NUMERIC value ONLY (e.g., 5000, 12500, 750.5) - NO "₹24,000" or "$150"
 2. "totalEstimatedCost": NUMERIC value ONLY - sum of all costs
 3. All budgetBreakdown costs: NUMERIC values ONLY
-4. Example CORRECT: "estimatedCost": 24000 ✅
-5. Example WRONG: "estimatedCost": "₹24,000" ❌
-6. Example WRONG: "estimatedCost": "$150" ❌
+4. Use the pricing guidelines above to ensure realistic values for ${primaryDestination}
+5. Example CORRECT: "estimatedCost": 24000 ✅
+6. Example WRONG: "estimatedCost": "₹24,000" ❌
+7. Example WRONG: "estimatedCost": "$150" ❌
 
-REQUIRED JSON STRUCTURE (with ${sourceLocation} currency):
+REQUIRED JSON STRUCTURE (All costs in INR):
 
 {
-  "currency": "${sourceLocation} currency code (e.g., USD, EUR, GBP, JPY, INR, etc.)",
-  "currencySymbol": "Currency symbol (e.g., $, €, £, ¥, ₹, etc.)",
+  "title": "${tripName}",
+  "currency": "INR",
+  "currencySymbol": "₹",
   "dayPlans": [
     {
       "day": 1,
@@ -697,7 +761,7 @@ REQUIRED JSON STRUCTURE (with ${sourceLocation} currency):
           "time": "Varies based on departure",
           "title": "Travel from ${params.source} to ${primaryDestination}",
           "description": "CRITICAL: Include detailed ${params.travelMode} travel information from ${params.source} to ${primaryDestination}. Include departure time, arrival time, journey duration, and any transit information.",
-          "estimatedCost": 24000,
+          "estimatedCost": ${params.travelMode === 'air' ? '300' : params.travelMode === 'rail' ? '80' : params.travelMode === 'bus' ? '25' : params.travelMode === 'car' ? '150' : '200'},
           "duration": "Estimated travel time",
           "location": "${params.source} to ${primaryDestination}",
           "insiderTip": "Best booking options and time-saving tips for this route",
@@ -743,7 +807,7 @@ REQUIRED JSON STRUCTURE (with ${sourceLocation} currency):
     {
       "name": "Hotel/Hostel Name",
       "type": "Hotel/Hostel/Airbnb/Guesthouse/Resort",
-      "priceRange": "Source currency range for ${numberOfRooms} room${numberOfRooms > 1 ? 's' : ''} per night (e.g., $100-200 for USA, €50-100 for France)",
+      "priceRange": "₹{min}-{max} per night for ${numberOfRooms} room${numberOfRooms > 1 ? 's' : ''} (use pricing guidelines above)",
       "location": {
         "address": "Full complete address (e.g., '123 Main Street, Downtown District, City, Country')",
         "area": "Neighborhood/Area",
@@ -771,7 +835,7 @@ REQUIRED JSON STRUCTURE (with ${sourceLocation} currency):
     {
       "name": "Restaurant Name",
       "cuisine": "Cuisine Type",
-      "priceRange": "Source currency per meal (e.g., $15-25 for USA, €10-20 for France)",
+      "priceRange": "₹{min}-{max} per meal for ${totalPeople} person${totalPeople > 1 ? 's' : ''} (use pricing guidelines above)",
       "mealType": ["breakfast", "lunch", "dinner"],
       "dietaryOptions": "${dietType === 'veg' ? '[\\"vegetarian\\", \\\"vegan\\"]' : dietType === 'non-veg' ? '[\\"non-vegetarian\\", \\\"meat\\", \\\"seafood\\"]' : '[\\"vegetarian\\", \\\"non-vegetarian\\", \\\"vegan\\", \\\"meat\\", \\\"seafood\\"]'}",
       "location": {
@@ -805,48 +869,54 @@ REQUIRED JSON STRUCTURE (with ${sourceLocation} currency):
   "dailyCostBreakdown": [
     {
       "day": 1,
-      "flightCost": 24000,
-      "accommodationCost": 12000,
-      "foodCost": 1500,
-      "sightseeingCost": 800,
-      "localTransportCost": 500,
-      "shoppingCost": 300,
-      "miscellaneousCost": 400,
-      "totalDayCost": 39500
+      "flightCost": 0,  // Use realistic costs from pricing guidelines above based on ${params.travelMode}
+      "accommodationCost": 0,  // Use pricing guidelines: ${params.budget} budget for ${numberOfRooms} room${numberOfRooms > 1 ? 's' : ''}
+      "foodCost": 0,  // Use pricing guidelines: ${params.budget} budget for ${totalPeople} person${totalPeople > 1 ? 's' : ''}
+      "sightseeingCost": 0,  // Use attraction cost range from pricing guidelines
+      "localTransportCost": 0,  // Use transportation costs from pricing guidelines
+      "shoppingCost": 0,
+      "miscellaneousCost": 0,
+      "totalDayCost": 0  // Sum of all above
     },
     // ... repeat for each day until ${params.duration}
   ],
   "budgetBreakdown": {
-    "totalFlightCost": 48000,
-    "totalAccommodationCost": 84000,
-    "totalFoodCost": 10500,
-    "totalSightseeingCost": 5600,
-    "totalLocalTransportCost": 3500,
-    "totalShoppingCost": 2100,
-    "totalMiscellaneousCost": 2800
+    "totalFlightCost": 0,  // Sum of all flightCost from dailyCostBreakdown
+    "totalAccommodationCost": 0,  // Sum of all accommodationCost
+    "totalFoodCost": 0,  // Sum of all foodCost
+    "totalSightseeingCost": 0,  // Sum of all sightseeingCost
+    "totalLocalTransportCost": 0,  // Sum of all localTransportCost
+    "totalShoppingCost": 0,  // Sum of all shoppingCost
+    "totalMiscellaneousCost": 0  // Sum of all miscellaneousCost
   },
-  "totalEstimatedCost": 156500
+  "totalEstimatedCost": 0  // Sum of all budgetBreakdown totals
 }
 
 CRITICAL INSTRUCTIONS:
 1. Create exactly ${params.duration} day plans
-2. **DAY 1 MUST START WITH TRAVEL FROM ${params.source} TO ${primaryDestination}** - First activity of Day 1 morning MUST be the ${params.travelMode} journey
-3. Day 1: Include travel + 1-2 activities after arrival; Days 2-N: 2-3 morning activities, 2-3 afternoon, 1-2 evening
-4. **ALL COSTS MUST BE IN ${sourceLocation}'S LOCAL CURRENCY** - Not destination currency! Identify the currency of ${sourceLocation} and use it consistently
-5. Use proper currency symbols ($ for USA, € for Europe, ¥ for Japan, £ for UK, ₹ for India, etc.)
-6. Include SPECIFIC FULL ADDRESSES with coordinates for all accommodations and restaurants
-7. **DAILY COST BREAKDOWN**: For each day (1 to ${params.duration}), provide NUMERIC VALUES ONLY (no calculations, no text, no explanations):
-   - flightCost: ${params.travelMode} cost (Day 1: from ${params.source} to ${primaryDestination}, Last day: return journey, other days: 0 or inter-city travel if multiple destinations)
-   - accommodationCost: Hotel cost for that night (based on ${totalPeople} people in ${numberOfRooms} room${numberOfRooms > 1 ? 's' : ''})
-   - foodCost: Total food for ${totalPeople} people (breakfast, lunch, dinner, snacks)
-   - sightseeingCost: Entry fees, tickets, guided tours for that day
-   - localTransportCost: Taxis, metro, local buses within destination city
-   - shoppingCost: Estimated shopping/souvenirs for that day
+2. **DAY 1 MUST START WITH TRAVEL FROM ${params.source} TO ${primaryDestination}** - First activity of Day 1 morning MUST be the ${params.travelMode} journey from ${params.source}
+3. **LAST DAY (${params.duration}) MUST INCLUDE RETURN JOURNEY TO ${params.source}** - Include the return ${params.travelMode} journey back to ${params.source} in the morning/afternoon activities with realistic travel costs
+4. Day 1: Include travel + 1-2 activities after arrival; Days 2-${params.duration - 1}: 2-3 morning activities, 2-3 afternoon, 1-2 evening; Day ${params.duration}: 1-2 morning activities + return journey
+5. **ALL COSTS MUST BE IN INR (₹)** - Use the detailed pricing guidelines provided above for ${primaryDestination}
+6. **CRITICAL**: Use the pricing guidelines at the top for REALISTIC cost estimates:
+   - Accommodation: Use the range provided for ${params.budget} budget and ${numberOfRooms} room${numberOfRooms > 1 ? 's' : ''}
+   - Food: Use breakfast/lunch/dinner costs for ${params.budget} budget × ${totalPeople} people
+   - Transportation: Use local transport, airport transfer, and taxi costs from guidelines
+   - Attractions: Use the average attraction cost range provided
+   - **Return Journey**: Include realistic ${params.travelMode} costs for the return trip to ${params.source} on Day ${params.duration}
+7. Include SPECIFIC FULL ADDRESSES with coordinates for all accommodations and restaurants
+7. **DAILY COST BREAKDOWN**: For each day (1 to ${params.duration}), provide REALISTIC NUMERIC VALUES ONLY:
+   - flightCost: Travel cost (Day 1: from ${params.source} to ${primaryDestination}, Day ${params.duration}: return journey from ${primaryDestination} to ${params.source} - use pricing guidelines for ${params.travelMode} mode)
+   - accommodationCost: Per night cost for ${numberOfRooms} room${numberOfRooms > 1 ? 's' : ''} (use accommodation pricing guidelines, Day ${params.duration}: 0 since returning home)
+   - foodCost: Total food for ${totalPeople} people (use food pricing guidelines: breakfast + lunch + dinner)
+   - sightseeingCost: Entry fees, tickets (use attraction cost range from guidelines)
+   - localTransportCost: Taxis, metro, buses (use transportation pricing guidelines)
+   - shoppingCost: Estimated shopping/souvenirs
    - miscellaneousCost: Tips, emergency fund, other expenses
    - totalDayCost: Sum of all above costs for that day
-8. **BUDGET BREAKDOWN SUMMARY**: Calculate totals across ALL days - NUMERIC VALUES ONLY:
-   - totalFlightCost: Sum of all flightCost from dailyCostBreakdown (roundtrip ${params.travelMode})
-   - totalAccommodationCost: Sum of all accommodationCost from dailyCostBreakdown (${params.duration} nights)
+8. **BUDGET BREAKDOWN SUMMARY**: Calculate REALISTIC totals across ALL days - NUMERIC VALUES ONLY:
+   - totalFlightCost: Sum of all flightCost from dailyCostBreakdown
+   - totalAccommodationCost: Sum of all accommodationCost from dailyCostBreakdown
    - totalFoodCost: Sum of all foodCost from dailyCostBreakdown
    - totalSightseeingCost: Sum of all sightseeingCost from dailyCostBreakdown
    - totalLocalTransportCost: Sum of all localTransportCost from dailyCostBreakdown
@@ -998,6 +1068,21 @@ Make this itinerary BETTER than free ChatGPT by including:
     validateAndStructureResponse(response, params) {
         // Use the robust parser
         const parseJsonOrArray = (d) => this.parseJsonOrArrayInternal(d);
+        // Generate unique trip name based on location sequence
+        const generateTripName = (source, destinations) => {
+            const allLocations = [source, ...destinations, source]; // source -> destinations -> source
+            const locationNames = allLocations.map(loc => {
+                // Clean location names (remove common suffixes, keep main city/country)
+                return loc.split(',')[0].trim().split(' ').slice(0, 2).join(' ');
+            });
+            if (destinations.length === 1) {
+                return `${locationNames[0]} to ${locationNames[1]} Adventure`;
+            }
+            else {
+                const midPoints = locationNames.slice(1, -1).join(' → ');
+                return `${locationNames[0]} → ${midPoints} → ${locationNames[0]} Journey`;
+            }
+        };
         // Validate day plans
         if (!response.dayPlans || !Array.isArray(response.dayPlans)) {
             throw new Error('Invalid day plans structure');
@@ -1076,6 +1161,10 @@ Make this itinerary BETTER than free ChatGPT by including:
                 whyRecommended: acc.whyRecommended || ''
             };
         });
+        console.log('🏨 Processed accommodations count:', processedAccommodations.length);
+        if (processedAccommodations.length > 0) {
+            console.log('🏨 First processed accommodation:', JSON.stringify(processedAccommodations[0]).substring(0, 300));
+        }
         // Process transportation tips and parse costs
         const rawTransportation = parseJsonOrArray(response.transportationTips);
         const processedTransportationTips = rawTransportation.map((tip) => {
@@ -1230,6 +1319,7 @@ Make this itinerary BETTER than free ChatGPT by including:
         }
         // Ensure all required fields exist with defaults
         return {
+            title: response.title || response.tripName || generateTripName(params.source, params.destinations),
             currency: response.currency,
             currencySymbol: response.currencySymbol,
             dayPlans: processedDayPlans,

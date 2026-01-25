@@ -640,7 +640,7 @@ export default function ItineraryDisplay({
                   ? itinerary.destinations.length === 1
                     ? itinerary.destinations[0]
                     : itinerary.destinations.join(', ')
-                  : 'Multiple Destinations'}
+                  : 'Multiple Destinations'} → {itinerary.source}
               </p>
               <p className="text-sm sm:text-base md:text-lg opacity-80 flex items-center justify-center gap-2">
                 <span>{travelModeIcons[itinerary.travelMode]?.icon}</span>
@@ -773,9 +773,10 @@ export default function ItineraryDisplay({
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 space-y-4 sm:space-y-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <h3 className="text-xl sm:text-2xl font-bold">Day {currentDay.day}</h3>
-            <p className="text-base sm:text-lg font-semibold text-blue-600">
+            {/* Hidden: Total day expenditure */}
+            {/* <p className="text-base sm:text-lg font-semibold text-blue-600">
               {formatCost(itinerary.dailyCostBreakdown?.find(db => db.day === currentDay.day)?.totalDayCost || currentDay.totalEstimatedCost)}
-            </p>
+            </p> */}
           </div>
 
           {/* Morning */}
