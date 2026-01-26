@@ -38,6 +38,11 @@ const sidebarItems = [
     title: 'My Itineraries',
     href: '/itinerary/my-itineraries',
     icon: '📝'
+  },
+  {
+    title: 'Reviews',
+    href: '/reviews',
+    icon: '⭐'
   }
 ]
 

@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadPostImage = exports.unifiedSearch = exports.getPopularPosts = exports.getFeaturedPosts = exports.getPostsByCategory = exports.addComment = exports.likePost = exports.deletePost = exports.updatePost = exports.createPost = exports.getPost = exports.getPosts = void 0;
-const Post_1 = __importDefault(require("../models/Post"));
-const drive_1 = require("../config/drive");
+const Post_1 = __importDefault(require("@/models/Post"));
+const drive_1 = require("@/config/drive");
 const sharp_1 = __importDefault(require("sharp"));
-const Destination_1 = __importDefault(require("../models/Destination"));
-const Guide_1 = __importDefault(require("../models/Guide"));
-const Photo_1 = __importDefault(require("../models/Photo"));
-const emailService_1 = require("../services/emailService");
+const Destination_1 = __importDefault(require("@/models/Destination"));
+const Guide_1 = __importDefault(require("@/models/Guide"));
+const Photo_1 = __importDefault(require("@/models/Photo"));
+const emailService_1 = require("@/services/emailService");
 // @desc    Get all posts
 // @route   GET /api/posts
 // @access  Public

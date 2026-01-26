@@ -96,6 +96,12 @@ const sidebarGroups = [
         href: '/admin/partners',
         icon: UserCheck,
         badge: null
+      },
+      {
+        name: 'Reviews',
+        href: '/admin/reviews',
+        icon: MessageCircle,
+        badge: null
       }
     ]
   },

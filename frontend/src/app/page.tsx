@@ -13,6 +13,7 @@ import { AIItineraryAnnouncement } from '@/components/home/AIItineraryAnnounceme
 import { API_BASE_URL } from '@/lib/api'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
+import FeaturedReviews from '@/components/home/FeaturedReviews'
 
 interface SiteSettings {
   featureToggles?: {
@@ -191,8 +192,13 @@ export default function HomePage() {
           </div>
         </section>
 
-        
-        
+        {/* Featured Reviews */}
+        <section className="section-padding">
+          <div className="container-max w-full">
+            <FeaturedReviews />
+          </div>
+        </section>
+
         {/* Newsletter Signup */}
         {/* <section className="section-padding hero-gradient">
           <div className="container-max w-full">

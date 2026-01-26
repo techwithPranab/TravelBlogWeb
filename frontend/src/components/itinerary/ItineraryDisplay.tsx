@@ -5,6 +5,7 @@ import { Itinerary, DayPlan, Activity } from '@/types/itinerary'
 import { jsPDF } from 'jspdf'
 import { emailItinerary } from '@/lib/itineraryApi'
 import WeatherWidget from './WeatherWidget'
+import ReviewForm from './ReviewForm'
 
 interface ItineraryDisplayProps {
   itinerary: Itinerary

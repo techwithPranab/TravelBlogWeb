@@ -37,6 +37,7 @@ import partnerRoutes from '@/routes/partnerRoutes'
 import itineraryRoutes from '@/routes/itineraryRoutes'
 import subscriptionRoutes from '@/routes/subscriptionRoutes'
 import siteSettingsRoutes from '@/routes/siteSettingsRoutes'
+import itineraryReviewRoutes from '@/routes/itineraryReviewRoutes'
 
 // Connect to database
 connectDB()
@@ -502,6 +503,7 @@ app.use(`${API_VERSION}/contributor`, contributorRoutes)
 app.use(`${API_VERSION}/reader`, readerRoutes)
 app.use(`${API_VERSION}/partners`, partnerRoutes)
 app.use(`${API_VERSION}/itineraries`, itineraryRoutes)
+app.use(`${API_VERSION}/itinerary-reviews`, itineraryReviewRoutes)
 app.use(`${API_VERSION}/subscriptions`, subscriptionRoutes)
 app.use(`${API_VERSION}/site-settings`, siteSettingsRoutes)
 

@@ -1566,6 +1566,460 @@ If you received this email, your SMTP configuration is successful!
       return false
     }
   }
+
+  /**
+   * Send review submitted confirmation email to user
+   */
+  async sendReviewSubmittedEmail(
+    userEmail: string,
+    userName: string,
+    reviewData: {
+      reviewTitle: string
+      itineraryTitle: string
+      reviewId: string
+    }
+  ): Promise<boolean> {
+    try {
+      console.log('📧 [REVIEW SUBMITTED] Sending review submitted email to:', userEmail)
+
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Review Submitted - BagPackStories</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 28px;">✅ Review Submitted!</h1>
+          </div>
+          
+          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hello ${userName},</p>
+            
+            <p>Thank you for taking the time to share your experience! Your review has been submitted successfully and is now pending approval.</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
+              <h2 style="margin: 0 0 10px 0; color: #667eea; font-size: 18px;">Review Details</h2>
+              <p style="margin: 5px 0;"><strong>Review Title:</strong> ${reviewData.reviewTitle}</p>
+              <p style="margin: 5px 0;"><strong>Itinerary:</strong> ${reviewData.itineraryTitle}</p>
+              <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: #f59e0b;">Pending Approval</span></p>
+            </div>
+            
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+              <p style="margin: 0; color: #856404;"><strong>⏰ What's Next?</strong></p>
+              <p style="margin: 10px 0 0 0; color: #856404;">Our team will review your submission within 24-48 hours. We'll send you an email once your review is approved or if we need any clarifications.</p>
+            </div>
+            
+            <p>In the meantime, you can:</p>
+            <ul style="color: #495057;">
+              <li>View your review in your dashboard</li>
+              <li>Submit reviews for other itineraries</li>
+              <li>Explore more travel destinations</li>
+            </ul>
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${process.env.FRONTEND_URL}/dashboard/reviews" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">View My Reviews</a>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated message from BagPackStories.</p>
+            <p>&copy; ${new Date().getFullYear()} BagPackStories. All rights reserved.</p>
+          </div>
+        </body>
+        </html>
+      `
+
+      const textContent = `
+        Review Submitted - BagPackStories
+        
+        Hello ${userName},
+        
+        Thank you for taking the time to share your experience! Your review has been submitted successfully and is now pending approval.
+        
+        Review Details:
+        - Review Title: ${reviewData.reviewTitle}
+        - Itinerary: ${reviewData.itineraryTitle}
+        - Status: Pending Approval
+        
+        What's Next?
+        Our team will review your submission within 24-48 hours. We'll send you an email once your review is approved or if we need any clarifications.
+        
+        View your reviews: ${process.env.FRONTEND_URL}/dashboard/reviews
+        
+        ---
+        This is an automated message from BagPackStories.
+        © ${new Date().getFullYear()} BagPackStories. All rights reserved.
+      `
+
+      const emailData = {
+        sender: {
+          email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+          name: process.env.FROM_NAME || 'BagPackStories'
+        },
+        to: [{ email: userEmail, name: userName }],
+        subject: `Review Submitted: ${reviewData.reviewTitle} - BagPackStories`,
+        htmlContent,
+        textContent
+      }
+
+      const success = await this.sendEmail(emailData)
+      
+      if (success) {
+        console.log('✅ [REVIEW SUBMITTED] Email sent successfully to:', userEmail)
+      }
+      
+      return success
+    } catch (error) {
+      console.error('❌ [REVIEW SUBMITTED] Error sending email:', error)
+      return false
+    }
+  }
+
+  /**
+   * Send review approved email to user
+   */
+  async sendReviewApprovedEmail(
+    userEmail: string,
+    userName: string,
+    reviewData: {
+      reviewTitle: string
+      itineraryTitle: string
+      reviewUrl: string
+    }
+  ): Promise<boolean> {
+    try {
+      console.log('📧 [REVIEW APPROVED] Sending approval email to:', userEmail)
+
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Review Approved - BagPackStories</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 28px;">🎉 Review Approved!</h1>
+          </div>
+          
+          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Congratulations ${userName}!</p>
+            
+            <p>Great news! Your review has been approved and is now live on our website. Thank you for contributing to the BagPackStories community!</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
+              <h2 style="margin: 0 0 10px 0; color: #10b981; font-size: 18px;">Your Review</h2>
+              <p style="margin: 5px 0;"><strong>Title:</strong> ${reviewData.reviewTitle}</p>
+              <p style="margin: 5px 0;"><strong>Itinerary:</strong> ${reviewData.itineraryTitle}</p>
+              <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: #10b981;">✅ Approved & Live</span></p>
+            </div>
+            
+            <div style="background: #d1fae5; border: 1px solid #6ee7b7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+              <p style="margin: 0; color: #065f46;"><strong>🌟 Share Your Success!</strong></p>
+              <p style="margin: 10px 0 0 0; color: #065f46;">Your review is now helping other travelers plan their adventures. Feel free to share it with your friends and fellow travel enthusiasts!</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${reviewData.reviewUrl}" style="background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 0 10px 10px 0;">View Your Review</a>
+              <a href="${process.env.FRONTEND_URL}/itineraries" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 0 10px 10px 0;">Explore More</a>
+            </div>
+            
+            <p style="margin-top: 30px; color: #666; font-size: 14px;">Keep sharing your experiences! Your insights help travelers make better decisions.</p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated message from BagPackStories.</p>
+            <p>&copy; ${new Date().getFullYear()} BagPackStories. All rights reserved.</p>
+          </div>
+        </body>
+        </html>
+      `
+
+      const textContent = `
+        Review Approved - BagPackStories
+        
+        Congratulations ${userName}!
+        
+        Great news! Your review has been approved and is now live on our website.
+        
+        Your Review:
+        - Title: ${reviewData.reviewTitle}
+        - Itinerary: ${reviewData.itineraryTitle}
+        - Status: ✅ Approved & Live
+        
+        View your review: ${reviewData.reviewUrl}
+        
+        Thank you for contributing to the BagPackStories community!
+        
+        ---
+        This is an automated message from BagPackStories.
+        © ${new Date().getFullYear()} BagPackStories. All rights reserved.
+      `
+
+      const emailData = {
+        sender: {
+          email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+          name: process.env.FROM_NAME || 'BagPackStories'
+        },
+        to: [{ email: userEmail, name: userName }],
+        subject: `🎉 Your Review Has Been Approved! - BagPackStories`,
+        htmlContent,
+        textContent
+      }
+
+      const success = await this.sendEmail(emailData)
+      
+      if (success) {
+        console.log('✅ [REVIEW APPROVED] Email sent successfully to:', userEmail)
+      }
+      
+      return success
+    } catch (error) {
+      console.error('❌ [REVIEW APPROVED] Error sending email:', error)
+      return false
+    }
+  }
+
+  /**
+   * Send review rejected email to user
+   */
+  async sendReviewRejectedEmail(
+    userEmail: string,
+    userName: string,
+    reviewData: {
+      reviewTitle: string
+      itineraryTitle: string
+      rejectionReason: string
+      editUrl: string
+    }
+  ): Promise<boolean> {
+    try {
+      console.log('📧 [REVIEW REJECTED] Sending rejection email to:', userEmail)
+
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Review Update - BagPackStories</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 28px;">Review Update</h1>
+          </div>
+          
+          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hello ${userName},</p>
+            
+            <p>Thank you for submitting your review. After careful review, we were unable to approve your submission at this time.</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ef4444;">
+              <h2 style="margin: 0 0 10px 0; color: #ef4444; font-size: 18px;">Review Details</h2>
+              <p style="margin: 5px 0;"><strong>Title:</strong> ${reviewData.reviewTitle}</p>
+              <p style="margin: 5px 0;"><strong>Itinerary:</strong> ${reviewData.itineraryTitle}</p>
+            </div>
+            
+            <div style="background: #fee2e2; border: 1px solid #fca5a5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+              <p style="margin: 0; color: #991b1b;"><strong>📋 Reason for Rejection:</strong></p>
+              <p style="margin: 10px 0 0 0; color: #991b1b;">${reviewData.rejectionReason}</p>
+            </div>
+            
+            <div style="background: #dbeafe; border: 1px solid #93c5fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+              <p style="margin: 0; color: #1e40af;"><strong>💡 What You Can Do:</strong></p>
+              <ul style="margin: 10px 0 0 0; color: #1e40af; padding-left: 20px;">
+                <li>Edit your review to address the feedback provided</li>
+                <li>Ensure your review meets our community guidelines</li>
+                <li>Resubmit your review for approval</li>
+              </ul>
+            </div>
+            
+            <p><strong>Community Guidelines:</strong></p>
+            <ul style="color: #495057;">
+              <li>Minimum 10 words required</li>
+              <li>Keep content respectful and appropriate</li>
+              <li>Share genuine experiences</li>
+              <li>Avoid promotional or spam content</li>
+            </ul>
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${reviewData.editUrl}" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Edit & Resubmit Review</a>
+            </div>
+            
+            <p style="margin-top: 30px; color: #666; font-size: 14px;">If you have any questions or need clarification, please don't hesitate to contact our support team.</p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated message from BagPackStories.</p>
+            <p>&copy; ${new Date().getFullYear()} BagPackStories. All rights reserved.</p>
+          </div>
+        </body>
+        </html>
+      `
+
+      const textContent = `
+        Review Update - BagPackStories
+        
+        Hello ${userName},
+        
+        Thank you for submitting your review. After careful review, we were unable to approve your submission at this time.
+        
+        Review Details:
+        - Title: ${reviewData.reviewTitle}
+        - Itinerary: ${reviewData.itineraryTitle}
+        
+        Reason for Rejection:
+        ${reviewData.rejectionReason}
+        
+        What You Can Do:
+        - Edit your review to address the feedback provided
+        - Ensure your review meets our community guidelines
+        - Resubmit your review for approval
+        
+        Edit your review: ${reviewData.editUrl}
+        
+        If you have any questions, please contact our support team.
+        
+        ---
+        This is an automated message from BagPackStories.
+        © ${new Date().getFullYear()} BagPackStories. All rights reserved.
+      `
+
+      const emailData = {
+        sender: {
+          email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+          name: process.env.FROM_NAME || 'BagPackStories'
+        },
+        to: [{ email: userEmail, name: userName }],
+        subject: `Review Update Required - BagPackStories`,
+        htmlContent,
+        textContent
+      }
+
+      const success = await this.sendEmail(emailData)
+      
+      if (success) {
+        console.log('✅ [REVIEW REJECTED] Email sent successfully to:', userEmail)
+      }
+      
+      return success
+    } catch (error) {
+      console.error('❌ [REVIEW REJECTED] Error sending email:', error)
+      return false
+    }
+  }
+
+  /**
+   * Send new review notification to admin
+   */
+  async sendNewReviewNotificationToAdmin(reviewData: {
+    reviewId: string
+    reviewTitle: string
+    reviewerName: string
+    reviewerEmail: string
+    itineraryTitle: string
+    rating: number
+    moderationFlags: string[]
+    adminDashboardUrl: string
+  }): Promise<boolean> {
+    try {
+      console.log('📧 [ADMIN NOTIFICATION] Sending new review notification to admin')
+
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@bagpackstories.in'
+
+      const flagsHtml = reviewData.moderationFlags.length > 0 
+        ? `<div style="background: #fee2e2; border: 1px solid #fca5a5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+             <p style="margin: 0; color: #991b1b;"><strong>⚠️ Moderation Flags:</strong></p>
+             <p style="margin: 10px 0 0 0; color: #991b1b;">${reviewData.moderationFlags.join(', ')}</p>
+           </div>`
+        : ''
+
+      const stars = '⭐'.repeat(reviewData.rating)
+
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>New Review Submitted - Admin Notification</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 28px;">📝 New Review Pending</h1>
+          </div>
+          
+          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">A new review has been submitted and is waiting for your approval.</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+              <h2 style="margin: 0 0 10px 0; color: #f59e0b; font-size: 18px;">Review Details</h2>
+              <p style="margin: 5px 0;"><strong>Title:</strong> ${reviewData.reviewTitle}</p>
+              <p style="margin: 5px 0;"><strong>Rating:</strong> ${stars} (${reviewData.rating}/5)</p>
+              <p style="margin: 5px 0;"><strong>Itinerary:</strong> ${reviewData.itineraryTitle}</p>
+              <p style="margin: 5px 0;"><strong>Reviewer:</strong> ${reviewData.reviewerName} (${reviewData.reviewerEmail})</p>
+            </div>
+            
+            ${flagsHtml}
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${reviewData.adminDashboardUrl}" style="background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 0 5px;">Approve</a>
+              <a href="${process.env.FRONTEND_URL}/admin/reviews" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 0 5px;">View All</a>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated admin notification from BagPackStories.</p>
+          </div>
+        </body>
+        </html>
+      `
+
+      const textContent = `
+        New Review Pending - Admin Notification
+        
+        A new review has been submitted and is waiting for your approval.
+        
+        Review Details:
+        - Title: ${reviewData.reviewTitle}
+        - Rating: ${reviewData.rating}/5
+        - Itinerary: ${reviewData.itineraryTitle}
+        - Reviewer: ${reviewData.reviewerName} (${reviewData.reviewerEmail})
+        ${reviewData.moderationFlags.length > 0 ? `\nModeration Flags: ${reviewData.moderationFlags.join(', ')}` : ''}
+        
+        Review in admin panel: ${reviewData.adminDashboardUrl}
+        
+        ---
+        This is an automated admin notification from BagPackStories.
+      `
+
+      const emailData = {
+        sender: {
+          email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+          name: process.env.FROM_NAME || 'BagPackStories'
+        },
+        to: [{ email: adminEmail, name: 'Admin' }],
+        subject: `New Review Pending Approval - ${reviewData.itineraryTitle}`,
+        htmlContent,
+        textContent
+      }
+
+      const success = await this.sendEmail(emailData)
+      
+      if (success) {
+        console.log('✅ [ADMIN NOTIFICATION] Email sent successfully')
+      }
+      
+      return success
+    } catch (error) {
+      console.error('❌ [ADMIN NOTIFICATION] Error sending email:', error)
+      return false
+    }
+  }
 }
 
 export const emailService = new EmailService();

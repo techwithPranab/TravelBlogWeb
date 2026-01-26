@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserStats = exports.getUserFollowing = exports.getUserFollowers = exports.followUser = exports.uploadAvatar = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
-const User_1 = __importDefault(require("../models/User"));
+const User_1 = __importDefault(require("@/models/User"));
 // @desc    Get all users
 // @route   GET /api/v1/users
 // @access  Private/Admin

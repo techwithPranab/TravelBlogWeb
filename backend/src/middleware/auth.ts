@@ -41,6 +41,7 @@ export const protect = async (
       req.user = user
       next()
     } catch (error) {
+      console.error('Auth middleware: Token verification failed:', error)
       res.status(401).json({
         success: false,
         error: 'Not authorized to access this route'

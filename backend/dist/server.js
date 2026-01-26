@@ -50,28 +50,29 @@ const mongoose_1 = __importDefault(require("mongoose"));
 // Load environment variables FIRST
 dotenv_1.default.config();
 // Importing the database connection and middleware
-const database_1 = require("./config/database");
-const errorHandler_1 = require("./middleware/errorHandler");
-const notFound_1 = __importDefault(require("./middleware/notFound"));
+const database_1 = require("@/config/database");
+const errorHandler_1 = require("@/middleware/errorHandler");
+const notFound_1 = __importDefault(require("@/middleware/notFound"));
 // Route imports
-const auth_1 = __importDefault(require("./routes/auth"));
-const users_1 = __importDefault(require("./routes/users"));
-const posts_1 = __importDefault(require("./routes/posts"));
-const categoryRoutes_1 = __importDefault(require("./routes/categoryRoutes"));
-const destinationRoutes_1 = __importDefault(require("./routes/destinationRoutes"));
-const guideRoutes_1 = __importDefault(require("./routes/guideRoutes"));
-const resourceRoutes_1 = __importDefault(require("./routes/resourceRoutes"));
-const commentRoutes_1 = __importDefault(require("./routes/commentRoutes"));
-const contactRoutes_1 = __importDefault(require("./routes/contactRoutes"));
-const photoRoutes_1 = __importDefault(require("./routes/photoRoutes"));
-const newsletterRoutes_1 = __importDefault(require("./routes/newsletterRoutes"));
-const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
-const readerRoutes_1 = __importDefault(require("./routes/readerRoutes"));
-const contributorRoutes_1 = __importDefault(require("./routes/contributorRoutes"));
-const partnerRoutes_1 = __importDefault(require("./routes/partnerRoutes"));
-const itineraryRoutes_1 = __importDefault(require("./routes/itineraryRoutes"));
-const subscriptionRoutes_1 = __importDefault(require("./routes/subscriptionRoutes"));
-const siteSettingsRoutes_1 = __importDefault(require("./routes/siteSettingsRoutes"));
+const auth_1 = __importDefault(require("@/routes/auth"));
+const users_1 = __importDefault(require("@/routes/users"));
+const posts_1 = __importDefault(require("@/routes/posts"));
+const categoryRoutes_1 = __importDefault(require("@/routes/categoryRoutes"));
+const destinationRoutes_1 = __importDefault(require("@/routes/destinationRoutes"));
+const guideRoutes_1 = __importDefault(require("@/routes/guideRoutes"));
+const resourceRoutes_1 = __importDefault(require("@/routes/resourceRoutes"));
+const commentRoutes_1 = __importDefault(require("@/routes/commentRoutes"));
+const contactRoutes_1 = __importDefault(require("@/routes/contactRoutes"));
+const photoRoutes_1 = __importDefault(require("@/routes/photoRoutes"));
+const newsletterRoutes_1 = __importDefault(require("@/routes/newsletterRoutes"));
+const adminRoutes_1 = __importDefault(require("@/routes/adminRoutes"));
+const readerRoutes_1 = __importDefault(require("@/routes/readerRoutes"));
+const contributorRoutes_1 = __importDefault(require("@/routes/contributorRoutes"));
+const partnerRoutes_1 = __importDefault(require("@/routes/partnerRoutes"));
+const itineraryRoutes_1 = __importDefault(require("@/routes/itineraryRoutes"));
+const subscriptionRoutes_1 = __importDefault(require("@/routes/subscriptionRoutes"));
+const siteSettingsRoutes_1 = __importDefault(require("@/routes/siteSettingsRoutes"));
+const itineraryReviewRoutes_1 = __importDefault(require("@/routes/itineraryReviewRoutes"));
 // Connect to database
 (0, database_1.connectDB)();
 // Create Express app
@@ -488,6 +489,7 @@ app.use(`${API_VERSION}/contributor`, contributorRoutes_1.default);
 app.use(`${API_VERSION}/reader`, readerRoutes_1.default);
 app.use(`${API_VERSION}/partners`, partnerRoutes_1.default);
 app.use(`${API_VERSION}/itineraries`, itineraryRoutes_1.default);
+app.use(`${API_VERSION}/itinerary-reviews`, itineraryReviewRoutes_1.default);
 app.use(`${API_VERSION}/subscriptions`, subscriptionRoutes_1.default);
 app.use(`${API_VERSION}/site-settings`, siteSettingsRoutes_1.default);
 // 404 handler

@@ -1,3 +1,5 @@
+import type { Itinerary } from './itinerary'
+
 export interface User {
   _id: string
   name: string
@@ -448,4 +450,81 @@ export interface ToastOptions {
   type?: 'success' | 'error' | 'warning' | 'info'
   duration?: number
   position?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+}
+
+// Itinerary Review Types
+export interface ItineraryReview {
+  _id: string
+  userId: string
+  itineraryId: string | Itinerary
+  userName: string
+  userEmail: string
+  rating: number
+  title: string
+  comment: string
+  status: 'pending' | 'approved' | 'rejected'
+  showOnHomePage: boolean
+  moderationFlags: string[]
+  reviewDate: string
+  approvedDate?: string
+  approvedBy?: string
+  rejectionReason?: string
+  helpfulCount: number
+  helpfulBy: string[]
+  tripDate?: string
+  isVerifiedTrip: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CreateReviewData {
+  itineraryId: string
+  rating: number
+  title: string
+  comment: string
+  tripDate?: string
+}
+
+export interface UpdateReviewData {
+  rating?: number
+  title?: string
+  comment?: string
+  tripDate?: string
+}
+
+export interface ReviewModerationResult {
+  isValid: boolean
+  violations: string[]
+  wordCount: number
+}
+
+export interface ReviewsResponse {
+  success: boolean
+  data?: ItineraryReview[]
+  pagination?: {
+    page: number
+    limit: number
+    total: number
+    pages: number
+  }
+  message?: string
+}
+
+export interface ReviewResponse {
+  success: boolean
+  data?: ItineraryReview
+  message?: string
+}
+
+export interface ReviewStats {
+  totalReviews: number
+  averageRating: number
+  ratingDistribution: {
+    1: number
+    2: number
+    3: number
+    4: number
+    5: number
+  }
+  featuredReviews: number
 }

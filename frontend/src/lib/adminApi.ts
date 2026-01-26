@@ -368,6 +368,48 @@ class AdminApi {
       body: JSON.stringify(settings)
     })
   }
+
+  // Itinerary Reviews (Admin)
+  async getPendingReviews(params?: { page?: number, limit?: number }) {
+    const searchParams = new URLSearchParams()
+    if (params?.page) searchParams.append('page', params.page.toString())
+    if (params?.limit) searchParams.append('limit', params.limit.toString())
+    const query = searchParams.toString()
+    const endpoint = query ? `/itinerary-reviews/admin/pending?${query}` : '/itinerary-reviews/admin/pending'
+    return this.get(endpoint)
+  }
+
+  async getAllReviews(params?: { page?: number, limit?: number, status?: string, itineraryId?: string, search?: string }) {
+    const searchParams = new URLSearchParams()
+    if (params?.page) searchParams.append('page', params.page.toString())
+    if (params?.limit) searchParams.append('limit', params.limit.toString())
+    if (params?.status) searchParams.append('status', params.status)
+    if (params?.itineraryId) searchParams.append('itineraryId', params.itineraryId)
+    if (params?.search) searchParams.append('search', params.search)
+    const query = searchParams.toString()
+    const endpoint = query ? `/itinerary-reviews/admin/all?${query}` : '/itinerary-reviews/admin/all'
+    return this.get(endpoint)
+  }
+
+  async approveReview(reviewId: string) {
+    return this.put(`/itinerary-reviews/admin/${reviewId}/approve`)
+  }
+
+  async rejectReview(reviewId: string, reason: string) {
+    return this.put(`/itinerary-reviews/admin/${reviewId}/reject`, { reason })
+  }
+
+  async toggleFeaturedReview(reviewId: string) {
+    return this.put(`/itinerary-reviews/admin/${reviewId}/toggle-featured`)
+  }
+
+  async deleteReview(reviewId: string) {
+    return this.delete(`/itinerary-reviews/admin/${reviewId}`)
+  }
+
+  async getFeaturedReviews() {
+    return this.get('/itinerary-reviews/admin/featured')
+  }
 }
 
 export const adminApi = new AdminApi()
