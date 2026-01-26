@@ -59,7 +59,7 @@ export function AIItinerarySection() {
   ]
 
   const benefits = [
-    '✨ Powered by GPT-4 AI Technology',
+    '✨ Powered by AI Technology',
     '🌍 Support for global destinations',
     '📅 Customizable duration & preferences',
     '💰 Budget-friendly options included',

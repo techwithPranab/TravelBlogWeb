@@ -15,12 +15,31 @@ import { Button } from '@/components/ui/Button'
 export function AIItineraryAnnouncement() {
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement email subscription
-    setSubscribed(true)
-    setEmail('')
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert('Please provide a valid email address')
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      const res = await (await import('@/lib/api')).publicApi.subscribe({ email, source: 'homepage' })
+      if (res && (res as any).success) {
+        setSubscribed(true)
+        setEmail('')
+      } else {
+        alert((res as any).message || 'Failed to subscribe')
+      }
+    } catch (err: any) {
+      console.error('Subscribe error:', err)
+      alert(err?.message || 'Failed to subscribe')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -60,7 +79,7 @@ export function AIItineraryAnnouncement() {
               <Sparkles className="w-7 h-7 text-white" />
             </div>
             <h3 className="text-lg font-bold mb-2 text-gray-900">AI Intelligence</h3>
-            <p className="text-gray-600 text-sm">Powered by GPT-4 for personalized recommendations</p>
+            <p className="text-gray-600 text-sm">Powered by AI for personalized recommendations</p>
           </div>
 
           <div className="bg-white/70 backdrop-blur-sm border border-white/50 rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300">
@@ -100,12 +119,12 @@ export function AIItineraryAnnouncement() {
             </h3>
 
             <p className="text-gray-700 mb-6 text-lg">
-              Join our waitlist and get early access to the most advanced travel planning tool ever created.
+              Join our waitlist and get early access — plus a special discount on your first year subscription.
             </p>
 
             {!subscribed ? (
               <form onSubmit={handleSubscribe} className="max-w-md mx-auto mb-4">
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="email"
                     value={email}
@@ -117,10 +136,39 @@ export function AIItineraryAnnouncement() {
                   <Button
                     type="submit"
                     variant="primary"
-                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                    disabled={submitting}
                   >
-                    <Bell className="w-4 h-4 mr-2" />
-                    Notify Me
+                    {submitting ? (
+                      <>
+                        <svg
+                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v16a8 8 0 01-8-8z"
+                          ></path>
+                        </svg>
+                        Subscribing...
+                      </>
+                    ) : (
+                      <>
+                        <Bell className="w-4 h-4 mr-2" />
+                        Join Waitlist & Get Discount
+                      </>
+                    )}
                   </Button>
                 </div>
               </form>
@@ -128,13 +176,13 @@ export function AIItineraryAnnouncement() {
               <div className="max-w-md mx-auto mb-4">
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <p className="text-green-800 font-medium">✅ You're on the waitlist!</p>
-                  <p className="text-green-600 text-sm">We'll notify you when AI Itineraries launch.</p>
+                  <p className="text-green-600 text-sm">You'll receive an early access invite and a special discount on your first year subscription when we launch.</p>
                 </div>
               </div>
             )}
 
             <p className="text-sm text-gray-500">
-              No spam, unsubscribe at any time. Launch expected in early 2026.
+              No spam, unsubscribe at any time. Launch expected in Mid of 2026.
             </p>
           </div>
         </div>
