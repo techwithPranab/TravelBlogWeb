@@ -21,7 +21,8 @@ import {
   Mail,
   Folder,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Megaphone
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -112,6 +113,17 @@ const sidebarGroups = [
         name: 'Users',
         href: '/admin/users',
         icon: Users,
+        badge: null
+      }
+    ]
+  },
+  {
+    name: 'Monetization',
+    items: [
+      {
+        name: 'Advertisements',
+        href: '/admin/advertisements',
+        icon: Megaphone,
         badge: null
       }
     ]

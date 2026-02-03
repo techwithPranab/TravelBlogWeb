@@ -22,6 +22,7 @@ import {
 import ContentSection from '@/components/blog/ContentSection'
 import YouTubeVideo from '@/components/blog/YouTubeVideo'
 import CommentSection from '@/components/blog/CommentSection'
+import AdContainer from '@/components/ads/AdContainer'
 import { postsApi } from '@/lib/api'
 import { containsProfanity, getProfanityError } from '@/utils/profanityFilter'
 
@@ -573,6 +574,16 @@ export default function BlogDetailsPage() {
             </div>
           </button>
         </div>
+        
+        {/* Advertisement: After Featured Image */}
+        <div className="mt-8">
+          <AdContainer
+            placement="after_featured_image"
+            blogPostId={post?.id}
+            variant="banner"
+            className="max-w-4xl mx-auto"
+          />
+        </div>
       </div>
 
       {/* Additional Images Gallery */}
@@ -613,95 +624,150 @@ export default function BlogDetailsPage() {
       {/* Content */}
       <div className="container mx-auto px-4 pb-16">
         <div className="max-w-7xl mx-auto">
-          {/* Main Content - Always show if exists */}
-          {post?.content && (
-            <div className="mb-12">
-              <div 
-                className="prose prose-lg max-w-none text-gray-800 
-                  prose-headings:text-gray-900 prose-headings:font-bold
-                  prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
-                  prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-                  prose-strong:text-gray-900 prose-strong:font-semibold
-                  prose-ul:list-disc prose-ul:ml-6 prose-ul:mb-4
-                  prose-ol:list-decimal prose-ol:ml-6 prose-ol:mb-4
-                  prose-li:text-gray-700 prose-li:mb-2
-                  prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic
-                  prose-img:rounded-lg prose-img:shadow-md"
-                dangerouslySetInnerHTML={{ __html: post.content }} 
-              />
-            </div>
-          )}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            {/* Main Content Column (2/3 width) */}
+            <div className="lg:col-span-2">
+              {/* Main Content - Always show if exists */}
+              {post?.content && (
+                <div className="mb-12">
+                  <div 
+                    className="prose prose-lg max-w-none text-gray-800 
+                      prose-headings:text-gray-900 prose-headings:font-bold
+                      prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
+                      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+                      prose-strong:text-gray-900 prose-strong:font-semibold
+                      prose-ul:list-disc prose-ul:ml-6 prose-ul:mb-4
+                      prose-ol:list-decimal prose-ol:ml-6 prose-ol:mb-4
+                      prose-li:text-gray-700 prose-li:mb-2
+                      prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic
+                      prose-img:rounded-lg prose-img:shadow-md"
+                    dangerouslySetInnerHTML={{ __html: post.content }} 
+                  />
+                </div>
+              )}
 
-          {/* Content Sections - Show after main content if exists */}
-          {post?.contentSections && post.contentSections.length > 0 && (
-            <div className="mb-12">
-              {post?.contentSections?.map((section) => (
-                <ContentSection
-                  key={section.id}
-                  section={section}
-                  onImageClick={(imageUrl) => {
-                    // Find the index of this image in all images
-                    const allImages = [post?.featuredImage?.url || '', ...(post?.images || []), ...(post?.contentSections?.filter(s => s.image).map(s => s.image!.url) || [])]
-                    const index = allImages.findIndex(img => img === imageUrl)
-                    handleImageClick(imageUrl, index >= 0 ? index : 0)
-                  }}
+              {/* Advertisement: Content Middle */}
+              <div className="my-8">
+                <AdContainer
+                  placement="content_middle"
+                  blogPostId={post?.id}
+                  variant="banner"
                 />
-              ))}
-            </div>
-          )}
-
-          {/* YouTube Videos Section */}
-          {post?.youtubeVideos && post.youtubeVideos.length > 0 && (
-            <div className="mb-12">
-              <div className="flex items-center gap-2 mb-6">
-                <Youtube className="w-6 h-6 text-red-600" />
-                <h2 className="text-xl font-bold text-gray-900">Related Videos</h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {post.youtubeVideos
-                  .sort((a, b) => a.order - b.order)
-                  .map((video) => (
-                    <YouTubeVideo key={video.id} video={video} />
+
+              {/* Content Sections - Show after main content if exists */}
+              {post?.contentSections && post.contentSections.length > 0 && (
+                <div className="mb-12">
+                  {post?.contentSections?.map((section) => (
+                    <ContentSection
+                      key={section.id}
+                      section={section}
+                      onImageClick={(imageUrl) => {
+                        // Find the index of this image in all images
+                        const allImages = [post?.featuredImage?.url || '', ...(post?.images || []), ...(post?.contentSections?.filter(s => s.image).map(s => s.image!.url) || [])]
+                        const index = allImages.findIndex(img => img === imageUrl)
+                        handleImageClick(imageUrl, index >= 0 ? index : 0)
+                      }}
+                    />
                   ))}
+                </div>
+              )}
+
+              {/* YouTube Videos Section */}
+              {post?.youtubeVideos && post.youtubeVideos.length > 0 && (
+                <div className="mb-12">
+                  <div className="flex items-center gap-2 mb-6">
+                    <Youtube className="w-6 h-6 text-red-600" />
+                    <h2 className="text-xl font-bold text-gray-900">Related Videos</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {post.youtubeVideos
+                      .sort((a, b) => a.order - b.order)
+                      .map((video) => (
+                        <YouTubeVideo key={video.id} video={video} />
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-8">
+                {post?.tags?.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
+                  >
+                    <Tag className="w-3 h-3 mr-1" />
+                    {tag}
+                  </span>
+                ))}
               </div>
-            </div>
-          )}
 
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-8">
-            {post?.tags?.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
-              >
-                <Tag className="w-3 h-3 mr-1" />
-                {tag}
-              </span>
-            ))}
-          </div>
+              {/* Author Bio */}
+              <div className="bg-gray-50 rounded-2xl p-6 mb-12">
+                <div className="flex items-start space-x-4">
+                  <img 
+                    src={post?.author?.avatar || '/images/default-avatar.jpg'} 
+                    alt={post?.author?.name || 'Unknown Author'}
+                    className="w-16 h-16 rounded-full"
+                  />
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">About {post?.author?.name || 'Unknown Author'}</h3>
+                    <p className="text-base text-gray-600">{post?.author?.bio || 'Travel enthusiast and writer'}</p>
+                  </div>
+                </div>
+              </div>
 
-          {/* Author Bio */}
-          <div className="bg-gray-50 rounded-2xl p-6 mb-12">
-            <div className="flex items-start space-x-4">
-                      <img 
-                src={post?.author?.avatar || '/images/default-avatar.jpg'} 
-                alt={post?.author?.name || 'Unknown Author'}
-                className="w-16 h-16 rounded-full"
+              {/* Advertisement: Before Comments */}
+              <div className="my-8">
+                <AdContainer
+                  placement="before_comments"
+                  blogPostId={post?.id}
+                  variant="banner"
+                />
+              </div>
+
+              {/* Comments Section */}
+              <CommentSection
+                resourceId={post?.id || ''}
+                resourceType="blog"
+                comments={comments}
+                onCommentSubmit={handleCommentSubmit}
               />
-              <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">About {post?.author?.name || 'Unknown Author'}</h3>
-                <p className="text-base text-gray-600">{post?.author?.bio || 'Travel enthusiast and writer'}</p>
+            </div>
+            
+            {/* Sidebar Column (1/3 width) */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-4 space-y-6">
+                {/* Advertisement: Sidebar Sticky */}
+                <AdContainer
+                  placement="sidebar_sticky"
+                  blogPostId={post?.id}
+                  variant="sidebar"
+                  sticky={true}
+                />
+                
+                {/* Table of Contents or Related Posts can go here */}
+                {post?.tags && post.tags.length > 0 && (
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h3 className="font-bold text-gray-900 mb-4">Topics</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-white text-gray-700 border border-gray-200"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
 
-          {/* Comments Section */}
-          <CommentSection
-            resourceId={post?.id || ''}
-            resourceType="blog"
-            comments={comments}
-            onCommentSubmit={handleCommentSubmit}
-          />
+          </div>
         </div>
       </div>
 
@@ -764,6 +830,16 @@ export default function BlogDetailsPage() {
           </div>
         </div>
       )}
+      
+      {/* Advertisement: Mobile Sticky Footer (mobile only) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg border-t border-gray-200">
+        <AdContainer
+          placement="sticky_footer"
+          blogPostId={post?.id}
+          variant="banner"
+          className="max-w-screen-sm mx-auto"
+        />
+      </div>
     </div>
   )
 }
