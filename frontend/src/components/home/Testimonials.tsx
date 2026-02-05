@@ -55,8 +55,7 @@ export function Testimonials() {
             </h2>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Real experiences from our global community of travelers who use our guides 
-            and stories to plan their adventures
+            Authentic experiences from our global community of travelers who use our destination guides and travel stories to plan their adventures
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -101,11 +100,11 @@ export function Testimonials() {
         <div className="flex items-center justify-center gap-2 mb-6">
           <Quote className="h-10 w-10 text-blue-600" />
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 dark:from-white dark:via-blue-200 dark:to-white bg-clip-text text-transparent">
-            Traveler Stories
+            Traveler Reviews & Experiences
           </h2>
         </div>
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-          Real experiences from our community of passionate travelers. Join thousands who've discovered their next adventure through our guides.
+          Discover authentic travel experiences and reviews from our global community. Read how travelers have transformed their journeys using our destination guides and expert advice.
         </p>
       </motion.div>
 

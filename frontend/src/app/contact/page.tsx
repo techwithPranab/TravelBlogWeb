@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { publicApi } from '@/lib/api';
+import Head from 'next/head';
+import { motion } from 'framer-motion';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -29,6 +31,33 @@ export default function ContactPage() {
     };
   } | null>(null);
   const [contactLoading, setContactLoading] = useState(true);
+
+  // Generate SEO metadata for contact page
+  const generateSEOMetadata = () => {
+    const title = 'Contact BagPackStories - Travel Questions, Collaboration & Support'
+    const description = 'Get in touch with BagPackStories for travel destination questions, expert advice, collaboration opportunities, photography inquiries, and personalized travel support. Connect with our travel community and plan your next adventure with confidence.'
+    const keywords = [
+      'contact travel blog',
+      'travel questions',
+      'travel support',
+      'destination advice',
+      'travel collaboration',
+      'photography inquiries',
+      'travel planning help',
+      'travel blogger contact',
+      'travel guide support',
+      'adventure travel questions',
+      'vacation planning assistance',
+      'travel community contact',
+      'destination recommendations',
+      'travel itinerary help',
+      'solo travel advice'
+    ].join(', ')
+
+    return { title, description, keywords }
+  }
+
+  const seoData = generateSEOMetadata()
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -87,7 +116,41 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <Head>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta name="keywords" content={seoData.keywords} />
+
+        {/* Mobile Optimization */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/contact`} />
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-contact.jpg`} />
+        <meta property="og:site_name" content="BagPackStories" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/contact`} />
+        <meta property="twitter:title" content={seoData.title} />
+        <meta property="twitter:description" content={seoData.description} />
+        <meta property="twitter:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-contact.jpg`} />
+
+        {/* Additional SEO */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="BagPackStories Team" />
+        <meta name="language" content="English" />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/contact`} />
+      </Head>
+
+      <div className="min-h-screen w-full overflow-x-hidden">
       {/* SEO Structured Data */}
       <script
         type="application/ld+json"
@@ -153,24 +216,74 @@ export default function ContactPage() {
       />
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold mb-4">
-            Contact BagPackStories - We're Here to Help
-          </h1>
-          <p className="text-lg text-blue-100 max-w-3xl mx-auto">
-            Have questions about travel destinations? Need expert travel advice? Want to collaborate on travel content? 
-            Looking for destination recommendations? We'd love to connect with fellow travelers and answer your queries.
-          </p>
+      <section className="relative min-h-screen flex items-center justify-center hero-gradient text-white overflow-hidden">
+        {/* Background with Ken Burns effect */}
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center animate-ken-burns opacity-20"></div>
+
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-indigo-900/70 to-slate-900/80"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+
+        <div className="relative z-10 container mx-auto px-4 py-20">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+              Get In Touch
+            </h1>
+            <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
+              Have travel questions? Need destination advice? Want to collaborate?
+              We're here to help you plan your next unforgettable adventure.
+            </p>
+
+            {/* Contact highlights */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div className="text-2xl mb-2">💬</div>
+                <h3 className="text-lg font-semibold text-white mb-2">Travel Questions</h3>
+                <p className="text-blue-200 text-sm">Get expert advice on destinations, itineraries, and travel tips</p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div className="text-2xl mb-2">🤝</div>
+                <h3 className="text-lg font-semibold text-white mb-2">Collaborations</h3>
+                <p className="text-blue-200 text-sm">Partner with us for travel content and brand collaborations</p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div className="text-2xl mb-2">📸</div>
+                <h3 className="text-lg font-semibold text-white mb-2">Photography</h3>
+                <p className="text-blue-200 text-sm">Discuss photography projects and visual storytelling</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        >
+          <div className="flex flex-col items-center text-white/70 hover:text-white transition-colors cursor-pointer">
+            <span className="text-sm font-medium mb-2">Scroll to contact form</span>
+            <div className="w-6 h-10 border-2 border-white/70 rounded-full flex justify-center">
+              <motion.div
+                animate={{ y: [0, 12, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="w-1 h-3 bg-white/70 rounded-full mt-2"
+              />
+            </div>
+          </div>
+        </motion.div>
+      </section>
 
       {/* Contact Form and Info */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Send Us Your Travel Questions</h2>
+          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Send Us Your Travel Questions</h2>
+            <p className="text-gray-600 mb-8">We'd love to hear from you! Whether you have questions about destinations, need travel advice, or want to collaborate, we're here to help.</p>
 
             {submitStatus === 'success' && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
@@ -344,6 +457,6 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

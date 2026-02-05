@@ -85,15 +85,15 @@ export function AIItinerarySection() {
           </div>
           
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
-            Your Perfect Trip, Planned in Seconds
+            AI-Powered Travel Itinerary Planner
           </h2>
           
           <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-4">
-            Stop spending hours researching. Let our AI create a personalized, day-by-day itinerary tailored to your preferences.
+            Transform your travel planning with our advanced AI technology. Create personalized, comprehensive itineraries in seconds with expert recommendations, budget breakdowns, and insider tips.
           </p>
           
           <p className="text-lg text-purple-200 font-semibold">
-            From hidden gems to budget breakdowns - everything you need in one place
+            Smart planning for solo travelers, families, and adventure seekers worldwide
           </p>
         </div>
 

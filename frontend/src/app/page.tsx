@@ -49,8 +49,8 @@ export default function HomePage() {
 
   // Generate SEO metadata for homepage
   const generateSEOMetadata = () => {
-    const title = 'BagPackStories - Travel Blog, Destination Guides & Authentic Travel Stories'
-    const description = 'Explore the world with BagPackStories. Discover breathtaking travel destinations, read authentic travel stories, get expert guides, photography tips, budget travel advice, and insider tips from experienced travelers. Your ultimate resource for travel inspiration and planning.'
+    const title = 'BagPackStories - Premier Travel Blog | Destination Guides, Travel Stories & Photography Tips'
+    const description = 'Discover authentic travel experiences with BagPackStories. Get expert destination guides, travel photography tips, budget travel advice, and inspiring stories from 50,000+ travelers worldwide. Plan your next adventure with insider tips, cultural insights, and practical travel planning resources.'
     const keywords = [
       'travel blog',
       'travel destinations',
@@ -71,7 +71,27 @@ export default function HomePage() {
       'cultural travel',
       'wanderlust',
       'globetrotting',
-      'travel experiences'
+      'travel experiences',
+      'travel planning',
+      'destination guides',
+      'travel photography tips',
+      'budget travel advice',
+      'authentic travel stories',
+      'insider travel tips',
+      'cultural experiences',
+      'adventure destinations',
+      'travel community',
+      'wanderlust inspiration',
+      'travel blogger',
+      'destination expert',
+      'travel content creator',
+      'vacation ideas',
+      'travel recommendations',
+      'best travel destinations',
+      'travel guide reviews',
+      'photography travel tips',
+      'cultural immersion travel',
+      'sustainable travel tips'
     ].join(', ')
 
     return { title, description, keywords }
@@ -83,7 +103,7 @@ export default function HomePage() {
   const generateStructuredData = () => {
     const structuredData = {
       "@context": "https://schema.org",
-      "@type": "WebSite",
+      "@type": ["WebSite", "TravelAgency"],
       "name": "BagPackStories",
       "alternateName": "BagPack Stories Travel Blog",
       "description": seoData.description,
@@ -91,16 +111,37 @@ export default function HomePage() {
       "publisher": {
         "@type": "Organization",
         "name": "BagPackStories",
-        "description": "Leading travel blog featuring authentic destination guides and travel stories",
+        "description": "Premier travel blog providing authentic destination guides, travel photography tips, and inspiring travel stories from experienced travelers worldwide",
+        "foundingDate": "2018",
+        "url": process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
         "logo": {
           "@type": "ImageObject",
-          "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/logo.png`
+          "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/logo.png`,
+          "width": 400,
+          "height": 400
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "email": "support@bagpackstories.in",
+          "availableLanguage": ["English"]
         },
         "sameAs": [
           "https://facebook.com/bagpackstories",
           "https://twitter.com/bagpackstories",
           "https://instagram.com/bagpackstories",
           "https://youtube.com/bagpackstories"
+        ],
+        "knowsAbout": [
+          "Travel blogging",
+          "Destination guides",
+          "Travel photography",
+          "Budget travel planning",
+          "Solo travel",
+          "Family vacations",
+          "Adventure travel",
+          "Cultural experiences",
+          "Sustainable tourism"
         ]
       },
       "potentialAction": {
@@ -113,7 +154,49 @@ export default function HomePage() {
       },
       "audience": {
         "@type": "Audience",
-        "audienceType": "Travel Enthusiasts, Adventure Seekers, Backpackers, Vacation Planners"
+        "audienceType": "Travel Enthusiasts, Adventure Seekers, Backpackers, Vacation Planners, Photography Lovers, Cultural Explorers"
+      },
+      "serviceType": [
+        "Travel Blog",
+        "Destination Guides",
+        "Travel Photography Tips",
+        "Budget Travel Advice",
+        "Travel Planning Resources",
+        "Cultural Travel Insights"
+      ],
+      "areaServed": {
+        "@type": "Country",
+        "name": "Worldwide"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Travel Content Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Destination Guides",
+              "description": "Comprehensive guides for travel destinations worldwide"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Travel Photography Tips",
+              "description": "Expert photography advice for travel enthusiasts"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Budget Travel Planning",
+              "description": "Practical advice for affordable travel experiences"
+            }
+          }
+        ]
       }
     }
 

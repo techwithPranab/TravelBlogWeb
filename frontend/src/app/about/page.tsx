@@ -38,24 +38,29 @@ export default function AboutPage() {
 
   // Generate SEO metadata for about page
   const generateSEOMetadata = () => {
-    const title = 'About BagPackStories - Real Travel Stories from an IT Professional & Passionate Explorer'
-    const description = 'Meet Pranab Paul, the founder of BagPackStories. Learn how an IT professional combines work trips, family vacations, and solo adventures to share authentic travel experiences, practical guides, and inspiring stories from destinations worldwide. Discover our mission to make travel accessible and inspiring.'
+    const title = 'About BagPackStories - Authentic Travel Stories, Expert Guides & Photography Tips'
+    const description = 'Discover BagPackStories, a premier travel blog founded by Pranab Paul. Read authentic travel experiences from work trips, family vacations, and solo adventures. Get expert destination guides, photography tips, budget travel advice, and insider insights from a passionate IT professional turned travel storyteller. Join 50,000+ inspired travelers worldwide.'
     const keywords = [
       'about travel blog',
-      'travel blogger',
-      'IT professional traveler',
+      'travel blogger biography',
       'authentic travel stories',
-      'travel photography',
-      'travel guide writer',
-      'destination expert',
-      'travel content creator',
+      'travel photography tips',
+      'destination guides writer',
+      'IT professional traveler',
       'solo travel experiences',
       'family vacation blogger',
       'work trip adventures',
       'backpacking stories',
-      'global travel community',
-      'travel inspiration source',
-      'adventure storyteller'
+      'travel inspiration',
+      'travel content creator',
+      'adventure travel expert',
+      'cultural travel experiences',
+      'budget travel tips',
+      'travel planning guide',
+      'globetrotting stories',
+      'wanderlust journey',
+      'travel community leader',
+      'destination expert reviews'
     ].join(', ')
 
     return { title, description, keywords }
@@ -68,7 +73,7 @@ export default function AboutPage() {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "AboutPage",
-      "name": "About BagPackStories - Travel Blog & Destination Guides",
+      "name": "About BagPackStories - Authentic Travel Stories & Expert Guides",
       "description": seoData.description,
       "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`,
       "mainEntityOfPage": {
@@ -78,8 +83,9 @@ export default function AboutPage() {
       "publisher": {
         "@type": "Organization",
         "name": "BagPackStories",
+        "alternateName": "BagPack Stories Travel Blog",
         "foundingDate": "2018",
-        "description": "A personal travel blog by Pranab Paul, an IT professional sharing authentic travel experiences, expert guides, and inspiring stories from work trips, family vacations, and solo adventures worldwide.",
+        "description": "Premier travel blog sharing authentic experiences, expert destination guides, photography tips, and practical travel advice from real-world adventures across the globe.",
         "url": process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
         "logo": {
           "@type": "ImageObject",
@@ -96,28 +102,80 @@ export default function AboutPage() {
           "contactType": "customer service",
           "email": "support@bagpackstories.in",
           "availableLanguage": ["English"]
-        }
-      },
-      "mainEntity": {
-        "@type": "Organization",
-        "name": "BagPackStories",
-        "description": "Leading personal travel blog featuring authentic stories, expert destination guides, photography tips, and practical travel advice from real-world experiences across the globe.",
-        "founder": {
-          "@type": "Person",
-          "name": "Pranab Paul",
-          "jobTitle": "Founder, Travel Writer & IT Professional",
-          "description": "IT professional and passionate traveler sharing authentic experiences from destinations worldwide"
         },
         "knowsAbout": [
           "Travel blogging",
           "Destination guides",
           "Travel photography",
-          "Budget travel tips",
+          "Budget travel planning",
+          "Solo travel experiences",
+          "Family vacation planning",
+          "Work trip adventures",
+          "Adventure travel",
+          "Cultural immersion",
+          "Sustainable tourism"
+        ]
+      },
+      "mainEntity": {
+        "@type": "Person",
+        "name": "Pranab Paul",
+        "alternateName": "Pranab Paul - Travel Blogger",
+        "jobTitle": "Founder, Travel Writer & IT Professional",
+        "description": "IT professional and passionate traveler sharing authentic travel experiences from work trips, family vacations, and solo adventures worldwide. Expert in destination guides, travel photography, and budget travel planning.",
+        "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`,
+        "image": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/images/pranab-paul.jpg`,
+        "sameAs": [
+          "https://linkedin.com/in/pranabpaul",
+          "https://instagram.com/pranabpaultravels"
+        ],
+        "knowsAbout": [
+          "Travel blogging",
+          "Destination guides",
+          "Travel photography",
+          "IT professional travel",
           "Solo travel",
           "Family vacations",
           "Work travel experiences",
           "Adventure travel",
-          "Cultural experiences"
+          "Cultural travel",
+          "Budget travel tips",
+          "Travel planning",
+          "Photography tips"
+        ],
+        "hasOccupation": [
+          {
+            "@type": "Occupation",
+            "name": "Travel Blogger",
+            "occupationLocation": {
+              "@type": "Country",
+              "name": "India"
+            }
+          },
+          {
+            "@type": "Occupation",
+            "name": "IT Professional",
+            "occupationLocation": {
+              "@type": "Country",
+              "name": "India"
+            }
+          }
+        ]
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "About",
+            "item": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`
+          }
         ]
       }
     }
@@ -196,6 +254,12 @@ export default function AboutPage() {
         <meta name="description" content={seoData.description} />
         <meta name="keywords" content={seoData.keywords} />
 
+        {/* Mobile Optimization */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`} />
@@ -213,8 +277,10 @@ export default function AboutPage() {
 
         {/* Additional SEO */}
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="BagPackStories Team" />
+        <meta name="author" content="Pranab Paul - BagPackStories" />
         <meta name="language" content="English" />
+        <meta name="geo.region" content="IN" />
+        <meta name="geo.country" content="India" />
         <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`} />
 
         {/* Structured Data */}
@@ -226,143 +292,212 @@ export default function AboutPage() {
         />
       </Head>
 
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen w-full overflow-x-hidden">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-8">
-        <div className="container mx-auto px-2">
-          <div className="max-w-5xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center"
-            >
-              {/* Profile Image */}
-              <div className="flex justify-center lg:justify-start order-2 lg:order-1">
-                <div className="relative">
-                  <div className="w-80 h-80 rounded-2xl overflow-hidden shadow-2xl">
-                    <img
-                      src="https://res.cloudinary.com/due8vcyim/image/upload/v1761492968/IMG-20241012-WA0023_2_zkgdmo.jpg"
-                      alt="Pranab Paul - Travel Blogger"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  {/* <div className="absolute -bottom-4 -right-4 bg-white text-purple-600 px-4 py-2 rounded-lg shadow-lg">
-                    <span className="text-sm font-semibold">Pranab Paul</span>
-                  </div> */}
-                </div>
-              </div>
+      <section className="relative min-h-screen flex items-center justify-center hero-gradient text-white overflow-hidden">
+        {/* Background with Ken Burns effect */}
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center animate-ken-burns opacity-20"></div>
 
-              {/* Hero Content */}
-              <div className="text-center lg:text-left order-1 lg:order-2">
-                <h1 className="text-2xl md:text-3xl font-bold mb-6">
-                  About My Journey
-                </h1>
-                <p className="text-lg mb-8 text-purple-100">
-                  Hi, I'm Pranab Paul - an IT professional sharing authentic travel stories from work trips, family vacations, and solo adventures around the world.
-                </p>
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-indigo-900/70 to-slate-900/80"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+
+        <div className="relative z-10 container mx-auto px-4 py-20">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center"
+            >
+              <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                About BagPackStories
+              </h1>
+              <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-4xl mx-auto leading-relaxed">
+                Discover authentic travel experiences from work trips, family vacations, and solo adventures.
+                Join thousands of travelers inspired by real stories from around the world.
+              </p>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+                {stats.map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="group"
+                  >
+                    <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:-translate-y-2">
+                      <stat.icon className="h-8 w-8 text-blue-300 mx-auto mb-4 group-hover:text-white transition-colors" />
+                      <div className="text-2xl md:text-3xl font-bold text-white mb-2">
+                        {loading ? (
+                          <div className="bg-white/20 animate-pulse rounded h-8 w-16 mx-auto"></div>
+                        ) : (
+                          stat.value
+                        )}
+                      </div>
+                      <div className="text-blue-200 text-sm font-medium">{stat.label}</div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
           </div>
         </div>
-      </section>
 
-      {/* Stats Section */}
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-2">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        >
+          <div className="flex flex-col items-center text-white/70 hover:text-white transition-colors cursor-pointer">
+            <span className="text-sm font-medium mb-2">Scroll to explore</span>
+            <div className="w-6 h-10 border-2 border-white/70 rounded-full flex justify-center">
               <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="bg-white rounded-2xl p-6 shadow-lg">
-                  <stat.icon className="h-8 w-8 text-purple-600 mx-auto mb-4" />
-                  <div className="text-xl font-bold text-gray-900 mb-2">
-                    {loading ? (
-                      <div className="bg-gray-200 animate-pulse rounded h-8 w-16 mx-auto"></div>
-                    ) : (
-                      stat.value
-                    )}
-                  </div>
-                  <div className="text-gray-600">{stat.label}</div>
-                </div>
-              </motion.div>
-            ))}
+                animate={{ y: [0, 12, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="w-1 h-3 bg-white/70 rounded-full mt-2"
+              />
+            </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Our Story Section */}
-      <section className="pt-8 pb-16">
-        <div className="container mx-auto px-2">
-          <div className="max-w-4xl mx-auto">
+      <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-center mb-6"
+              className="text-center mb-16"
             >
-              <h2 className="text-xl font-bold text-gray-900 mb-4">My Story</h2>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                My Travel Journey
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                From IT professional work trips to family adventures and solo explorations - discover how authentic travel experiences shape unforgettable stories
+              </p>
             </motion.div>
 
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+              {/* Profile Image */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="order-2 lg:order-1"
+              >
+                <div className="relative">
+                  <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                    <img
+                      src="https://res.cloudinary.com/due8vcyim/image/upload/v1761492968/IMG-20241012-WA0023_2_zkgdmo.jpg"
+                      alt="Pranab Paul - Travel Blogger & IT Professional"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="absolute -bottom-6 -right-6 bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-6 py-3 rounded-2xl shadow-xl">
+                    <span className="text-lg font-bold">Pranab Paul</span>
+                    <p className="text-sm opacity-90">Founder & Travel Writer</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Story Content */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="order-1 lg:order-2"
+              >
+                <h3 className="text-3xl font-bold text-gray-900 mb-6">
+                  From Code to Compass: My Unique Travel Perspective
+                </h3>
+                <div className="space-y-6 text-gray-600 leading-relaxed">
+                  <p className="text-lg">
+                    My journey as a travel blogger began in 2011 when I, Pranab Paul, combined my IT career with a passion for exploration. What started as documenting work assignments across different countries has evolved into a comprehensive travel resource that helps thousands of travelers every month.
+                  </p>
+
+                  <p className="text-lg">
+                    As an IT professional, I've had the unique opportunity to visit destinations for business conferences, client meetings, and project deployments. This professional travel experience provides authentic insights into both corporate and leisure travel, making my content uniquely relatable to diverse audiences.
+                  </p>
+
+                  <p className="text-lg">
+                    Beyond work trips, I cherish family vacations that create lasting memories and solo adventures that push personal boundaries. Each type of travel offers different lessons and perspectives, enriching my ability to provide comprehensive travel guidance.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Mission Statement */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="prose prose-base max-w-none text-gray-600"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="bg-white rounded-3xl p-8 md:p-12 shadow-xl"
             >
-              <p className="text-lg leading-relaxed mb-6">
-                My journey began in 2011 when I, Pranab Paul, an IT professional with a passion for exploration, started documenting
-                my travels across different countries. What began as capturing memories from work trips and personal vacations
-                has evolved into a comprehensive travel resource visited by thousands of travelers every month.
-              </p>
+              <div className="text-center mb-8">
+                <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h3>
+                <p className="text-lg text-gray-600">
+                  To inspire authentic travel experiences that connect people with diverse cultures, create meaningful memories, and promote responsible tourism worldwide.
+                </p>
+              </div>
 
-              <p className="text-base leading-relaxed mb-6">
-                As an IT professional, I have had the unique opportunity to visit various countries for work assignments,
-                while also exploring destinations through family vacations and solo adventures. This diverse travel experience
-                provides authentic insights into both business and leisure travel, making my content relatable to different
-                types of travelers.
-              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Globe className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Authentic Stories</h4>
+                  <p className="text-gray-600">Real experiences from actual travels, not just tourist brochures</p>
+                </div>
 
-              <p className="text-base leading-relaxed mb-6">
-                I believe that travel is one of life's greatest teachers. Every destination has its own story, culture, and lessons
-                to offer. Through my detailed guides, authentic stories, and practical tips, I aim to inspire and empower others
-                to explore the world with confidence and respect for local communities, whether traveling for work, with family, or solo.
-              </p>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Camera className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Expert Photography</h4>
+                  <p className="text-gray-600">Professional travel photography tips and stunning visual guides</p>
+                </div>
 
-              <p className="text-base leading-relaxed">
-                Whether you're planning your first international trip, a family vacation, or you're a seasoned globetrotter looking
-                for new inspiration, I'm here to help you create unforgettable memories and meaningful connections around the world.
-              </p>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-accent-500 to-accent-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Heart className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Practical Advice</h4>
+                  <p className="text-gray-600">Budget-friendly tips, local insights, and honest recommendations</p>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Values Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">My Values</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Our Core Values</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              These core principles guide my travels and help me create meaningful experiences to share with fellow travelers.
+              These principles guide every travel story, destination guide, and piece of advice we share with our global community of travelers.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {values.map((value, index) => (
               <motion.div
                 key={value.title}
@@ -370,11 +505,19 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-8 shadow-lg"
+                className="group bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100"
               >
-                <value.icon className="h-12 w-12 text-purple-600 mb-4" />
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
-                <p className="text-gray-600">{value.description}</p>
+                <div className="flex items-start space-x-6">
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <value.icon className="h-8 w-8 text-white" />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">{value.title}</h3>
+                    <p className="text-gray-600 leading-relaxed text-lg">{value.description}</p>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>

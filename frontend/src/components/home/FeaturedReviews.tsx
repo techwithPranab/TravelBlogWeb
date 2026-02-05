@@ -42,8 +42,8 @@ export default function FeaturedReviews() {
   return (
     <div className="w-full">
       <div className="text-center mb-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Traveler Reviews</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mt-2">Handpicked reviews from travelers featured on our homepage</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Featured Traveler Reviews</h2>
+        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mt-2">Discover authentic reviews and experiences from travelers who have explored destinations featured on our travel blog</p>
       </div>
 
       {loading ? (

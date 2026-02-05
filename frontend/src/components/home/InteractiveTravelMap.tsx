@@ -91,7 +91,7 @@ export function InteractiveTravelMap() {
       <div className="animate-fade-up">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Interactive Travel Map
+            Global Travel Destinations Map
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
             Loading travel destinations...
@@ -109,7 +109,7 @@ export function InteractiveTravelMap() {
       <div className="animate-fade-up">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Interactive Travel Map
+            Global Travel Destinations Map
           </h2>
           <p className="text-lg text-red-500 dark:text-red-400">
             {error}
@@ -131,10 +131,10 @@ export function InteractiveTravelMap() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 dark:from-white dark:via-blue-200 dark:to-indigo-200 bg-clip-text text-transparent mb-6">
-            Explore Destinations Worldwide
+            Global Travel Destinations Map
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Discover incredible destinations across the globe. Click any marker to explore detailed guides, authentic reviews, and insider tips from fellow travelers.
+            Explore our comprehensive collection of destination guides and travel stories. Click on any location to discover authentic reviews, practical tips, and insider recommendations from experienced travelers worldwide.
           </p>
         </motion.div>
 

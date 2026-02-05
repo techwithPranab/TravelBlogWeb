@@ -69,13 +69,13 @@ export function FeaturedStories() {
         <div className="container-max animate-fade-up">
           <div className="text-center mb-16">
             <span className="text-teal-600 dark:text-teal-400 font-semibold text-sm uppercase tracking-wider mb-4 block">
-              Travel Inspiration
+              Authentic Travel Experiences
             </span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 font-serif">
               Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">Stories</span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              Dive into our most captivating travel experiences and get inspired for your next adventure
+              Discover inspiring travel narratives, destination insights, and authentic experiences from passionate travelers worldwide
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -119,7 +119,7 @@ export function FeaturedStories() {
             Featured Travel Stories
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            No featured stories available at the moment.
+            Discover authentic travel experiences and destination guides from our community of travelers.
           </p>
         </div>
       </section>
@@ -132,13 +132,13 @@ export function FeaturedStories() {
         {/* Professional Header Section */}
         <div className="text-center mb-16">
           <span className="text-teal-600 dark:text-teal-400 font-semibold text-sm uppercase tracking-wider mb-4 block">
-            Travel Inspiration
+            Authentic Travel Experiences
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 font-serif">
-            Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">Stories</span>
+            Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">Travel Stories</span>
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Immerse yourself in captivating travel narratives and authentic stories from globetrotters
+            Discover inspiring travel narratives, destination insights, and authentic experiences from passionate travelers worldwide. Get inspired for your next adventure.
           </p>
         </div>
 

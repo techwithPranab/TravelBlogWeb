@@ -148,10 +148,10 @@ export function Categories() {
     <div className="animate-fade-up">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Explore by Category
+          Explore Travel Categories
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          Find exactly what you're looking for
+          Discover destination guides, travel tips, photography advice, and adventure stories by category
         </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">

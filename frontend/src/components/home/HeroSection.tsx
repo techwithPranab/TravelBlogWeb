@@ -70,7 +70,7 @@ export function HeroSection() {
   const heroStats = [
     { 
       icon: MapPin, 
-      label: 'Travel Destinations Covered', 
+      label: 'Destinations Explored', 
       value: statsLoading ? '...' : (stats?.totalDestinations || 0).toLocaleString() 
     },
     { 
@@ -80,7 +80,7 @@ export function HeroSection() {
     },
     { 
       icon: Calendar, 
-      label: 'Authentic Travel Stories', 
+      label: 'Travel Stories Shared', 
       value: statsLoading ? '...' : (stats?.totalPosts || 0).toLocaleString() 
     },
   ]
@@ -109,13 +109,13 @@ export function HeroSection() {
           {/* Hero Text - Enhanced Typography */}
           <div className="mb-8 animate-fade-up">
             <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight">
-              Explore the World
+              Discover Your Next
               <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 animate-gradient">
-                One Story at a Time
+                Travel Adventure
               </span>
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-light">
-              Discover breathtaking destinations, authentic travel experiences, and insider tips from passionate travelers around the globe.
+              Explore authentic destinations, read real travel stories, and get expert photography tips from passionate travelers. Your comprehensive guide to meaningful travel experiences worldwide.
             </p>
           </div>
 
@@ -131,7 +131,7 @@ export function HeroSection() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Where do you want to go? Search destinations, guides, and stories..."
+                placeholder="Search travel destinations, guides, photography tips, and authentic stories..."
                 className="w-full pl-16 pr-40 py-5 md:py-6 text-base md:text-lg rounded-full bg-white/95 backdrop-blur-xl border-2 border-white/30 focus:border-teal-400 focus:ring-4 focus:ring-teal-500/20 focus:outline-none shadow-2xl text-gray-900 placeholder-gray-500 transition-all duration-300 hover:shadow-3xl"
                 style={{ minHeight: '64px' }}
               />
