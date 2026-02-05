@@ -1,0 +1,22 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heroGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D9488;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#0891B2;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#0EA5E9;stop-opacity:0.6" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#heroGradient)"/>
+  <!-- Mountain silhouette -->
+  <path d="M0 600 L400 300 L800 500 L1200 200 L1600 400 L1920 300 L1920 1080 L0 1080 Z" fill="#1e293b" opacity="0.3"/>
+  <!-- Sun -->
+  <circle cx="1600" cy="200" r="80" fill="#fbbf24" opacity="0.6"/>
+  <!-- Clouds -->
+  <circle cx="200" cy="150" r="40" fill="white" opacity="0.4"/>
+  <circle cx="250" cy="140" r="35" fill="white" opacity="0.4"/>
+  <circle cx="300" cy="155" r="30" fill="white" opacity="0.4"/>
+  <circle cx="800" cy="120" r="45" fill="white" opacity="0.3"/>
+  <circle cx="850" cy="110" r="40" fill="white" opacity="0.3"/>
+  <circle cx="900" cy="125" r="35" fill="white" opacity="0.3"/>
+</svg></content>
+<parameter name="filePath">/Users/pranabpaul/Desktop/Blog/TravelBlogWeb/frontend/public/images/hero-background.svg

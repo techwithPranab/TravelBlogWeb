@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { destinationsApi } from '@/lib/api'
 import { motion } from 'framer-motion'
+import OptimizedImage from '@/components/OptimizedImage'
 import { DestinationSchema } from '@/components/StructuredData'
 
 interface Destination {
@@ -254,11 +255,15 @@ export default function DestinationDetailsPage() {
 
       {/* Hero Section */}
       <div className="relative h-screen">
-        <Image
+        <OptimizedImage
           src={destination.featuredImage.url}
           alt={destination.featuredImage.alt}
-          fill
+          width={1920}
+          height={1080}
+          aspectRatio="landscape"
           className="object-cover"
+          priority={true}
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-black/30"></div>
         
@@ -493,11 +498,14 @@ export default function DestinationDetailsPage() {
                     }}
                     aria-label={`View ${image.alt}`}
                   >
-                    <Image
+                    <OptimizedImage
                       src={image.url}
                       alt={image.alt}
-                      fill
+                      width={400}
+                      height={300}
+                      aspectRatio="landscape"
                       className="object-cover"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     />
                   </button>
                 ))}

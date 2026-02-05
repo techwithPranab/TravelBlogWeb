@@ -23,6 +23,7 @@ import ContentSection from '@/components/blog/ContentSection'
 import YouTubeVideo from '@/components/blog/YouTubeVideo'
 import CommentSection from '@/components/blog/CommentSection'
 import AdContainer from '@/components/ads/AdContainer'
+import OptimizedImage from '@/components/OptimizedImage'
 import { BlogPostSchema } from '@/components/StructuredData'
 import { postsApi } from '@/lib/api'
 import { containsProfanity, getProfanityError } from '@/utils/profanityFilter'
@@ -501,10 +502,14 @@ export default function BlogDetailsPage() {
           
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <img 
-                src={post?.author?.avatar || '/images/default-avatar.jpg'} 
+              <OptimizedImage
+                src={post?.author?.avatar || '/images/default-avatar.jpg'}
                 alt={post?.author?.name || 'Unknown Author'}
-                className="w-12 h-12 rounded-full"
+                width={48}
+                height={48}
+                aspectRatio="square"
+                className="rounded-full"
+                showLoader={false}
               />
               <div>
                 <div className="font-medium text-gray-900">{post?.author?.name || 'Unknown Author'}</div>
@@ -615,11 +620,14 @@ export default function BlogDetailsPage() {
                   aria-label={`View gallery image ${index + 1} in full size`}
                 >
                   <div className="aspect-square rounded-lg overflow-hidden">
-                    <Image
+                    <OptimizedImage
                       src={imageUrl}
                       alt={`Gallery image ${index + 1}`}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      width={400}
+                      height={400}
+                      aspectRatio="square"
+                      className="transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   </div>
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-lg flex items-center justify-center">
