@@ -281,7 +281,10 @@ export const getContributorDashboard = handleAsync(async (req: AuthenticatedRequ
     rejectedPosts,
     draftPosts,
     totalViews,
-    totalLikes
+    totalLikes,
+    totalComments,
+    averageViewsPerPost,
+    engagementRate
   ] = await Promise.all([
     Post.countDocuments({ author: userId }),
     Post.countDocuments({ author: userId, status: 'published' }),
@@ -295,6 +298,30 @@ export const getContributorDashboard = handleAsync(async (req: AuthenticatedRequ
     Post.aggregate([
       { $match: { author: userId, status: 'published' } },
       { $group: { _id: null, totalLikes: { $sum: { $size: '$likes' } } } }
+    ]),
+    Post.aggregate([
+      { $match: { author: userId, status: 'published' } },
+      { $lookup: { from: 'comments', localField: '_id', foreignField: 'post', as: 'comments' } },
+      { $group: { _id: null, totalComments: { $sum: { $size: '$comments' } } } }
+    ]),
+    Post.aggregate([
+      { $match: { author: userId, status: 'published' } },
+      { $group: { _id: null, avgViews: { $avg: '$viewCount' }, postCount: { $sum: 1 } } }
+    ]),
+    Post.aggregate([
+      { $match: { author: userId, status: 'published' } },
+      {
+        $lookup: { from: 'comments', localField: '_id', foreignField: 'post', as: 'comments' }
+      },
+      {
+        $group: {
+          _id: null,
+          totalEngagement: {
+            $sum: { $add: [{ $size: '$likes' }, { $size: '$comments' }] }
+          },
+          totalViews: { $sum: '$viewCount' }
+        }
+      }
     ])
   ])
 
@@ -324,7 +351,12 @@ export const getContributorDashboard = handleAsync(async (req: AuthenticatedRequ
         rejectedPosts,
         draftPosts,
         totalViews: totalViews[0]?.totalViews || 0,
-        totalLikes: totalLikes[0]?.totalLikes || 0
+        totalLikes: totalLikes[0]?.totalLikes || 0,
+        totalComments: totalComments[0]?.totalComments || 0,
+        averageViewsPerPost: Math.round((averageViewsPerPost[0]?.avgViews || 0) * 10) / 10,
+        engagementRate: totalViews[0]?.totalViews > 0
+          ? Math.round(((engagementRate[0]?.totalEngagement || 0) / totalViews[0].totalViews) * 100 * 10) / 10
+          : 0
       },
       recentPosts,
       recentRejections

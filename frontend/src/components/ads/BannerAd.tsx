@@ -53,7 +53,7 @@ export default function BannerAd({
           <div className="relative w-full h-[200px] md:h-[250px] overflow-hidden bg-gray-100">
             <Image
               src={creative.imageUrl}
-              alt={creative.imageAlt || ad.title}
+              alt={creative.imageAlt || ad.title || ad.name || 'Advertisement'}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

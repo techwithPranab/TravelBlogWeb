@@ -121,8 +121,8 @@ const sidebarGroups = [
     name: 'Monetization',
     items: [
       {
-        name: 'Advertisements',
-        href: '/admin/advertisements',
+        name: 'Ads',
+        href: '/admin/ads',
         icon: Megaphone,
         badge: null
       }
@@ -165,6 +165,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     const userData = localStorage.getItem('adminUser')
 
     if (!token || !userData) {
+      localStorage.setItem('intendedPath', pathname)
       router.push('/admin/login')
       return
     }
@@ -180,6 +181,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       console.error('Error parsing user data:', error)
       router.push('/admin/login')
     }
+
+    // Auto-expand sections with active items
+    const newCollapsed = new Set(collapsedSections)
+    sidebarGroups.forEach(group => {
+      const hasActiveItem = group.items.some(item => pathname === item.href)
+      if (hasActiveItem) {
+        newCollapsed.delete(group.name)
+      }
+    })
+    setCollapsedSections(newCollapsed)
   }, [router, pathname])
 
   const handleLogout = () => {

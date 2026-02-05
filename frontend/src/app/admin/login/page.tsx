@@ -43,8 +43,10 @@ export default function AdminLoginPage() {
       localStorage.setItem('adminToken', data.token)
       localStorage.setItem('adminUser', JSON.stringify(data.user))
 
-      // Redirect to admin dashboard
-      router.push('/admin/dashboard')
+      // Redirect to intended path or admin dashboard
+      const intendedPath = localStorage.getItem('intendedPath')
+      localStorage.removeItem('intendedPath')
+      router.push(intendedPath || '/admin/dashboard')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {

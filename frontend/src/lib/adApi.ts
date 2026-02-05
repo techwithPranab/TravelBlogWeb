@@ -29,6 +29,21 @@ export interface Advertisement {
     sponsored: boolean
     ugc: boolean
   }
+  schedule?: {
+    startDate: Date
+    endDate?: Date
+    timezone?: string
+  }
+  performance?: {
+    impressions: number
+    clicks: number
+    ctr: number
+    conversions?: number
+    revenue?: number
+    lastImpressionAt?: Date
+    lastClickAt?: Date
+  }
+  status: 'draft' | 'active' | 'paused' | 'completed' | 'archived'
 }
 
 export interface AdAnalytics {

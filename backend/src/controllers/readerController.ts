@@ -4,6 +4,7 @@ import { handleAsync } from '../utils/handleAsync';
 import Post from '../models/Post';
 import Photo from '../models/Photo';
 import User from '../models/User';
+import Comment from '../models/Comment';
 import { uploadBufferToCloudinary, deleteFromCloudinary, getFileIdFromUrl, convertToDownloadUrl } from '../config/drive';
 
 // @desc    Get dashboard data for reader
@@ -34,6 +35,42 @@ export const getReaderDashboard = handleAsync(async (req: Request, res: Response
       { $match: { author: userId } },
       { $group: { _id: null, totalViews: { $sum: '$viewCount' } } }
     ]);
+
+    // Get user's reading activity (posts read by user)
+    const postsReadThisMonth = await Post.aggregate([
+      {
+        $lookup: {
+          from: 'useractivities',
+          let: { postId: '$_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$user', userId] },
+                    { $eq: ['$post', '$$postId'] },
+                    { $eq: ['$action', 'view'] },
+                    { $gte: ['$createdAt', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)] }
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'userViews'
+        }
+      },
+      { $match: { 'userViews.0': { $exists: true } } },
+      { $count: 'totalRead' }
+    ]);
+
+    // Get user's comments count
+    const userCommentsCount = await Comment.countDocuments({ author: userId });
+
+    // Get user's following count (simplified - assuming following field exists)
+    const followingCount = 0; // Placeholder - would need to implement following system
+
+    // Get user's saved posts count (placeholder)
+    const savedPostsCount = 0; // Placeholder - would need to implement bookmarking system
 
     // Get recent activity (likes, comments on user's posts)
     const recentActivity = [];
@@ -102,6 +139,10 @@ export const getReaderDashboard = handleAsync(async (req: Request, res: Response
         totalLikes: totalLikes[0]?.totalLikes || 0,
         totalComments: totalComments[0]?.totalComments || 0,
         totalViews: totalViews[0]?.totalViews || 0,
+        postsReadThisMonth: postsReadThisMonth[0]?.totalRead || 0,
+        userCommentsCount,
+        followingCount,
+        savedPostsCount,
         recentActivity
       }
     });

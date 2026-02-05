@@ -28,7 +28,7 @@ export default function NativeAd({
 
   if (!ad) return null
 
-  const { content, link } = ad
+  const { creative, destinationUrl, title, description } = ad
 
   // Card variant - similar to blog post card
   if (variant === 'card') {
@@ -45,18 +45,18 @@ export default function NativeAd({
         </div>
 
         <a
-          href={link.url}
+          href={destinationUrl}
           onClick={handleClick}
           target="_blank"
           rel="nofollow sponsored noopener noreferrer"
           className="block group"
         >
           {/* Image */}
-          {content.imageUrl && (
+          {creative.imageUrl && (
             <div className="relative w-full h-48 overflow-hidden bg-gray-100">
               <Image
-                src={content.imageUrl}
-                alt={content.headline}
+                src={creative.imageUrl}
+                alt={title || ad.name || 'Advertisement'}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -67,18 +67,18 @@ export default function NativeAd({
           {/* Content */}
           <div className="p-4">
             <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-              {content.headline}
+              {title}
             </h3>
 
-            {content.description && (
+            {description && (
               <p className="text-gray-600 text-sm mb-3 line-clamp-3">
-                {content.description}
+                {description}
               </p>
             )}
 
-            {content.callToAction && (
+            {creative.callToAction && (
               <div className="flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:text-blue-700">
-                <span>{content.callToAction}</span>
+                <span>{creative.callToAction}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
@@ -103,18 +103,18 @@ export default function NativeAd({
         className={`relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow ${className}`}
       >
         <a
-          href={link.url}
+          href={destinationUrl}
           onClick={handleClick}
           target="_blank"
           rel="nofollow sponsored noopener noreferrer"
           className="flex gap-4 p-4 group"
         >
           {/* Image */}
-          {content.imageUrl && (
+          {creative.imageUrl && (
             <div className="relative w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
               <Image
-                src={content.imageUrl}
-                alt={content.headline}
+                src={creative.imageUrl}
+                alt={title || ad.name || 'Advertisement'}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="128px"
@@ -132,18 +132,18 @@ export default function NativeAd({
             </div>
 
             <h3 className="text-base font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors line-clamp-2">
-              {content.headline}
+              {title}
             </h3>
 
-            {content.description && (
+            {description && (
               <p className="text-gray-600 text-sm mb-2 line-clamp-2">
-                {content.description}
+                {description}
               </p>
             )}
 
-            {content.callToAction && (
+            {creative.callToAction && (
               <div className="flex items-center gap-1 text-blue-600 font-medium text-sm group-hover:text-blue-700">
-                <span>{content.callToAction}</span>
+                <span>{creative.callToAction}</span>
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
@@ -167,7 +167,7 @@ export default function NativeAd({
       className={`relative p-4 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 transition-colors ${className}`}
     >
       <a
-        href={link.url}
+        href={destinationUrl}
         onClick={handleClick}
         target="_blank"
         rel="nofollow sponsored noopener noreferrer"
@@ -179,18 +179,18 @@ export default function NativeAd({
         </div>
 
         <h3 className="text-base font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
-          {content.headline}
+          {title}
         </h3>
 
-        {content.description && (
+        {description && (
           <p className="text-gray-600 text-sm mb-2 line-clamp-2">
-            {content.description}
+            {description}
           </p>
         )}
 
-        {content.callToAction && (
+        {creative.callToAction && (
           <div className="text-blue-600 font-medium text-sm group-hover:text-blue-700">
-            {content.callToAction} →
+            {creative.callToAction} →
           </div>
         )}
       </a>

@@ -242,7 +242,7 @@ exports.deleteContributorPost = (0, handleAsync_1.handleAsync)(async (req, res) 
 // @access  Private/Contributor
 exports.getContributorDashboard = (0, handleAsync_1.handleAsync)(async (req, res) => {
     const userId = req.user?._id;
-    const [totalPosts, publishedPosts, pendingPosts, rejectedPosts, draftPosts, totalViews, totalLikes] = await Promise.all([
+    const [totalPosts, publishedPosts, pendingPosts, rejectedPosts, draftPosts, totalViews, totalLikes, totalComments, averageViewsPerPost, engagementRate] = await Promise.all([
         Post_1.default.countDocuments({ author: userId }),
         Post_1.default.countDocuments({ author: userId, status: 'published' }),
         Post_1.default.countDocuments({ author: userId, status: 'pending' }),
@@ -255,6 +255,30 @@ exports.getContributorDashboard = (0, handleAsync_1.handleAsync)(async (req, res
         Post_1.default.aggregate([
             { $match: { author: userId, status: 'published' } },
             { $group: { _id: null, totalLikes: { $sum: { $size: '$likes' } } } }
+        ]),
+        Post_1.default.aggregate([
+            { $match: { author: userId, status: 'published' } },
+            { $lookup: { from: 'comments', localField: '_id', foreignField: 'post', as: 'comments' } },
+            { $group: { _id: null, totalComments: { $sum: { $size: '$comments' } } } }
+        ]),
+        Post_1.default.aggregate([
+            { $match: { author: userId, status: 'published' } },
+            { $group: { _id: null, avgViews: { $avg: '$viewCount' }, postCount: { $sum: 1 } } }
+        ]),
+        Post_1.default.aggregate([
+            { $match: { author: userId, status: 'published' } },
+            {
+                $lookup: { from: 'comments', localField: '_id', foreignField: 'post', as: 'comments' }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalEngagement: {
+                        $sum: { $add: [{ $size: '$likes' }, { $size: '$comments' }] }
+                    },
+                    totalViews: { $sum: '$viewCount' }
+                }
+            }
         ])
     ]);
     // Get recent posts
@@ -281,7 +305,12 @@ exports.getContributorDashboard = (0, handleAsync_1.handleAsync)(async (req, res
                 rejectedPosts,
                 draftPosts,
                 totalViews: totalViews[0]?.totalViews || 0,
-                totalLikes: totalLikes[0]?.totalLikes || 0
+                totalLikes: totalLikes[0]?.totalLikes || 0,
+                totalComments: totalComments[0]?.totalComments || 0,
+                averageViewsPerPost: Math.round((averageViewsPerPost[0]?.avgViews || 0) * 10) / 10,
+                engagementRate: totalViews[0]?.totalViews > 0
+                    ? Math.round(((engagementRate[0]?.totalEngagement || 0) / totalViews[0].totalViews) * 100 * 10) / 10
+                    : 0
             },
             recentPosts,
             recentRejections

@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyEmail = exports.resetPassword = exports.forgotPassword = exports.updatePassword = exports.updateProfile = exports.getMe = exports.logout = exports.login = exports.register = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const crypto_1 = __importDefault(require("crypto"));
-const User_1 = __importDefault(require("@/models/User"));
-const Subscription_1 = __importDefault(require("@/models/Subscription"));
+const User_1 = __importDefault(require("../models/User"));
+const Subscription_1 = __importDefault(require("../models/Subscription"));
 // Generate JWT Token
 const signToken = (id) => {
     const secret = process.env.JWT_SECRET;
@@ -245,7 +245,7 @@ const forgotPassword = async (req, res) => {
         const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3001'}/reset-password?token=${resetToken}`;
         try {
             // Send email using email service
-            const { emailService } = require('@/services/emailService');
+            const { emailService } = require('../services/emailService');
             await emailService.sendPasswordResetEmail(user.email, user.name, resetUrl, resetToken);
             res.status(200).json({
                 success: true,

@@ -43,7 +43,6 @@ export default function NewAdvertisementPage() {
       limit: undefined,
     },
     status: 'draft',
-    priority: 5,
   })
 
   const adTypes = [
@@ -60,12 +59,14 @@ export default function NewAdvertisementPage() {
   ]
 
   const placementPositions = [
-    'header_top', 'header_bottom', 'content_top', 'content_middle', 'content_bottom',
+    'header_top', 'header_bottom', 'before_featured_image', 'after_featured_image',
+    'overlay_featured_image', 'content_top', 'content_paragraph_1', 'content_paragraph_2',
+    'content_paragraph_3', 'content_middle', 'content_bottom', 'between_sections',
+    'before_gallery', 'after_gallery', 'in_gallery', 'before_videos', 'after_videos',
     'sidebar_top', 'sidebar_middle', 'sidebar_bottom', 'sidebar_sticky',
-    'content_paragraph_1', 'content_paragraph_2', 'content_paragraph_3',
-    'after_featured_image', 'before_content', 'after_content', 'before_gallery',
-    'after_gallery', 'before_video', 'after_video', 'before_comments', 'after_comments',
-    'floating_bottom_left', 'floating_bottom_right', 'sticky_footer', 'page_takeover'
+    'before_comments', 'after_comments', 'in_comments', 'before_author_bio',
+    'after_author_bio', 'page_bottom', 'floating_bottom_right', 'floating_bottom_left',
+    'sticky_footer', 'sticky_header'
   ]
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,35 +84,54 @@ export default function NewAdvertisementPage() {
 
     try {
       setLoading(true)
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('adminToken')
       if (!token) {
         router.push('/admin/login')
         return
       }
 
       const submitData: any = {
-        ...formData,
+        name: formData.name,
+        type: formData.type,
+        format: formData.format,
+        description: formData.content.description,
+        creative: {
+          imageUrl: formData.content.imageUrl,
+          videoUrl: formData.content.videoUrl,
+          htmlContent: formData.content.customHtml,
+          callToAction: formData.content.headline,
+          buttonText: formData.content.callToAction,
+        },
+        destinationUrl: formData.link.url,
+        utmParameters: formData.link.trackingParams,
+        placements: formData.placement.map(position => ({
+          position,
+          priority: 1,
+        })),
+        targeting: {
+          categories: formData.targeting.categories,
+          tags: formData.targeting.tags,
+          geoLocations: formData.targeting.countries,
+          deviceTypes: formData.targeting.deviceTypes,
+          userRoles: formData.targeting.userRoles,
+        },
         schedule: {
           startDate: new Date(formData.schedule.startDate),
           endDate: formData.schedule.endDate ? new Date(formData.schedule.endDate) : undefined,
         },
-      }
-
-      if (formData.budget.type !== 'unlimited' && formData.budget.limit) {
-        submitData.budget = {
+        budget: formData.budget.type === 'unlimited' ? { type: 'none' } : {
           type: formData.budget.type,
-          limit: parseInt(formData.budget.limit as any),
-          spent: 0,
-        }
-      } else {
-        submitData.budget = { type: 'unlimited', spent: 0 }
+          maxImpressions: formData.budget.type === 'impressions' ? formData.budget.limit : undefined,
+          maxClicks: formData.budget.type === 'clicks' ? formData.budget.limit : undefined,
+        },
+        status: formData.status,
       }
 
       const response = await createAdvertisement(submitData, token)
       
       if (response.success) {
         toast.success('Advertisement created successfully!')
-        router.push('/admin/advertisements')
+        router.push('/admin/ads')
       }
     } catch (error: any) {
       toast.error(error.message || 'Failed to create advertisement')
@@ -145,17 +165,17 @@ export default function NewAdvertisementPage() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 w-full">
       {/* Header */}
       <div className="mb-6">
         <Link
-          href="/admin/advertisements"
+          href="/admin/ads"
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
         >
           <ArrowLeft className="w-5 h-5" />
-          Back to Advertisements
+          Back to Ads
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Create New Advertisement</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Create New Ad</h1>
         <p className="text-gray-600 mt-1">Fill in the details below to create a new advertisement</p>
       </div>
 
@@ -231,20 +251,6 @@ export default function NewAdvertisementPage() {
                   <option value="paused">Paused</option>
                 </select>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Priority (1-10)
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={formData.priority}
-                  onChange={(e) => updateField('priority', parseInt(e.target.value))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -304,6 +310,32 @@ export default function NewAdvertisementPage() {
                 onChange={(e) => updateNestedField('content', 'imageUrl', e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="https://example.com/image.jpg"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Video URL
+              </label>
+              <input
+                type="url"
+                value={formData.content.videoUrl}
+                onChange={(e) => updateNestedField('content', 'videoUrl', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="https://example.com/video.mp4"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Custom HTML
+              </label>
+              <textarea
+                value={formData.content.customHtml}
+                onChange={(e) => updateNestedField('content', 'customHtml', e.target.value)}
+                rows={4}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Custom HTML code for advanced ad formats"
               />
             </div>
 
@@ -424,10 +456,94 @@ export default function NewAdvertisementPage() {
           </div>
         </div>
 
+        {/* Targeting */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Targeting</h2>
+          
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Categories
+              </label>
+              <input
+                type="text"
+                value={formData.targeting.categories.join(', ')}
+                onChange={(e) => updateNestedField('targeting', 'categories', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="e.g., beach, mountain, city (comma separated)"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tags
+              </label>
+              <input
+                type="text"
+                value={formData.targeting.tags.join(', ')}
+                onChange={(e) => updateNestedField('targeting', 'tags', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="e.g., adventure, luxury, budget (comma separated)"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Countries
+              </label>
+              <input
+                type="text"
+                value={formData.targeting.countries.join(', ')}
+                onChange={(e) => updateNestedField('targeting', 'countries', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="e.g., USA, Canada, UK (comma separated)"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Device Types
+              </label>
+              <div className="flex gap-4">
+                {['desktop', 'mobile', 'tablet'].map((device) => (
+                  <label key={device} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formData.targeting.deviceTypes.includes(device)}
+                      onChange={() => toggleArrayField('targeting', 'deviceTypes', device)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm capitalize">{device}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                User Roles
+              </label>
+              <div className="flex gap-4">
+                {['guest', 'registered', 'premium'].map((role) => (
+                  <label key={role} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formData.targeting.userRoles.includes(role)}
+                      onChange={() => toggleArrayField('targeting', 'userRoles', role)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm capitalize">{role}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Submit Buttons */}
         <div className="flex items-center justify-end gap-4">
           <Link
-            href="/admin/advertisements"
+            href="/admin/ads"
             className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
             Cancel
@@ -437,7 +553,7 @@ export default function NewAdvertisementPage() {
             disabled={loading}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Creating...' : 'Create Advertisement'}
+            {loading ? 'Creating...' : 'Create Ad'}
           </button>
         </div>
       </form>

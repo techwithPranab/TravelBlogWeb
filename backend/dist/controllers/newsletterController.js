@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getMetrics = exports.getSubscribers = exports.getStats = exports.updatePreferences = exports.verifyEmail = exports.unsubscribe = exports.subscribe = void 0;
 const crypto_1 = __importDefault(require("crypto"));
-const Newsletter_1 = __importDefault(require("@/models/Newsletter"));
+const Newsletter_1 = __importDefault(require("../models/Newsletter"));
 // @desc    Subscribe to newsletter
 // @route   POST /api/newsletter/subscribe
 // @access  Public

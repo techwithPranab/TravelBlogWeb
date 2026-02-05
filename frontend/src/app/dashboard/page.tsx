@@ -29,6 +29,10 @@ interface ReaderDashboardStats {
   totalLikes: number
   totalComments: number
   totalViews: number
+  postsReadThisMonth: number
+  userCommentsCount: number
+  followingCount: number
+  savedPostsCount: number
   recentActivity: ActivityItem[]
 }
 
@@ -77,6 +81,10 @@ export default function DashboardPage() {
             totalLikes: dashboardData.stats?.totalLikes || 0,
             totalComments: dashboardData.stats?.totalComments || 0,
             totalViews: dashboardData.stats?.totalViews || 0,
+            postsReadThisMonth: dashboardData.stats?.postsReadThisMonth || 0,
+            userCommentsCount: dashboardData.stats?.userCommentsCount || 0,
+            followingCount: dashboardData.stats?.followingCount || 0,
+            savedPostsCount: dashboardData.stats?.savedPostsCount || 0,
             recentActivity: dashboardData.recentActivity || []
           })
         }
@@ -154,20 +162,52 @@ export default function DashboardPage() {
         change: 'Live posts'
       },
       {
+        title: 'Total Views',
+        value: contributorStats.stats.totalViews,
+        icon: Eye,
+        color: 'text-purple-600',
+        bgColor: 'bg-purple-100',
+        change: 'All time views'
+      },
+      {
+        title: 'Total Likes',
+        value: contributorStats.stats.totalLikes,
+        icon: Heart,
+        color: 'text-red-600',
+        bgColor: 'bg-red-100',
+        change: 'Reader engagement'
+      },
+      {
+        title: 'Total Comments',
+        value: contributorStats.stats.totalComments,
+        icon: MessageCircle,
+        color: 'text-indigo-600',
+        bgColor: 'bg-indigo-100',
+        change: 'Community interaction'
+      },
+      {
+        title: 'Avg Views/Post',
+        value: contributorStats.stats.averageViewsPerPost,
+        icon: TrendingUp,
+        color: 'text-orange-600',
+        bgColor: 'bg-orange-100',
+        change: 'Performance metric'
+      },
+      {
+        title: 'Engagement Rate',
+        value: `${contributorStats.stats.engagementRate}%`,
+        icon: Users,
+        color: 'text-teal-600',
+        bgColor: 'bg-teal-100',
+        change: 'Likes + comments per view'
+      },
+      {
         title: 'Pending Review',
         value: contributorStats.stats.pendingPosts,
         icon: Clock,
         color: 'text-yellow-600',
         bgColor: 'bg-yellow-100',
         change: 'Awaiting approval'
-      },
-      {
-        title: 'Rejected',
-        value: contributorStats.stats.rejectedPosts,
-        icon: XCircle,
-        color: 'text-red-600',
-        bgColor: 'bg-red-100',
-        change: 'Need revision'
       }
     ]
 
@@ -227,6 +267,38 @@ export default function DashboardPage() {
                 </p>
               </div>
             ))}
+          </motion.div>
+
+          {/* Performance Insights */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-8"
+          >
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+              Performance Insights
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600 mb-2">
+                  {contributorStats.stats.publishedPosts > 0 ? Math.round(contributorStats.stats.totalViews / contributorStats.stats.publishedPosts) : 0}
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Avg Views per Post</p>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600 mb-2">
+                  {contributorStats.stats.engagementRate}%
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Engagement Rate</p>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-600 mb-2">
+                  {contributorStats.stats.totalComments}
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Total Comments</p>
+              </div>
+            </div>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -380,12 +452,12 @@ export default function DashboardPage() {
 
   const statCards = [
     {
-      title: 'Total Posts',
+      title: 'My Posts',
       value: readerStats.totalPosts,
       icon: BookOpen,
       color: 'text-blue-600',
       bgColor: 'bg-blue-100',
-      change: '+2 this month'
+      change: 'Published articles'
     },
     {
       title: 'Total Likes',
@@ -393,15 +465,15 @@ export default function DashboardPage() {
       icon: Heart,
       color: 'text-red-600',
       bgColor: 'bg-red-100',
-      change: '+28 this week'
+      change: 'Reader engagement'
     },
     {
-      title: 'Comments',
+      title: 'Comments Received',
       value: readerStats.totalComments,
       icon: MessageCircle,
       color: 'text-green-600',
       bgColor: 'bg-green-100',
-      change: '+12 this week'
+      change: 'Community interaction'
     },
     {
       title: 'Total Views',
@@ -409,7 +481,39 @@ export default function DashboardPage() {
       icon: Eye,
       color: 'text-purple-600',
       bgColor: 'bg-purple-100',
-      change: '+156 this week'
+      change: 'Content reach'
+    },
+    {
+      title: 'Posts Read',
+      value: readerStats.postsReadThisMonth,
+      icon: BookOpen,
+      color: 'text-indigo-600',
+      bgColor: 'bg-indigo-100',
+      change: 'This month'
+    },
+    {
+      title: 'My Comments',
+      value: readerStats.userCommentsCount,
+      icon: MessageCircle,
+      color: 'text-orange-600',
+      bgColor: 'bg-orange-100',
+      change: 'Community participation'
+    },
+    {
+      title: 'Following',
+      value: readerStats.followingCount,
+      icon: Users,
+      color: 'text-teal-600',
+      bgColor: 'bg-teal-100',
+      change: 'Travel creators'
+    },
+    {
+      title: 'Saved Posts',
+      value: readerStats.savedPostsCount,
+      icon: Heart,
+      color: 'text-pink-600',
+      bgColor: 'bg-pink-100',
+      change: 'Bookmarked articles'
     }
   ]
 
@@ -469,6 +573,44 @@ export default function DashboardPage() {
               </p>
             </div>
           ))}
+        </motion.div>
+
+        {/* Reading Insights */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-8"
+        >
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            Reading Activity
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600 mb-2">
+                {readerStats.postsReadThisMonth}
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Posts Read This Month</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600 mb-2">
+                {readerStats.userCommentsCount}
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Comments Made</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600 mb-2">
+                {readerStats.followingCount}
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Following</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600 mb-2">
+                {readerStats.savedPostsCount}
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Saved Posts</p>
+            </div>
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

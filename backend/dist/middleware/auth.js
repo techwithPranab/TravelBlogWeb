@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.optionalAuth = exports.adminOnly = exports.restrictTo = exports.authorize = exports.protect = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const User_1 = __importDefault(require("@/models/User"));
+const User_1 = __importDefault(require("../models/User"));
 const protect = async (req, res, next) => {
     try {
         let token;
@@ -36,6 +36,7 @@ const protect = async (req, res, next) => {
             next();
         }
         catch (error) {
+            console.error('Auth middleware: Token verification failed:', error);
             res.status(401).json({
                 success: false,
                 error: 'Not authorized to access this route'

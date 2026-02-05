@@ -50,29 +50,31 @@ const mongoose_1 = __importDefault(require("mongoose"));
 // Load environment variables FIRST
 dotenv_1.default.config();
 // Importing the database connection and middleware
-const database_1 = require("@/config/database");
-const errorHandler_1 = require("@/middleware/errorHandler");
-const notFound_1 = __importDefault(require("@/middleware/notFound"));
+const database_1 = require("./config/database");
+const errorHandler_1 = require("./middleware/errorHandler");
+const notFound_1 = __importDefault(require("./middleware/notFound"));
 // Route imports
-const auth_1 = __importDefault(require("@/routes/auth"));
-const users_1 = __importDefault(require("@/routes/users"));
-const posts_1 = __importDefault(require("@/routes/posts"));
-const categoryRoutes_1 = __importDefault(require("@/routes/categoryRoutes"));
-const destinationRoutes_1 = __importDefault(require("@/routes/destinationRoutes"));
-const guideRoutes_1 = __importDefault(require("@/routes/guideRoutes"));
-const resourceRoutes_1 = __importDefault(require("@/routes/resourceRoutes"));
-const commentRoutes_1 = __importDefault(require("@/routes/commentRoutes"));
-const contactRoutes_1 = __importDefault(require("@/routes/contactRoutes"));
-const photoRoutes_1 = __importDefault(require("@/routes/photoRoutes"));
-const newsletterRoutes_1 = __importDefault(require("@/routes/newsletterRoutes"));
-const adminRoutes_1 = __importDefault(require("@/routes/adminRoutes"));
-const readerRoutes_1 = __importDefault(require("@/routes/readerRoutes"));
-const contributorRoutes_1 = __importDefault(require("@/routes/contributorRoutes"));
-const partnerRoutes_1 = __importDefault(require("@/routes/partnerRoutes"));
-const itineraryRoutes_1 = __importDefault(require("@/routes/itineraryRoutes"));
-const subscriptionRoutes_1 = __importDefault(require("@/routes/subscriptionRoutes"));
-const siteSettingsRoutes_1 = __importDefault(require("@/routes/siteSettingsRoutes"));
-const itineraryReviewRoutes_1 = __importDefault(require("@/routes/itineraryReviewRoutes"));
+const auth_1 = __importDefault(require("./routes/auth"));
+const users_1 = __importDefault(require("./routes/users"));
+const posts_1 = __importDefault(require("./routes/posts"));
+const categoryRoutes_1 = __importDefault(require("./routes/categoryRoutes"));
+const destinationRoutes_1 = __importDefault(require("./routes/destinationRoutes"));
+const guideRoutes_1 = __importDefault(require("./routes/guideRoutes"));
+const resourceRoutes_1 = __importDefault(require("./routes/resourceRoutes"));
+const commentRoutes_1 = __importDefault(require("./routes/commentRoutes"));
+const contactRoutes_1 = __importDefault(require("./routes/contactRoutes"));
+const photoRoutes_1 = __importDefault(require("./routes/photoRoutes"));
+const newsletterRoutes_1 = __importDefault(require("./routes/newsletterRoutes"));
+const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
+const readerRoutes_1 = __importDefault(require("./routes/readerRoutes"));
+const contributorRoutes_1 = __importDefault(require("./routes/contributorRoutes"));
+const partnerRoutes_1 = __importDefault(require("./routes/partnerRoutes"));
+const itineraryRoutes_1 = __importDefault(require("./routes/itineraryRoutes"));
+const subscriptionRoutes_1 = __importDefault(require("./routes/subscriptionRoutes"));
+const siteSettingsRoutes_1 = __importDefault(require("./routes/siteSettingsRoutes"));
+const itineraryReviewRoutes_1 = __importDefault(require("./routes/itineraryReviewRoutes"));
+const advertisementRoutes_1 = __importDefault(require("./routes/advertisementRoutes"));
+const adAnalyticsRoutes_1 = __importDefault(require("./routes/adAnalyticsRoutes"));
 // Connect to database
 (0, database_1.connectDB)();
 // Create Express app
@@ -116,7 +118,11 @@ app.use((0, helmet_1.default)({
     crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use((0, cors_1.default)({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: [
+        process.env.FRONTEND_URL || 'http://localhost:3000',
+        'http://localhost:3001',
+        'http://localhost:3000',
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -484,6 +490,8 @@ app.use(`${API_VERSION}/comments`, commentRoutes_1.default);
 app.use(`${API_VERSION}/contact`, contactRoutes_1.default);
 app.use(`${API_VERSION}/photos`, photoRoutes_1.default);
 app.use(`${API_VERSION}/newsletter`, newsletterRoutes_1.default);
+app.use(`${API_VERSION}/ads`, advertisementRoutes_1.default);
+app.use(`${API_VERSION}/ad-analytics`, adAnalyticsRoutes_1.default);
 app.use(`${API_VERSION}/admin`, adminRoutes_1.default);
 app.use(`${API_VERSION}/contributor`, contributorRoutes_1.default);
 app.use(`${API_VERSION}/reader`, readerRoutes_1.default);

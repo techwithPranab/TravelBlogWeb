@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Plus, Search, Filter, Eye, Edit, Trash2, Copy, MoreVertical } from 'lucide-react'
-import { getAdvertisements, deleteAdvertisement, duplicateAdvertisement, bulkUpdateStatus } from '@/lib/adApi'
+import { Plus, Search, Filter, Eye, Edit, Trash2, MoreVertical } from 'lucide-react'
+import { getAdvertisements, deleteAdvertisement, bulkUpdateStatus } from '@/lib/adApi'
 import { Advertisement } from '@/lib/adApi'
 import toast from 'react-hot-toast'
 
@@ -26,7 +26,7 @@ export default function AdvertisementsPage() {
   const fetchAdvertisements = async () => {
     try {
       setLoading(true)
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('adminToken')
       if (!token) {
         router.push('/admin/login')
         return
@@ -40,8 +40,8 @@ export default function AdvertisementsPage() {
       const response = await getAdvertisements(params, token)
       
       if (response.success) {
-        setAdvertisements(response.data)
-        setTotalPages(response.pagination?.pages || 1)
+        setAdvertisements(response.data.advertisements || [])
+        setTotalPages(response.data.pagination?.pages || 1)
       }
     } catch (error: any) {
       toast.error(error.message || 'Failed to fetch advertisements')
@@ -54,7 +54,7 @@ export default function AdvertisementsPage() {
     if (!confirm('Are you sure you want to delete this advertisement?')) return
 
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('adminToken')
       if (!token) return
 
       await deleteAdvertisement(id, token)
@@ -65,19 +65,6 @@ export default function AdvertisementsPage() {
     }
   }
 
-  const handleDuplicate = async (id: string) => {
-    try {
-      const token = localStorage.getItem('token')
-      if (!token) return
-
-      const response = await duplicateAdvertisement(id, token)
-      toast.success('Advertisement duplicated successfully')
-      fetchAdvertisements()
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to duplicate advertisement')
-    }
-  }
-
   const handleBulkStatusUpdate = async (status: string) => {
     if (selectedAds.length === 0) {
       toast.error('Please select advertisements first')
@@ -85,7 +72,7 @@ export default function AdvertisementsPage() {
     }
 
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('adminToken')
       if (!token) return
 
       await bulkUpdateStatus({ ids: selectedAds, status }, token)
@@ -104,6 +91,8 @@ export default function AdvertisementsPage() {
   }
 
   const toggleSelectAll = () => {
+    if (!Array.isArray(advertisements)) return
+    
     if (selectedAds.length === advertisements.length) {
       setSelectedAds([])
     } else {
@@ -135,15 +124,15 @@ export default function AdvertisementsPage() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Advertisements</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Ads</h1>
             <p className="text-gray-600 mt-1">Manage your advertisement campaigns</p>
           </div>
           <Link
-            href="/admin/advertisements/new"
+            href="/admin/ads/new"
             className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-5 h-5" />
-            Create Advertisement
+            Create Ad
           </Link>
         </div>
 
@@ -228,15 +217,15 @@ export default function AdvertisementsPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="text-gray-600 mt-4">Loading advertisements...</p>
           </div>
-        ) : advertisements.length === 0 ? (
+        ) : !Array.isArray(advertisements) || advertisements.length === 0 ? (
           <div className="p-12 text-center">
-            <p className="text-gray-600">No advertisements found</p>
+            <p className="text-gray-600">No ads found</p>
             <Link
-              href="/admin/advertisements/new"
+              href="/admin/ads/new"
               className="inline-flex items-center gap-2 mt-4 text-blue-600 hover:text-blue-700"
             >
               <Plus className="w-5 h-5" />
-              Create your first advertisement
+              Create your first ad
             </Link>
           </div>
         ) : (
@@ -247,7 +236,7 @@ export default function AdvertisementsPage() {
                   <th className="px-6 py-3 text-left">
                     <input
                       type="checkbox"
-                      checked={selectedAds.length === advertisements.length}
+                      checked={Array.isArray(advertisements) && selectedAds.length === advertisements.length}
                       onChange={toggleSelectAll}
                       className="rounded border-gray-300"
                     />
@@ -273,7 +262,7 @@ export default function AdvertisementsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {advertisements.map((ad) => (
+                {Array.isArray(advertisements) && advertisements.map((ad) => (
                   <tr key={ad._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <input
@@ -285,9 +274,9 @@ export default function AdvertisementsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-start gap-3">
-                        {ad.content.imageUrl && (
+                        {ad.creative.imageUrl && (
                           <img
-                            src={ad.content.imageUrl}
+                            src={ad.creative.imageUrl}
                             alt={ad.name}
                             className="w-16 h-16 object-cover rounded"
                           />
@@ -295,7 +284,7 @@ export default function AdvertisementsPage() {
                         <div>
                           <div className="font-medium text-gray-900">{ad.name}</div>
                           <div className="text-sm text-gray-500 line-clamp-1">
-                            {ad.content.headline}
+                            {ad.title}
                           </div>
                         </div>
                       </div>
@@ -314,12 +303,12 @@ export default function AdvertisementsPage() {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       <div className="space-y-1">
-                        <div>{ad.performance.impressions.toLocaleString()} impressions</div>
-                        <div>{ad.performance.clicks.toLocaleString()} clicks</div>
+                        <div>{(ad.performance?.impressions || 0).toLocaleString()} impressions</div>
+                        <div>{(ad.performance?.clicks || 0).toLocaleString()} clicks</div>
                         <div className="text-gray-500">
                           CTR:{' '}
-                          {ad.performance.impressions > 0
-                            ? ((ad.performance.clicks / ad.performance.impressions) * 100).toFixed(
+                          {(ad.performance?.impressions || 0) > 0
+                            ? (((ad.performance?.clicks || 0) / (ad.performance?.impressions || 1)) * 100).toFixed(
                                 2
                               )
                             : 0}
@@ -329,33 +318,27 @@ export default function AdvertisementsPage() {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       <div className="space-y-1">
-                        <div>Start: {formatDate(ad.schedule.startDate)}</div>
-                        {ad.schedule.endDate && <div>End: {formatDate(ad.schedule.endDate)}</div>}
+                        {ad.schedule?.startDate && <div>Start: {formatDate(ad.schedule.startDate)}</div>}
+                        {ad.schedule?.endDate && <div>End: {formatDate(ad.schedule.endDate)}</div>}
+                        {!ad.schedule && <div className="text-gray-400">No schedule</div>}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right text-sm font-medium">
                       <div className="flex items-center justify-end gap-2">
                         <Link
-                          href={`/admin/advertisements/${ad._id}/analytics`}
+                          href={`/admin/ads/${ad._id}/view`}
                           className="text-blue-600 hover:text-blue-900"
-                          title="View Analytics"
+                          title="View Advertisement"
                         >
                           <Eye className="w-5 h-5" />
                         </Link>
                         <Link
-                          href={`/admin/advertisements/${ad._id}/edit`}
+                          href={`/admin/ads/${ad._id}/edit`}
                           className="text-gray-600 hover:text-gray-900"
                           title="Edit"
                         >
                           <Edit className="w-5 h-5" />
                         </Link>
-                        <button
-                          onClick={() => handleDuplicate(ad._id)}
-                          className="text-gray-600 hover:text-gray-900"
-                          title="Duplicate"
-                        >
-                          <Copy className="w-5 h-5" />
-                        </button>
                         <button
                           onClick={() => handleDelete(ad._id)}
                           className="text-red-600 hover:text-red-900"
