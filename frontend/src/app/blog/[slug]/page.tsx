@@ -23,6 +23,7 @@ import ContentSection from '@/components/blog/ContentSection'
 import YouTubeVideo from '@/components/blog/YouTubeVideo'
 import CommentSection from '@/components/blog/CommentSection'
 import AdContainer from '@/components/ads/AdContainer'
+import { BlogPostSchema } from '@/components/StructuredData'
 import { postsApi } from '@/lib/api'
 import { containsProfanity, getProfanityError } from '@/utils/profanityFilter'
 
@@ -450,6 +451,20 @@ export default function BlogDetailsPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Structured Data for SEO */}
+      {post && (
+        <BlogPostSchema
+          title={post.title}
+          description={post.excerpt}
+          author={post.author}
+          datePublished={post.publishedAt}
+          image={post.featuredImage.url}
+          url={`/blog/${params.slug}`}
+          category={post.category?.name}
+          tags={post.tags}
+        />
+      )}
+
       {/* Header */}
       <div className="bg-gray-50 py-8">
         <div className="container mx-auto px-4">

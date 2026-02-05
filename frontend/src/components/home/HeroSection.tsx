@@ -70,17 +70,17 @@ export function HeroSection() {
   const heroStats = [
     { 
       icon: MapPin, 
-      label: 'Destinations', 
+      label: 'Travel Destinations Covered', 
       value: statsLoading ? '...' : (stats?.totalDestinations || 0).toLocaleString() 
     },
     { 
       icon: Compass, 
-      label: 'Guides', 
+      label: 'Expert Travel Guides', 
       value: statsLoading ? '...' : (stats?.totalGuides || 0).toLocaleString() 
     },
     { 
       icon: Calendar, 
-      label: 'Stories Shared', 
+      label: 'Authentic Travel Stories', 
       value: statsLoading ? '...' : (stats?.totalPosts || 0).toLocaleString() 
     },
   ]
@@ -101,15 +101,16 @@ export function HeroSection() {
         <div className="max-w-4xl mx-auto">
           {/* Hero Text */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 animate-fade-up">
-            Discover the World
+            Explore the World
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-fuchsia-600">
-              One Story at a Time
+              Through Authentic Travel Stories
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-700 mb-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-            Join me on epic adventures around the globe. From hidden gems to iconic destinations,
-            discover travel tips, cultural insights, and breathtaking photography.
+            Discover hidden gems and iconic destinations worldwide. Get expert travel guides, 
+            insider tips, cultural insights, and stunning photography from experienced globetrotters 
+            sharing their real adventures.
           </p>          {/* Search Bar */}
           <form 
             onSubmit={handleSearch} 
@@ -122,7 +123,7 @@ export function HeroSection() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search destinations, travel tips, experiences..."
+                placeholder="Search destinations, countries, travel tips, guides, experiences..."
                 className="w-full pl-12 pr-4 py-4 text-lg rounded-xl bg-white/95 backdrop-blur-sm border-0 focus:ring-4 focus:ring-white/50 focus:outline-none shadow-2xl text-black placeholder-gray-500"
               />
               <Button

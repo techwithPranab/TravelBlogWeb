@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Head from 'next/head'
 import { 
   Search, 
   HelpCircle, 
@@ -39,33 +40,33 @@ export default function HelpCenterPage() {
   const categories: HelpCategory[] = [
     {
       id: 'blog',
-      name: 'Blog',
+      name: 'Travel Blog & Stories',
       icon: <Book className="w-6 h-6" />,
-      description: 'Learn how to read, comment, and interact with our travel blog posts',
+      description: 'Learn how to read, comment on, and interact with our authentic travel blog posts and stories',
       articleCount: 8,
       href: '/help/blog'
     },
     {
       id: 'destinations',
-      name: 'Destinations',
+      name: 'Destination Guides',
       icon: <MapPin className="w-6 h-6" />,
-      description: 'Find information about destinations and location details',
+      description: 'Find comprehensive information about travel destinations, locations, and expert recommendations',
       articleCount: 25,
       href: '/help/destinations'
     },
     {
       id: 'gallery',
-      name: 'Photo Gallery',
+      name: 'Travel Photography Gallery',
       icon: <Globe className="w-6 h-6" />,
-      description: 'Browse and explore our travel photography gallery',
+      description: 'Browse and explore our collection of travel photography and visual stories from around the world',
       articleCount: 12,
       href: '/help/gallery'
     },
     {
       id: 'guides',
-      name: 'Travel Guides',
+      name: 'Expert Travel Guides',
       icon: <Book className="w-6 h-6" />,
-      description: 'Access comprehensive travel guides and itineraries',
+      description: 'Access comprehensive travel guides, itineraries, and practical tips for your adventures',
       articleCount: 18,
       href: '/help/guides'
     }
@@ -136,6 +137,19 @@ export default function HelpCenterPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Head>
+        <title>Travel Help Center - BagPackStories | FAQs, Guides & Support for Travelers</title>
+        <meta
+          name="description"
+          content="Get help with BagPackStories travel blog. Find answers to frequently asked questions about destinations, travel guides, photography gallery, blog navigation, and expert travel advice. Your comprehensive travel support center."
+        />
+        <meta
+          name="keywords"
+          content="travel help center, travel FAQ, travel support, destination help, travel guide assistance, blog help, travel questions, customer support, travel advice, how to travel, travel resources, traveler support"
+        />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/help`} />
+      </Head>
+
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
@@ -146,8 +160,12 @@ export default function HelpCenterPage() {
           >
             <HelpCircle className="w-16 h-16 mx-auto mb-6" />
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              How can we help you?
+              Travel Help Center - Find Answers to Your Questions
             </h1>
+            <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-8">
+              Get help with travel blog navigation, destination guides, travel tips, photography gallery, 
+              and expert advice for planning your adventures
+            </p>
             <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
               Find answers to your questions, browse our guides, or get in touch with our support team.
             </p>

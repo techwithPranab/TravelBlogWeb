@@ -123,10 +123,11 @@ export function InteractiveTravelMap() {
     <div className="animate-fade-up">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Interactive Travel Map
+          Explore Destinations Worldwide
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          Explore destinations I've visited around the world
+          Click any marker to discover travel guides, reviews, and insider tips for destinations 
+          across the globe
         </p>
       </div>
 

@@ -41,15 +41,16 @@ export default function PrivacyPolicyPage() {
   return (
     <>
       <Head>
-        <title>Privacy Policy | BagPackStories</title>
+        <title>Privacy Policy - BagPackStories Travel Blog | Data Protection & User Privacy</title>
         <meta
           name="description"
-          content="Learn how BagPackStories collects, uses, and protects your personal information. Our commitment to your privacy and data security."
+          content="BagPackStories Privacy Policy: Learn how we collect, use, protect, and manage your personal information. Our commitment to user privacy, data security, GDPR compliance, and transparent data practices for our travel blog community."
         />
         <meta
           name="keywords"
-          content="privacy policy, data protection, personal information, GDPR, CCPA, data security"
+          content="privacy policy, data protection, personal information, user privacy, GDPR compliance, CCPA compliance, data security, cookie policy, travel blog privacy, user data protection, information security, privacy rights, data handling"
         />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/privacy-policy`} />
       </Head>
       <div className="min-h-screen bg-white">
       {/* Header */}
@@ -65,15 +66,16 @@ export default function PrivacyPolicyPage() {
           
           <div className="flex items-center mb-4">
             <Shield className="w-8 h-8 mr-3" />
-            <h1 className="text-2xl md:text-3xl font-bold">Privacy Policy</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">Privacy Policy - Your Data Protection Rights</h1>
           </div>
           
           <p className="text-lg text-blue-100 max-w-2xl">
-            Your privacy matters to us. Learn how we collect, use, and protect your personal information.
+            BagPackStories is committed to protecting your privacy. Learn how we collect, use, safeguard, 
+            and respect your personal information while providing you with the best travel content and community experience.
           </p>
           
           <div className="mt-6 text-sm text-blue-200">
-            Last updated: September 8, 2025
+            Last updated: February 4, 2026
           </div>
         </div>
       </div>

@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { destinationsApi } from '@/lib/api'
 import { motion } from 'framer-motion'
+import { DestinationSchema } from '@/components/StructuredData'
 
 interface Destination {
   _id: string
@@ -234,6 +235,23 @@ export default function DestinationDetailsPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Structured Data for SEO */}
+      {destination && (
+        <DestinationSchema
+          name={destination.name}
+          description={destination.description}
+          image={destination.featuredImage.url}
+          url={`/destinations/${params.slug}`}
+          latitude={destination.coordinates?.lat}
+          longitude={destination.coordinates?.lng}
+          addressCountry={destination.country}
+          rating={destination.rating}
+          ratingCount={destination.totalReviews}
+          bestTimeToVisit={destination.bestTimeToVisit}
+          popularActivities={destination.activities?.map(a => a.name)}
+        />
+      )}
+
       {/* Hero Section */}
       <div className="relative h-screen">
         <Image

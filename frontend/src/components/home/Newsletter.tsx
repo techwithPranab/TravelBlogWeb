@@ -51,10 +51,11 @@ export function Newsletter() {
   return (
     <div className="animate-fade-up text-center text-white">
       <h2 className="text-3xl md:text-4xl font-bold mb-4">
-        Stay Updated
+        Get Travel Inspiration in Your Inbox
       </h2>
       <p className="text-xl mb-8 text-white/90">
-        Get the latest travel stories and tips delivered to your inbox
+        Subscribe to receive exclusive travel guides, destination tips, photography insights, 
+        and inspiring stories from around the world
       </p>
       
       {message && (

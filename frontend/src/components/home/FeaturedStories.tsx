@@ -120,10 +120,11 @@ export function FeaturedStories() {
     <div className="animate-fade-up">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-          Featured Travel Stories
+          Featured Travel Stories & Destination Guides
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Dive into our most popular travel experiences and get inspired for your next adventure.
+          Explore our handpicked travel experiences, destination reviews, and expert guides. 
+          Get inspired by authentic stories from fellow travelers exploring the world.
         </p>
       </div>
 

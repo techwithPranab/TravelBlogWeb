@@ -1,5 +1,6 @@
 "use client"
 import Link from 'next/link'
+import Head from 'next/head'
 import { ArrowLeft, Mail, Gift, Users, Globe, Calendar, Star, CheckCircle, Zap } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
@@ -88,48 +89,48 @@ export default function NewsletterPage() {
   const benefits = [
     {
       icon: Globe,
-      title: 'Destination Spotlights',
-      description: 'Discover hidden gems and trending destinations before they become crowded'
+      title: 'Exclusive Destination Spotlights',
+      description: 'Discover hidden gems, trending destinations, and off-the-beaten-path locations before they become crowded with tourists'
     },
     {
       icon: Gift,
-      title: 'Exclusive Deals',
-      description: 'Access special discounts on hotels, flights, and travel gear'
+      title: 'Travel Deals & Discounts',
+      description: 'Access exclusive deals on hotels, flights, travel gear, and special offers from our trusted travel partners'
     },
     {
       icon: Star,
-      title: 'Expert Tips',
-      description: 'Get insider travel tips from experienced travelers and local experts'
+      title: 'Expert Travel Tips & Hacks',
+      description: 'Get insider travel tips, budget advice, packing hacks, and practical guidance from experienced travelers and local experts'
     },
     {
       icon: Calendar,
-      title: 'Travel Planning',
-      description: 'Seasonal travel guides and planning checklists for your next adventure'
+      title: 'Seasonal Travel Planning Guides',
+      description: 'Receive seasonal destination guides, travel planning checklists, and curated itineraries for your next adventure'
     }
   ]
 
   const features = [
     {
-      title: 'Weekly Travel Digest',
-      description: 'Our most popular stories, tips, and destination guides delivered every Monday',
+      title: 'Weekly Travel Digest & Stories',
+      description: 'Our most popular travel stories, destination tips, photography highlights, and expert guides delivered every Monday morning',
       frequency: 'Weekly',
       subscribers: metrics.weeklyDigest
     },
     {
-      title: 'Deal Alerts',
-      description: 'Flash sales, limited-time offers, and exclusive discounts on travel deals',
+      title: 'Flash Travel Deal Alerts',
+      description: 'Limited-time travel deals, flash sales on flights and hotels, and exclusive discounts from trusted partners',
       frequency: 'As needed',
       subscribers: metrics.dealAlerts
     },
     {
-      title: 'Destination Deep Dives',
-      description: 'Comprehensive guides to specific destinations with local insights and tips',
+      title: 'Destination Deep Dive Guides',
+      description: 'Comprehensive monthly guides to specific destinations featuring local insights, cultural tips, and practical travel advice',
       frequency: 'Monthly',
       subscribers: metrics.destinations
     },
     {
-      title: 'Travel Tips & Hacks',
-      description: 'Practical advice for budget travel, packing, and making the most of your trips',
+      title: 'Travel Tips, Hacks & Budget Advice',
+      description: 'Practical advice for budget travel, smart packing strategies, photography tips, and making the most of your trips',
       frequency: 'Bi-weekly',
       subscribers: metrics.travelTips
     }
@@ -137,6 +138,19 @@ export default function NewsletterPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Head>
+        <title>Subscribe to Travel Newsletter - BagPackStories | Get Expert Travel Tips & Destination Guides</title>
+        <meta
+          name="description"
+          content="Subscribe to BagPackStories travel newsletter and receive exclusive destination guides, expert travel tips, photography insights, budget advice, and special deals delivered to your inbox. Join thousands of travelers worldwide."
+        />
+        <meta
+          name="keywords"
+          content="travel newsletter, destination guides, travel tips email, travel deals, travel inspiration, adventure newsletter, budget travel advice, photography tips, travel community, exclusive travel content, wanderlust newsletter"
+        />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/newsletter`} />
+      </Head>
+
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16">
         <div className="container mx-auto px-4">
@@ -151,12 +165,13 @@ export default function NewsletterPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center mb-6">
               <Mail className="w-12 h-12 mr-3" />
-              <h1 className="text-2xl md:text-3xl font-bold">Travel Newsletter</h1>
+              <h1 className="text-2xl md:text-3xl font-bold">Subscribe to BagPackStories Travel Newsletter</h1>
             </div>
             
             <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
-              Get the latest destination guides, travel tips, and exclusive deals delivered
-              straight to your inbox. Join our community of travelers who never miss an adventure.
+              Get exclusive travel inspiration delivered to your inbox! Receive expert destination guides, 
+              insider travel tips, photography insights, budget advice, and special travel deals. 
+              Join thousands of travelers who never miss an adventure.
             </p>
             
             {/* <div className="flex items-center justify-center space-x-8 text-blue-100">
@@ -181,9 +196,10 @@ export default function NewsletterPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Why Subscribe?</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Why Subscribe to Our Travel Newsletter?</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Join our community of passionate travelers and get exclusive access to the best travel content.
+              Join our global community of passionate travelers and adventure seekers. Get exclusive access 
+              to expert travel content, destination insights, and insider tips to make your journeys unforgettable.
             </p>
           </div>
           

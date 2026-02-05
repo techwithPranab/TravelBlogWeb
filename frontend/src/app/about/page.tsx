@@ -38,19 +38,24 @@ export default function AboutPage() {
 
   // Generate SEO metadata for about page
   const generateSEOMetadata = () => {
-    const title = 'About Me - BagPackStories | IT Professional & Passionate Traveler'
-    const description = 'Learn about Pranab Paul\'s journey as an IT professional and passionate traveler, sharing authentic experiences from work trips, family vacations, and solo adventures around the world.'
+    const title = 'About BagPackStories - Real Travel Stories from an IT Professional & Passionate Explorer'
+    const description = 'Meet Pranab Paul, the founder of BagPackStories. Learn how an IT professional combines work trips, family vacations, and solo adventures to share authentic travel experiences, practical guides, and inspiring stories from destinations worldwide. Discover our mission to make travel accessible and inspiring.'
     const keywords = [
       'about travel blog',
-      'travel team',
-      'travel writers',
-      'travel photographers',
-      'travel company',
-      'travel mission',
-      'travel values',
-      'travel story',
-      'travel community',
-      'travel experts'
+      'travel blogger',
+      'IT professional traveler',
+      'authentic travel stories',
+      'travel photography',
+      'travel guide writer',
+      'destination expert',
+      'travel content creator',
+      'solo travel experiences',
+      'family vacation blogger',
+      'work trip adventures',
+      'backpacking stories',
+      'global travel community',
+      'travel inspiration source',
+      'adventure storyteller'
     ].join(', ')
 
     return { title, description, keywords }
@@ -63,39 +68,56 @@ export default function AboutPage() {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "AboutPage",
-      "name": "About BagPackStories",
+      "name": "About BagPackStories - Travel Blog & Destination Guides",
       "description": seoData.description,
       "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`,
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/about`
+      },
       "publisher": {
         "@type": "Organization",
         "name": "BagPackStories",
         "foundingDate": "2018",
-        "description": "A personal travel blog by Pranab Paul, sharing authentic travel experiences from work trips, family vacations, and solo adventures around the world.",
+        "description": "A personal travel blog by Pranab Paul, an IT professional sharing authentic travel experiences, expert guides, and inspiring stories from work trips, family vacations, and solo adventures worldwide.",
+        "url": process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/logo.png`
+        },
         "sameAs": [
           "https://facebook.com/bagpackstories",
           "https://twitter.com/bagpackstories",
-          "https://instagram.com/bagpackstories"
-        ]
+          "https://instagram.com/bagpackstories",
+          "https://youtube.com/bagpackstories"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "email": "support@bagpackstories.in",
+          "availableLanguage": ["English"]
+        }
       },
       "mainEntity": {
         "@type": "Organization",
         "name": "BagPackStories",
-        "description": "Personal travel blog by Pranab Paul, an IT professional sharing authentic stories, practical guides, and inspiring adventures from around the world.",
+        "description": "Leading personal travel blog featuring authentic stories, expert destination guides, photography tips, and practical travel advice from real-world experiences across the globe.",
         "founder": {
           "@type": "Person",
-          "name": "Pranab Paul"
+          "name": "Pranab Paul",
+          "jobTitle": "Founder, Travel Writer & IT Professional",
+          "description": "IT professional and passionate traveler sharing authentic experiences from destinations worldwide"
         },
-        "employee": [
-          {
-            "@type": "Person",
-            "name": "Pranab Paul",
-            "jobTitle": "Founder & IT Professional Travel Writer"
-          },
-          {
-            "@type": "Person",
-            "name": "Emma Rodriguez",
-            "jobTitle": "Adventure Guide Writer"
-          }
+        "knowsAbout": [
+          "Travel blogging",
+          "Destination guides",
+          "Travel photography",
+          "Budget travel tips",
+          "Solo travel",
+          "Family vacations",
+          "Work travel experiences",
+          "Adventure travel",
+          "Cultural experiences"
         ]
       }
     }

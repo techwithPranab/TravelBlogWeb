@@ -49,8 +49,8 @@ export default function HomePage() {
 
   // Generate SEO metadata for homepage
   const generateSEOMetadata = () => {
-    const title = 'BagPackStories - Discover Amazing Destinations & Travel Stories'
-    const description = 'Explore breathtaking destinations, read inspiring travel stories, and get expert travel guides from experienced travelers around the world. Your ultimate travel companion.'
+    const title = 'BagPackStories - Travel Blog, Destination Guides & Authentic Travel Stories'
+    const description = 'Explore the world with BagPackStories. Discover breathtaking travel destinations, read authentic travel stories, get expert guides, photography tips, budget travel advice, and insider tips from experienced travelers. Your ultimate resource for travel inspiration and planning.'
     const keywords = [
       'travel blog',
       'travel destinations',
@@ -61,7 +61,17 @@ export default function HomePage() {
       'vacation planning',
       'travel tips',
       'world destinations',
-      'travel inspiration'
+      'travel inspiration',
+      'backpacking',
+      'budget travel',
+      'solo travel tips',
+      'family vacation ideas',
+      'destination reviews',
+      'travel itineraries',
+      'cultural travel',
+      'wanderlust',
+      'globetrotting',
+      'travel experiences'
     ].join(', ')
 
     return { title, description, keywords }
@@ -75,15 +85,23 @@ export default function HomePage() {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "BagPackStories",
+      "alternateName": "BagPack Stories Travel Blog",
       "description": seoData.description,
       "url": process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
       "publisher": {
         "@type": "Organization",
         "name": "BagPackStories",
+        "description": "Leading travel blog featuring authentic destination guides and travel stories",
         "logo": {
           "@type": "ImageObject",
           "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/logo.png`
-        }
+        },
+        "sameAs": [
+          "https://facebook.com/bagpackstories",
+          "https://twitter.com/bagpackstories",
+          "https://instagram.com/bagpackstories",
+          "https://youtube.com/bagpackstories"
+        ]
       },
       "potentialAction": {
         "@type": "SearchAction",
@@ -92,6 +110,10 @@ export default function HomePage() {
           "urlTemplate": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/search?q={search_term_string}`
         },
         "query-input": "required name=search_term_string"
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Travel Enthusiasts, Adventure Seekers, Backpackers, Vacation Planners"
       }
     }
 

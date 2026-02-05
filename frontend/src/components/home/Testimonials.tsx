@@ -51,11 +51,12 @@ export function Testimonials() {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Quote className="h-8 w-8 text-blue-600" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-              What Our Readers Say
+              Traveler Reviews & Testimonials
             </h2>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Join thousands of travelers who trust our stories and guides for their adventures
+            Real experiences from our global community of travelers who use our guides 
+            and stories to plan their adventures
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

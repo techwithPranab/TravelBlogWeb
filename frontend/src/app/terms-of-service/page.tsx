@@ -40,15 +40,16 @@ export default function TermsOfServicePage() {
   return (
     <>
       <Head>
-        <title>Terms of Service | BagPackStories</title>
+        <title>Terms of Service - BagPackStories Travel Blog | User Agreement & Guidelines</title>
         <meta
           name="description"
-          content="Read our terms of service to understand your rights and responsibilities when using BagPackStories platform."
+          content="Read BagPackStories Terms of Service to understand your rights and responsibilities when using our travel blog platform. Learn about user guidelines, content usage, community standards, and legal terms for accessing our travel guides and stories."
         />
         <meta
           name="keywords"
-          content="terms of service, user agreement, legal terms, conditions, website rules"
+          content="terms of service, user agreement, legal terms, terms and conditions, website rules, user guidelines, content policy, community guidelines, acceptable use policy, travel blog terms, user rights, platform rules"
         />
+        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/terms-of-service`} />
       </Head>
       <div className="min-h-screen bg-white">
         {/* Header */}
@@ -64,15 +65,17 @@ export default function TermsOfServicePage() {
           
           <div className="flex items-center mb-4">
             <Scale className="w-8 h-8 mr-3" />
-            <h1 className="text-2xl md:text-3xl font-bold">Terms of Service</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">Terms of Service - User Agreement</h1>
           </div>
           
           <p className="text-lg text-green-100 max-w-2xl">
-            Please read these terms carefully before using our travel blog platform.
+            Welcome to BagPackStories! Please read these terms of service carefully to understand your rights, 
+            responsibilities, and the guidelines for using our travel blog platform, accessing travel guides, 
+            and engaging with our community.
           </p>
           
           <div className="mt-6 text-sm text-green-200">
-            Last updated: September 8, 2025
+            Last updated: February 4, 2026
           </div>
         </div>
       </div>

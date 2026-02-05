@@ -95,19 +95,39 @@ export default function ContactPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ContactPage",
-            "name": "Contact Us - BagPackStories",
-            "description": "Get in touch with BagPackStories for travel tips, collaborations, and questions about our travel stories.",
+            "name": "Contact BagPackStories - Travel Blog & Destination Guide Support",
+            "description": "Get in touch with BagPackStories for travel questions, collaboration opportunities, travel guide requests, photography inquiries, and general support. We're here to help plan your next adventure.",
             "url": "https://bagpackstories.in/contact",
             "mainEntity": {
               "@type": "Organization",
               "name": "BagPackStories",
+              "description": "Leading personal travel blog providing authentic stories and expert destination guides",
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+1-555-TRAVEL",
+                "telephone": contactInfo?.phone || "+91 9836027578",
                 "contactType": "customer service",
-                "email": contactInfo?.email || "hello@bagpackstories.in",
-                "availableLanguage": "English"
-              }
+                "email": contactInfo?.email || "support@bagpackstories.in",
+                "availableLanguage": ["English"],
+                "areaServed": "Worldwide",
+                "hoursAvailable": {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                  "opens": "09:00",
+                  "closes": "18:00"
+                }
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Barrackpore",
+                "addressRegion": "West Bengal",
+                "addressCountry": "India"
+              },
+              "sameAs": [
+                "https://facebook.com/bagpackstories",
+                "https://twitter.com/bagpackstories",
+                "https://instagram.com/bagpackstories",
+                "https://youtube.com/bagpackstories"
+              ]
             },
             "publisher": {
               "@type": "Organization",
@@ -115,6 +135,17 @@ export default function ContactPage() {
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://bagpackstories.in/images/logo.png"
+              }
+            },
+            "potentialAction": {
+              "@type": "CommunicateAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://bagpackstories.in/contact",
+                "actionPlatform": [
+                  "http://schema.org/DesktopWebPlatform",
+                  "http://schema.org/MobileWebPlatform"
+                ]
               }
             }
           })
@@ -125,10 +156,11 @@ export default function ContactPage() {
       <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-2xl md:text-3xl font-bold mb-4">
-            Get in Touch
+            Contact BagPackStories - We're Here to Help
           </h1>
           <p className="text-lg text-blue-100 max-w-3xl mx-auto">
-            Have a question about our travel stories? Want to collaborate? We'd love to hear from you.
+            Have questions about travel destinations? Need expert travel advice? Want to collaborate on travel content? 
+            Looking for destination recommendations? We'd love to connect with fellow travelers and answer your queries.
           </p>
         </div>
       </div>
@@ -138,7 +170,7 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Send Us Your Travel Questions</h2>
 
             {submitStatus === 'success' && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">

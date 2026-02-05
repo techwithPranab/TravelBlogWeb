@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import { generateGuidePDF } from '@/lib/pdfGenerator'
 import { guidesApi, Guide } from '@/lib/api'
+import { GuideSchema } from '@/components/StructuredData'
 
 export default function GuideDetailsPage() {
   const params = useParams()
@@ -143,6 +144,19 @@ export default function GuideDetailsPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Structured Data for SEO */}
+      {guide && (
+        <GuideSchema
+          title={guide.title}
+          description={guide.description}
+          author={guide.author?.name || 'BagPackStories Team'}
+          datePublished={guide.createdAt}
+          dateModified={guide.lastUpdated}
+          image={guide.featuredImage?.url || '/images/default-guide.jpg'}
+          url={`/guides/${params.slug}`}
+        />
+      )}
+
       {/* Header */}
       <div className="bg-gray-50 py-8">
         <div className="container mx-auto px-4">

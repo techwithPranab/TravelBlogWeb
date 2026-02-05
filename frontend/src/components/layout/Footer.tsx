@@ -44,10 +44,10 @@ export function Footer() {
 
   const footerLinks = {
     explore: [
-      { name: 'Destinations', href: '/destinations' },
-      { name: 'Travel Guides', href: '/guides' },
-      { name: 'Blogs', href: '/blog' },
-      { name: 'Photo Gallery', href: '/gallery' },
+      { name: 'Travel Destinations', href: '/destinations' },
+      { name: 'Expert Travel Guides', href: '/guides' },
+      { name: 'Travel Blog & Stories', href: '/blog' },
+      { name: 'Travel Photography', href: '/gallery' },
     ],
     resources: [
       // { name: 'Travel Resources', href: '/resources' },
@@ -56,15 +56,15 @@ export function Footer() {
       { name: '', href: '' }, // Keep empty item to maintain array type
     ].filter(item => item.name !== ''), // Filter out empty items
     company: [
-      { name: 'About', href: '/about' },
-      { name: 'Contact', href: '/contact' },
+      { name: 'About BagPackStories', href: '/about' },
+      { name: 'Contact Us', href: '/contact' },
       { name: 'Privacy Policy', href: '/privacy-policy' },
       { name: 'Terms of Service', href: '/terms-of-service' },
     ],
     support: [
-      { name: 'Help Center', href: '/help' },
+      { name: 'Travel Help Center', href: '/help' },
       // { name: 'Community', href: '/communities' },
-      { name: 'Newsletter', href: '/newsletter' },
+      { name: 'Travel Newsletter', href: '/newsletter' },
       // { name: 'Partner with Us', href: '/partner-with-us' },
     ],
   }
@@ -90,9 +90,10 @@ export function Footer() {
               <span className="text-2xl font-bold">BagPackStories</span>
             </div>
             
-            <p className="text-gray-300 mb-6 max-w-md">
-              Discover amazing destinations, get practical travel tips, and find inspiration 
-              for your next adventure. Join thousands of travelers exploring the world one story at a time.
+            <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
+              Your trusted travel companion for discovering breathtaking destinations worldwide. 
+              Get expert travel guides, insider tips, destination reviews, and authentic travel stories 
+              from experienced globetrotters. Plan your dream vacation with our comprehensive resources.
             </p>
 
             {/* Social Links */}
