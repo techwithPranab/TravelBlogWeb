@@ -1,8 +1,8 @@
 "use client"
 import Link from 'next/link'
 import Head from 'next/head'
-import { ArrowLeft, Mail, Gift, Users, Globe, Calendar, Star, CheckCircle, Zap } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { ArrowLeft, Mail, Gift, Globe, Calendar, Star, CheckCircle, Zap } from 'lucide-react'
+import { useState } from 'react'
 
 export default function NewsletterPage() {
   const [email, setEmail] = useState('')
@@ -14,36 +14,6 @@ export default function NewsletterPage() {
   })
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [metrics, setMetrics] = useState({
-    weeklyDigest: '1K+',
-    dealAlerts: '1K+',
-    destinations: '1K+',
-    travelTips: '1K+'
-  })
-
-  // Fetch newsletter metrics on component mount
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/newsletter/public/metrics`)
-        if (response.ok) {
-          const data = await response.json()
-          if (data.success) {
-            setMetrics({
-              weeklyDigest: data.data.weeklyDigest,
-              dealAlerts: data.data.dealAlerts,
-              destinations: data.data.destinations,
-              travelTips: data.data.travelTips
-            })
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch newsletter metrics:', error)
-      }
-    }
-    
-    fetchMetrics()
-  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -89,105 +59,177 @@ export default function NewsletterPage() {
   const benefits = [
     {
       icon: Globe,
-      title: 'Exclusive Destination Spotlights',
-      description: 'Discover hidden gems, trending destinations, and off-the-beaten-path locations before they become crowded with tourists'
+      title: 'Exclusive Destination Spotlights & Hidden Gems',
+      description: 'Discover off-the-beaten-path locations, trending destinations, and authentic local experiences before they become mainstream tourist traps. Get insider access to places only locals know.'
     },
     {
       icon: Gift,
-      title: 'Travel Deals & Discounts',
-      description: 'Access exclusive deals on hotels, flights, travel gear, and special offers from our trusted travel partners'
+      title: 'VIP Travel Deals & Exclusive Discounts',
+      description: 'Access flash sales on flights, hotel deals up to 70% off, travel gear discounts, and special offers from our trusted airline and hotel partners. Save thousands on your next trip.'
     },
     {
       icon: Star,
-      title: 'Expert Travel Tips & Hacks',
-      description: 'Get insider travel tips, budget advice, packing hacks, and practical guidance from experienced travelers and local experts'
+      title: 'Expert Photography Tutorials & Travel Tips',
+      description: 'Master travel photography with professional techniques, learn to capture stunning landscapes and portraits, and get pro tips for editing travel photos. Plus budget travel hacks from seasoned adventurers.'
     },
     {
       icon: Calendar,
-      title: 'Seasonal Travel Planning Guides',
-      description: 'Receive seasonal destination guides, travel planning checklists, and curated itineraries for your next adventure'
+      title: 'Seasonal Travel Planning & Itinerary Guides',
+      description: 'Receive comprehensive destination guides with seasonal weather insights, cultural events calendar, optimal travel times, and curated itineraries tailored to different budgets and interests.'
     }
   ]
 
   const features = [
     {
-      title: 'Weekly Travel Digest & Stories',
-      description: 'Our most popular travel stories, destination tips, photography highlights, and expert guides delivered every Monday morning',
-      frequency: 'Weekly',
-      subscribers: metrics.weeklyDigest
+      title: 'Weekly Travel Digest & Adventure Stories',
+      description: 'Our flagship newsletter featuring the best travel stories, destination highlights, professional photography showcases, expert travel guides, and inspiring adventures from around the globe. Delivered every Monday morning to start your week with wanderlust.',
+      frequency: 'Every Monday',
+      highlight: 'Most Popular'
     },
     {
-      title: 'Flash Travel Deal Alerts',
-      description: 'Limited-time travel deals, flash sales on flights and hotels, and exclusive discounts from trusted partners',
-      frequency: 'As needed',
-      subscribers: metrics.dealAlerts
+      title: 'Flash Travel Deal Alerts & Exclusive Offers',
+      description: 'Never miss limited-time deals on flights, hotels, vacation packages, and travel experiences. Get instant notifications about flash sales, last-minute deals, and VIP offers from our partner airlines, hotels, and travel companies. Save up to 70% on your dream trips.',
+      frequency: 'Real-time alerts',
+      highlight: 'Time-Sensitive'
     },
     {
-      title: 'Destination Deep Dive Guides',
-      description: 'Comprehensive monthly guides to specific destinations featuring local insights, cultural tips, and practical travel advice',
+      title: 'Destination Deep Dive Guides & Local Insights',
+      description: 'Comprehensive monthly guides to specific destinations featuring authentic local experiences, cultural insights, seasonal weather patterns, optimal travel times, hidden attractions, and practical advice from residents and frequent visitors. Plan smarter, travel better.',
       frequency: 'Monthly',
-      subscribers: metrics.destinations
+      highlight: 'In-Depth'
     },
     {
-      title: 'Travel Tips, Hacks & Budget Advice',
-      description: 'Practical advice for budget travel, smart packing strategies, photography tips, and making the most of your trips',
+      title: 'Travel Photography Tips & Budget Travel Hacks',
+      description: 'Bi-weekly practical advice covering professional travel photography techniques, budget-saving strategies, smart packing tips, cultural etiquette guides, and money-saving hacks. Learn from experienced photographers and budget travel experts who\'ve visited 100+ countries.',
       frequency: 'Bi-weekly',
-      subscribers: metrics.travelTips
+      highlight: 'Expert Tips'
     }
   ]
 
   return (
     <div className="min-h-screen bg-white">
       <Head>
-        <title>Subscribe to Travel Newsletter - BagPackStories | Get Expert Travel Tips & Destination Guides</title>
+        <title>Free Travel Newsletter: Expert Destination Guides, Photography Tips & Exclusive Deals | BagPackStories</title>
         <meta
           name="description"
-          content="Subscribe to BagPackStories travel newsletter and receive exclusive destination guides, expert travel tips, photography insights, budget advice, and special deals delivered to your inbox. Join thousands of travelers worldwide."
+          content="Subscribe to BagPackStories premium travel newsletter for FREE. Get weekly destination guides, expert photography tutorials, budget travel hacks, exclusive flight deals, and insider travel tips from professional photographers and travel experts."
         />
         <meta
           name="keywords"
-          content="travel newsletter, destination guides, travel tips email, travel deals, travel inspiration, adventure newsletter, budget travel advice, photography tips, travel community, exclusive travel content, wanderlust newsletter"
+          content="travel newsletter subscription, free travel newsletter, destination guides, travel photography tips, budget travel advice, flight deals, travel deals, travel inspiration, adventure newsletter, travel planning tips, photography tutorials, travel hacks, exclusive travel content, wanderlust newsletter, travel community"
         />
+        <meta name="author" content="BagPackStories" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="English" />
+        <meta name="revisit-after" content="7 days" />
+        <meta property="og:title" content="Free Travel Newsletter: Expert Guides & Exclusive Deals | BagPackStories" />
+        <meta property="og:description" content="Get FREE weekly travel inspiration, expert destination guides, photography tips, and exclusive deals." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/newsletter`} />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/images/newsletter-og.jpg`} />
+        <meta property="og:site_name" content="BagPackStories" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Free Travel Newsletter: Expert Guides & Exclusive Deals" />
+        <meta name="twitter:description" content="Get FREE weekly travel inspiration, expert destination guides, photography tips, and exclusive deals." />
+        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/images/newsletter-og.jpg`} />
         <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/newsletter`} />
       </Head>
+
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "Travel Newsletter Subscription - BagPackStories",
+            "description": "Subscribe to premium travel newsletter for expert destination guides, photography tips, and exclusive travel deals",
+            "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/newsletter`,
+            "publisher": {
+              "@type": "Organization",
+              "name": "BagPackStories",
+              "url": process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+              "logo": {
+                "@type": "ImageObject",
+                "url": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/images/logo.svg`
+              },
+              "sameAs": [
+                "https://www.instagram.com/bagpackstories",
+                "https://www.facebook.com/bagpackstories"
+              ]
+            },
+            "mainEntity": {
+              "@type": "SubscribeAction",
+              "name": "Newsletter Subscription",
+              "description": "Subscribe to receive weekly travel guides, photography tips, and exclusive deals",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/newsletter`,
+                "inLanguage": "en-US",
+                "actionPlatform": [
+                  "http://schema.org/DesktopWebPlatform",
+                  "http://schema.org/MobileWebPlatform"
+                ]
+              },
+              "expectsAcceptanceOf": {
+                "@type": "Offer",
+                "name": "Free Travel Newsletter",
+                "description": "Weekly travel inspiration, expert guides, and exclusive deals",
+                "price": "0",
+                "priceCurrency": "USD"
+              }
+            },
+            "breadcrumb": {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Newsletter",
+                  "item": `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/newsletter`
+                }
+              ]
+            }
+          })
+        }}
+      />
 
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16">
         <div className="container mx-auto px-4">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-flex items-center text-white/80 hover:text-white mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </Link>
-          
+
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center mb-6">
               <Mail className="w-12 h-12 mr-3" />
-              <h1 className="text-2xl md:text-3xl font-bold">Subscribe to BagPackStories Travel Newsletter</h1>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+                Join Travelers Worldwide: Get FREE Expert Travel Insights
+              </h1>
             </div>
-            
-            <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
-              Get exclusive travel inspiration delivered to your inbox! Receive expert destination guides, 
-              insider travel tips, photography insights, budget advice, and special travel deals. 
-              Join thousands of travelers who never miss an adventure.
+
+            <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
+              Unlock premium travel content delivered weekly to your inbox. Get exclusive destination guides from local experts,
+              professional photography tutorials, budget-saving travel hacks, and flash deals on flights & hotels.
+              Transform your travel planning with insider knowledge from passionate explorers worldwide.
             </p>
-            
-            {/* <div className="flex items-center justify-center space-x-8 text-blue-100">
-              <div className="text-center">
-                <div className="text-2xl font-bold">45K+</div>
-                <div className="text-sm">Subscribers</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">4.9</div>
-                <div className="text-sm">Rating</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">200+</div>
-                <div className="text-sm">Countries</div>
-              </div>
-            </div> */}
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto">
+              <p className="text-blue-100 text-lg font-medium">
+                🎯 <strong>What You'll Get:</strong> Weekly travel digest, exclusive deals, destination deep-dives, and expert photography tips
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -196,10 +238,13 @@ export default function NewsletterPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Why Subscribe to Our Travel Newsletter?</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Join our global community of passionate travelers and adventure seekers. Get exclusive access 
-              to expert travel content, destination insights, and insider tips to make your journeys unforgettable.
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Why Travelers Choose Our Newsletter
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Join our thriving community of passionate travelers, professional photographers, and adventure seekers.
+              Get exclusive access to premium travel content, insider destination intelligence, and expert guidance
+              that transforms ordinary trips into extraordinary adventures. Your journey to becoming a smarter traveler starts here.
             </p>
           </div>
           
@@ -221,9 +266,13 @@ export default function NewsletterPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Choose Your Adventure</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Select the newsletters that match your travel interests and schedule.
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Choose Your Travel Newsletter Experience
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Join fellow travelers who rely on our expert-curated travel content.
+              From budget travel hacks and exclusive deals to destination guides and photography tips,
+              our newsletters deliver the travel insights you need to plan better, travel smarter, and create unforgettable memories.
             </p>
           </div>
           
@@ -235,24 +284,89 @@ export default function NewsletterPage() {
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
                     <p className="text-gray-600 mb-3">{feature.description}</p>
                   </div>
-                </div>
-                
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                   <div className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-1" />
-                    <span>{feature.frequency}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Users className="w-4 h-4 mr-1" />
-                    <span>{feature.subscribers} subscribers</span>
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      {feature.highlight}
+                    </span>
                   </div>
                 </div>
                 
-                <div className="flex items-center">
-                  <span className="text-sm text-blue-600 font-medium">Join {feature.subscribers} subscribers</span>
+                <div className="flex items-center text-sm text-gray-500">
+                  <Calendar className="w-4 h-4 mr-1" />
+                  <span>{feature.frequency}</span>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Frequently Asked Questions About Our Travel Newsletter
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Get answers to common questions about our travel newsletter subscription, content delivery, and how we help you become a better traveler.
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto space-y-6">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">How often will I receive newsletters?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Our newsletters are delivered on different schedules based on content type: Weekly Travel Digest every Monday,
+                Flash Deal Alerts in real-time when available, Destination Deep Dive Guides monthly, and Travel Photography Tips bi-weekly.
+                You can customize your preferences during signup to receive only the content that interests you most.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Is the newsletter really free?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Yes! Our travel newsletter is completely free. We believe in sharing travel knowledge and inspiration with fellow adventurers worldwide.
+                You'll never pay a subscription fee, and we don't sell your email address to third parties. Your privacy is protected.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Can I unsubscribe at any time?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Absolutely! Every newsletter includes an easy one-click unsubscribe link at the bottom. You can also manage your preferences
+                or unsubscribe directly from your account dashboard. We respect your inbox and make it simple to leave if our content
+                no longer serves your travel interests.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">What makes your travel content different?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Our content is created by experienced travelers, professional photographers, and local experts who've visited over 200 countries.
+                We focus on authentic experiences, practical advice, and insider knowledge that mainstream travel sites often miss.
+                Every guide is researched on-site and includes real local insights, not just generic tourist information.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Do you offer travel deals and discounts?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Yes! Our Flash Deal Alerts newsletter delivers exclusive offers from trusted travel partners including airlines, hotels,
+                vacation packages, and tour operators. Members can save up to 70% on flights, accommodations, and experiences.
+                These are time-sensitive offers not available to the general public.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">How do you select destinations for your guides?</h3>
+              <p className="text-gray-600 leading-relaxed">
+                We choose destinations based on reader interest, seasonal travel opportunities, and emerging travel trends.
+                Our editorial team considers factors like accessibility, unique cultural experiences, photographic potential,
+                and current travel conditions. We also respond to reader requests and focus on destinations that offer
+                authentic local experiences rather than just tourist hotspots.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -359,7 +473,36 @@ export default function NewsletterPage() {
         </div>
       </section>
 
+      {/* Final CTA Section */}
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Ready to Transform Your Travel Experience?
+            </h2>
+            <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+              Join thousands of smart travelers who discover better destinations, save money on trips, and capture stunning photos.
+              Your next adventure starts with one click.
+            </p>
 
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto mb-8">
+              <p className="text-blue-100 text-lg font-medium">
+                🚀 <strong>Subscribe now and get:</strong> Free travel planning checklist + exclusive welcome guide to budget travel
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                href="#subscription-form"
+                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg"
+              >
+                Start My Free Subscription
+              </a>
+              <span className="text-blue-200 text-sm">No credit card required • Unsubscribe anytime</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

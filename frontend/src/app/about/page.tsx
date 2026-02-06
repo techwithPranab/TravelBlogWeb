@@ -310,10 +310,10 @@ export default function AboutPage() {
               transition={{ duration: 0.8 }}
               className="text-center"
             >
-              <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                 About BagPackStories
               </h1>
-              <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-4xl mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-4xl mx-auto leading-relaxed">
                 Discover authentic travel experiences from work trips, family vacations, and solo adventures.
                 Join thousands of travelers inspired by real stories from around the world.
               </p>
@@ -330,7 +330,7 @@ export default function AboutPage() {
                   >
                     <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:-translate-y-2">
                       <stat.icon className="h-8 w-8 text-blue-300 mx-auto mb-4 group-hover:text-white transition-colors" />
-                      <div className="text-2xl md:text-3xl font-bold text-white mb-2">
+                      <div className="text-xl md:text-2xl font-bold text-white mb-2">
                         {loading ? (
                           <div className="bg-white/20 animate-pulse rounded h-8 w-16 mx-auto"></div>
                         ) : (
@@ -356,11 +356,9 @@ export default function AboutPage() {
           <div className="flex flex-col items-center text-white/70 hover:text-white transition-colors cursor-pointer">
             <span className="text-sm font-medium mb-2">Scroll to explore</span>
             <div className="w-6 h-10 border-2 border-white/70 rounded-full flex justify-center">
-              <motion.div
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-1 h-3 bg-white/70 rounded-full mt-2"
-              />
+              <div
+                className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-bounce"
+              ></div>
             </div>
           </div>
         </motion.div>
@@ -377,10 +375,10 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 My Travel Journey
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 From IT professional work trips to family adventures and solo explorations - discover how authentic travel experiences shape unforgettable stories
               </p>
             </motion.div>
@@ -417,19 +415,19 @@ export default function AboutPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="order-1 lg:order-2"
               >
-                <h3 className="text-3xl font-bold text-gray-900 mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
                   From Code to Compass: My Unique Travel Perspective
                 </h3>
                 <div className="space-y-6 text-gray-600 leading-relaxed">
-                  <p className="text-lg">
+                  <p className="text-base">
                     My journey as a travel blogger began in 2011 when I, Pranab Paul, combined my IT career with a passion for exploration. What started as documenting work assignments across different countries has evolved into a comprehensive travel resource that helps thousands of travelers every month.
                   </p>
 
-                  <p className="text-lg">
+                  <p className="text-base">
                     As an IT professional, I've had the unique opportunity to visit destinations for business conferences, client meetings, and project deployments. This professional travel experience provides authentic insights into both corporate and leisure travel, making my content uniquely relatable to diverse audiences.
                   </p>
 
-                  <p className="text-lg">
+                  <p className="text-base">
                     Beyond work trips, I cherish family vacations that create lasting memories and solo adventures that push personal boundaries. Each type of travel offers different lessons and perspectives, enriching my ability to provide comprehensive travel guidance.
                   </p>
                 </div>
@@ -445,8 +443,8 @@ export default function AboutPage() {
               className="bg-white rounded-3xl p-8 md:p-12 shadow-xl"
             >
               <div className="text-center mb-8">
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h3>
-                <p className="text-lg text-gray-600">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+                <p className="text-base text-gray-600">
                   To inspire authentic travel experiences that connect people with diverse cultures, create meaningful memories, and promote responsible tourism worldwide.
                 </p>
               </div>
@@ -456,7 +454,7 @@ export default function AboutPage() {
                   <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Globe className="h-8 w-8 text-white" />
                   </div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">Authentic Stories</h4>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Authentic Stories</h4>
                   <p className="text-gray-600">Real experiences from actual travels, not just tourist brochures</p>
                 </div>
 
@@ -464,7 +462,7 @@ export default function AboutPage() {
                   <div className="w-16 h-16 bg-gradient-to-r from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Camera className="h-8 w-8 text-white" />
                   </div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">Expert Photography</h4>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Expert Photography</h4>
                   <p className="text-gray-600">Professional travel photography tips and stunning visual guides</p>
                 </div>
 
@@ -472,7 +470,7 @@ export default function AboutPage() {
                   <div className="w-16 h-16 bg-gradient-to-r from-accent-500 to-accent-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Heart className="h-8 w-8 text-white" />
                   </div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">Practical Advice</h4>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Practical Advice</h4>
                   <p className="text-gray-600">Budget-friendly tips, local insights, and honest recommendations</p>
                 </div>
               </div>
@@ -491,8 +489,8 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Our Core Values</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Core Values</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               These principles guide every travel story, destination guide, and piece of advice we share with our global community of travelers.
             </p>
           </motion.div>
@@ -514,8 +512,8 @@ export default function AboutPage() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">{value.title}</h3>
-                    <p className="text-gray-600 leading-relaxed text-lg">{value.description}</p>
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">{value.title}</h3>
+                    <p className="text-gray-600 leading-relaxed text-base">{value.description}</p>
                   </div>
                 </div>
               </motion.div>

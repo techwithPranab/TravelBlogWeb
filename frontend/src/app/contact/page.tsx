@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { publicApi } from '@/lib/api';
-import Head from 'next/head';
 import { motion } from 'framer-motion';
 
 export default function ContactPage() {
@@ -54,7 +53,7 @@ export default function ContactPage() {
       'solo travel advice'
     ].join(', ')
 
-    return { title, description, keywords }
+    return { title, description, keywords };
   }
 
   const seoData = generateSEOMetadata()
@@ -117,39 +116,6 @@ export default function ContactPage() {
 
   return (
     <>
-      <Head>
-        <title>{seoData.title}</title>
-        <meta name="description" content={seoData.description} />
-        <meta name="keywords" content={seoData.keywords} />
-
-        {/* Mobile Optimization */}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/contact`} />
-        <meta property="og:title" content={seoData.title} />
-        <meta property="og:description" content={seoData.description} />
-        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-contact.jpg`} />
-        <meta property="og:site_name" content="BagPackStories" />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/contact`} />
-        <meta property="twitter:title" content={seoData.title} />
-        <meta property="twitter:description" content={seoData.description} />
-        <meta property="twitter:image" content={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/og-contact.jpg`} />
-
-        {/* Additional SEO */}
-        <meta name="robots" content="index, follow" />
-        <meta name="author" content="BagPackStories Team" />
-        <meta name="language" content="English" />
-        <link rel="canonical" href={`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/contact`} />
-      </Head>
-
       <div className="min-h-screen w-full overflow-x-hidden">
       {/* SEO Structured Data */}
       <script
@@ -221,8 +187,8 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center animate-ken-burns opacity-20"></div>
 
         {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-indigo-900/70 to-slate-900/80"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-indigo-900/50 to-purple-900/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/30 via-transparent to-transparent"></div>
 
         <div className="relative z-10 container mx-auto px-4 py-20">
           <div className="max-w-4xl mx-auto text-center">
@@ -267,11 +233,9 @@ export default function ContactPage() {
           <div className="flex flex-col items-center text-white/70 hover:text-white transition-colors cursor-pointer">
             <span className="text-sm font-medium mb-2">Scroll to contact form</span>
             <div className="w-6 h-10 border-2 border-white/70 rounded-full flex justify-center">
-              <motion.div
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-1 h-3 bg-white/70 rounded-full mt-2"
-              />
+              <div
+                className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-bounce"
+              ></div>
             </div>
           </div>
         </motion.div>
@@ -432,8 +396,9 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* FAQ Section */}
+          {/* FAQ Section */}
             <div className="bg-white rounded-lg shadow-lg p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
 

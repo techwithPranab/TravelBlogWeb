@@ -108,7 +108,7 @@ export function HeroSection() {
         <div className="max-w-6xl mx-auto">
           {/* Hero Text - Enhanced Typography */}
           <div className="mb-8 animate-fade-up">
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-6 leading-tight tracking-tight">
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
               Discover Your Next
               <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 animate-gradient">
                 Travel Adventure

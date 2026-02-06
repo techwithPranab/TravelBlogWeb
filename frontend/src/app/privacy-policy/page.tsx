@@ -17,7 +17,10 @@ export default function PrivacyPolicyPage() {
       zipCode: string;
       country: string;
     };
-    supportEmail?: string;
+    support?: {
+      email: string;
+      responseTime: string;
+    };
   } | null>(null);
   const [contactLoading, setContactLoading] = useState(true);
 
@@ -221,7 +224,7 @@ export default function PrivacyPolicyPage() {
                     <span className="text-gray-500">Loading...</span>
                   ) : (
                     <span className="text-blue-600 font-medium">
-                      {contactInfo?.supportEmail || contactInfo?.email || 'privacy@bagpackstories.in'}
+                      {contactInfo?.support?.email || contactInfo?.email || 'privacy@bagpackstories.in'}
                     </span>
                   )}
                 </p>
@@ -285,7 +288,7 @@ export default function PrivacyPolicyPage() {
                     {contactLoading ? (
                       <span className="text-gray-500">Loading...</span>
                     ) : (
-                      <span>{contactInfo?.supportEmail || contactInfo?.email || 'privacy@bagpackstories.in'}</span>
+                      <span>{contactInfo?.support?.email || contactInfo?.email || 'privacy@bagpackstories.in'}</span>
                     )}
                   </p>
                   <p>
