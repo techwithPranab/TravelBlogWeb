@@ -429,7 +429,7 @@ export default function BlogDetailsPage() {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center max-w-md mx-auto px-4">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Oops! Something went wrong</h1>
+          <h1 className="text-2xl font-bold font-serif text-gray-900 mb-4">Oops! Something went wrong</h1>
           <p className="text-gray-600 mb-6">{error}</p>
           <div className="space-y-3">
             <button
@@ -492,7 +492,7 @@ export default function BlogDetailsPage() {
             )}
           </div>
           
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-2xl md:text-3xl font-bold font-serif text-gray-900 mb-6 leading-tight">
             {post?.title || ''}
           </h1>
           
@@ -774,7 +774,7 @@ export default function BlogDetailsPage() {
                 {/* Table of Contents or Related Posts can go here */}
                 {post?.tags && post.tags.length > 0 && (
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <h3 className="font-bold text-gray-900 mb-4">Topics</h3>
+                    <h3 className="font-bold font-serif text-gray-900 mb-4">Topics</h3>
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
                         <span

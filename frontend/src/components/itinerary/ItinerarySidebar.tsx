@@ -79,7 +79,7 @@ export default function ItinerarySidebar({ className }: ItinerarySidebarProps) {
   return (
     <div className={cn('w-64 bg-white border-r border-gray-200', className)}>
       <div className="p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">AI Itinerary</h2>
+        <h2 className="text-xl font-bold font-serif text-gray-900 mb-6">AI Itinerary</h2>
         <nav className="space-y-2">
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href

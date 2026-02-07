@@ -78,7 +78,7 @@ export default function ItineraryDashboard() {
     <ItineraryLayout>
       <div className="p-8">
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">AI Itinerary Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold font-serif text-gray-900 mb-2">AI Itinerary Dashboard</h1>
           <p className="text-sm sm:text-base text-gray-600">Manage your travel itineraries and track your usage</p>
         </div>
 

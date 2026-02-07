@@ -176,7 +176,7 @@ export default function ReviewsSection({ itineraryId, itineraryTitle, showWriteR
     <div className="space-y-6">
       {/* Header with Write Review Button */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold font-serif text-gray-900">
           Reviews ({reviews.length})
         </h2>
         {showWriteReview && (

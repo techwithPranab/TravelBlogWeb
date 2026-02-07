@@ -186,7 +186,7 @@ export default function ReviewsPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="container-max px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">My Reviews</h1>
+          <h1 className="text-3xl font-bold font-serif text-gray-900 dark:text-white mb-2">My Reviews</h1>
           <p className="text-gray-600 dark:text-gray-400">Manage your itinerary reviews and feedback</p>
         </div>
 
@@ -351,7 +351,7 @@ export default function ReviewsPage() {
         {showAddReview && selectedItinerary && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">
+              <h3 className="text-lg font-bold font-serif mb-4 text-gray-900 dark:text-white">
                 Review: {selectedItinerary.title}
               </h3>
               <ReviewForm

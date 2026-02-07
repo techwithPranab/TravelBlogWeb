@@ -90,7 +90,7 @@ function ResetPasswordContent() {
             <div className="mx-auto h-16 w-16 bg-red-100 rounded-full flex items-center justify-center">
               <AlertCircle className="h-8 w-8 text-red-600" />
             </div>
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">Invalid Link</h2>
+            <h2 className="mt-6 text-3xl font-serif font-bold text-gray-900">Invalid Link</h2>
             <p className="mt-2 text-sm text-gray-600">
               This password reset link is invalid or has expired.
             </p>
@@ -128,7 +128,7 @@ function ResetPasswordContent() {
             <div className="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">Password Reset Successful!</h2>
+            <h2 className="mt-6 text-3xl font-serif font-bold text-gray-900">Password Reset Successful!</h2>
             <p className="mt-2 text-sm text-gray-600">
               Your password has been reset successfully.
             </p>
@@ -165,7 +165,7 @@ function ResetPasswordContent() {
             <div className="mx-auto h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center">
               <Lock className="h-8 w-8 text-blue-600" />
             </div>
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            <h2 className="mt-6 text-3xl font-serif font-bold text-gray-900">
               Reset your password
             </h2>
             <p className="mt-2 text-sm text-gray-600">

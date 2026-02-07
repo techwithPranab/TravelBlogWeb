@@ -84,7 +84,7 @@ export function AIItinerarySection() {
             <span className="text-sm font-semibold text-purple-200">Powered by AI</span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
             AI-Powered Travel Itinerary Planner
           </h2>
           
@@ -119,7 +119,7 @@ export function AIItinerarySection() {
                   <feature.icon className="w-7 h-7 text-white" />
                 </div>
                 
-                <h3 className="text-xl font-bold mb-2 text-white group-hover:text-purple-200 transition-colors">
+                <h3 className="text-xl font-serif font-bold mb-2 text-white group-hover:text-purple-200 transition-colors">
                   {feature.title}
                 </h3>
                 
@@ -141,7 +141,7 @@ export function AIItinerarySection() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Benefits List */}
           <div className="space-y-4">
-            <h3 className="text-2xl md:text-3xl font-bold mb-6 flex items-center">
+            <h3 className="text-2xl md:text-3xl font-serif font-bold mb-6 flex items-center">
               <Globe className="w-8 h-8 mr-3 text-purple-400" />
               Why Choose AI Itinerary?
             </h3>
@@ -165,7 +165,7 @@ export function AIItinerarySection() {
                 <Calendar className="w-10 h-10 text-white" />
               </div>
               
-              <h3 className="text-3xl font-bold mb-4">
+              <h3 className="text-3xl font-serif font-bold mb-4">
                 Ready to Start Your Adventure?
               </h3>
               

@@ -59,7 +59,7 @@ export function AIItineraryAnnouncement() {
             <span className="text-sm font-semibold text-blue-700">Coming Soon</span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
             AI-Powered Travel Itineraries
           </h2>
 
@@ -78,7 +78,7 @@ export function AIItineraryAnnouncement() {
             <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
               <Sparkles className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-lg font-bold mb-2 text-gray-900">AI Intelligence</h3>
+            <h3 className="text-lg font-serif font-bold mb-2 text-gray-900">AI Intelligence</h3>
             <p className="text-gray-600 text-sm">Powered by AI for personalized recommendations</p>
           </div>
 
@@ -86,7 +86,7 @@ export function AIItineraryAnnouncement() {
             <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
               <Clock className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-lg font-bold mb-2 text-gray-900">Instant Results</h3>
+            <h3 className="text-lg font-serif font-bold mb-2 text-gray-900">Instant Results</h3>
             <p className="text-gray-600 text-sm">Complete itineraries in seconds, not hours</p>
           </div>
 
@@ -94,7 +94,7 @@ export function AIItineraryAnnouncement() {
             <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
               <Calendar className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-lg font-bold mb-2 text-gray-900">Day-by-Day Plans</h3>
+            <h3 className="text-lg font-serif font-bold mb-2 text-gray-900">Day-by-Day Plans</h3>
             <p className="text-gray-600 text-sm">Detailed schedules with optimal timing</p>
           </div>
 
@@ -102,7 +102,7 @@ export function AIItineraryAnnouncement() {
             <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
               <Rocket className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-lg font-bold mb-2 text-gray-900">Smart Budgeting</h3>
+            <h3 className="text-lg font-serif font-bold mb-2 text-gray-900">Smart Budgeting</h3>
             <p className="text-gray-600 text-sm">Local currency costs and money-saving tips</p>
           </div>
         </div>
@@ -114,7 +114,7 @@ export function AIItineraryAnnouncement() {
               <Rocket className="w-10 h-10 text-white" />
             </div>
 
-            <h3 className="text-3xl font-bold mb-4 text-gray-900">
+            <h3 className="text-3xl font-serif font-bold mb-4 text-gray-900">
               Be the First to Know When We Launch!
             </h3>
 

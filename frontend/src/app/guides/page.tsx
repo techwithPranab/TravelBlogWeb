@@ -100,10 +100,10 @@ export default function GuidesPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold font-serif mb-6">
               Travel Guides & Itineraries
             </h1>
-            <p className="text-xl mb-8 text-orange-100">
+            <p className="text-xl md:text-2xl lg:text-3xl font-light mb-8 text-orange-100 leading-relaxed">
               Comprehensive travel guides, detailed itineraries, and expert tips to help you plan your perfect trip.
             </p>
           </motion.div>
@@ -286,7 +286,7 @@ export default function GuidesPage() {
             transition={{ duration: 0.6 }}
             className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 text-center text-white"
           >
-            <h2 className="text-3xl font-bold mb-4">Create Your Custom Itinerary</h2>
+            <h2 className="text-3xl font-bold font-serif mb-4">Create Your Custom Itinerary</h2>
             <p className="text-xl mb-6 text-orange-100">
               Get personalized travel itineraries crafted by our expert travel writers.
             </p>

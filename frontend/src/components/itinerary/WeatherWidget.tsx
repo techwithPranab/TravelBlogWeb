@@ -110,7 +110,7 @@ export default function WeatherWidget({ weatherForecast, className = '' }: Weath
     <div className={`bg-white rounded-xl shadow-lg p-4 sm:p-6 ${className}`}>
       <div className="flex items-center gap-2 mb-4">
         <span className="text-2xl">🌤️</span>
-        <h2 className="text-lg sm:text-xl font-bold">Weather Forecast</h2>
+        <h2 className="text-lg sm:text-xl font-bold font-serif">Weather Forecast</h2>
       </div>
 
       <div className="space-y-4">

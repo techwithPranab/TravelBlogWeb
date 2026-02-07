@@ -65,7 +65,7 @@ export default function TermsOfServicePage() {
           
           <div className="flex items-center mb-4">
             <Scale className="w-8 h-8 mr-3" />
-            <h1 className="text-2xl md:text-3xl font-bold">Terms of Service - User Agreement</h1>
+            <h1 className="text-2xl md:text-3xl font-serif font-bold">Terms of Service - User Agreement</h1>
           </div>
           
           <p className="text-lg text-green-100 max-w-2xl">

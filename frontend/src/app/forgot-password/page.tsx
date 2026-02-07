@@ -48,7 +48,7 @@ export default function ForgotPasswordPage() {
             <div className="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">Check Your Email!</h2>
+            <h2 className="mt-6 text-3xl font-serif font-bold text-gray-900">Check Your Email!</h2>
             <p className="mt-2 text-sm text-gray-600">
               We've sent a password reset link to <span className="font-semibold text-blue-600">{email}</span>
             </p>
@@ -119,7 +119,7 @@ export default function ForgotPasswordPage() {
             <div className="mx-auto h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center">
               <Mail className="h-8 w-8 text-blue-600" />
             </div>
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            <h2 className="mt-6 text-3xl font-serif font-bold text-gray-900">
               Forgot your password?
             </h2>
             <p className="mt-2 text-sm text-gray-600">

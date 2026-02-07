@@ -234,14 +234,14 @@ export default function HelpCenterPage() {
             transition={{ duration: 0.6 }}
           >
             <HelpCircle className="w-16 h-16 mx-auto mb-6" />
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-bold mb-6 leading-tight tracking-tight">
               Travel Help Center - Your Complete Travel Support Hub
             </h1>
-            <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-8">
+            <p className="text-xl md:text-2xl lg:text-3xl text-blue-100 max-w-2xl mx-auto mb-8 font-light leading-relaxed">
               Get comprehensive assistance with travel planning, destination research, photography techniques,
               blog navigation, and expert travel advice from experienced adventurers worldwide.
             </p>
-            <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+            <p className="text-xl md:text-2xl lg:text-3xl mb-8 text-blue-100 max-w-2xl mx-auto font-light">
               Browse detailed FAQs, access comprehensive travel guides, explore destination information,
               learn photography tips, and connect with our travel support team for personalized assistance.
             </p>

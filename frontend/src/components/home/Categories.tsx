@@ -124,7 +124,7 @@ export function Categories() {
     return (
       <div className="animate-fade-up">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
             Browse Travel Content by Category
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -147,7 +147,7 @@ export function Categories() {
   return (
     <div className="animate-fade-up">
       <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
           Explore Travel Categories
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400">

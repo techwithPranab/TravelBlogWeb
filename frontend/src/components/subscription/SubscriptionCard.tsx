@@ -77,7 +77,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
       {/* Free Plan */}
       <div className={`bg-white rounded-xl shadow-lg p-8 border-2 ${currentPlan === 'free' ? 'border-blue-500' : 'border-gray-200'}`}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-2xl font-bold text-gray-900">Free Plan</h3>
+          <h3 className="text-2xl font-bold font-serif text-gray-900">Free Plan</h3>
           {currentPlan === 'free' && (
             <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
               Current Plan
@@ -137,7 +137,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <Crown className="w-8 h-8 text-yellow-300 mr-2" />
-              <h3 className="text-2xl font-bold text-white">Premium Plan</h3>
+              <h3 className="text-2xl font-bold font-serif text-white">Premium Plan</h3>
             </div>
             {currentPlan === 'premium' && (
               <span className="bg-yellow-400 text-purple-900 text-xs font-semibold px-3 py-1 rounded-full">

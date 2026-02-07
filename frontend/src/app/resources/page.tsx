@@ -124,10 +124,10 @@ export default function ResourcesPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-bold mb-6 leading-tight tracking-tight">
               Travel Resources & Tools
             </h1>
-            <p className="text-xl mb-8 text-indigo-100">
+            <p className="text-xl md:text-2xl lg:text-3xl font-light mb-8 text-indigo-100 leading-relaxed">
               Essential tools, guides, and resources to help you plan, book, and enjoy your travels with confidence.
             </p>
           </motion.div>
@@ -268,7 +268,7 @@ export default function ResourcesPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Browse by Category</h2>
+              <h2 className="text-3xl md:text-4xl font-bold font-serif text-gray-900 mb-6">Browse by Category</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Find exactly what you need with our organized resource categories.
               </p>
@@ -319,7 +319,7 @@ export default function ResourcesPage() {
             className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white"
           >
             <BookOpen className="h-16 w-16 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Get New Resources First</h2>
+            <h2 className="text-3xl font-bold font-serif mb-4">Get New Resources First</h2>
             <p className="text-xl mb-6 text-indigo-100">
               Subscribe to our newsletter and be the first to access new travel resources and tools.
             </p>

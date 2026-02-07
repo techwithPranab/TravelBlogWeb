@@ -635,7 +635,7 @@ export default function ItineraryDisplay({
         <div className="relative h-48 sm:h-56 md:h-64 bg-gradient-to-br from-blue-500 to-purple-600">
           <div className="absolute inset-0 flex items-center justify-center px-4">
             <div className="text-white text-center">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 md:mb-4">{itinerary.title}</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif mb-2 md:mb-4">{itinerary.title}</h1>
               <p className="text-base sm:text-lg md:text-2xl opacity-90 mb-1 md:mb-2">
                 {itinerary.source} → {itinerary.destinations && itinerary.destinations.length > 0
                   ? itinerary.destinations.length === 1
@@ -751,7 +751,7 @@ export default function ItineraryDisplay({
 
       {/* Day Selector */}
       <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-        <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Daily Itinerary</h2>
+        <h2 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">Daily Itinerary</h2>
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {itinerary.dayPlans.map(day => (
             <button
@@ -773,7 +773,7 @@ export default function ItineraryDisplay({
       {currentDay && (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 space-y-4 sm:space-y-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-            <h3 className="text-xl sm:text-2xl font-bold">Day {currentDay.day}</h3>
+            <h3 className="text-xl sm:text-2xl font-bold font-serif">Day {currentDay.day}</h3>
             {/* Hidden: Total day expenditure */}
             {/* <p className="text-base sm:text-lg font-semibold text-blue-600">
               {formatCost(itinerary.dailyCostBreakdown?.find(db => db.day === currentDay.day)?.totalDayCost || currentDay.totalEstimatedCost)}
@@ -809,7 +809,7 @@ export default function ItineraryDisplay({
       {/* Accommodations */}
       {itinerary.accommodationSuggestions && itinerary.accommodationSuggestions.length > 0 && (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">🏨 Accommodation Suggestions</h3>
+          <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">🏨 Accommodation Suggestions</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
             {itinerary.accommodationSuggestions.map((acc, index) => {
               // Handle case where acc might be a string or malformed
@@ -889,7 +889,7 @@ export default function ItineraryDisplay({
       {/* Transportation */}
       {itinerary.transportationTips && itinerary.transportationTips.length > 0 && (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">🚗 Transportation Tips</h3>
+          <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">🚗 Transportation Tips</h3>
           <div className="space-y-3">
             {itinerary.transportationTips.map((tip, index) => {
               // Handle case where tip might be a string or malformed
@@ -934,7 +934,7 @@ export default function ItineraryDisplay({
       {/* Restaurants */}
       {itinerary.restaurantRecommendations && itinerary.restaurantRecommendations.length > 0 && (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">🍽️ Restaurant Recommendations</h3>
+          <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">🍽️ Restaurant Recommendations</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
             {itinerary.restaurantRecommendations.map((restaurant, index) => {
               // Handle case where restaurant might be a string or malformed
@@ -1020,7 +1020,7 @@ export default function ItineraryDisplay({
       {/* General Tips */}
       {itinerary.generalTips && itinerary.generalTips.length > 0 && (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">💡 General Tips & Insider Knowledge</h3>
+          <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">💡 General Tips & Insider Knowledge</h3>
           <ul className="space-y-2">
             {itinerary.generalTips.map((tip, index) => (
               <li key={index} className="flex gap-2 sm:gap-3">
@@ -1035,7 +1035,7 @@ export default function ItineraryDisplay({
       {/* Enhanced: Packing List */}
       {itinerary.packingList && itinerary.packingList.length > 0 && (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">🎒 Packing List (Season-Specific)</h3>
+          <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">🎒 Packing List (Season-Specific)</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {itinerary.packingList.map((item, index) => (
               <div key={index} className="flex items-center gap-2 bg-gray-50 p-2 sm:p-3 rounded-lg">
@@ -1050,7 +1050,7 @@ export default function ItineraryDisplay({
       {/* Enhanced: Daily Cost Breakdown */}
       {itinerary.dailyCostBreakdown && itinerary.dailyCostBreakdown.length > 0 && (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">📊 Daily Cost Breakdown</h3>
+          <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">📊 Daily Cost Breakdown</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-xs sm:text-sm">
               <thead className="bg-gray-100">
@@ -1089,7 +1089,7 @@ export default function ItineraryDisplay({
       {/* Enhanced: Budget Breakdown Summary */}
       {itinerary.budgetBreakdown && (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">💰 Budget Breakdown Summary</h3>
+          <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">💰 Budget Breakdown Summary</h3>
           <div className="space-y-3">
             <div className="flex justify-between items-center border-b pb-2">
               <span className="text-sm sm:text-base text-gray-700">✈️ Total Flight/Rail/Car Cost</span>
@@ -1146,7 +1146,7 @@ export default function ItineraryDisplay({
       {showExport && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl p-4 sm:p-6 max-w-md w-full">
-            <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Export Itinerary</h3>
+            <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">Export Itinerary</h3>
             <p className="text-sm sm:text-base text-gray-700 mb-4 sm:mb-6">
               Download your itinerary as a PDF file to access it offline.
             </p>
@@ -1172,7 +1172,7 @@ export default function ItineraryDisplay({
       {showEmailModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl p-4 sm:p-6 max-w-md w-full">
-            <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Email Itinerary</h3>
+            <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4">Email Itinerary</h3>
             <p className="text-sm sm:text-base text-gray-700 mb-4">
               Enter the email address where you'd like to send this itinerary. The itinerary will be sent as a PDF attachment.
             </p>

@@ -231,7 +231,7 @@ export default function DashboardPage() {
             transition={{ duration: 0.6 }}
             className="mb-8"
           >
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-3xl font-bold font-serif text-gray-900 dark:text-white mb-2">
               Contributor Dashboard
             </h1>
             <p className="text-gray-600 dark:text-gray-400">

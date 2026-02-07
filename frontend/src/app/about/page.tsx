@@ -310,10 +310,10 @@ export default function AboutPage() {
               transition={{ duration: 0.8 }}
               className="text-center"
             >
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-bold mb-6 leading-tight tracking-tight bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                 About BagPackStories
               </h1>
-              <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-4xl mx-auto leading-relaxed">
+              <p className="text-xl md:text-2xl lg:text-3xl text-blue-100 mb-8 max-w-4xl mx-auto leading-relaxed font-light">
                 Discover authentic travel experiences from work trips, family vacations, and solo adventures.
                 Join thousands of travelers inspired by real stories from around the world.
               </p>

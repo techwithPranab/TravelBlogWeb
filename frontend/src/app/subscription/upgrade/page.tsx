@@ -64,7 +64,7 @@ export default function UpgradeToPremiumPage() {
             Back
           </button>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
             🚀 Upgrade to Premium
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -74,7 +74,7 @@ export default function UpgradeToPremiumPage() {
 
         {/* Features Comparison */}
         <div className="mb-12 bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6 text-center">
             Compare Plans
           </h2>
           <div className="overflow-x-auto">
@@ -157,7 +157,7 @@ export default function UpgradeToPremiumPage() {
 
         {/* Testimonials */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6 text-center">
             What Our Premium Users Say
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -208,7 +208,7 @@ export default function UpgradeToPremiumPage() {
 
         {/* FAQ */}
         <div className="mt-12 bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6 text-center">
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">

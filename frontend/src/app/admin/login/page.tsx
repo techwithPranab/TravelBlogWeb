@@ -85,9 +85,9 @@ export default function AdminLoginPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-3xl font-bold text-white mb-3 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent"
+              className="text-3xl font-serif font-bold text-white mb-3 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent"
             >
-              Admin Portal
+              BagPackStories Admin
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0 }}

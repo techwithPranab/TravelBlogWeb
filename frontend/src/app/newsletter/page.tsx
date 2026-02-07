@@ -214,12 +214,12 @@ export default function NewsletterPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center mb-6">
               <Mail className="w-12 h-12 mr-3" />
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-serif leading-tight">
                 Join Travelers Worldwide: Get FREE Expert Travel Insights
               </h1>
             </div>
 
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-blue-100 font-light mb-8 max-w-3xl mx-auto leading-relaxed">
               Unlock premium travel content delivered weekly to your inbox. Get exclusive destination guides from local experts,
               professional photography tutorials, budget-saving travel hacks, and flash deals on flights & hotels.
               Transform your travel planning with insider knowledge from passionate explorers worldwide.
@@ -238,7 +238,7 @@ export default function NewsletterPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6">
               Why Travelers Choose Our Newsletter
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -266,7 +266,7 @@ export default function NewsletterPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6">
               Choose Your Travel Newsletter Experience
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -305,7 +305,7 @@ export default function NewsletterPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6">
               Frequently Asked Questions About Our Travel Newsletter
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -378,7 +378,7 @@ export default function NewsletterPage() {
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <div className="text-center mb-8">
                 <Zap className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Start Your Journey</h2>
+                <h2 className="text-xl font-serif font-bold text-gray-900 mb-4">Start Your Journey</h2>
                 <p className="text-gray-600">
                   Subscribe now and get a free travel planning checklist as a welcome gift!
                 </p>
@@ -477,7 +477,7 @@ export default function NewsletterPage() {
       <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
               Ready to Transform Your Travel Experience?
             </h2>
             <p className="text-xl text-blue-100 mb-8 leading-relaxed">

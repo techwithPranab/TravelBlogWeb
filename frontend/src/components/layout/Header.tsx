@@ -88,7 +88,7 @@ export function Header() {
                 <img
                   src="/images/logo1.svg"
                   alt="BagPackStories Logo"
-                  className="h-16 w-auto md:h-10"
+                  className="h-20 w-auto md:h-10"
                   onError={(e) => {
                     // Fallback to icon if logo image fails to load
                     e.currentTarget.style.display = 'none';

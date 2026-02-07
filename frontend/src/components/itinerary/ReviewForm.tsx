@@ -134,7 +134,7 @@ export default function ReviewForm({ itineraryId, itineraryTitle, onSubmit, onCa
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Write a Review</h2>
+        <h2 className="text-2xl font-bold font-serif text-gray-900 mb-2">Write a Review</h2>
         <p className="text-gray-600">
           Share your experience with <span className="font-medium">{itineraryTitle}</span>
         </p>

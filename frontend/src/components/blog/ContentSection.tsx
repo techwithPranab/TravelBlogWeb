@@ -21,7 +21,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
   const renderTextOnlySection = () => (
     <div className="prose prose-base max-w-none mb-12">
       {section.title && (
-        <h2 className="text-xl font-bold text-gray-900 mb-6">{section.title}</h2>
+        <h2 className="text-xl font-bold font-serif text-gray-900 mb-6">{section.title}</h2>
       )}
       <div dangerouslySetInnerHTML={{ __html: section.content }} />
     </div>
@@ -30,7 +30,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
   const renderImageOnlySection = () => (
     <div className="mb-12">
       {section.title && (
-        <h2 className="text-xl font-bold text-gray-900 mb-6">{section.title}</h2>
+        <h2 className="text-xl font-bold font-serif text-gray-900 mb-6">{section.title}</h2>
       )}
       {section.image && (
         <div className={`relative ${
@@ -110,7 +110,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
     const textElement = (
       <div className="prose prose-base max-w-none">
         {section.title && (
-          <h2 className="text-xl font-bold text-gray-900 mb-4">{section.title}</h2>
+          <h2 className="text-xl font-bold font-serif text-gray-900 mb-4">{section.title}</h2>
         )}
         <div dangerouslySetInnerHTML={{ __html: section.content }} />
       </div>
@@ -120,7 +120,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
       return (
         <div className="mb-12">
           {section.title && (
-            <h2 className="text-xl font-bold text-gray-900 mb-8 text-center">{section.title}</h2>
+            <h2 className="text-xl font-bold font-serif text-gray-900 mb-8 text-center">{section.title}</h2>
           )}
           <div className="mb-8">
             {imageElement}
@@ -136,7 +136,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
       return (
         <div className="mb-12">
           {section.title && (
-            <h2 className="text-xl font-bold text-gray-900 mb-8">{section.title}</h2>
+            <h2 className="text-xl font-bold font-serif text-gray-900 mb-8">{section.title}</h2>
           )}
           <div className="mb-8">
             <div className="relative w-full h-[500px] md:h-[600px] rounded-lg overflow-hidden group cursor-pointer">
@@ -177,7 +177,7 @@ export default function ContentSection({ section, onImageClick }: ContentSection
     return (
       <div className="mb-12">
         {section.title && (
-          <h2 className="text-xl font-bold text-gray-900 mb-8">{section.title}</h2>
+          <h2 className="text-xl font-bold font-serif text-gray-900 mb-8">{section.title}</h2>
         )}
         <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${
           section.imagePosition === 'right' ? 'lg:grid-flow-col-dense' : ''

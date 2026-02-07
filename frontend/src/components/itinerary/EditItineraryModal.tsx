@@ -119,7 +119,7 @@ export default function EditItineraryModal({ isOpen, onClose, itinerary, onSave 
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Edit Itinerary Details</h2>
+            <h2 className="text-2xl font-bold font-serif text-gray-900">Edit Itinerary Details</h2>
             <p className="text-sm text-gray-600 mt-1">
               {editsRemaining > 0 ? (
                 <span className="text-blue-600">

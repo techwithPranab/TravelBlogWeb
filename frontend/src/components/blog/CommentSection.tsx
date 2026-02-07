@@ -90,7 +90,7 @@ export default function CommentSection({ resourceId, resourceType, comments, onC
     <div className="mt-12 border-t border-gray-200 pt-8">
       <div className="flex items-center gap-2 mb-6">
         <MessageCircle className="w-6 h-6 text-indigo-600" />
-        <h3 className="text-2xl font-bold text-gray-900">
+        <h3 className="text-2xl font-bold font-serif text-gray-900">
           Comments ({comments.length})
         </h3>
       </div>

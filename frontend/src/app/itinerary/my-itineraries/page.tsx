@@ -82,7 +82,7 @@ export default function MyItinerariesPage() {
     <ItineraryLayout>
       <div className="p-4 sm:p-6 md:p-8">
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">My Itineraries</h1>
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 mb-2">My Itineraries</h1>
           <p className="text-sm sm:text-base text-gray-600">View and manage all your AI-generated travel itineraries</p>
         </div>
 

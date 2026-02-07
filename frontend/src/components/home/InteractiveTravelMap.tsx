@@ -90,7 +90,7 @@ export function InteractiveTravelMap() {
     return (
       <div className="animate-fade-up">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
             Global Travel Destinations Map
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -108,7 +108,7 @@ export function InteractiveTravelMap() {
     return (
       <div className="animate-fade-up">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
             Global Travel Destinations Map
           </h2>
           <p className="text-lg text-red-500 dark:text-red-400">
@@ -130,7 +130,7 @@ export function InteractiveTravelMap() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 dark:from-white dark:via-blue-200 dark:to-indigo-200 bg-clip-text text-transparent mb-6">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 dark:from-white dark:via-blue-200 dark:to-indigo-200 bg-clip-text text-transparent mb-6">
             Global Travel Destinations Map
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">

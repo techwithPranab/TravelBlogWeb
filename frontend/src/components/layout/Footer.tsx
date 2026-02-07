@@ -87,7 +87,7 @@ export function Footer() {
               <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
                 <MapPin className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold">BagPackStories</span>
+              <span className="text-2xl font-serif font-bold">BagPackStories</span>
             </div>
             
             <p className="text-gray-300 mb-6 max-w-md leading-relaxed">

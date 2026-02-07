@@ -280,7 +280,7 @@ export default function DestinationDetailsPage() {
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-2xl md:text-3xl font-bold mb-4"
+              className="text-2xl md:text-3xl font-bold font-serif mb-4"
             >
               {destination.name}
             </motion.h1>
@@ -377,7 +377,7 @@ export default function DestinationDetailsPage() {
                 <div className="bg-green-50 rounded-lg p-6">
                   <div className="flex items-center space-x-3 mb-4">
                     <Train className="w-8 h-8 text-green-600" />
-                    <h3 className="text-xl font-semibold text-gray-900">By Rail</h3>
+                    <h3 className="text-xl font-semibold font-serif text-gray-900">By Rail</h3>
                   </div>
                   <div className="space-y-3 text-sm text-gray-700">
                     <div>
@@ -486,7 +486,7 @@ export default function DestinationDetailsPage() {
 
             {/* Gallery */}
             <section className="mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Gallery</h2>
+              <h2 className="text-3xl font-bold font-serif text-gray-900 mb-6">Gallery</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {destination.gallery.map((image, index) => (
                   <button
@@ -557,7 +557,7 @@ export default function DestinationDetailsPage() {
 
             {/* Accommodation */}
             <section className="mb-12">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Where to Stay</h2>
+              <h2 className="text-xl font-bold font-serif text-gray-900 mb-6">Where to Stay</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {destination.accommodation?.map((accommodation, index) => (
                   <div key={`accommodation-${accommodation.name}-${index}`} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
@@ -682,7 +682,7 @@ export default function DestinationDetailsPage() {
 
             {/* Transportation */}
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Getting Around</h3>
+              <h3 className="text-xl font-bold font-serif text-gray-900 mb-4">Getting Around</h3>
               <ul className="space-y-2">
                 {destination.transportation.map((transport) => (
                   <li key={`transport-${transport}`} className="flex items-center space-x-2">
@@ -695,7 +695,7 @@ export default function DestinationDetailsPage() {
 
             {/* Local Cuisine */}
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Local Cuisine</h3>
+              <h3 className="text-xl font-bold font-serif text-gray-900 mb-4">Local Cuisine</h3>
               <ul className="space-y-2">
                 {destination.localCuisine.map((dish) => (
                   <li key={`cuisine-${dish}`} className="flex items-center space-x-2">
@@ -710,7 +710,7 @@ export default function DestinationDetailsPage() {
 
         {/* Related Posts */}
         <section className="mt-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Articles</h2>
+          <h2 className="text-3xl font-bold font-serif text-gray-900 mb-8">Related Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {destination.relatedPosts.map((post) => (
               <Link 

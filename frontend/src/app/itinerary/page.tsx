@@ -139,7 +139,7 @@ export default function ItineraryPage() {
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold font-serif text-gray-900 mb-4">
             AI Travel Itinerary Generator ✨
           </h1>
           <p className="text-xl text-gray-600">
@@ -214,7 +214,7 @@ export default function ItineraryPage() {
             ) : itineraries.length === 0 ? (
               <div className="bg-white rounded-xl shadow-lg p-12 text-center">
                 <div className="text-6xl mb-4">🗺️</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-2xl font-bold font-serif text-gray-900 mb-2">
                   No itineraries yet
                 </h3>
                 <p className="text-gray-600 mb-6">
@@ -264,7 +264,7 @@ export default function ItineraryPage() {
                       </div>
                     </div>
                     <div className="p-6">
-                      <h3 className="text-xl font-bold mb-2">{itinerary.title}</h3>
+                      <h3 className="text-xl font-bold font-serif mb-2">{itinerary.title}</h3>
                       <p className="text-gray-600 mb-4">
                         {itinerary.source} → {itinerary.destinations && itinerary.destinations.length > 0
                           ? itinerary.destinations.length === 1

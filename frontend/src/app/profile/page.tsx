@@ -578,7 +578,7 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Profile not found</h2>
+          <h2 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-2">Profile not found</h2>
           <p className="text-gray-600 dark:text-gray-400">Unable to load profile information.</p>
         </div>
       </div>
@@ -658,7 +658,7 @@ export default function ProfilePage() {
             <div className="flex-1 text-center sm:text-left">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                  <h1 className="text-2xl font-bold font-serif text-gray-900 dark:text-white mb-1">
                     {profile.name}
                   </h1>
                   <div className="flex items-center justify-center sm:justify-start space-x-4 text-sm text-gray-600 dark:text-gray-400">
@@ -708,7 +708,7 @@ export default function ProfilePage() {
           className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-sm border border-gray-200 dark:border-gray-700"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Profile Information</h2>
+            <h2 className="text-xl font-bold font-serif text-gray-900 dark:text-white">Profile Information</h2>
             {isEditing && (
               <div className="flex space-x-2">
                 <button

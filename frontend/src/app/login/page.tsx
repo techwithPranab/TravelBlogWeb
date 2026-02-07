@@ -52,7 +52,7 @@ export default function LoginPage() {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+          <h2 className="mt-6 text-3xl font-bold font-serif text-gray-900">
             Welcome back
           </h2>
           <p className="mt-2 text-sm text-gray-600">
