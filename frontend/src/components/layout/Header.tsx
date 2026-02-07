@@ -203,7 +203,7 @@ export function Header() {
                   )}
                 </div>
               ) : (
-                <div className="hidden sm:flex items-center space-x-2">
+                <div className="hidden">
                   <Link href="/login">
                     <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
                       Login
@@ -275,7 +275,7 @@ export function Header() {
                       <span>{user?.name}</span>
                     </div>
                   ) : (
-                    <div className="flex flex-col space-y-2">
+                    <div className="hidden">
                       <Link href="/login" onClick={() => {
                         console.log('Login link clicked')
                         setIsMenuOpen(false)
