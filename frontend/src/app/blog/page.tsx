@@ -224,10 +224,10 @@ function BlogPageContent() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold font-serif mb-6">
               Travel Stories & Guides
             </h1>
-            <p className="text-xl mb-8 text-blue-100">
+            <p className="text-xl font-light mb-8 text-blue-100">
               Discover inspiring travel stories, practical guides, and insider tips from experienced travelers around the world.
             </p>
           </motion.div>
@@ -367,7 +367,7 @@ function BlogPageContent() {
             transition={{ duration: 0.6 }}
             className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white"
           >
-            <h2 className="text-3xl font-bold mb-4">Never Miss a Story</h2>
+            <h2 className="text-3xl font-bold font-serif mb-4">Never Miss a Story</h2>
             <p className="text-xl mb-6 text-blue-100">
               Subscribe to our newsletter for the latest travel guides and inspiration.
             </p>

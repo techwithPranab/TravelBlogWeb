@@ -352,7 +352,7 @@ function SearchPageContent() {
               <ArrowLeft className="w-5 h-5" />
               <span>Back</span>
             </button>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-serif font-bold text-gray-900 dark:text-white">
               Search Results
             </h1>
             <div></div> {/* Spacer */}

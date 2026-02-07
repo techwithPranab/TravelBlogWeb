@@ -21,7 +21,8 @@ import {
   Mail,
   Folder,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Megaphone
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -96,6 +97,12 @@ const sidebarGroups = [
         href: '/admin/partners',
         icon: UserCheck,
         badge: null
+      },
+      {
+        name: 'Reviews',
+        href: '/admin/reviews',
+        icon: MessageCircle,
+        badge: null
       }
     ]
   },
@@ -106,6 +113,17 @@ const sidebarGroups = [
         name: 'Users',
         href: '/admin/users',
         icon: Users,
+        badge: null
+      }
+    ]
+  },
+  {
+    name: 'Monetization',
+    items: [
+      {
+        name: 'Ads',
+        href: '/admin/ads',
+        icon: Megaphone,
         badge: null
       }
     ]
@@ -147,6 +165,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     const userData = localStorage.getItem('adminUser')
 
     if (!token || !userData) {
+      localStorage.setItem('intendedPath', pathname)
       router.push('/admin/login')
       return
     }
@@ -162,6 +181,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       console.error('Error parsing user data:', error)
       router.push('/admin/login')
     }
+
+    // Auto-expand sections with active items
+    const newCollapsed = new Set(collapsedSections)
+    sidebarGroups.forEach(group => {
+      const hasActiveItem = group.items.some(item => pathname === item.href)
+      if (hasActiveItem) {
+        newCollapsed.delete(group.name)
+      }
+    })
+    setCollapsedSections(newCollapsed)
   }, [router, pathname])
 
   const handleLogout = () => {

@@ -7,7 +7,7 @@ import Newsletter from '../models/Newsletter'
 import Comment from '../models/Comment'
 import SiteSettings from '../models/SiteSettings'
 import EmailTemplate from '../models/EmailTemplate'
-import { AuthenticatedRequest } from '../middleware/adminAuth'
+import { AuthenticatedRequest } from '../types/express'
 import { emailService } from '../services/emailService'
 
 // Admin Dashboard Stats

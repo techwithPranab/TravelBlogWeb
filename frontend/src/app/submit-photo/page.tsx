@@ -270,7 +270,7 @@ export default function SubmitPhotoPage() {
           className="text-center max-w-md mx-auto p-8"
         >
           <CheckCircle className="w-24 h-24 text-green-600 mx-auto mb-6" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Photo Submitted!</h1>
+          <h1 className="text-3xl font-serif font-bold text-gray-900 mb-4">Photo Submitted!</h1>
           <p className="text-gray-600 mb-6">
             Thank you for your submission. Your photo is now under review and will be published once approved.
           </p>
@@ -291,7 +291,7 @@ export default function SubmitPhotoPage() {
           className="text-center mb-12"
         >
           <Camera className="w-16 h-16 text-blue-600 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Submit Your Travel Photo</h1>
+          <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">Submit Your Travel Photo</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Share your amazing travel photography with our community. All submissions are reviewed before publication.
           </p>

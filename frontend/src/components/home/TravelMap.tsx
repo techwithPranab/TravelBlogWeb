@@ -25,11 +25,11 @@ export function TravelMap() {
         <div className="flex items-center justify-center gap-2 mb-4">
           <Globe className="h-8 w-8 text-blue-600" />
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-            Explore Our Travel Map
+            Interactive Travel Destinations Map
           </h2>
         </div>
         <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          Discover amazing destinations through our travel stories from around the world
+          Explore our comprehensive collection of destination guides and travel stories from cities and countries worldwide
         </p>
       </motion.div>
 

@@ -183,10 +183,10 @@ export default function DestinationsPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold font-serif mb-6">
               Discover Amazing Destinations
             </h1>
-            <p className="text-xl mb-8 text-green-100">
+            <p className="text-xl md:text-2xl lg:text-3xl text-green-100 mb-8 font-light leading-relaxed">
               Explore breathtaking places around the world with our curated destination guides and travel insights.
             </p>
           </motion.div>

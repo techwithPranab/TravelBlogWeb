@@ -9,6 +9,7 @@ const handleAsync_1 = require("../utils/handleAsync");
 const Post_1 = __importDefault(require("../models/Post"));
 const Photo_1 = __importDefault(require("../models/Photo"));
 const User_1 = __importDefault(require("../models/User"));
+const Comment_1 = __importDefault(require("../models/Comment"));
 const drive_1 = require("../config/drive");
 // @desc    Get dashboard data for reader
 // @route   GET /api/v1/reader/dashboard
@@ -34,6 +35,38 @@ exports.getReaderDashboard = (0, handleAsync_1.handleAsync)(async (req, res) => 
             { $match: { author: userId } },
             { $group: { _id: null, totalViews: { $sum: '$viewCount' } } }
         ]);
+        // Get user's reading activity (posts read by user)
+        const postsReadThisMonth = await Post_1.default.aggregate([
+            {
+                $lookup: {
+                    from: 'useractivities',
+                    let: { postId: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$user', userId] },
+                                        { $eq: ['$post', '$$postId'] },
+                                        { $eq: ['$action', 'view'] },
+                                        { $gte: ['$createdAt', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)] }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    as: 'userViews'
+                }
+            },
+            { $match: { 'userViews.0': { $exists: true } } },
+            { $count: 'totalRead' }
+        ]);
+        // Get user's comments count
+        const userCommentsCount = await Comment_1.default.countDocuments({ author: userId });
+        // Get user's following count (simplified - assuming following field exists)
+        const followingCount = 0; // Placeholder - would need to implement following system
+        // Get user's saved posts count (placeholder)
+        const savedPostsCount = 0; // Placeholder - would need to implement bookmarking system
         // Get recent activity (likes, comments on user's posts)
         const recentActivity = [];
         // Get recent likes on user's posts
@@ -95,6 +128,10 @@ exports.getReaderDashboard = (0, handleAsync_1.handleAsync)(async (req, res) => 
                 totalLikes: totalLikes[0]?.totalLikes || 0,
                 totalComments: totalComments[0]?.totalComments || 0,
                 totalViews: totalViews[0]?.totalViews || 0,
+                postsReadThisMonth: postsReadThisMonth[0]?.totalRead || 0,
+                userCommentsCount,
+                followingCount,
+                savedPostsCount,
                 recentActivity
             }
         });

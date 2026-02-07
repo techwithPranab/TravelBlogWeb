@@ -988,6 +988,18 @@ export const publicApi = {
         responseTime: string
       }
     }>('/public/contact')
+  },
+
+  subscribe: async (payload: {
+    email: string
+    name?: string
+    source?: 'homepage' | 'blog' | 'popup' | 'footer' | 'manual' | 'newsletter-page'
+    preferences?: any
+  }): Promise<ApiResponse<{ message?: string }>> => {
+    return apiRequest('/newsletter/subscribe', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
   }
 }
 

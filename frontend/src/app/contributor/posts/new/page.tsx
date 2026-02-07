@@ -315,7 +315,7 @@ export default function NewPostPage() {
         <div className="border-b border-gray-200 p-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Create New Post</h1>
+              <h1 className="text-2xl font-serif font-bold text-gray-900">Create New Post</h1>
               <p className="text-gray-600 mt-1">Write and publish a new blog post</p>
             </div>
             <div className="flex gap-3">

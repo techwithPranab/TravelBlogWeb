@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePhoto = exports.moderatePhoto = exports.getPendingPhotos = exports.getAllPhotosAdmin = exports.getFeaturedPhotos = exports.getPhotoLocations = exports.getPhotoCategories = exports.downloadPhoto = exports.likePhoto = exports.submitPhoto = exports.upload = exports.getPhoto = exports.getPhotos = void 0;
+exports.updatePhotoStatus = exports.deletePhoto = exports.moderatePhoto = exports.getPendingPhotos = exports.getAllPhotosAdmin = exports.getFeaturedPhotos = exports.getPhotoLocations = exports.getPhotoCategories = exports.downloadPhoto = exports.likePhoto = exports.submitPhoto = exports.upload = exports.getPhoto = exports.getPhotos = void 0;
 const Photo_1 = __importDefault(require("../models/Photo"));
 const handleAsync_1 = require("../utils/handleAsync");
 const drive_1 = require("../config/drive");
@@ -343,18 +343,20 @@ exports.getAllPhotosAdmin = (0, handleAsync_1.handleAsync)(async (req, res) => {
         .populate('moderatedBy', 'name email');
     const total = await Photo_1.default.countDocuments(filter);
     // Get status counts for admin dashboard with better error handling
-    let statusCounts = { pending: 0, approved: 0, rejected: 0 };
+    let statusCounts = { pending: 0, approved: 0, rejected: 0, inactive: 0 };
     try {
         // Use separate count queries for reliability
-        const [pendingCount, approvedCount, rejectedCount] = await Promise.all([
+        const [pendingCount, approvedCount, rejectedCount, inactiveCount] = await Promise.all([
             Photo_1.default.countDocuments({ status: 'pending' }),
             Photo_1.default.countDocuments({ status: 'approved' }),
-            Photo_1.default.countDocuments({ status: 'rejected' })
+            Photo_1.default.countDocuments({ status: 'rejected' }),
+            Photo_1.default.countDocuments({ status: 'inactive' })
         ]);
         statusCounts = {
             pending: pendingCount,
             approved: approvedCount,
-            rejected: rejectedCount
+            rejected: rejectedCount,
+            inactive: inactiveCount
         };
     }
     catch (error) {
@@ -406,10 +408,10 @@ exports.moderatePhoto = (0, handleAsync_1.handleAsync)(async (req, res) => {
     // Validate status - make it case-insensitive and trim whitespace
     const normalizedStatus = status?.toString().toLowerCase().trim();
     console.log('Normalized status:', normalizedStatus);
-    if (!normalizedStatus || !['approved', 'rejected'].includes(normalizedStatus)) {
+    if (!normalizedStatus || !['approved', 'rejected', 'inactive'].includes(normalizedStatus)) {
         return res.status(400).json({
             success: false,
-            error: `Status must be either 'approved' or 'rejected'. Received: '${status}' (normalized: '${normalizedStatus}')`
+            error: `Status must be either 'approved', 'rejected', or 'inactive'. Received: '${status}' (normalized: '${normalizedStatus}')`
         });
     }
     const updateData = {
@@ -503,4 +505,39 @@ exports.deletePhoto = (0, handleAsync_1.handleAsync)(async (req, res) => {
             error: 'Failed to delete photo'
         });
     }
+});
+// @desc    Update photo status
+// @route   PUT /api/v1/photos/admin/:id/status
+// @access  Private/Admin
+exports.updatePhotoStatus = (0, handleAsync_1.handleAsync)(async (req, res) => {
+    const { status } = req.body;
+    const adminId = req.user?.id;
+    // Validate status
+    const normalizedStatus = status?.toString().toLowerCase().trim();
+    if (!normalizedStatus || !['pending', 'approved', 'rejected', 'inactive'].includes(normalizedStatus)) {
+        return res.status(400).json({
+            success: false,
+            error: `Status must be one of: 'pending', 'approved', 'rejected', or 'inactive'. Received: '${status}'`
+        });
+    }
+    const updateData = {
+        status: normalizedStatus,
+        moderatedBy: adminId,
+        moderatedAt: new Date(),
+        updatedAt: new Date()
+    };
+    if (normalizedStatus === 'approved') {
+        updateData.approvedAt = new Date();
+    }
+    const photo = await Photo_1.default.findByIdAndUpdate(req.params.id, updateData, { new: true }).populate('moderatedBy', 'name email');
+    if (!photo) {
+        return res.status(404).json({
+            success: false,
+            error: 'Photo not found'
+        });
+    }
+    res.status(200).json({
+        success: true,
+        data: photo
+    });
 });

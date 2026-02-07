@@ -59,6 +59,11 @@ export function Header() {
     { name: 'Gallery', href: '/gallery' },
   ]
 
+  // Add Itinerary to navigation only for authenticated users
+  const userNavigation = isAuthenticated
+    ? [...navigation, { name: 'Itinerary', href: '/itinerary/dashboard' }]
+    : navigation
+
   const themeOptions = [
     { value: 'light', label: 'Light', icon: Sun },
     { value: 'dark', label: 'Dark', icon: Moon },
@@ -70,8 +75,8 @@ export function Header() {
       <header 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? 'bg-black/95 backdrop-blur-sm border-b border-gray-800 shadow-sm' 
-            : 'bg-black/95 backdrop-blur-sm'
+            ? 'bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm' 
+            : 'bg-white/95 backdrop-blur-sm'
         }`}
       >
         <nav className="container-max px-4 sm:px-6 lg:px-8">
@@ -79,10 +84,25 @@ export function Header() {
             {/* Logo */}
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                  <Map className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                {/* Logo Image - Replace with actual logo file */}
+                <img
+                  src="/images/logo1.svg"
+                  alt="BagPackStories Logo"
+                  className="h-20 w-auto md:h-10"
+                  onError={(e) => {
+                    // Fallback to icon if logo image fails to load
+                    e.currentTarget.style.display = 'none';
+                    const fallbackIcon = e.currentTarget.nextElementSibling as HTMLElement;
+                    if (fallbackIcon) {
+                      fallbackIcon.style.display = 'flex';
+                    }
+                  }}
+                />
+                {/* Fallback Icon */}
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center" style={{ display: 'none' }}>
+                  <Map className="w-5 h-5 md:w-6 md:h-6 text-gray-900" />
                 </div>
-                <span className="text-lg md:text-xl font-bold text-white">
+                <span className="text-lg md:text-xl font-bold text-gray-900 font-poppins">
                   BagPackStories
                 </span>
               </Link>
@@ -91,11 +111,11 @@ export function Header() {
             {/* Desktop Navigation */}
             <div className="hidden lg:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                {navigation.map((item) => (
+                {userNavigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-primary-400 hover:bg-white/10 transition-colors"
+                    className="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:text-primary-600 hover:bg-gray-100 transition-colors font-poppins"
                   >
                     {item.name}
                   </Link>
@@ -108,7 +128,7 @@ export function Header() {
               {/* Search */}
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="p-2 md:p-2.5 rounded-md text-white hover:text-primary-400 hover:bg-white/10 transition-colors touch-manipulation hidden sm:flex"
+                className="p-2 md:p-2.5 rounded-md text-gray-900 hover:text-primary-600 hover:bg-gray-100 transition-colors touch-manipulation hidden sm:flex"
                 aria-label="Search"
               >
                 <Search className="w-5 h-5 md:w-6 md:h-6" />
@@ -134,7 +154,7 @@ export function Header() {
                     const nextIndex = (currentIndex + 1) % themeOptions.length
                     setTheme(themeOptions[nextIndex].value as any)
                   }}
-                  className="p-2 md:p-2.5 rounded-md text-white hover:text-primary-400 hover:bg-white/10 transition-colors touch-manipulation"
+                  className="p-2 md:p-2.5 rounded-md text-gray-900 hover:text-primary-600 hover:bg-gray-100 transition-colors touch-manipulation"
                   aria-label="Toggle theme"
                 >
                   {theme === 'light' && <Sun className="w-5 h-5 md:w-6 md:h-6" />}
@@ -148,7 +168,7 @@ export function Header() {
                 <div className="relative hidden sm:block">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center space-x-2 p-2 md:p-2.5 rounded-md text-white hover:text-primary-400 hover:bg-white/10 transition-colors touch-manipulation"
+                    className="flex items-center space-x-2 p-2 md:p-2.5 rounded-md text-gray-900 hover:text-primary-600 hover:bg-gray-100 transition-colors touch-manipulation"
                   >
                     {user?.avatar ? (
                       <img
@@ -159,30 +179,22 @@ export function Header() {
                     ) : (
                       <User className="w-5 h-5 md:w-6 md:h-6" />
                     )}
-                    <span className="hidden lg:block text-sm md:text-base">{user?.name}</span>
+                    <span className="hidden lg:block text-sm md:text-base font-poppins">{user?.name}</span>
                   </button>
 
                   {isUserMenuOpen && (
                     <div className="absolute right-0 mt-2 w-48 md:w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
                       <Link
                         href="/profile"
-                        className="flex items-center px-4 py-3 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="flex items-center px-4 py-3 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-poppins"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
                         <Settings className="w-4 h-4 md:w-5 md:h-5 mr-3" />
                         Profile
                       </Link>
-                      <Link
-                        href="/dashboard"
-                        className="flex items-center px-4 py-3 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        <BookOpen className="w-4 h-4 md:w-5 md:h-5 mr-3" />
-                        Dashboard
-                      </Link>
                       <button
                         onClick={handleLogout}
-                        className="flex items-center w-full px-4 py-3 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="flex items-center w-full px-4 py-3 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-poppins"
                       >
                         <LogOut className="w-4 h-4 md:w-5 md:h-5 mr-3" />
                         Logout
@@ -191,19 +203,13 @@ export function Header() {
                   )}
                 </div>
               ) : (
-                // <div className="hidden sm:flex items-center space-x-2">
-                //   <Link href="/login">
-                //     <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
-                //       Login
-                //     </Button>
-                //   </Link>
-                //   <Link href="/signup">
-                //     <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
-                //       Sign Up
-                //     </Button>
-                //   </Link>
-                // </div>
-                <div></div>
+                <div className="hidden sm:flex items-center space-x-2">
+                  <Link href="/login">
+                    <Button variant="primary" size="sm" className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base">
+                      Login
+                    </Button>
+                  </Link>
+                </div>
               )}
 
               {/* Mobile menu button - Always visible on mobile */}
@@ -220,7 +226,7 @@ export function Header() {
                 onTouchEnd={(e) => {
                   e.currentTarget.style.transform = 'scale(1)'
                 }}
-                className="lg:hidden p-3 md:p-3 rounded-md text-white hover:text-primary-400 hover:bg-white/10 active:bg-white/20 transition-all duration-150 touch-manipulation flex-shrink-0 mobile-menu-button border border-white/20"
+                className="lg:hidden p-3 md:p-3 rounded-md text-gray-900 hover:text-primary-600 hover:bg-gray-100 active:bg-gray-200 transition-all duration-150 touch-manipulation flex-shrink-0 mobile-menu-button border border-gray-300"
                 aria-label="Open main menu"
                 type="button"
               >
@@ -235,7 +241,7 @@ export function Header() {
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="lg:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700 relative z-40 bg-black/95 backdrop-blur-sm">
+            <div className="lg:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700 relative z-40 bg-white/95 backdrop-blur-sm">
               {/* Mobile Actions */}
               <div className="pt-4 pb-4 border-b border-gray-200 dark:border-gray-700 mb-4">
                 <div className="flex items-center justify-between">
@@ -246,7 +252,7 @@ export function Header() {
                       setIsSearchOpen(true)
                       setIsMenuOpen(false)
                     }}
-                    className="flex items-center space-x-2 p-3 rounded-md text-white hover:text-primary-400 hover:bg-white/10 active:bg-white/20 transition-colors touch-manipulation"
+                    className="flex items-center space-x-2 p-3 rounded-md text-gray-900 hover:text-primary-600 hover:bg-gray-100 active:bg-gray-200 transition-colors touch-manipulation font-poppins"
                   >
                     <Search className="w-5 h-5" />
                     <span>Search</span>
@@ -256,7 +262,7 @@ export function Header() {
                 {/* Mobile Auth */}
                 <div className="mt-4 flex flex-col space-y-2">
                   {isAuthenticated ? (
-                    <div className="flex items-center space-x-2 p-3 rounded-md text-white hover:text-primary-400 hover:bg-white/10 transition-colors">
+                    <div className="flex items-center space-x-2 p-3 rounded-md text-gray-900 hover:text-primary-600 hover:bg-gray-100 transition-colors font-poppins">
                       {user?.avatar ? (
                         <img
                           src={user.avatar}
@@ -269,36 +275,27 @@ export function Header() {
                       <span>{user?.name}</span>
                     </div>
                   ) : (
-                    // <div className="flex flex-col space-y-2">
-                    //   <Link href="/login" onClick={() => {
-                    //     console.log('Login link clicked')
-                    //     setIsMenuOpen(false)
-                    //   }}>
-                    //     <Button variant="primary" className="w-full">
-                    //       Login
-                    //     </Button>
-                    //   </Link>
-                    //   <Link href="/signup" onClick={() => {
-                    //     console.log('Signup link clicked')
-                    //     setIsMenuOpen(false)
-                    //   }}>
-                    //     <Button variant="primary" className="w-full">
-                    //       Sign Up
-                    //     </Button>
-                    //   </Link>
-                    // </div>
-                    <div></div>
+                    <div className="flex flex-col space-y-2">
+                      <Link href="/login" onClick={() => {
+                        console.log('Login link clicked')
+                        setIsMenuOpen(false)
+                      }}>
+                        <Button variant="primary" className="w-full">
+                          Login
+                        </Button>
+                      </Link>
+                    </div>
                   )}
                 </div>
               </div>
 
               {/* Navigation Links */}
               <div className="space-y-2">
-                {navigation.map((item) => (
+                {userNavigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="block px-4 py-3 rounded-md text-base md:text-lg font-medium text-white hover:text-primary-400 hover:bg-white/10 active:bg-white/20 transition-colors touch-manipulation"
+                    className="block px-4 py-3 rounded-md text-base md:text-lg font-medium text-gray-900 hover:text-primary-600 hover:bg-gray-100 active:bg-gray-200 transition-colors touch-manipulation font-poppins"
                     onClick={() => {
                       console.log(`Navigation link clicked: ${item.name}`)
                       setIsMenuOpen(false)

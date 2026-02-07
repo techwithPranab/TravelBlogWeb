@@ -167,10 +167,10 @@ export default function GalleryClient() {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold font-serif mb-6">
             Travel Photo Gallery
           </h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl lg:text-3xl font-light text-blue-100 max-w-3xl mx-auto leading-relaxed">
             Discover amazing travel moments captured by adventurers around the world
           </p>
           <div className="mt-8 text-blue-100">
@@ -183,7 +183,7 @@ export default function GalleryClient() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+            <h2 className="text-xl md:text-2xl font-bold font-serif text-gray-900 mb-4">
               Share Your Travel Moments
             </h2>
             <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto">

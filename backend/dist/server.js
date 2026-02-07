@@ -69,6 +69,12 @@ const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
 const readerRoutes_1 = __importDefault(require("./routes/readerRoutes"));
 const contributorRoutes_1 = __importDefault(require("./routes/contributorRoutes"));
 const partnerRoutes_1 = __importDefault(require("./routes/partnerRoutes"));
+const itineraryRoutes_1 = __importDefault(require("./routes/itineraryRoutes"));
+const subscriptionRoutes_1 = __importDefault(require("./routes/subscriptionRoutes"));
+const siteSettingsRoutes_1 = __importDefault(require("./routes/siteSettingsRoutes"));
+const itineraryReviewRoutes_1 = __importDefault(require("./routes/itineraryReviewRoutes"));
+const advertisementRoutes_1 = __importDefault(require("./routes/advertisementRoutes"));
+const adAnalyticsRoutes_1 = __importDefault(require("./routes/adAnalyticsRoutes"));
 // Connect to database
 (0, database_1.connectDB)();
 // Create Express app
@@ -112,15 +118,19 @@ app.use((0, helmet_1.default)({
     crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use((0, cors_1.default)({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: [
+        process.env.FRONTEND_URL || 'http://localhost:3000',
+        'http://localhost:3001',
+        'http://localhost:3000',
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use((0, compression_1.default)());
 app.use((0, morgan_1.default)('combined'));
-app.use(express_1.default.json({ limit: '10mb' }));
-app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express_1.default.json({ limit: '50mb' }));
+app.use(express_1.default.urlencoded({ extended: true, limit: '50mb' }));
 // Data sanitization
 app.use((0, express_mongo_sanitize_1.default)());
 app.use((0, hpp_1.default)());
@@ -480,10 +490,16 @@ app.use(`${API_VERSION}/comments`, commentRoutes_1.default);
 app.use(`${API_VERSION}/contact`, contactRoutes_1.default);
 app.use(`${API_VERSION}/photos`, photoRoutes_1.default);
 app.use(`${API_VERSION}/newsletter`, newsletterRoutes_1.default);
+app.use(`${API_VERSION}/ads`, advertisementRoutes_1.default);
+app.use(`${API_VERSION}/ad-analytics`, adAnalyticsRoutes_1.default);
 app.use(`${API_VERSION}/admin`, adminRoutes_1.default);
 app.use(`${API_VERSION}/contributor`, contributorRoutes_1.default);
 app.use(`${API_VERSION}/reader`, readerRoutes_1.default);
 app.use(`${API_VERSION}/partners`, partnerRoutes_1.default);
+app.use(`${API_VERSION}/itineraries`, itineraryRoutes_1.default);
+app.use(`${API_VERSION}/itinerary-reviews`, itineraryReviewRoutes_1.default);
+app.use(`${API_VERSION}/subscriptions`, subscriptionRoutes_1.default);
+app.use(`${API_VERSION}/site-settings`, siteSettingsRoutes_1.default);
 // 404 handler
 app.use(notFound_1.default);
 // Error handler

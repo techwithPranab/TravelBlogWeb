@@ -17,5 +17,6 @@ router.put('/:id/download', photoController_1.downloadPhoto);
 router.get('/admin/all', auth_1.protect, (0, auth_1.restrictTo)('admin'), photoController_1.getAllPhotosAdmin);
 router.get('/admin/pending', auth_1.protect, (0, auth_1.restrictTo)('admin'), photoController_1.getPendingPhotos);
 router.put('/admin/:id/moderate', auth_1.protect, (0, auth_1.restrictTo)('admin'), photoController_1.moderatePhoto);
+router.put('/admin/:id/status', auth_1.protect, (0, auth_1.restrictTo)('admin'), photoController_1.updatePhotoStatus);
 router.delete('/admin/:id', auth_1.protect, (0, auth_1.restrictTo)('admin'), photoController_1.deletePhoto);
 exports.default = router;

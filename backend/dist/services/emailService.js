@@ -1011,6 +1011,811 @@ If you received this email, your SMTP configuration is successful!
             return false;
         }
     }
+    /**
+     * Send an email with attachments
+     */
+    async sendEmailWithAttachment(to, subject, htmlContent, attachments) {
+        try {
+            console.log('📧 [EMAIL SERVICE] Sending email with attachment...');
+            if (!this.transporter) {
+                console.error('❌ [EMAIL SERVICE] SMTP transporter is not configured');
+                return false;
+            }
+            const { fromEmail, supportEmail } = await getEmailsFromSiteSettings();
+            const mailOptions = {
+                from: {
+                    name: process.env.FROM_NAME || 'BagPackStories',
+                    address: fromEmail
+                },
+                to,
+                subject,
+                html: htmlContent,
+                attachments
+            };
+            const result = await this.transporter.sendMail(mailOptions);
+            console.log('✅ [EMAIL SERVICE] Email with attachment sent', { messageId: result?.messageId });
+            return true;
+        }
+        catch (error) {
+            console.error('❌ [EMAIL SERVICE] Error sending email with attachment:', error);
+            return false;
+        }
+    }
+    /**
+     * Generate HTML template for itinerary email
+     */
+    generateItineraryHTMLTemplate(itinerary) {
+        const currencySymbol = itinerary.currencySymbol || '$';
+        const startDate = itinerary.startDate ? new Date(itinerary.startDate).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }) : 'Not specified';
+        const endDate = itinerary.endDate ? new Date(itinerary.endDate).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }) : 'Not specified';
+        // Generate day plans HTML
+        let dayPlansHTML = '';
+        if (itinerary.dayPlans && itinerary.dayPlans.length > 0) {
+            dayPlansHTML = itinerary.dayPlans.map((day) => {
+                const dayDate = day.date ? new Date(day.date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric'
+                }) : '';
+                const generateActivityHTML = (activities, period) => {
+                    if (!activities || activities.length === 0)
+                        return '';
+                    return `
+            <div style="margin-bottom: 15px;">
+              <h4 style="color: #495057; font-size: 14px; font-weight: 600; margin: 10px 0 8px 0; text-transform: uppercase;">${period}</h4>
+              ${activities.map((activity) => `
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #007bff;">
+                  <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div style="flex: 1;">
+                      <div style="font-weight: 600; color: #212529; margin-bottom: 4px;">${activity.time || ''} - ${activity.title}</div>
+                      ${activity.location ? `<div style="color: #6c757d; font-size: 13px; margin-bottom: 4px;">📍 ${activity.location}</div>` : ''}
+                      <div style="color: #495057; font-size: 13px;">${activity.description}</div>
+                      ${activity.duration ? `<div style="color: #6c757d; font-size: 12px; margin-top: 4px;">⏱️ Duration: ${activity.duration}</div>` : ''}
+                    </div>
+                    ${activity.estimatedCost > 0 ? `<div style="background: #e7f3ff; color: #0056b3; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; white-space: nowrap; margin-left: 10px;">${currencySymbol}${activity.estimatedCost.toFixed(2)}</div>` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+                };
+                return `
+          <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <div style="border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 15px;">
+              <h3 style="color: #007bff; margin: 0; font-size: 18px;">Day ${day.day}${dayDate ? ` - ${dayDate}` : ''}</h3>
+            </div>
+            ${generateActivityHTML(day.morning, '🌅 Morning')}
+            ${generateActivityHTML(day.afternoon, '☀️ Afternoon')}
+            ${generateActivityHTML(day.evening, '🌆 Evening')}
+            ${day.notes ? `<div style="background: #fff3cd; border-left: 3px solid #ffc107; padding: 12px; margin-top: 15px; border-radius: 4px;"><strong>📝 Notes:</strong> ${day.notes}</div>` : ''}
+            <div style="text-align: right; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+              <strong style="color: #28a745; font-size: 16px;">Day Total: ${currencySymbol}${(day.totalEstimatedCost || 0).toFixed(2)}</strong>
+            </div>
+          </div>
+        `;
+            }).join('');
+        }
+        // Generate accommodation suggestions HTML
+        let accommodationHTML = '';
+        if (itinerary.accommodationSuggestions && itinerary.accommodationSuggestions.length > 0) {
+            accommodationHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🏨 Accommodation Suggestions</h3>
+          ${itinerary.accommodationSuggestions.map((acc) => `
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 12px;">
+              <h4 style="color: #212529; margin: 0 0 8px 0; font-size: 16px;">${acc.name}</h4>
+              <div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;">
+                <strong>Type:</strong> ${acc.type} | <strong>Price Range:</strong> ${acc.priceRange}
+              </div>
+              ${acc.location?.address ? `<div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;">📍 ${acc.location.address}${acc.location.area ? `, ${acc.location.area}` : ''}</div>` : ''}
+              ${acc.amenities && acc.amenities.length > 0 ? `<div style="margin: 8px 0;"><strong style="font-size: 13px;">Amenities:</strong> <span style="font-size: 13px;">${acc.amenities.join(', ')}</span></div>` : ''}
+              ${acc.whyRecommended ? `<div style="background: #e7f3ff; padding: 10px; border-radius: 4px; margin-top: 8px; font-size: 13px;">💡 ${acc.whyRecommended}</div>` : ''}
+              ${acc.bookingTip ? `<div style="color: #856404; background: #fff3cd; padding: 8px; border-radius: 4px; margin-top: 6px; font-size: 12px;">💬 ${acc.bookingTip}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+        }
+        // Generate restaurant recommendations HTML
+        let restaurantHTML = '';
+        if (itinerary.restaurantRecommendations && itinerary.restaurantRecommendations.length > 0) {
+            restaurantHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🍽️ Restaurant Recommendations</h3>
+          ${itinerary.restaurantRecommendations.map((rest) => `
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 12px;">
+              <h4 style="color: #212529; margin: 0 0 8px 0; font-size: 16px;">${rest.name}${rest.localFavorite ? ' ⭐' : ''}</h4>
+              <div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;">
+                <strong>Cuisine:</strong> ${rest.cuisine} | <strong>Price Range:</strong> ${rest.priceRange}
+              </div>
+              ${rest.mealType && rest.mealType.length > 0 ? `<div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;"><strong>Meal Type:</strong> ${rest.mealType.join(', ')}</div>` : ''}
+              ${rest.location?.address ? `<div style="color: #6c757d; font-size: 13px; margin-bottom: 6px;">📍 ${rest.location.address}${rest.location.area ? `, ${rest.location.area}` : ''}</div>` : ''}
+              ${rest.mustTryDish ? `<div style="background: #d4edda; padding: 8px; border-radius: 4px; margin-top: 8px; font-size: 13px;">🌟 Must Try: ${rest.mustTryDish}</div>` : ''}
+              ${rest.reservationNeeded ? `<div style="color: #721c24; background: #f8d7da; padding: 6px; border-radius: 4px; margin-top: 6px; font-size: 12px;">⚠️ Reservation recommended</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+        }
+        // Generate transportation tips HTML
+        let transportationHTML = '';
+        if (itinerary.transportationTips && itinerary.transportationTips.length > 0) {
+            transportationHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🚗 Transportation Tips</h3>
+          ${itinerary.transportationTips.map((tip) => `
+            <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px; border-left: 3px solid #17a2b8;">
+              <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                  <strong style="color: #212529; font-size: 14px;">${tip.type}</strong>
+                  <div style="color: #495057; font-size: 13px; margin-top: 4px;">${tip.description}</div>
+                </div>
+                ${tip.estimatedCost > 0 ? `<div style="background: #e7f3ff; color: #0056b3; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; white-space: nowrap; margin-left: 10px;">${currencySymbol}${tip.estimatedCost.toFixed(2)}</div>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+        }
+        // Generate budget breakdown HTML
+        let budgetHTML = '';
+        if (itinerary.budgetBreakdown || itinerary.totalEstimatedCost > 0) {
+            budgetHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">💰 Budget Breakdown</h3>
+          ${itinerary.budgetBreakdown ? `
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
+              ${itinerary.budgetBreakdown.totalFlightCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>✈️ Flights</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalFlightCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalAccommodationCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🏨 Accommodation</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalAccommodationCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalFoodCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🍽️ Food & Dining</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalFoodCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalSightseeingCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🎫 Sightseeing & Activities</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalSightseeingCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalLocalTransportCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🚌 Local Transport</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalLocalTransportCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalShoppingCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>🛍️ Shopping</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalShoppingCost.toFixed(2)}</strong></div>` : ''}
+              ${itinerary.budgetBreakdown.totalMiscellaneousCost > 0 ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #dee2e6;"><span>💼 Miscellaneous</span><strong>${currencySymbol}${itinerary.budgetBreakdown.totalMiscellaneousCost.toFixed(2)}</strong></div>` : ''}
+              <div style="display: flex; justify-content: space-between; padding: 12px 0; margin-top: 10px; background: #e7f3ff; padding: 12px; border-radius: 4px;"><span style="font-size: 16px; font-weight: 600;">Total Estimated Cost</span><strong style="font-size: 18px; color: #28a745;">${currencySymbol}${itinerary.totalEstimatedCost.toFixed(2)}</strong></div>
+            </div>
+          ` : `
+            <div style="background: #e7f3ff; padding: 15px; border-radius: 6px; text-align: center;">
+              <strong style="font-size: 18px; color: #28a745;">Total Estimated Cost: ${currencySymbol}${itinerary.totalEstimatedCost.toFixed(2)}</strong>
+            </div>
+          `}
+        </div>
+      `;
+        }
+        // Generate weather forecast HTML
+        let weatherHTML = '';
+        if (itinerary.weatherForecast && Array.isArray(itinerary.weatherForecast) && itinerary.weatherForecast.length > 0) {
+            weatherHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🌤️ Weather Forecast</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            ${itinerary.weatherForecast.map((weather) => {
+                // Use forecastSummary data structure from database
+                const summary = weather.forecastSummary;
+                if (!summary)
+                    return '';
+                const locationName = weather.location || 'Unknown Location';
+                const dateRange = weather.dateRange;
+                const dateText = dateRange ?
+                    `${new Date(dateRange.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(dateRange.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` :
+                    'Trip Duration';
+                // Weather icon mapping (simplified)
+                const getWeatherIcon = (icon) => {
+                    if (icon && icon.includes('01'))
+                        return '☀️'; // Clear
+                    if (icon && icon.includes('02'))
+                        return '⛅'; // Few clouds
+                    if (icon && (icon.includes('03') || icon.includes('04')))
+                        return '☁️'; // Cloudy
+                    if (icon && (icon.includes('09') || icon.includes('10')))
+                        return '🌧️'; // Rain
+                    if (icon && icon.includes('11'))
+                        return '⛈️'; // Thunderstorm
+                    if (icon && icon.includes('13'))
+                        return '❄️'; // Snow
+                    if (icon && icon.includes('50'))
+                        return '🌫️'; // Mist
+                    return '🌤️'; // Default
+                };
+                return `
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
+                  <div style="text-align: center; margin-bottom: 12px;">
+                    <div style="font-size: 28px; margin-bottom: 8px;">${getWeatherIcon(summary.icon)}</div>
+                    <div style="font-weight: 600; color: #212529; font-size: 16px; margin-bottom: 4px;">${locationName}</div>
+                    <div style="color: #6c757d; font-size: 12px;">${dateText}</div>
+                  </div>
+                  
+                  <div style="text-align: center; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span style="color: #dc3545; font-weight: 600; font-size: 14px;">${summary.minTemp || 0}°${summary.unit || 'C'}</span>
+                      <span style="color: #28a745; font-weight: 600; font-size: 14px;">${summary.maxTemp || 0}°${summary.unit || 'C'}</span>
+                    </div>
+                    <div style="color: #6c757d; font-size: 13px; margin-bottom: 8px;">Avg: ${summary.avgMin || 0}° - ${summary.avgMax || 0}°${summary.unit || 'C'}</div>
+                    <div style="color: #495057; font-size: 13px; margin-bottom: 8px; text-transform: capitalize;">${summary.conditions || 'Unknown'}</div>
+                  </div>
+                  
+                  ${summary.avgPrecipitation > 0 ? `<div style="color: #17a2b8; font-size: 12px; margin-bottom: 8px; text-align: center;">💧 ${summary.avgPrecipitation}% avg precipitation</div>` : ''}
+                  
+                  ${summary.recommendations && summary.recommendations.length > 0 ? `
+                    <div style="background: #e7f3ff; padding: 10px; border-radius: 4px; margin-top: 12px;">
+                      <div style="font-size: 12px; color: #0056b3; font-weight: 600; margin-bottom: 6px;">Weather Tips:</div>
+                      ${summary.recommendations.slice(0, 3).map((rec) => `<div style="font-size: 11px; color: #0056b3; margin-bottom: 2px;">• ${rec}</div>`).join('')}
+                    </div>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+        }
+        // Generate general tips HTML
+        let tipsHTML = '';
+        if (itinerary.generalTips && itinerary.generalTips.length > 0) {
+            tipsHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">💡 General Tips</h3>
+          <ul style="margin: 0; padding-left: 20px;">
+            ${itinerary.generalTips.map((tip) => `<li style="color: #495057; font-size: 14px; margin-bottom: 8px;">${tip}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+        }
+        // Generate packing list HTML
+        let packingHTML = '';
+        if (itinerary.packingList && itinerary.packingList.length > 0) {
+            packingHTML = `
+        <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">🎒 Packing List</h3>
+          <ul style="margin: 0; padding-left: 20px;">
+            ${itinerary.packingList.map((item) => `<li style="color: #495057; font-size: 14px; margin-bottom: 8px;">${item}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+        }
+        // Main HTML template
+        return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Travel Itinerary</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+  <div style="max-width: 800px; margin: 0 auto; background-color: #ffffff;">
+    <!-- Header -->
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: #ffffff;">
+      <h1 style="margin: 0 0 10px 0; font-size: 28px; font-weight: bold;">✈️ Your Travel Itinerary</h1>
+      <h2 style="margin: 0; font-size: 20px; font-weight: 300;">${itinerary.title || 'Your Amazing Journey'}</h2>
+    </div>
+
+    <!-- Content -->
+    <div style="padding: 30px; background-color: #f8f9fa;">
+      <!-- Trip Overview -->
+      <div style="background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <h3 style="color: #007bff; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #007bff; padding-bottom: 10px;">📋 Trip Overview</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">FROM</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.source || 'Not specified'}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">TO</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.destinations ? itinerary.destinations.join(', ') : itinerary.destination || 'Not specified'}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">START DATE</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${startDate}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">END DATE</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${endDate}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">DURATION</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.duration} days</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">TRAVELERS</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.totalPeople || (itinerary.adults + itinerary.children)} (${itinerary.adults || 0} adults, ${itinerary.children || 0} children)</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">ROOMS</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px;">${itinerary.numberOfRooms || 1} room${(itinerary.numberOfRooms || 1) > 1 ? 's' : ''}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">DIET TYPE</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px; text-transform: capitalize;">${itinerary.dietType || 'Not specified'}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">TRAVEL MODE</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px; text-transform: capitalize;">${itinerary.travelMode || 'Not specified'}</div>
+          </div>
+          <div>
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 4px;">BUDGET</div>
+            <div style="color: #212529; font-weight: 600; font-size: 14px; text-transform: capitalize;">${itinerary.budget || 'Not specified'}</div>
+          </div>
+        </div>
+        ${itinerary.interests && itinerary.interests.length > 0 ? `
+          <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+            <div style="color: #6c757d; font-size: 12px; margin-bottom: 6px;">INTERESTS</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              ${itinerary.interests.map((interest) => `<span style="background: #e7f3ff; color: #0056b3; padding: 4px 12px; border-radius: 12px; font-size: 13px;">${interest}</span>`).join('')}
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Weather Forecast -->
+      ${weatherHTML}
+
+      <!-- Day Plans -->
+      ${dayPlansHTML}
+
+      <!-- Accommodation -->
+      ${accommodationHTML}
+
+      <!-- Restaurants -->
+      ${restaurantHTML}
+
+      <!-- Transportation -->
+      ${transportationHTML}
+
+      <!-- Budget Breakdown -->
+      ${budgetHTML}
+
+      <!-- General Tips -->
+      ${tipsHTML}
+
+      <!-- Packing List -->
+      ${packingHTML}
+    </div>
+
+    <!-- Footer -->
+    <div style="background: #343a40; color: #ffffff; padding: 20px; text-align: center;">
+      <p style="margin: 0 0 10px 0; font-size: 14px;">Generated by <strong>BagPackStories</strong></p>
+      <p style="margin: 0; font-size: 12px; color: #adb5bd;">Your AI-powered travel planning companion</p>
+    </div>
+  </div>
+</body>
+</html>
+    `;
+    }
+    /**
+     * Send itinerary email with HTML template
+     */
+    async sendItineraryEmail(to, itinerary) {
+        try {
+            console.log('📧 [EMAIL SERVICE] Sending itinerary email...');
+            if (!this.transporter) {
+                console.error('❌ [EMAIL SERVICE] SMTP transporter is not configured');
+                return false;
+            }
+            const { fromEmail } = await getEmailsFromSiteSettings();
+            const subject = `Your Travel Itinerary: ${itinerary.title || 'Your Amazing Journey'}`;
+            const htmlContent = this.generateItineraryHTMLTemplate(itinerary);
+            const mailOptions = {
+                from: {
+                    name: process.env.FROM_NAME || 'BagPackStories',
+                    address: fromEmail
+                },
+                to,
+                subject,
+                html: htmlContent
+            };
+            const result = await this.transporter.sendMail(mailOptions);
+            console.log('✅ [EMAIL SERVICE] Itinerary email sent', { messageId: result?.messageId });
+            return true;
+        }
+        catch (error) {
+            console.error('❌ [EMAIL SERVICE] Error sending itinerary email:', error);
+            return false;
+        }
+    }
+    /**
+     * Send review submitted confirmation email to user
+     */
+    async sendReviewSubmittedEmail(userEmail, userName, reviewData) {
+        try {
+            console.log('📧 [REVIEW SUBMITTED] Sending review submitted email to:', userEmail);
+            const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Review Submitted - BagPackStories</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 28px;">✅ Review Submitted!</h1>
+          </div>
+          
+          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hello ${userName},</p>
+            
+            <p>Thank you for taking the time to share your experience! Your review has been submitted successfully and is now pending approval.</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
+              <h2 style="margin: 0 0 10px 0; color: #667eea; font-size: 18px;">Review Details</h2>
+              <p style="margin: 5px 0;"><strong>Review Title:</strong> ${reviewData.reviewTitle}</p>
+              <p style="margin: 5px 0;"><strong>Itinerary:</strong> ${reviewData.itineraryTitle}</p>
+              <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: #f59e0b;">Pending Approval</span></p>
+            </div>
+            
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+              <p style="margin: 0; color: #856404;"><strong>⏰ What's Next?</strong></p>
+              <p style="margin: 10px 0 0 0; color: #856404;">Our team will review your submission within 24-48 hours. We'll send you an email once your review is approved or if we need any clarifications.</p>
+            </div>
+            
+            <p>In the meantime, you can:</p>
+            <ul style="color: #495057;">
+              <li>View your review in your dashboard</li>
+              <li>Submit reviews for other itineraries</li>
+              <li>Explore more travel destinations</li>
+            </ul>
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${process.env.FRONTEND_URL}/dashboard/reviews" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">View My Reviews</a>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated message from BagPackStories.</p>
+            <p>&copy; ${new Date().getFullYear()} BagPackStories. All rights reserved.</p>
+          </div>
+        </body>
+        </html>
+      `;
+            const textContent = `
+        Review Submitted - BagPackStories
+        
+        Hello ${userName},
+        
+        Thank you for taking the time to share your experience! Your review has been submitted successfully and is now pending approval.
+        
+        Review Details:
+        - Review Title: ${reviewData.reviewTitle}
+        - Itinerary: ${reviewData.itineraryTitle}
+        - Status: Pending Approval
+        
+        What's Next?
+        Our team will review your submission within 24-48 hours. We'll send you an email once your review is approved or if we need any clarifications.
+        
+        View your reviews: ${process.env.FRONTEND_URL}/dashboard/reviews
+        
+        ---
+        This is an automated message from BagPackStories.
+        © ${new Date().getFullYear()} BagPackStories. All rights reserved.
+      `;
+            const emailData = {
+                sender: {
+                    email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+                    name: process.env.FROM_NAME || 'BagPackStories'
+                },
+                to: [{ email: userEmail, name: userName }],
+                subject: `Review Submitted: ${reviewData.reviewTitle} - BagPackStories`,
+                htmlContent,
+                textContent
+            };
+            const success = await this.sendEmail(emailData);
+            if (success) {
+                console.log('✅ [REVIEW SUBMITTED] Email sent successfully to:', userEmail);
+            }
+            return success;
+        }
+        catch (error) {
+            console.error('❌ [REVIEW SUBMITTED] Error sending email:', error);
+            return false;
+        }
+    }
+    /**
+     * Send review approved email to user
+     */
+    async sendReviewApprovedEmail(userEmail, userName, reviewData) {
+        try {
+            console.log('📧 [REVIEW APPROVED] Sending approval email to:', userEmail);
+            const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Review Approved - BagPackStories</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 28px;">🎉 Review Approved!</h1>
+          </div>
+          
+          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Congratulations ${userName}!</p>
+            
+            <p>Great news! Your review has been approved and is now live on our website. Thank you for contributing to the BagPackStories community!</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
+              <h2 style="margin: 0 0 10px 0; color: #10b981; font-size: 18px;">Your Review</h2>
+              <p style="margin: 5px 0;"><strong>Title:</strong> ${reviewData.reviewTitle}</p>
+              <p style="margin: 5px 0;"><strong>Itinerary:</strong> ${reviewData.itineraryTitle}</p>
+              <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: #10b981;">✅ Approved & Live</span></p>
+            </div>
+            
+            <div style="background: #d1fae5; border: 1px solid #6ee7b7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+              <p style="margin: 0; color: #065f46;"><strong>🌟 Share Your Success!</strong></p>
+              <p style="margin: 10px 0 0 0; color: #065f46;">Your review is now helping other travelers plan their adventures. Feel free to share it with your friends and fellow travel enthusiasts!</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${reviewData.reviewUrl}" style="background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 0 10px 10px 0;">View Your Review</a>
+              <a href="${process.env.FRONTEND_URL}/itineraries" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 0 10px 10px 0;">Explore More</a>
+            </div>
+            
+            <p style="margin-top: 30px; color: #666; font-size: 14px;">Keep sharing your experiences! Your insights help travelers make better decisions.</p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated message from BagPackStories.</p>
+            <p>&copy; ${new Date().getFullYear()} BagPackStories. All rights reserved.</p>
+          </div>
+        </body>
+        </html>
+      `;
+            const textContent = `
+        Review Approved - BagPackStories
+        
+        Congratulations ${userName}!
+        
+        Great news! Your review has been approved and is now live on our website.
+        
+        Your Review:
+        - Title: ${reviewData.reviewTitle}
+        - Itinerary: ${reviewData.itineraryTitle}
+        - Status: ✅ Approved & Live
+        
+        View your review: ${reviewData.reviewUrl}
+        
+        Thank you for contributing to the BagPackStories community!
+        
+        ---
+        This is an automated message from BagPackStories.
+        © ${new Date().getFullYear()} BagPackStories. All rights reserved.
+      `;
+            const emailData = {
+                sender: {
+                    email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+                    name: process.env.FROM_NAME || 'BagPackStories'
+                },
+                to: [{ email: userEmail, name: userName }],
+                subject: `🎉 Your Review Has Been Approved! - BagPackStories`,
+                htmlContent,
+                textContent
+            };
+            const success = await this.sendEmail(emailData);
+            if (success) {
+                console.log('✅ [REVIEW APPROVED] Email sent successfully to:', userEmail);
+            }
+            return success;
+        }
+        catch (error) {
+            console.error('❌ [REVIEW APPROVED] Error sending email:', error);
+            return false;
+        }
+    }
+    /**
+     * Send review rejected email to user
+     */
+    async sendReviewRejectedEmail(userEmail, userName, reviewData) {
+        try {
+            console.log('📧 [REVIEW REJECTED] Sending rejection email to:', userEmail);
+            const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Review Update - BagPackStories</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 28px;">Review Update</h1>
+          </div>
+          
+          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">Hello ${userName},</p>
+            
+            <p>Thank you for submitting your review. After careful review, we were unable to approve your submission at this time.</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ef4444;">
+              <h2 style="margin: 0 0 10px 0; color: #ef4444; font-size: 18px;">Review Details</h2>
+              <p style="margin: 5px 0;"><strong>Title:</strong> ${reviewData.reviewTitle}</p>
+              <p style="margin: 5px 0;"><strong>Itinerary:</strong> ${reviewData.itineraryTitle}</p>
+            </div>
+            
+            <div style="background: #fee2e2; border: 1px solid #fca5a5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+              <p style="margin: 0; color: #991b1b;"><strong>📋 Reason for Rejection:</strong></p>
+              <p style="margin: 10px 0 0 0; color: #991b1b;">${reviewData.rejectionReason}</p>
+            </div>
+            
+            <div style="background: #dbeafe; border: 1px solid #93c5fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+              <p style="margin: 0; color: #1e40af;"><strong>💡 What You Can Do:</strong></p>
+              <ul style="margin: 10px 0 0 0; color: #1e40af; padding-left: 20px;">
+                <li>Edit your review to address the feedback provided</li>
+                <li>Ensure your review meets our community guidelines</li>
+                <li>Resubmit your review for approval</li>
+              </ul>
+            </div>
+            
+            <p><strong>Community Guidelines:</strong></p>
+            <ul style="color: #495057;">
+              <li>Minimum 10 words required</li>
+              <li>Keep content respectful and appropriate</li>
+              <li>Share genuine experiences</li>
+              <li>Avoid promotional or spam content</li>
+            </ul>
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${reviewData.editUrl}" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Edit & Resubmit Review</a>
+            </div>
+            
+            <p style="margin-top: 30px; color: #666; font-size: 14px;">If you have any questions or need clarification, please don't hesitate to contact our support team.</p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated message from BagPackStories.</p>
+            <p>&copy; ${new Date().getFullYear()} BagPackStories. All rights reserved.</p>
+          </div>
+        </body>
+        </html>
+      `;
+            const textContent = `
+        Review Update - BagPackStories
+        
+        Hello ${userName},
+        
+        Thank you for submitting your review. After careful review, we were unable to approve your submission at this time.
+        
+        Review Details:
+        - Title: ${reviewData.reviewTitle}
+        - Itinerary: ${reviewData.itineraryTitle}
+        
+        Reason for Rejection:
+        ${reviewData.rejectionReason}
+        
+        What You Can Do:
+        - Edit your review to address the feedback provided
+        - Ensure your review meets our community guidelines
+        - Resubmit your review for approval
+        
+        Edit your review: ${reviewData.editUrl}
+        
+        If you have any questions, please contact our support team.
+        
+        ---
+        This is an automated message from BagPackStories.
+        © ${new Date().getFullYear()} BagPackStories. All rights reserved.
+      `;
+            const emailData = {
+                sender: {
+                    email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+                    name: process.env.FROM_NAME || 'BagPackStories'
+                },
+                to: [{ email: userEmail, name: userName }],
+                subject: `Review Update Required - BagPackStories`,
+                htmlContent,
+                textContent
+            };
+            const success = await this.sendEmail(emailData);
+            if (success) {
+                console.log('✅ [REVIEW REJECTED] Email sent successfully to:', userEmail);
+            }
+            return success;
+        }
+        catch (error) {
+            console.error('❌ [REVIEW REJECTED] Error sending email:', error);
+            return false;
+        }
+    }
+    /**
+     * Send new review notification to admin
+     */
+    async sendNewReviewNotificationToAdmin(reviewData) {
+        try {
+            console.log('📧 [ADMIN NOTIFICATION] Sending new review notification to admin');
+            const adminEmail = process.env.ADMIN_EMAIL || 'admin@bagpackstories.in';
+            const flagsHtml = reviewData.moderationFlags.length > 0
+                ? `<div style="background: #fee2e2; border: 1px solid #fca5a5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+             <p style="margin: 0; color: #991b1b;"><strong>⚠️ Moderation Flags:</strong></p>
+             <p style="margin: 10px 0 0 0; color: #991b1b;">${reviewData.moderationFlags.join(', ')}</p>
+           </div>`
+                : '';
+            const stars = '⭐'.repeat(reviewData.rating);
+            const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>New Review Submitted - Admin Notification</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 28px;">📝 New Review Pending</h1>
+          </div>
+          
+          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 16px;">A new review has been submitted and is waiting for your approval.</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+              <h2 style="margin: 0 0 10px 0; color: #f59e0b; font-size: 18px;">Review Details</h2>
+              <p style="margin: 5px 0;"><strong>Title:</strong> ${reviewData.reviewTitle}</p>
+              <p style="margin: 5px 0;"><strong>Rating:</strong> ${stars} (${reviewData.rating}/5)</p>
+              <p style="margin: 5px 0;"><strong>Itinerary:</strong> ${reviewData.itineraryTitle}</p>
+              <p style="margin: 5px 0;"><strong>Reviewer:</strong> ${reviewData.reviewerName} (${reviewData.reviewerEmail})</p>
+            </div>
+            
+            ${flagsHtml}
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${reviewData.adminDashboardUrl}" style="background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 0 5px;">Approve</a>
+              <a href="${process.env.FRONTEND_URL}/admin/reviews" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 0 5px;">View All</a>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated admin notification from BagPackStories.</p>
+          </div>
+        </body>
+        </html>
+      `;
+            const textContent = `
+        New Review Pending - Admin Notification
+        
+        A new review has been submitted and is waiting for your approval.
+        
+        Review Details:
+        - Title: ${reviewData.reviewTitle}
+        - Rating: ${reviewData.rating}/5
+        - Itinerary: ${reviewData.itineraryTitle}
+        - Reviewer: ${reviewData.reviewerName} (${reviewData.reviewerEmail})
+        ${reviewData.moderationFlags.length > 0 ? `\nModeration Flags: ${reviewData.moderationFlags.join(', ')}` : ''}
+        
+        Review in admin panel: ${reviewData.adminDashboardUrl}
+        
+        ---
+        This is an automated admin notification from BagPackStories.
+      `;
+            const emailData = {
+                sender: {
+                    email: process.env.FROM_EMAIL || 'noreply@bagpackstories.in',
+                    name: process.env.FROM_NAME || 'BagPackStories'
+                },
+                to: [{ email: adminEmail, name: 'Admin' }],
+                subject: `New Review Pending Approval - ${reviewData.itineraryTitle}`,
+                htmlContent,
+                textContent
+            };
+            const success = await this.sendEmail(emailData);
+            if (success) {
+                console.log('✅ [ADMIN NOTIFICATION] Email sent successfully');
+            }
+            return success;
+        }
+        catch (error) {
+            console.error('❌ [ADMIN NOTIFICATION] Error sending email:', error);
+            return false;
+        }
+    }
 }
 exports.emailService = new EmailService();
 exports.default = EmailService;

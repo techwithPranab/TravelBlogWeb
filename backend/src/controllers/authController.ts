@@ -2,10 +2,8 @@ import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import User, { IUser } from '@/models/User'
-
-interface AuthenticatedRequest extends Request {
-  user?: IUser
-}
+import Subscription from '@/models/Subscription'
+import { AuthenticatedRequest } from '../types/express'
 
 // Generate JWT Token
 const signToken = (id: string): string => {
@@ -64,6 +62,14 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       password,
       role: role || 'reader', // Default to reader if no role provided
     })
+
+    // Create free subscription for new user
+    try {
+      await Subscription.createFreeSubscription(user._id)
+    } catch (subscriptionError) {
+      console.error('Failed to create subscription for new user:', subscriptionError)
+      // Don't fail registration if subscription creation fails
+    }
 
     sendTokenResponse(user, 201, res)
   } catch (error: any) {

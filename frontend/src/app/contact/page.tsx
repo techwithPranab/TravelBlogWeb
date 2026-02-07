@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { publicApi } from '@/lib/api';
+import { motion } from 'framer-motion';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -29,6 +30,33 @@ export default function ContactPage() {
     };
   } | null>(null);
   const [contactLoading, setContactLoading] = useState(true);
+
+  // Generate SEO metadata for contact page
+  const generateSEOMetadata = () => {
+    const title = 'Contact BagPackStories - Travel Questions, Collaboration & Support'
+    const description = 'Get in touch with BagPackStories for travel destination questions, expert advice, collaboration opportunities, photography inquiries, and personalized travel support. Connect with our travel community and plan your next adventure with confidence.'
+    const keywords = [
+      'contact travel blog',
+      'travel questions',
+      'travel support',
+      'destination advice',
+      'travel collaboration',
+      'photography inquiries',
+      'travel planning help',
+      'travel blogger contact',
+      'travel guide support',
+      'adventure travel questions',
+      'vacation planning assistance',
+      'travel community contact',
+      'destination recommendations',
+      'travel itinerary help',
+      'solo travel advice'
+    ].join(', ')
+
+    return { title, description, keywords };
+  }
+
+  const seoData = generateSEOMetadata()
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -87,7 +115,8 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <div className="min-h-screen w-full overflow-x-hidden">
       {/* SEO Structured Data */}
       <script
         type="application/ld+json"
@@ -95,19 +124,39 @@ export default function ContactPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ContactPage",
-            "name": "Contact Us - BagPackStories",
-            "description": "Get in touch with BagPackStories for travel tips, collaborations, and questions about our travel stories.",
+            "name": "Contact BagPackStories - Travel Blog & Destination Guide Support",
+            "description": "Get in touch with BagPackStories for travel questions, collaboration opportunities, travel guide requests, photography inquiries, and general support. We're here to help plan your next adventure.",
             "url": "https://bagpackstories.in/contact",
             "mainEntity": {
               "@type": "Organization",
               "name": "BagPackStories",
+              "description": "Leading personal travel blog providing authentic stories and expert destination guides",
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+1-555-TRAVEL",
+                "telephone": contactInfo?.phone || "+91 9836027578",
                 "contactType": "customer service",
-                "email": contactInfo?.email || "hello@bagpackstories.in",
-                "availableLanguage": "English"
-              }
+                "email": contactInfo?.email || "support@bagpackstories.in",
+                "availableLanguage": ["English"],
+                "areaServed": "Worldwide",
+                "hoursAvailable": {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                  "opens": "09:00",
+                  "closes": "18:00"
+                }
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Barrackpore",
+                "addressRegion": "West Bengal",
+                "addressCountry": "India"
+              },
+              "sameAs": [
+                "https://facebook.com/bagpackstories",
+                "https://twitter.com/bagpackstories",
+                "https://instagram.com/bagpackstories",
+                "https://youtube.com/bagpackstories"
+              ]
             },
             "publisher": {
               "@type": "Organization",
@@ -116,29 +165,89 @@ export default function ContactPage() {
                 "@type": "ImageObject",
                 "url": "https://bagpackstories.in/images/logo.png"
               }
+            },
+            "potentialAction": {
+              "@type": "CommunicateAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://bagpackstories.in/contact",
+                "actionPlatform": [
+                  "http://schema.org/DesktopWebPlatform",
+                  "http://schema.org/MobileWebPlatform"
+                ]
+              }
             }
           })
         }}
       />
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold mb-4">
-            Get in Touch
-          </h1>
-          <p className="text-lg text-blue-100 max-w-3xl mx-auto">
-            Have a question about our travel stories? Want to collaborate? We'd love to hear from you.
-          </p>
+      <section className="relative min-h-screen flex items-center justify-center hero-gradient text-white overflow-hidden">
+        {/* Background with Ken Burns effect */}
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center animate-ken-burns opacity-20"></div>
+
+        {/* Gradient overlays */}
+                                                                                                                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-indigo-900/50 to-purple-900/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/30 via-transparent to-transparent"></div>
+
+        <div className="relative z-10 container mx-auto px-4 py-20">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-bold mb-6 leading-tight tracking-tight bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+              Get In Touch
+            </h1>
+            <p className="text-xl md:text-2xl lg:text-3xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed font-light">
+              Have travel questions? Need destination advice? Want to collaborate?
+              We're here to help you plan your next unforgettable adventure.
+            </p>
+
+            {/* Contact highlights */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div className="text-2xl mb-2">💬</div>
+                <h3 className="text-lg font-semibold text-white mb-2">Travel Questions</h3>
+                <p className="text-blue-200 text-sm">Get expert advice on destinations, itineraries, and travel tips</p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div className="text-2xl mb-2">🤝</div>
+                <h3 className="text-lg font-semibold text-white mb-2">Collaborations</h3>
+                <p className="text-blue-200 text-sm">Partner with us for travel content and brand collaborations</p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                <div className="text-2xl mb-2">📸</div>
+                <h3 className="text-lg font-semibold text-white mb-2">Photography</h3>
+                <p className="text-blue-200 text-sm">Discuss photography projects and visual storytelling</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        >
+          <div className="flex flex-col items-center text-white/70 hover:text-white transition-colors cursor-pointer">
+            <span className="text-sm font-medium mb-2">Scroll to contact form</span>
+            <div className="w-6 h-10 border-2 border-white/70 rounded-full flex justify-center">
+              <div
+                className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-bounce"
+              ></div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
 
       {/* Contact Form and Info */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Send Us Your Travel Questions</h2>
+            <p className="text-gray-600 mb-8">We'd love to hear from you! Whether you have questions about destinations, need travel advice, or want to collaborate, we're here to help.</p>
 
             {submitStatus === 'success' && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
@@ -287,8 +396,9 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* FAQ Section */}
+          {/* FAQ Section */}
             <div className="bg-white rounded-lg shadow-lg p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
 
@@ -312,6 +422,6 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

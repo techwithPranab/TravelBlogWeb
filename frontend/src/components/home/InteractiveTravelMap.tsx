@@ -90,8 +90,8 @@ export function InteractiveTravelMap() {
     return (
       <div className="animate-fade-up">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Interactive Travel Map
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+            Global Travel Destinations Map
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400">
             Loading travel destinations...
@@ -108,8 +108,8 @@ export function InteractiveTravelMap() {
     return (
       <div className="animate-fade-up">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Interactive Travel Map
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+            Global Travel Destinations Map
           </h2>
           <p className="text-lg text-red-500 dark:text-red-400">
             {error}
@@ -120,18 +120,33 @@ export function InteractiveTravelMap() {
   }
 
   return (
-    <div className="animate-fade-up">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Interactive Travel Map
-        </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400">
-          Explore destinations I've visited around the world
-        </p>
-      </div>
+    <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-serif font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 dark:from-white dark:via-blue-200 dark:to-indigo-200 bg-clip-text text-transparent mb-6">
+            Global Travel Destinations Map
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            Explore our comprehensive collection of destination guides and travel stories. Click on any location to discover authentic reviews, practical tips, and insider recommendations from experienced travelers worldwide.
+          </p>
+        </motion.div>
 
-      {/* Map Container */}
-      <div ref={mapRef} className="relative rounded-lg overflow-hidden shadow-lg bg-gradient-to-b from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20">
+        {/* Map Container */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          ref={mapRef}
+          className="relative rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-b from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-gray-200/50 dark:border-gray-700/50 mb-16"
+        >
         {/* Zoom Controls */}
         <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
           <button
@@ -240,46 +255,66 @@ export function InteractiveTravelMap() {
             {travelLocations.find(loc => loc.id === hoveredLocation)?.country}
           </div>
         )}
-      </div>
+        </motion.div>
 
-      {/* Location Grid */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {travelLocations.map((location) => (
-          <motion.div
-            key={location.id}
-            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setSelectedLocation(location)}
-            whileHover={{ y: -4 }}
-          >
-            <div className="flex items-center space-x-3 mb-4">
-              <MapPin className="w-5 h-5 text-red-500" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {location.name}
-              </h3>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {location.country}
-              </span>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-              {location.description}
-            </p>
-            <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
-              <div className="flex items-center space-x-1">
-                <Calendar className="w-4 h-4" />
-                <span>{location.visitDate}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Camera className="w-4 h-4" />
-                <span>{location.photos?.length || 0} photos</span>
-              </div>
-              {location.totalPosts && (
-                <div className="flex items-center space-x-1">
-                  <span className="text-blue-600 font-medium">{location.totalPosts} posts</span>
+        {/* Location Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {travelLocations.map((location) => (
+            <motion.div
+              key={location.id}
+              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200/50 dark:border-gray-700/50 cursor-pointer"
+              onClick={() => setSelectedLocation(location)}
+              whileHover={{ y: -4 }}
+            >
+              <div className="p-8 h-full">
+                {/* Location icon */}
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-lg">
+                    <MapPin className="w-6 h-6 text-white" fill="currentColor" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                      {location.name}
+                    </h3>
+                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                      {location.country}
+                    </span>
+                  </div>
                 </div>
-              )}
-            </div>
-          </motion.div>
-        ))}
+
+                {/* Description */}
+                <p className="text-gray-600 dark:text-gray-400 text-base mb-6 leading-relaxed">
+                  {location.description}
+                </p>
+
+                {/* Stats */}
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+                      <Calendar className="w-4 h-4" />
+                      <span>{location.visitDate}</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+                      <Camera className="w-4 h-4" />
+                      <span>{location.photos?.length || 0}</span>
+                    </div>
+                  </div>
+                  {location.totalPosts && (
+                    <div className="text-blue-600 dark:text-blue-400 font-semibold">
+                      {location.totalPosts} posts
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
 
       {/* Location Detail Modal */}
@@ -296,7 +331,7 @@ export function InteractiveTravelMap() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
           >
             <div className="p-6">
               {/* Header */}
@@ -446,6 +481,6 @@ export function InteractiveTravelMap() {
           </motion.div>
         </motion.div>
       )}
-    </div>
+    </section>
   )
 }

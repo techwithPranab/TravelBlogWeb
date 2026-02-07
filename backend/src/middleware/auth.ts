@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import User, { IUser } from '@/models/User'
-
-interface AuthenticatedRequest extends Request {
-  user?: IUser
-}
+import { AuthenticatedRequest } from '../types/express'
 
 export const protect = async (
   req: AuthenticatedRequest,
@@ -44,6 +41,7 @@ export const protect = async (
       req.user = user
       next()
     } catch (error) {
+      console.error('Auth middleware: Token verification failed:', error)
       res.status(401).json({
         success: false,
         error: 'Not authorized to access this route'

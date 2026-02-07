@@ -56,6 +56,10 @@ export interface ISiteSettings extends Document {
     maintenanceMode: boolean
     analyticsCode?: string
   }
+  featureToggles: {
+    aiItineraryEnabled: boolean
+    aiItineraryAnnouncementEnabled: boolean
+  }
   theme: {
     primaryColor: string
     secondaryColor: string
@@ -171,6 +175,16 @@ const siteSettingsSchema = new Schema<ISiteSettings>({
       default: false
     },
     analyticsCode: String
+  },
+  featureToggles: {
+    aiItineraryEnabled: {
+      type: Boolean,
+      default: false
+    },
+    aiItineraryAnnouncementEnabled: {
+      type: Boolean,
+      default: true
+    }
   },
   theme: {
     primaryColor: {

@@ -34,6 +34,12 @@ import adminRoutes from '@/routes/adminRoutes'
 import readerRoutes from '@/routes/readerRoutes'
 import contributorRoutes from '@/routes/contributorRoutes'
 import partnerRoutes from '@/routes/partnerRoutes'
+import itineraryRoutes from '@/routes/itineraryRoutes'
+import subscriptionRoutes from '@/routes/subscriptionRoutes'
+import siteSettingsRoutes from '@/routes/siteSettingsRoutes'
+import itineraryReviewRoutes from '@/routes/itineraryReviewRoutes'
+import advertisementRoutes from '@/routes/advertisementRoutes'
+import adAnalyticsRoutes from '@/routes/adAnalyticsRoutes'
 
 // Connect to database
 connectDB()
@@ -87,7 +93,11 @@ app.use(helmet({
 }))
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3000',
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -494,10 +504,16 @@ app.use(`${API_VERSION}/comments`, commentRoutes)
 app.use(`${API_VERSION}/contact`, contactRoutes)
 app.use(`${API_VERSION}/photos`, photoRoutes)
 app.use(`${API_VERSION}/newsletter`, newsletterRoutes)
+app.use(`${API_VERSION}/ads`, advertisementRoutes)
+app.use(`${API_VERSION}/ad-analytics`, adAnalyticsRoutes)
 app.use(`${API_VERSION}/admin`, adminRoutes)
 app.use(`${API_VERSION}/contributor`, contributorRoutes)
 app.use(`${API_VERSION}/reader`, readerRoutes)
 app.use(`${API_VERSION}/partners`, partnerRoutes)
+app.use(`${API_VERSION}/itineraries`, itineraryRoutes)
+app.use(`${API_VERSION}/itinerary-reviews`, itineraryReviewRoutes)
+app.use(`${API_VERSION}/subscriptions`, subscriptionRoutes)
+app.use(`${API_VERSION}/site-settings`, siteSettingsRoutes)
 
 // 404 handler
 app.use(notFound)

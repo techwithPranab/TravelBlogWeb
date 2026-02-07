@@ -32,12 +32,9 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const bcrypt = __importStar(require("bcryptjs"));
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -111,14 +108,14 @@ userSchema.pre('save', async function (next) {
     if (!this.isModified('password'))
         return next();
     console.log('🔐 [USER MODEL] Hashing password for user:', this.email);
-    const salt = await bcryptjs_1.default.genSalt(12);
-    this.password = await bcryptjs_1.default.hash(this.password, salt);
+    const salt = await bcrypt.genSalt(12);
+    this.password = await bcrypt.hash(this.password, salt);
     console.log('✅ [USER MODEL] Password hashed successfully');
     next();
 });
 // Compare password method
 userSchema.methods.comparePassword = async function (candidatePassword) {
-    return await bcryptjs_1.default.compare(candidatePassword, this.password);
+    return await bcrypt.compare(candidatePassword, this.password);
 };
 // Virtual for post count
 userSchema.virtual('postCount', {

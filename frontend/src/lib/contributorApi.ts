@@ -7,6 +7,9 @@ export interface ContributorStats {
   draftPosts: number
   totalViews: number
   totalLikes: number
+  totalComments: number
+  averageViewsPerPost: number
+  engagementRate: number
 }
 
 export interface ContributorDashboardData {
